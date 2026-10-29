@@ -154,6 +154,56 @@ h2.sec{font-weight:700;font-size:22px;margin:28px 0 12px;display:flex;align-item
 .tv-empty .qr{width:40vh}
 .tv-empty h2{font-family:var(--display);color:var(--accent);font-size:clamp(32px,5vw,80px);margin:0;font-weight:400}
 .tv-empty p{font-size:clamp(18px,2vw,32px);font-weight:600;margin:0;color:var(--muted)}
+.chars{position:fixed;inset:0;pointer-events:none;z-index:6;overflow:hidden}
+.ch{position:absolute;line-height:0}
+.ch img{height:min(30vh,30vw);width:auto;max-width:40vw;object-fit:contain;filter:drop-shadow(0 1.5vh 2.5vh rgba(0,0,0,.35))}
+.ch img.sticker{height:min(26vh,26vw);background:#fff;padding:.9vh;border-radius:2.2vh;transform:rotate(var(--r));box-shadow:0 1.6vh 3.5vh rgba(0,0,0,.35);filter:none}
+.ch .emo{font-size:min(20vh,24vw);line-height:1;filter:drop-shadow(0 1vh 2vh rgba(0,0,0,.25))}
+.ch.pk-l{left:1vw;bottom:calc(var(--bh,22vh) + 1vh);animation:pkl 6.5s cubic-bezier(.3,1.3,.5,1) both}
+.ch.pk-r{right:1vw;bottom:calc(var(--bh,22vh) + 1vh);animation:pkr 6.5s cubic-bezier(.3,1.3,.5,1) both}
+.ch.pk-b{left:50%;bottom:calc(var(--bh,22vh) + 1vh);animation:pkb 6.5s ease both}
+.ch.voa{top:10vh;left:0;animation:voa 7s linear both}
+.ch.pula{left:6vw;bottom:calc(var(--bh,22vh) + 1vh);animation:pula 6.5s ease-in-out both}
+@keyframes pkl{0%{transform:translateX(-130%) rotate(-25deg)}14%{transform:translateX(0) rotate(10deg)}22%{transform:rotate(-7deg)}32%{transform:rotate(5deg)}45%{transform:translateY(-3vh) rotate(-3deg)}58%{transform:translateY(0) rotate(4deg)}84%{transform:translateX(0) rotate(0)}100%{transform:translateX(-140%) rotate(-20deg)}}
+@keyframes pkr{0%{transform:translateX(130%) rotate(25deg)}14%{transform:translateX(0) rotate(-10deg)}22%{transform:rotate(7deg)}32%{transform:rotate(-5deg)}45%{transform:translateY(-3vh) rotate(3deg)}58%{transform:translateY(0) rotate(-4deg)}84%{transform:translateX(0) rotate(0)}100%{transform:translateX(140%) rotate(20deg)}}
+@keyframes pkb{0%{transform:translate(-50%,110%)}16%{transform:translate(-50%,-6%) scale(1.05)}24%{transform:translate(-50%,2%) scale(.97)}32%,78%{transform:translate(-50%,0)}50%{transform:translate(-50%,-4%) rotate(4deg)}64%{transform:translate(-50%,0) rotate(-4deg)}100%{transform:translate(-50%,115%)}}
+@keyframes voa{0%{transform:translate(-45vw,0) rotate(-8deg)}25%{transform:translate(20vw,-4vh) rotate(6deg)}50%{transform:translate(50vw,3vh) rotate(-6deg)}75%{transform:translate(80vw,-4vh) rotate(6deg)}100%{transform:translate(115vw,0) rotate(-8deg)}}
+@keyframes pula{0%{transform:translate(-50vw,0)}12%{transform:translate(0,0)}20%{transform:translate(0,-10vh) rotate(-8deg)}28%{transform:translate(0,0) scale(1.05,.93)}36%{transform:translate(0,-6vh) rotate(8deg)}44%{transform:translate(0,0)}52%{transform:translate(0,-3vh)}60%,82%{transform:translate(0,0)}100%{transform:translate(-55vw,0)}}
+.conf{position:fixed;inset:0;pointer-events:none;z-index:8;overflow:hidden}
+.conf i{position:absolute;top:-4vh;width:1.5vh;height:.9vh;border-radius:2px;animation:cf 3s ease-in both}
+@keyframes cf{to{transform:translate(var(--x),112vh) rotate(var(--g))}}
+.sl.e-zoom{animation:ezoom .9s cubic-bezier(.3,1.4,.5,1) both}
+.sl.e-left{animation:eleft .8s cubic-bezier(.3,1.2,.5,1) both}
+.sl.e-right{animation:eright .8s cubic-bezier(.3,1.2,.5,1) both}
+.sl.e-up{animation:eup .8s cubic-bezier(.3,1.2,.5,1) both}
+.sl.e-tilt{animation:etilt .9s cubic-bezier(.3,1.3,.5,1) both}
+@keyframes ezoom{from{opacity:0;transform:scale(.6)}}
+@keyframes eleft{from{opacity:0;transform:translateX(-40vw) rotate(-6deg)}}
+@keyframes eright{from{opacity:0;transform:translateX(40vw) rotate(6deg)}}
+@keyframes eup{from{opacity:0;transform:translateY(30vh)}}
+@keyframes etilt{from{opacity:0;transform:rotate(-14deg) scale(.8)}}
+.sl.out{animation:fadeout .6s ease both !important}
+.sl-foto .ph{transform:rotate(var(--r,0deg))}
+.pol{background:#fff;padding:1.2vh 1.2vh 1.2vh;border-radius:.8vh;box-shadow:0 2vh 6vh rgba(0,0,0,.38);transform:rotate(var(--r));max-width:92%;line-height:0;overflow:hidden;animation:polin .9s cubic-bezier(.3,1.5,.5,1) both}
+.pol img{max-height:calc(var(--sh,60vh) - 13vh);max-width:86vw;object-fit:contain;display:block;animation:kb 7s ease-out both}
+@keyframes polin{from{opacity:0;transform:rotate(calc(var(--r) * 3)) scale(.5) translateY(-20vh)}}
+.sl-col{display:block}
+.sl-col .pol{position:absolute;max-width:44%}
+.sl-col .pol img{max-height:calc(var(--sh,60vh) * .52);max-width:40vw}
+.sl-col .c1{left:4%;top:6%} .sl-col .c2{left:30%;top:24%;z-index:2} .sl-col .c3{right:4%;top:2%}
+.sl-col .cap{position:absolute;left:0;right:0;bottom:1vh;margin:auto}
+.sl-intro{text-align:center}
+.sl-intro .hey{font-weight:700;font-size:clamp(18px,2.6vw,42px);color:var(--muted)}
+.sl-intro .nm{font-family:var(--display);color:var(--accent);font-size:clamp(54px,11vw,190px);line-height:1;text-shadow:0 .6vh 0 color-mix(in srgb,var(--accent2) 60%, transparent)}
+.sl-intro .nm span{display:inline-block;animation:onda 1.6s ease-in-out infinite}
+@keyframes onda{0%,100%{transform:translateY(0) rotate(0)}30%{transform:translateY(-3vh) rotate(-4deg)}60%{transform:translateY(0) rotate(3deg)}}
+.sl-intro .sub{font-weight:700;font-size:clamp(22px,3.4vw,56px);color:var(--ink)}
+.sl-intro .cta{font-weight:600;font-size:clamp(15px,1.8vw,30px);color:var(--muted);background:color-mix(in srgb,var(--surface) 80%, transparent);padding:1.2vh 2.4vw;border-radius:99px}
+.novo{position:absolute;top:0;left:50%;transform:translateX(-50%);z-index:3;background:var(--accent);color:var(--on);font-weight:800;font-size:clamp(16px,2.2vw,36px);padding:.8vh 2.4vw;border-radius:99px;box-shadow:0 1vh 3vh rgba(0,0,0,.25);animation:novo 1s ease-in-out infinite alternate}
+@keyframes novo{to{transform:translateX(-50%) scale(1.08)}}
+.tv-empty .qr{width:min(calc(var(--sh,60vh) - 22vh),62vw)}
+.sl-foto .ph{max-height:calc(var(--sh,60vh) - 12vh) !important;max-width:88vw !important}
+.sl-video video{max-height:calc(var(--sh,60vh) - 7vh) !important}
 .tv-hint{position:fixed;right:12px;bottom:8px;z-index:6;font-size:12px;color:var(--muted);opacity:.5}
 
 /* ---------- painéis ---------- */
@@ -744,50 +794,74 @@ function folhaGravar(kind){
 async function telaTelao(){
   FESTA = await carregarFesta(SLUG).catch(()=>null);
   if(!FESTA) return telaNaoAchou();
-  const f=FESTA, t=temaDe(f), url=linkFesta(f.slug); aplicarTema(t, .62); document.title='Telão · '+(FESTA.homenageado||FESTA.titulo);
+  const f=FESTA, t=temaDe(f), url=linkFesta(f.slug), nome=f.homenageado||f.titulo; aplicarTema(t, .62); document.title='Telão · '+nome;
   $('app').innerHTML = `
    <div class="tv">
-     <div class="tv-top"><div class="t">${esc(f.homenageado||f.titulo)}</div><div class="n" id="tvN"></div></div>
+     <div class="tv-top"><div class="t">${esc(nome)}</div><div class="n" id="tvN"></div></div>
      <div class="stage" id="stage"></div>
-     <div class="tv-bar"><div class="qr" id="tvQr"></div><div><b>Deixe sua homenagem!</b><span>Aponte a câmera do celular para o código · foto, recado, áudio ou vídeo</span></div>${t.enfeite?`<img class="tv-enf" id="tvEnf" src="${midia(t.enfeite)}" alt="">`:`<div class="acts-mini">${t.deco.join('')}</div>`}</div>
+     <div class="tv-bar"><div class="qr" id="tvQr"></div><div><b>Deixe sua homenagem!</b><span>Aponte a câmera do celular para o código · foto, recado, áudio ou vídeo</span></div></div>
    </div>
-   <div class="tv-start" id="tvStart"><div>${t.enfeite?`<img class="enf-big" src="${midia(t.enfeite)}" alt="">`:`<div style="font-size:64px">${t.deco[0]}</div>`}<div class="who">${esc(f.homenageado||f.titulo)}</div><p class="muted" style="font-size:20px;font-weight:600">${esc(subtitulo(f))}</p>
+   <div class="tv-start" id="tvStart"><div>${t.enfeite?`<img class="enf-big" src="${midia(t.enfeite)}" alt="">`:`<div style="font-size:64px">${t.deco[0]}</div>`}<div class="who">${esc(nome)}</div><p class="muted" style="font-size:20px;font-weight:600">${esc(subtitulo(f))}</p>
      <button class="btn" id="tvGo" style="font-size:22px;padding:16px 30px">▶ Iniciar telão</button><p class="muted" style="font-size:14px;margin-top:14px">Dica: conecte o notebook na TV. Teclas: → próxima · ← anterior · espaço pausa · F tela cheia${t.musica&&t.musica.tipo&&t.musica.tipo!=='nenhuma'?' · M música':''}</p></div></div>
    <div class="tv-hint" id="tvHint"></div>${f.plano==='teste'?'<div class="demo">MODO TESTE</div>':''}`;
   qrInto($('tvQr'), url, 300);
-  const tv = {list:[], known:new Set(), queue:[], loop:0, cur:null, timer:null, paused:false, hist:[], n:0, hi:0, ei:0, vz:false};
-  const fotosH = t.fotos||[], enfs = t.enfeites||[], mus = criarMusica(t.musica);
-  const itemHist = () => ({id:'h'+tv.hi, tipo:'hist', caminho:fotosH[(tv.hi++)%fotosH.length]});
+  const medir=()=>{ const h=$('stage')?$('stage').clientHeight:0; if(h) document.documentElement.style.setProperty('--sh', h+'px'); const bb=document.querySelector('.tv-bar'); if(bb) document.documentElement.style.setProperty('--bh', bb.offsetHeight+'px'); }; medir(); addEventListener('resize', medir); setTimeout(medir,500);
+  const tv = {list:[], known:new Set(), queue:[], loop:0, cur:null, timer:null, paused:false, hist:[], hi:0, pv:1, pm:0, since:0};
+  const fotosH = t.fotos||[], mus = criarMusica(t.musica);
+  const PADRAO_VAZIO = fotosH.length>=3 ? ['intro','hist','hist','col','hist','hist','qr'] : fotosH.length ? ['intro','hist','hist','qr'] : ['intro','qr'];
+  const PADRAO_MIX   = fotosH.length>=3 ? ['hist','col','hist','intro','hist','qr'] : fotosH.length ? ['hist','intro','hist','qr'] : ['intro','qr'];
+  const proxFoto = () => fotosH[(tv.hi++) % fotosH.length];
+  const extra = k => k==='hist' ? {tipo:'hist', caminho:proxFoto()} : k==='col' ? {tipo:'col', fotos:[proxFoto(),proxFoto(),proxFoto()]} : {tipo:k};
+
+  // ---- personagens que entram e saem da tela ----
+  const chars = (()=>{
+    const lay=document.createElement('div'); lay.className='chars'; document.body.appendChild(lay);
+    const srcs = (t.enfeites||[]).length ? t.enfeites.map(p=>({img:midia(p)})) : t.deco.map(e=>({emo:e}));
+    srcs.forEach(s=>{ if(!s.img) return; const im=new Image(); im.crossOrigin='anonymous';
+      im.onload=()=>{ try{ const c=document.createElement('canvas'); c.width=c.height=24; const x=c.getContext('2d'); x.drawImage(im,0,0,24,24); const d=x.getImageData(0,0,24,24).data; s.trans=[0,23,552,575].some(i=>d[i*4+3]<200); }catch(e){ s.trans=false; } };
+      im.onerror=()=>{ s.trans=false; }; im.src=s.img; });
+    const tipos=['pk-l','pk-r','pk-b','voa','pk-l','pk-r','pula']; let i=0, timer=null, ult='';
+    function um(forca){ if(lay.children.length>=(forca?3:1)) return; const s=srcs[i++ % srcs.length]; let k; do{ k=forca||tipos[Math.floor(Math.random()*tipos.length)]; }while(!forca && k===ult && tipos.length>1); ult=k;
+      const el=document.createElement('div'); el.className='ch '+k;
+      el.innerHTML = s.img ? `<img class="${s.trans===true?'':'sticker'}" style="--r:${(Math.random()*16-8).toFixed(1)}deg" src="${s.img}" alt="">` : `<span class="emo">${s.emo}</span>`;
+      lay.appendChild(el); setTimeout(()=>el.remove(), 7000); }
+    return { start(){ um(); timer=setInterval(()=>um(), 6500); }, festa(){ um('pk-l'); setTimeout(()=>um('pk-r'),400); } };
+  })();
+  function confete(n=90){ const box=document.createElement('div'); box.className='conf'; const cores=t.pal&&t.pal.length?t.pal:['#ff5a5f','#ffc300','#2ec4b6','#7b2cbf'];
+    for(let i=0;i<n;i++){ const s=document.createElement('i'); s.style.left=(Math.random()*100)+'vw'; s.style.background=cores[i%cores.length]; s.style.animationDelay=(Math.random()*.7).toFixed(2)+'s'; s.style.animationDuration=(2.2+Math.random()*1.8).toFixed(2)+'s'; s.style.setProperty('--x',(Math.random()*30-15).toFixed(1)+'vw'); s.style.setProperty('--g',(Math.random()*900-450).toFixed(0)+'deg'); box.appendChild(s); }
+    document.body.appendChild(box); setTimeout(()=>box.remove(),5000); }
+
   async function puxar(){
     try{ const l=await postsAprovados(f.id); tv.list=l; for(const p of l){ if(!tv.known.has(p.id)){ tv.known.add(p.id); if(tv.started) tv.queue.push(p); } } $('tvN').textContent = l.length ? `${l.length} homenage${l.length>1?'ns':'m'} 💛` : ''; }catch(e){}
   }
-  function vazio(){
-    const st=$('stage'); st.innerHTML=`<div class="sl tv-empty"><div class="qr" id="tvQrBig"></div><h2>Mande a primeira homenagem!</h2><p>Aponte a câmera do celular para o código</p></div>`;
-    qrInto($('tvQrBig'), url, 600); tv.cur=null; clearTimeout(tv.timer); tv.timer=setTimeout(proxima, 5000);
-  }
   function proxima(back){
     clearTimeout(tv.timer); if(tv.paused) return;
-    let p;
-    if(!back){ tv.n++; if(fotosH.length && tv.list.length && !tv.queue.length && tv.n%5===0) return mostrar(itemHist()); }
+    let p=null;
     if(back && tv.hist.length>1){ tv.hist.pop(); p=tv.hist.pop(); }
-    else if(tv.queue.length) p=tv.queue.shift();
-    else if(tv.list.length){ p=tv.list[tv.loop % tv.list.length]; tv.loop++; }
-    if(!p){ tv.vz=!tv.vz; if(fotosH.length && tv.vz) return mostrar(itemHist()); return vazio(); }
-    if(!tv.list.find(x=>x.id===p.id)) return proxima();
-    tv.hist.push(p); if(tv.hist.length>50) tv.hist.shift();
+    else if(tv.queue.length){ p={...tv.queue.shift(), _novo:true}; }
+    else if(tv.list.length){ if(tv.since>=3){ tv.since=0; return mostrar(extra(PADRAO_MIX[tv.pm++ % PADRAO_MIX.length])); } p=tv.list[tv.loop % tv.list.length]; tv.loop++; }
+    else return mostrar(extra(PADRAO_VAZIO[tv.pv++ % PADRAO_VAZIO.length]));
+    if(!p || !tv.list.find(x=>x.id===p.id)) return proxima();
+    tv.since++; tv.hist.push(p); if(tv.hist.length>50) tv.hist.shift();
     mostrar(p);
   }
+  const ENTRADAS=['e-zoom','e-left','e-right','e-up','e-tilt'];
+  const giro = () => (Math.random()*8-4).toFixed(1)+'deg';
   function mostrar(p){
     const st=$('stage'); const old=st.firstElementChild; if(old){ old.classList.add('out'); const o=old; setTimeout(()=>o.remove(),600); old.querySelectorAll('audio,video').forEach(m=>{ try{ m.pause(); }catch(e){} }); }
-    const el=document.createElement('div'); el.className='sl'; const by = p.autor ? esc(p.autor) : '';
+    const el=document.createElement('div'); el.className='sl '+ENTRADAS[Math.floor(Math.random()*ENTRADAS.length)]; const by = p.autor ? esc(p.autor) : '';
     let dur=8000;
-    if(enfs.length>1 && $('tvEnf')){ tv.ei=(tv.ei+1)%enfs.length; $('tvEnf').src=midia(enfs[tv.ei]); }
-    if(p.tipo==='hist'){ el.classList.add('sl-foto'); el.innerHTML=`<img class="ph" src="${midia(p.caminho)}" alt=""><div class="cap">📖 A história de ${esc(f.homenageado||f.titulo)}</div>`; dur=6500; }
-    else if(p.tipo==='foto'){ el.classList.add('sl-foto'); el.innerHTML=`<img class="ph" src="${midia(p.caminho)}" alt="">${(p.texto||by)?`<div class="cap">${esc(p.texto||'')}${by?`<small>📸 ${by}</small>`:''}</div>`:''}`; dur=8000; }
+    if(p.tipo==='hist'){ el.classList.add('sl-hist'); el.innerHTML=`<div class="pol" style="--r:${giro()}"><img src="${midia(p.caminho)}" alt=""></div><div class="cap">📖 A história de ${esc(nome)}</div>`; dur=6500; }
+    else if(p.tipo==='col'){ el.classList.add('sl-col'); el.innerHTML=p.fotos.map((c,i)=>`<div class="pol c${i+1}" style="--r:${[-9,4,10][i]}deg;animation-delay:${i*.45}s"><img src="${midia(c)}" alt=""></div>`).join('')+`<div class="cap">📖 A história de ${esc(nome)}</div>`; dur=8500; }
+    else if(p.tipo==='intro'){ el.className='sl sl-intro e-zoom'; el.innerHTML=`<div class="hey">✨ Bem-vindos à festa ✨</div><div class="nm">${[...nome].map((ch,i)=>`<span style="animation-delay:${(i*.08).toFixed(2)}s">${ch===' '?'&nbsp;':esc(ch)}</span>`).join('')}</div><div class="sub">${esc(subtitulo(f))}</div><div class="cta">📸 ✍️ 🎤 🎥 Mande sua homenagem pelo QR Code aqui embaixo!</div>`; dur=7500; confete(60); chars.festa(); }
+    else if(p.tipo==='qr'){ el.className='sl tv-empty e-zoom'; el.innerHTML=`<div class="qr" id="tvQrBig"></div><h2>${tv.list.length?'Deixe a sua homenagem também!':'Mande a primeira homenagem!'}</h2><p>Aponte a câmera do celular para o código</p>`; dur=7000; }
+    else if(p.tipo==='foto'){ el.classList.add('sl-foto'); el.innerHTML=`<img class="ph" style="--r:${giro()}" src="${midia(p.caminho)}" alt="">${(p.texto||by)?`<div class="cap">${esc(p.texto||'')}${by?`<small>📸 ${by}</small>`:''}</div>`:''}`; dur=8000; }
     else if(p.tipo==='texto'){ el.classList.add('sl-texto'); const L=(p.texto||'').length; const fs = L<40?9:L<90?7:L<180?5.4:L<320?4.2:3.4; el.innerHTML=`<div class="q${t.fundo?' card-on':''}" style="font-size:${fs}vw">${esc(p.texto)}</div>${by?`<div class="by">— ${by}</div>`:''}`; dur=Math.min(18000, 7000+L*45); }
     else if(p.tipo==='audio'){ el.classList.add('sl-audio'); el.innerHTML=`<div class="mic">🎤</div><div class="eq">${'<i></i>'.repeat(12)}</div><div class="cap">Recado de ${by||'um convidado'}</div><audio src="${midia(p.caminho)}" preload="auto"></audio>`; dur=null; }
     else if(p.tipo==='video'){ el.classList.add('sl-video'); el.innerHTML=`<video src="${midia(p.caminho)}" playsinline preload="auto" ${p.thumb?`poster="${midia(p.thumb)}"`:''}></video>${by?`<div class="cap"><small>🎥 Recado de ${by}</small></div>`:''}`; dur=null; }
+    if(p._novo){ el.insertAdjacentHTML('afterbegin','<div class="novo">✨ Nova homenagem! ✨</div>'); confete(); chars.festa(); }
     st.appendChild(el); tv.cur=p;
+    if(p.tipo==='qr') qrInto($('tvQrBig'), url, 600);
     const m=el.querySelector('audio,video'); if(mus) mus.duck(!!m);
     if(m){ m.onended=()=>proxima(); m.onerror=()=>{ tv.timer=setTimeout(proxima,1500); }; m.play().catch(()=>{ tv.timer=setTimeout(proxima,3000); }); tv.timer=setTimeout(proxima, ((p.duracao||60)+6)*1000); }
     else tv.timer=setTimeout(proxima, dur);
@@ -796,7 +870,7 @@ async function telaTelao(){
     $('tvStart').hidden=true; tv.started=true; if(mus) mus.start();
     try{ await document.documentElement.requestFullscreen(); }catch(e){}
     try{ if(navigator.wakeLock) await navigator.wakeLock.request('screen'); }catch(e){}
-    await puxar(); proxima();
+    await puxar(); chars.start(); mostrar(extra('intro'));
   };
   document.addEventListener('keydown', e=>{
     if(!tv.started) return;

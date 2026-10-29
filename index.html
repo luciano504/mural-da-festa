@@ -311,8 +311,8 @@ h2.sec{font-weight:700;font-size:22px;margin:28px 0 12px;display:flex;align-item
 .hist figure:nth-child(odd){transform:rotate(-1.5deg)} .hist figure:nth-child(even){transform:rotate(1.5deg)}
 .hist img{height:190px;width:auto;max-width:72vw;display:block;object-fit:cover;border-radius:2px}
 .tv-bar .qr{position:relative;z-index:3}
-.demo{position:fixed;inset:-30vh -30vw;z-index:2;pointer-events:none;display:flex;flex-wrap:wrap;align-content:center;justify-content:center;gap:5vh 5vw;transform:rotate(-24deg)}
-.demo span{font:900 clamp(30px,6.5vw,120px)/1 Fredoka,sans-serif;color:rgba(255,255,255,.5);-webkit-text-stroke:.25vw rgba(170,20,20,.55);letter-spacing:.06em;white-space:nowrap}
+.demo{position:fixed;left:0;top:0;z-index:2;pointer-events:none;background:rgba(201,42,42,.82);color:#fff;font:900 clamp(24px,4vw,68px)/1.05 Fredoka,sans-serif;text-align:center;padding:1.4vh 2.4vw;border-radius:2vh;border:.4vh solid rgba(255,255,255,.85);box-shadow:0 1vh 3vh rgba(0,0,0,.3);letter-spacing:.04em;will-change:transform}
+.demo small{display:block;font-weight:700;font-size:.42em;letter-spacing:0;opacity:.95}
 .demo-faixa{position:fixed;left:0;right:0;top:0;z-index:10;background:#c92a2a;color:#fff;text-align:center;font:800 clamp(13px,1.8vw,30px)/1.25 Fredoka,sans-serif;padding:.9vh 2vw;box-shadow:0 .5vh 2vh rgba(0,0,0,.3)}
 .teste-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;padding:12px 14px;border-radius:16px;background:#fff3bf;color:#5c4400;margin-bottom:12px}
 .teste-bar b{font-size:16px}
@@ -803,12 +803,14 @@ async function telaTelao(){
    <div class="tv">
      <div class="tv-top"><div class="t">${esc(nome)}</div><div class="n" id="tvN"></div></div>
      <div class="stage" id="stage"></div>
-     ${f.plano==='teste'?'<div class="demo">'+'<span>MODO TESTE</span>'.repeat(40)+'</div>':''}
+     ${f.plano==='teste'?'<div class="demo" id="tvDemo">🧪 MODO TESTE<small>ative a festa para tirar este aviso</small></div>':''}
      <div class="tv-bar"><div class="qr" id="tvQr"></div><div><b>Deixe sua homenagem!</b><span>Aponte a câmera do celular para o código · foto, recado, áudio ou vídeo</span></div></div>
    </div>
    <div class="tv-start" id="tvStart"><div>${t.enfeite?`<img class="enf-big" src="${midia(t.enfeite)}" alt="">`:`<div style="font-size:64px">${t.deco[0]}</div>`}<div class="who">${esc(nome)}</div><p class="muted" style="font-size:20px;font-weight:600">${esc(subtitulo(f))}</p>
      <button class="btn" id="tvGo" style="font-size:22px;padding:16px 30px">▶ Iniciar telão</button><p class="muted" style="font-size:14px;margin-top:14px">Dica: conecte o notebook na TV. Teclas: → próxima · ← anterior · espaço pausa · F tela cheia${t.musica&&t.musica.tipo&&t.musica.tipo!=='nenhuma'?' · M música':''}</p></div></div>
-   <div class="tv-hint" id="tvHint"></div>${f.plano==='teste'?'<div class="demo-faixa">🧪 VERSÃO DE TESTE · Mural da Festa · ative a festa para tirar esta marca</div>':''}`;
+   <div class="tv-hint" id="tvHint"></div>`;
+  if($('tvDemo')){ const d=$('tvDemo'); let x=innerWidth*.3, y=innerHeight*.3, vx=1.6, vy=1.2;
+    const passo=()=>{ const w=d.offsetWidth, h=d.offsetHeight, W=innerWidth, H=innerHeight; x+=vx; y+=vy; if(x<0){x=0;vx=Math.abs(vx);} if(x>W-w){x=W-w;vx=-Math.abs(vx);} if(y<0){y=0;vy=Math.abs(vy);} if(y>H-h){y=H-h;vy=-Math.abs(vy);} d.style.transform=`translate(${x}px,${y}px) rotate(-6deg)`; requestAnimationFrame(passo); }; requestAnimationFrame(passo); }
   qrInto($('tvQr'), url, 300);
   const medir=()=>{ const h=$('stage')?$('stage').clientHeight:0; if(h) document.documentElement.style.setProperty('--sh', h+'px'); const bb=document.querySelector('.tv-bar'); if(bb) document.documentElement.style.setProperty('--bh', bb.offsetHeight+'px'); }; medir(); addEventListener('resize', medir); setTimeout(medir,500);
   const tv = {list:[], known:new Set(), queue:[], loop:0, cur:null, timer:null, paused:false, hist:[], hi:0, pv:1, pm:0, since:0};
@@ -1378,12 +1380,10 @@ async function pdfAlbum(f, posts, prog){
   return {blob:doc.output('blob'), paginas:n};
 }
 function marcaTeste(c, W, H){
-  const u=W/1240; c.save(); c.translate(W/2,H/2); c.rotate(-.45); c.textAlign='center'; c.textBaseline='middle';
-  c.font=`900 ${Math.round(120*u)}px Fredoka, sans-serif`; c.lineWidth=Math.max(2,5*u); c.strokeStyle='rgba(170,20,20,.55)'; c.fillStyle='rgba(255,255,255,.55)';
-  const passoY=230*u, passoX=820*u, D=Math.hypot(W,H);
-  for(let y=-D/2, l=0; y<D/2; y+=passoY, l++) for(let x=-D/2+(l%2)*passoX/2; x<D/2; x+=passoX){ c.strokeText('MODO TESTE',x,y); c.fillText('MODO TESTE',x,y); }
-  c.restore();
-  c.save(); c.fillStyle='#c92a2a'; c.fillRect(0,0,W,70*u); c.fillStyle='#fff'; c.font=`800 ${Math.round(34*u)}px Fredoka, sans-serif`; c.textAlign='center'; c.textBaseline='middle'; c.fillText('VERSÃO DE TESTE · ative a festa para tirar esta marca', W/2, 36*u); c.restore();
+  const u=W/1240; c.save(); c.translate(W/2,H*.5); c.rotate(-.35); c.textAlign='center'; c.textBaseline='middle';
+  const w=900*u, h=230*u; rr(c,-w/2,-h/2,w,h,40*u); c.fillStyle='rgba(201,42,42,.72)'; c.fill(); c.lineWidth=10*u; c.strokeStyle='rgba(255,255,255,.85)'; c.stroke();
+  c.fillStyle='#fff'; c.font=`900 ${Math.round(120*u)}px Fredoka, sans-serif`; c.fillText('MODO TESTE',0,-18*u);
+  c.font=`700 ${Math.round(38*u)}px Fredoka, sans-serif`; c.fillText('ative a festa para tirar este aviso',0,70*u); c.restore();
 }
 async function conviteCanvas(f, W, H){
   const t=await temaPdf(f); const cv=document.createElement('canvas'); cv.width=W; cv.height=H; const c=cv.getContext('2d'); const u=W/1080;

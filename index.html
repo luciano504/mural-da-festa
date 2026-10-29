@@ -180,6 +180,11 @@ h2.sec{font-weight:700;font-size:22px;margin:28px 0 12px;display:flex;align-item
 .tema .nm{font-weight:700;font-size:15px}
 .tema .dots{display:flex;gap:4px}
 .tema .dots i{width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,.7)}
+.tema.seu{background:linear-gradient(135deg,#fff 0%,#fff6e0 100%);color:#2b2335;border:3px dashed var(--accent);grid-column:span 2;min-height:110px}
+.tema.seu[aria-pressed="true"]{border-style:solid;border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 30%, transparent)}
+.tema.seu .nm{font-size:19px} .tema.seu small{font-size:13px;color:#6b6478;font-weight:600}
+.seucta{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:18px 20px;margin-bottom:12px;border:3px solid var(--accent);background:linear-gradient(135deg,var(--surface),color-mix(in srgb,var(--accent) 12%, var(--surface)))}
+.seucta h2{margin:0;font-size:24px} .seucta p{margin:4px 0 0;color:var(--muted)}
 .tema .rec{position:absolute;top:8px;right:8px;font-size:11px;font-weight:700;padding:2px 7px;border-radius:999px;background:rgba(255,255,255,.85);color:#333}
 .cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
 .cat{border:2px solid var(--line);background:var(--surface);border-radius:16px;padding:12px 8px;cursor:pointer;font-weight:600;display:flex;flex-direction:column;align-items:center;gap:4px}
@@ -818,26 +823,30 @@ function painelAdmin(){
    <div class="top"><h1>Anfitrião · <em>${esc(f.homenageado||f.titulo)}</em></h1><div class="row"><a class="btn ghost sm" href="${linkFesta(f.slug)}" target="_blank" rel="noopener">👀 Ver como convidado</a><a class="btn sm" href="${linkFesta(f.slug,'telao')}" target="_blank" rel="noopener">📺 Abrir telão</a><button class="btn ghost sm" id="sair">Sair</button></div></div>
    ${f.plano==='teste'?`<div class="teste-bar"><div><b>🧪 Festa em modo teste</b><br><span style="font-size:14px">Funciona de verdade, com até 10 homenagens e a marca “teste” no telão e no álbum. Ative para liberar tudo.</span></div><div class="row">${COMPRA_URL?`<a class="btn alt sm" href="${COMPRA_URL}" target="_blank" rel="noopener">💳 Comprar ativação</a>`:''}<button class="btn sm" id="btAtivar">🔓 Tenho um código</button></div></div>`:''}
    ${store.get('mf_novo_'+f.slug)?`<div class="card passos" id="passos"><div class="row" style="justify-content:space-between"><b style="font-size:18px">🎉 Sua festa está criada! Próximos passos:</b><button class="btn ghost sm" id="psOk">Entendi</button></div><ol>
-     <li><button class="link" data-ir="meutema">Monte o tema</button>: imagem de fundo, personagens, 8 a 12 fotos do homenageado e a música do telão.</li>
+     <li><button class="link" data-ir="meutema">Faça o seu tema</button>: imagem de fundo, personagens, 8 a 12 fotos do homenageado e a música do telão.</li>
      <li><button class="link" data-ir="compartilhar">Mande o convite com QR Code</button> no grupo da família e imprima os cartões de mesa.</li>
      <li>No dia, abra o <b>📺 telão</b> no notebook ligado na TV. Na aba <b>💌 Homenagens</b> você aprova o que aparece.</li>
      <li>Depois da festa, baixe o álbum em <button class="link" data-ir="recordacoes">📖 Recordações</button>.</li></ol></div>`:''}
+   ${!f.custom?`<div class="card seucta" id="seuCta"><div><h2>🎨 Faça o seu tema</h2><p>Imagem de fundo, personagens, 8 a 12 fotos de ${esc(f.homenageado||'quem a gente ama')} e música no telão. Leva 5 minutos.</p></div><button class="btn" id="seuGo" style="font-size:18px;padding:14px 24px">Começar agora →</button></div>`:''}
    <div class="tabs" id="abasTop">
-     <button data-v="moderar" aria-pressed="true">💌 Homenagens <span class="n" id="nPend" hidden></span></button>
+     <button data-v="meutema" aria-pressed="false">🎨 Faça o seu tema</button>
+     <button data-v="moderar" aria-pressed="false">💌 Homenagens <span class="n" id="nPend" hidden></span></button>
      <button data-v="festa" aria-pressed="false">📝 Dados da festa</button>
-     <button data-v="meutema" aria-pressed="false">🎨 Tema, fotos e música</button>
      <button data-v="compartilhar" aria-pressed="false">📲 Compartilhar</button>
      <button data-v="recordacoes" aria-pressed="false">📖 Recordações</button>
    </div>
    <div id="vw"></div></div>`;
   $('sair').onclick=()=>{ store.sset('mf_pin_'+SLUG,null); location.reload(); };
   const abas=$('abasTop');
-  abas.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; abas.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed', x===b)); ({moderar:vModerar, festa:vFesta, meutema:vMeuTema, compartilhar:vCompartilhar, recordacoes:vRecordacoes})[b.dataset.v](); };
+  abas.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; abas.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed', x===b)); if(b.dataset.v==='meutema' && $('seuCta')) $('seuCta').remove(); ({moderar:vModerar, festa:vFesta, meutema:vMeuTema, compartilhar:vCompartilhar, recordacoes:vRecordacoes})[b.dataset.v](); };
   const ir=v=>{ const b=abas.querySelector(`[data-v="${v}"]`); if(b) b.click(); };
   document.querySelectorAll('[data-ir]').forEach(b=>b.onclick=()=>ir(b.dataset.ir));
   if($('psOk')) $('psOk').onclick=()=>{ store.set('mf_novo_'+f.slug,null); $('passos').remove(); };
   if($('btAtivar')) $('btAtivar').onclick=ativarFesta;
-  vModerar(); setInterval(()=>{ if(!document.hidden && ADM.view==='moderar') carregarAdmPosts(); }, 12000);
+  if($('seuGo')) $('seuGo').onclick=()=>{ ir('meutema'); $('vw').scrollIntoView({behavior:'smooth'}); };
+  const abaIni = Q.get('aba') || (!f.custom ? 'meutema' : 'moderar');
+  ir(['meutema','moderar','festa','compartilhar','recordacoes'].includes(abaIni) ? abaIni : 'moderar'); if(ADM.view!=='moderar') carregarAdmPosts();
+  setInterval(()=>{ if(!document.hidden && ADM.view==='moderar') carregarAdmPosts(); }, 12000);
 }
 function ativarFesta(){
   abrirFolha(`<h3>🔓 Ativar a festa</h3><p class="muted" style="margin-top:0">Digite o código de ativação que você recebeu depois da compra. A festa passa a aceitar homenagens sem limite e sai a marca “teste”.</p>
@@ -887,7 +896,14 @@ function formFesta(f, {mestre, auto}={}){
   <div class="card" style="padding:18px">
    <h3 style="margin:0 0 10px">Tipo de festa</h3>
    <div class="cats" id="ffCats">${Object.entries(CATS).map(([k,c])=>`<button type="button" class="cat" data-k="${k}" aria-pressed="${k===cat}"><span class="e">${c.e}</span>${c.n}</button>`).join('')}</div>
-   <div class="grid2" style="margin-top:16px">
+  </div>
+  <div class="card" style="padding:18px;margin-top:12px">
+   <div class="row" style="justify-content:space-between"><h3 style="margin:0">Tema <span class="muted" style="font-size:14px;font-weight:600">· faça o seu ou escolha um pronto</span></h3><label class="row" style="gap:6px;font-size:14px;font-weight:600"><input type="checkbox" id="ffTodos"> ver todos os temas</label></div>
+   <div class="temas" id="ffTemas" style="margin-top:12px"></div>
+  </div>
+  <div class="card" style="padding:18px;margin-top:12px">
+   <h3 style="margin:0 0 10px">Dados da festa</h3>
+   <div class="grid2">
      <label class="f">Homenageado(s)<input class="in" id="ffHom" maxlength="80" value="${esc(f.homenageado||'')}"></label>
      <label class="f">Título da festa<input class="in" id="ffTit" maxlength="80" value="${esc(f.titulo||'')}" placeholder="Deixe vazio que eu sugiro"></label>
      <label class="f" id="ffIdadeL">Idade<input class="in" id="ffIdade" type="number" min="0" max="120" value="${f.idade??''}"></label>
@@ -897,10 +913,6 @@ function formFesta(f, {mestre, auto}={}){
    </div>
    <label class="f" style="margin-top:12px">Mensagem de boas-vindas (opcional)<textarea class="in" id="ffMsg" maxlength="300" style="min-height:80px" placeholder="Ex.: Deixe aqui seu carinho para a Maria Clara!">${esc(f.mensagem||'')}</textarea></label>
    <label class="row" style="margin-top:12px;font-weight:600;gap:8px"><input type="checkbox" id="ffMod" ${f.moderacao!==false?'checked':''} style="width:22px;height:22px"> Aprovar as homenagens antes de irem para o telão</label>
-  </div>
-  <div class="card" style="padding:18px;margin-top:12px">
-   <div class="row" style="justify-content:space-between"><h3 style="margin:0">Tema</h3><label class="row" style="gap:6px;font-size:14px;font-weight:600"><input type="checkbox" id="ffTodos"> ver todos os temas</label></div>
-   <div class="temas" id="ffTemas" style="margin-top:12px"></div>
   </div>
   ${mestre?`<div class="card" style="padding:18px;margin-top:12px"><h3 style="margin:0 0 10px">Cliente e acesso</h3><div class="grid2">
      <label class="f">Senha do anfitrião<input class="in" id="ffSenha" maxlength="20" value="${String(Math.floor(100000+Math.random()*900000))}"></label>
@@ -917,18 +929,18 @@ function formFesta(f, {mestre, auto}={}){
      <label class="row" style="margin-top:12px;font-weight:600;gap:8px;align-items:flex-start"><input type="checkbox" id="ffAceite" style="width:22px;height:22px;flex:none"> Li e aceito os <a href="${BASE}?termos" target="_blank" rel="noopener">Termos de uso e Privacidade</a></label></div>`
    :`<div class="card" style="padding:18px;margin-top:12px"><h3 style="margin:0 0 10px">Senha do anfitrião</h3><label class="f">Nova senha (deixe vazio para manter)<input class="in" id="ffSenha" maxlength="20" type="password" autocomplete="new-password"></label></div>`}`;
 }
-function ligarFormFesta(f, onTema){
-  let cat=f.categoria||'aniversario', tem=f.tema||CATS[cat].tema;
+function ligarFormFesta(f, onTema, onSeu, seuIni){
+  let cat=f.categoria||'aniversario', tem=f.tema||CATS[cat].tema, seu=!!seuIni;
   const ajustarIdade=()=>{ const L=$('ffIdadeL'); const lab={bodas:'Anos de casados',quinze:null,casamento:null,cha_bebe:null,formatura:null,outra:null}[cat]; const show = !(cat in {quinze:1,casamento:1,cha_bebe:1,formatura:1,outra:1}); L.hidden=!show; L.firstChild.textContent = lab || 'Idade que vai fazer';
     const ph={menina:'Ex.: Maria Clara',menino:'Ex.: Pedro Henrique',infantil:'Ex.: Theo',quinze:'Ex.: Isabela',bodas:'Ex.: Ana & José',casamento:'Ex.: Júlia & Rafael',cha_bebe:'Ex.: Bebê Helena',formatura:'Ex.: Turma de Medicina 2026',aniversario:'Ex.: Dona Lúcia',outra:'Ex.: Família Silva'}[cat]; $('ffHom').placeholder=ph; };
   const pintar=()=>{ const todos=$('ffTodos').checked; const ks=Object.keys(TEMAS).filter(k=>todos||TEMAS[k].cats.includes(cat)||k===tem);
-    $('ffTemas').innerHTML=ks.map(k=>{ const t=TEMAS[k]; return `<button type="button" class="tema" data-k="${k}" aria-pressed="${k===tem}" style="background:linear-gradient(135deg,${t.bg} 0%,${t.bg2} 100%);color:${t.ink}">${CATS[cat].tema===k?'<span class="rec">sugerido</span>':''}<span class="e">${t.e}</span><span class="nm" style="font-family:${t.font},Fredoka,sans-serif;font-weight:400;font-size:${/Great|Pacifico/.test(t.font)?'20px':'15px'}">${t.n}</span><span class="dots"><i style="background:${t.accent}"></i><i style="background:${t.accent2}"></i><i style="background:${t.surface}"></i></span></button>`; }).join('');
-    $('ffTemas').querySelectorAll('.tema').forEach(b=>b.onclick=()=>{ tem=b.dataset.k; pintar(); onTema&&onTema(tem); }); };
-  $('ffCats').onclick=e=>{ const b=e.target.closest('.cat'); if(!b) return; cat=b.dataset.k; $('ffCats').querySelectorAll('.cat').forEach(x=>x.setAttribute('aria-pressed',x===b)); if(!TEMAS[tem].cats.includes(cat)){ tem=CATS[cat].tema; onTema&&onTema(tem); } if(cat==='quinze') $('ffIdade').value=15; ajustarIdade(); pintar(); };
+    $('ffTemas').innerHTML=(onSeu?`<button type="button" class="tema seu" data-seu="1" aria-pressed="${seu}"><span class="rec" style="background:var(--accent);color:var(--on)">recomendado</span><span class="e">🎨</span><span class="nm">Faça o seu tema</span><small>Sua imagem de fundo, os personagens da festa, as fotos do homenageado e a música do telão</small></button>`:'')+ks.map(k=>{ const t=TEMAS[k]; return `<button type="button" class="tema" data-k="${k}" aria-pressed="${!seu&&k===tem}" style="background:linear-gradient(135deg,${t.bg} 0%,${t.bg2} 100%);color:${t.ink}">${CATS[cat].tema===k?'<span class="rec">sugerido</span>':''}<span class="e">${t.e}</span><span class="nm" style="font-family:${t.font},Fredoka,sans-serif;font-weight:400;font-size:${/Great|Pacifico/.test(t.font)?'20px':'15px'}">${t.n}</span><span class="dots"><i style="background:${t.accent}"></i><i style="background:${t.accent2}"></i><i style="background:${t.surface}"></i></span></button>`; }).join('');
+    $('ffTemas').querySelectorAll('.tema').forEach(b=>b.onclick=()=>{ if(b.dataset.seu){ seu=true; pintar(); onSeu(); return; } seu=false; tem=b.dataset.k; pintar(); onTema&&onTema(tem); }); };
+  $('ffCats').onclick=e=>{ const b=e.target.closest('.cat'); if(!b) return; cat=b.dataset.k; $('ffCats').querySelectorAll('.cat').forEach(x=>x.setAttribute('aria-pressed',x===b)); if(!TEMAS[tem].cats.includes(cat)){ tem=CATS[cat].tema; if(!seu) onTema&&onTema(tem); } if(cat==='quinze') $('ffIdade').value=15; ajustarIdade(); pintar(); };
   $('ffTodos').onchange=pintar; ajustarIdade(); pintar();
   return ()=>{ const hom=$('ffHom').value.trim(); let tit=$('ffTit').value.trim(); const idade=$('ffIdade').value;
     if(!tit) tit = sugerirTitulo(cat, hom, idade);
-    return {categoria:cat, tema:tem, homenageado:hom, titulo:tit, idade: (cat==='quinze'?'15':($('ffIdadeL').hidden?'':idade)), data:$('ffData').value, hora:$('ffHora').value.trim(), local:$('ffLocal').value.trim(), mensagem:$('ffMsg').value.trim(), moderacao:$('ffMod').checked}; };
+    return {categoria:cat, tema:tem, homenageado:hom, titulo:tit, idade: (cat==='quinze'?'15':($('ffIdadeL').hidden?'':idade)), data:$('ffData').value, hora:$('ffHora').value.trim(), local:$('ffLocal').value.trim(), mensagem:$('ffMsg').value.trim(), moderacao:$('ffMod').checked, seu}; };
 }
 function sugerirTitulo(cat, hom, idade){
   const n=hom||'';
@@ -943,10 +955,10 @@ function sugerirTitulo(cat, hom, idade){
 function vFesta(){
   ADM.view='festa'; const f=FESTA;
   $('vw').innerHTML = formFesta(f) + `<div class="row" style="justify-content:flex-end;margin-top:12px"><span class="msg" id="ffM"></span><button class="btn" id="ffSalvar">Salvar alterações</button></div>`;
-  const ler=ligarFormFesta(f, k=>aplicarTema(FESTA.custom ? temaDe(FESTA) : k));
-  $('vw').insertAdjacentHTML('afterbegin', `<div class="aviso" style="margin-bottom:12px;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:color-mix(in srgb,var(--accent) 12%, var(--surface));color:var(--ink)"><span>🎨 Quer usar <b>imagens do tema, personagens, fotos do homenageado e música</b>? Fica na aba ao lado.</span><button class="btn sm" id="irKit">Abrir Tema, fotos e música</button></div>`);
+  const ler=ligarFormFesta(f, k=>aplicarTema(FESTA.custom ? temaDe(FESTA) : k), ()=>document.querySelector('#abasTop [data-v="meutema"]').click(), !!(FESTA.custom && FESTA.custom.visual!==false));
+  $('vw').insertAdjacentHTML('afterbegin', `<div class="aviso" style="margin-bottom:12px;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:color-mix(in srgb,var(--accent) 12%, var(--surface));color:var(--ink)"><span>🎨 Quer usar <b>sua imagem de fundo, personagens, fotos do homenageado e música</b>?</span><button class="btn sm" id="irKit">Faça o seu tema</button></div>`);
   $('irKit').onclick=()=>document.querySelector('#abasTop [data-v="meutema"]').click();
-  if(FESTA.custom && FESTA.custom.visual!==false) $('ffTemas').insertAdjacentHTML('beforebegin','<p class="aviso" style="margin:10px 0 0">Você está usando cores e imagem de fundo próprias (aba 🎨 Tema, fotos e música). O tema pronto escolhido aqui só aparece se lá você escolher “usar o tema pronto”.</p>');
+  if(FESTA.custom && FESTA.custom.visual!==false) $('ffTemas').insertAdjacentHTML('beforebegin','<p class="aviso" style="margin:10px 0 0">Você está usando o seu próprio tema (aba 🎨 Faça o seu tema). Um tema pronto escolhido aqui só aparece se lá você escolher “usar o tema pronto”.</p>');
   $('ffSalvar').onclick=async()=>{ const d=ler(); const s=$('ffSenha').value.trim(); if(s && s.length<4){ $('ffM').className='msg err'; $('ffM').textContent='A senha precisa de pelo menos 4 dígitos.'; return; } if(s) d.nova_senha=s;
     try{ FESTA=await rpc('fe_admin_editar',{p_slug:SLUG,p_pin:PIN,d}); if(s){ PIN=s; store.sset('mf_pin_'+SLUG,s); } aplicarTema(temaDe(FESTA)); $('ffM').className='msg ok'; $('ffM').textContent='Salvo! ✨'; }catch(e){ $('ffM').className='msg err'; $('ffM').textContent=ERR(e); } };
 }
@@ -969,7 +981,7 @@ async function vMeuTema(){
   const base=tema(FESTA.tema), tc=info.tema_custom||{}, mu=tc.musica||{};
   const c=Object.assign({accent:base.accent, accent2:base.accent2, bg:base.dark?mix(base.accent,'#ffffff',.9):base.bg, font:base.font}, tc);
   const K={
-    visual: info.tema_custom ? tc.visual!==false : false,
+    visual: info.tema_custom ? tc.visual!==false : true,
     fundo: tc.fundo ? {path:tc.fundo} : null,
     enfeites: (Array.isArray(tc.enfeites)&&tc.enfeites.length ? tc.enfeites : tc.enfeite ? [tc.enfeite] : []).map(p=>({path:p})),
     fotos: (tc.fotos||[]).map(p=>({path:p})),
@@ -981,7 +993,7 @@ async function vMeuTema(){
   const status = info.bloqueado ? `<p class="aviso">🚫 O tema desta festa foi desligado pelo organizador. Fale com ele para liberar.</p>`
     : info.ativo ? `<p class="aviso" style="background:#d3f9d8;color:#1b5e20">✅ Ligado: convidados, telão e álbum já estão usando o que está salvo aqui.</p>` : '';
   $('vw').innerHTML=`<div class="card" style="padding:18px;display:flex;flex-direction:column;gap:16px">
-    <div><h3 style="margin:0 0 4px">🎨 Tema, fotos e música</h3><p class="muted" style="margin:0">Deixe o telão e o álbum com a cara da festa. Para ficar bonito, sugerimos:</p></div>${status}
+    <div><h3 style="margin:0 0 4px;font-size:24px">🎨 Faça o seu tema</h3><p class="muted" style="margin:0">Deixe o telão e o álbum com a cara da festa. Para ficar bonito, sugerimos:</p></div>${status}
     <div class="kitguia"><div><b>1 fundo</b>a arte do convite ou do painel, de preferência deitada</div><div><b>até 3 personagens</b>PNG sem fundo: o tema, o mascote, o brasão</div><div><b>8 a 12 fotos</b>a história de ${esc(nome)}: bebê, infância, hoje</div><div><b>1 música</b>uma trilha pronta ou até 3 músicas suas</div></div>
 
     <div class="kitsec"><h4>1 · Cores e imagem de fundo</h4>
@@ -1356,7 +1368,8 @@ function telaCriar(){
     <p class="muted" style="margin:-4px 0 14px">Leva 2 minutos. Escolha o tipo de festa e o tema, preencha os dados e pronto: você recebe o link, o QR Code e o convite na hora. Depois, monta o telão com imagens, fotos e música.</p>
     ${formFesta(f0,{auto:true})}
     <div class="row" style="justify-content:flex-end;margin-top:12px"><span class="msg" id="nfM"></span><button class="btn" id="nfCriar" style="font-size:18px">🎉 Criar minha festa</button></div></div>`;
-  const ler=ligarFormFesta(f0, k=>aplicarTema(k));
+  const ler=ligarFormFesta(f0, k=>{ aplicarTema(k); $('ffSeuN').hidden=true; }, ()=>{ $('ffSeuN').hidden=false; }, true);
+  $('ffTemas').insertAdjacentHTML('afterend','<p class="aviso" id="ffSeuN" style="margin:12px 0 0">🎨 Ótimo! Assim que criar a festa, você vai direto para a tela de fazer o seu tema: imagem de fundo, personagens, fotos e música.</p>');
   const erro=t=>{ $('nfM').className='msg err'; $('nfM').textContent=t; };
   $('nfCriar').onclick=async()=>{
     const d=ler(); if(!d.homenageado) return erro('Preencha o nome do homenageado.');
@@ -1365,11 +1378,11 @@ function telaCriar(){
     if(!$('ffAceite').checked) return erro('Para criar, aceite os Termos de uso.');
     Object.assign(d,{senha_anfitriao:senha, cliente:cli, contato:cont, codigo:$('ffCod').value.trim(), aceite:true});
     $('nfCriar').disabled=true; $('nfM').className='msg'; $('nfM').innerHTML='<span class="spin"></span> Criando…';
-    try{ const f=await rpc('fe_auto_criar',{d, p_aparelho:deviceId()}); store.sset('mf_pin_'+f.slug, senha); store.set('mf_novo_'+f.slug,'1'); telaCriada(f, senha, !!d.codigo); }
+    try{ const f=await rpc('fe_auto_criar',{d, p_aparelho:deviceId()}); store.sset('mf_pin_'+f.slug, senha); store.set('mf_novo_'+f.slug,'1'); telaCriada(f, senha, !!d.codigo, d.seu); }
     catch(e){ erro(ERR(e)); $('nfCriar').disabled=false; }
   };
 }
-function telaCriada(f, senha, tentouCodigo){
+function telaCriada(f, senha, tentouCodigo, seu){
   aplicarTema(temaDe(f)); history.replaceState(null,'',BASE+'?criar');
   const okCod=f.plano==='completo';
   $('app').innerHTML=`<div class="wrap" style="max-width:720px"><div class="card" style="padding:24px;text-align:center"><div style="font-size:64px">${tema(f.tema).e}</div><h1 style="margin:4px 0">Sua festa está criada!</h1>
@@ -1379,7 +1392,7 @@ function telaCriada(f, senha, tentouCodigo){
     <div style="text-align:left;margin-top:16px;display:flex;flex-direction:column;gap:10px">
      ${[['📲 Link dos convidados',linkFesta(f.slug)],['📺 Telão',linkFesta(f.slug,'telao')],['🔐 Sua área de anfitrião',linkFesta(f.slug,'admin')]].map(([n,u])=>`<div><div style="font-weight:600;font-size:14px;margin-bottom:4px">${n}</div><div class="linkbox"><code>${esc(u)}</code><button class="btn sm" data-copy="${esc(u)}">Copiar</button></div></div>`).join('')}</div>
     <p class="aviso" style="margin-top:14px;text-align:left">📌 Guarde estes links e a sua senha. Toque em <b>Copiar tudo</b> e mande para o seu próprio WhatsApp.</p>
-    <div class="row" style="justify-content:center;margin-top:12px"><button class="btn alt" id="fcMsg">📋 Copiar tudo</button><a class="btn" href="${linkFesta(f.slug,'admin')}">Montar o telão e o convite →</a></div></div></div>`;
+    <div class="row" style="justify-content:center;margin-top:12px"><button class="btn alt" id="fcMsg">📋 Copiar tudo</button><a class="btn" href="${linkFesta(f.slug,'admin')}&aba=meutema" style="font-size:18px">🎨 ${seu?'Fazer o meu tema agora':'Montar o telão e o convite'} →</a></div></div></div>`;
   qrInto($('fcQr'), linkFesta(f.slug), 200);
   document.querySelectorAll('[data-copy]').forEach(b=>b.onclick=()=>copiar(b.dataset.copy));
   $('fcMsg').onclick=()=>copiar(msgCliente(f, senha),'Copiado! Cole no seu WhatsApp para guardar.');

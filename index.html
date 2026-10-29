@@ -1,0 +1,1069 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Mural da Festa</title>
+<meta name="description" content="Fotos, recados, áudios e vídeos dos convidados no telão da festa — e um álbum de recordações no final.">
+<meta property="og:title" content="Mural da Festa">
+<meta property="og:description" content="Deixe sua homenagem: foto, recado, áudio ou vídeo!">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%89%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Caveat:wght@500;700&family=Cinzel:wght@600;700&family=Fredoka:wght@400;500;600;700&family=Great+Vibes&family=Luckiest+Guy&family=Pacifico&family=Playfair+Display:wght@600;700&display=swap">
+<style>
+/* Layout: cada festa veste o próprio tema (tokens trocados por JS); página do convidado = capa + 4 botões + mural; telão = palco em tela cheia; anfitrião e mestre = painéis em abas */
+:root{
+  --bg:#fffdf7; --bg2:#f3e8ff; --surface:#ffffff; --ink:#2a1745; --muted:#6d5c86;
+  --accent:#7b2cbf; --accent2:#ff9f1c; --on:#ffffff; --line:rgba(42,23,69,.12);
+  --display:'Luckiest Guy', 'Fredoka', system-ui, sans-serif;
+  --body:'Fredoka', ui-rounded, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --hand:'Caveat', 'Fredoka', cursive;
+  --ok:#2f9e44; --bad:#e03131; --warn:#f08c00;
+  color-scheme: light;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink)}
+body{font-family:var(--body);font-size:16px;line-height:1.45;min-height:100%;overflow-x:hidden;
+  background:radial-gradient(120% 70% at 50% -10%, var(--bg2) 0%, transparent 60%), var(--bg)}
+[hidden]{display:none!important}
+img,video{max-width:100%}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent2);outline-offset:2px}
+#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.wrap{position:relative;z-index:1;max-width:1120px;margin:0 auto;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:0 10px 30px rgba(0,0,0,.06)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;padding:11px 18px;font-weight:600;cursor:pointer;
+  background:var(--accent);color:var(--on);transition:transform .12s, filter .15s;text-decoration:none;white-space:nowrap}
+.btn:hover{filter:brightness(1.07)} .btn:active{transform:scale(.97)}
+.btn.alt{background:var(--accent2);color:var(--ink)}
+.btn.ghost{background:transparent;color:var(--ink);border:2px solid var(--line)}
+.btn.ok{background:var(--ok);color:#fff} .btn.bad{background:var(--bad);color:#fff}
+.btn.sm{padding:7px 12px;font-size:14px}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.in, textarea.in, select.in{width:100%;background:var(--bg);border:2px solid var(--line);border-radius:14px;padding:11px 13px;min-width:0}
+textarea.in{min-height:120px;resize:vertical}
+label.f{display:flex;flex-direction:column;gap:6px;font-weight:600;font-size:14px;color:var(--muted);min-width:0}
+.msg{min-height:22px;font-weight:600;font-size:15px}
+.msg.ok{color:var(--ok)} .msg.err{color:var(--bad)}
+.muted{color:var(--muted)}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:color-mix(in srgb,var(--accent) 14%, transparent);color:var(--accent);font-weight:600;font-size:14px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+h2.sec{font-weight:700;font-size:22px;margin:28px 0 12px;display:flex;align-items:center;gap:10px}
+.center{text-align:center}
+
+/* ---------- capa do convidado ---------- */
+.hero{padding:28px 20px 24px;text-align:center;position:relative;overflow:hidden}
+.hero .who{font-family:var(--display);font-size:clamp(44px,11vw,96px);line-height:1.05;margin:10px 0 4px;color:var(--accent);text-wrap:balance;word-break:break-word}
+.hero .tit{font-weight:700;font-size:clamp(18px,3.6vw,26px);margin:0;text-wrap:balance}
+.hero .sub{font-weight:600;color:var(--accent2);font-size:clamp(16px,3vw,22px);margin-top:4px;filter:brightness(.85)}
+.hero .meta{display:flex;flex-wrap:wrap;gap:8px 18px;justify-content:center;color:var(--muted);font-weight:500;margin-top:14px}
+.hero .msgf{max-width:620px;margin:14px auto 0;font-size:17px}
+.hero .deco{position:absolute;font-size:44px;opacity:.9;animation:bob 4s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-8px) rotate(4deg)}}
+.acts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:18px}
+@media (max-width:640px){.acts{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.act{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border:0;border-radius:22px;padding:20px 8px;cursor:pointer;font-weight:700;font-size:17px;
+  background:var(--surface);color:var(--ink);border:2px solid var(--line);box-shadow:0 8px 20px rgba(0,0,0,.06);transition:transform .15s}
+.act:hover{transform:translateY(-3px)} .act .ic{font-size:40px;line-height:1}
+.act:nth-child(1){background:var(--accent);color:var(--on);border-color:transparent}
+.act:nth-child(4){background:var(--accent2);color:var(--ink);border-color:transparent}
+.namebar{display:flex;gap:8px;align-items:center;margin-top:14px;flex-wrap:wrap;justify-content:center}
+.namebar .in{max-width:280px}
+.closed{padding:16px;border-radius:18px;background:color-mix(in srgb,var(--accent2) 22%, var(--surface));font-weight:600;text-align:center;margin-top:16px}
+
+/* ---------- mural ---------- */
+.mural{columns:3 260px;column-gap:12px}
+.post{break-inside:avoid;margin:0 0 12px;background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 6px 16px rgba(0,0,0,.05)}
+.post img,.post video{display:block;width:100%;height:auto;background:#000}
+.post .pb{padding:10px 14px 12px}
+.post .by{font-weight:600;color:var(--muted);font-size:14px}
+.post.t .pb{padding:18px 18px 14px}
+.post.t blockquote{margin:0 0 8px;font-family:var(--hand);font-size:28px;line-height:1.15;word-break:break-word}
+.post.a .pb{display:flex;flex-direction:column;gap:8px}
+.post audio{width:100%}
+.empty{padding:22px;text-align:center;color:var(--muted);border:2px dashed var(--line);border-radius:18px}
+
+/* ---------- folha (envio) ---------- */
+.ov{position:fixed;inset:0;z-index:50;background:rgba(10,8,20,.55);display:grid;place-items:center;backdrop-filter:blur(3px);
+  padding:max(12px,env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) max(12px,env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px))}
+.sheet{width:min(560px,100%);max-height:100%;overflow:auto;background:var(--surface);color:var(--ink);border-radius:26px;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,.35);animation:pop .25s ease both}
+@keyframes pop{from{transform:scale(.94);opacity:0}}
+.sheet h3{margin:0 0 12px;font-size:24px;display:flex;align-items:center;gap:10px}
+.sheet .foot{display:flex;gap:10px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap}
+.drop{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border:3px dashed var(--line);border-radius:20px;padding:26px 12px;text-align:center;font-weight:600;cursor:pointer;background:var(--bg)}
+.drop input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.drop .ic{font-size:44px}
+.thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px;margin-top:10px}
+.thumbs img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px}
+.sugs{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.sugs button{border:2px solid var(--line);background:var(--bg);border-radius:999px;padding:6px 10px;cursor:pointer;font-size:14px}
+.rec{display:flex;flex-direction:column;align-items:center;gap:12px}
+.rec .time{font-weight:700;font-size:28px;font-variant-numeric:tabular-nums}
+.rec canvas{width:100%;height:90px;border-radius:14px;background:var(--bg)}
+.recbtn{width:92px;height:92px;border-radius:50%;border:0;background:var(--bad);color:#fff;font-size:20px;font-weight:700;cursor:pointer;box-shadow:0 0 0 8px color-mix(in srgb,var(--bad) 25%, transparent)}
+.recbtn.on{animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 18px color-mix(in srgb,var(--bad) 10%, transparent)}}
+.vbox{position:relative;width:100%;border-radius:18px;overflow:hidden;background:#000;aspect-ratio:3/4;max-height:60vh}
+.vbox video{width:100%;height:100%;object-fit:cover;display:block}
+.vbox .live{transform:scaleX(-1)}
+.vbox .badge{position:absolute;top:10px;left:10px;background:var(--bad);color:#fff;border-radius:999px;padding:4px 10px;font-weight:700;font-variant-numeric:tabular-nums}
+.alt{font-size:14px;color:var(--muted);text-align:center}
+.alt label{text-decoration:underline;cursor:pointer;position:relative}
+.alt input{position:absolute;opacity:0;width:1px;height:1px}
+.thanks{text-align:center;padding:10px 0}
+.thanks .big{font-size:64px}
+
+/* ---------- telão ---------- */
+.tv{position:fixed;inset:0;z-index:5;display:grid;grid-template-rows:auto 1fr auto;color:var(--ink)}
+.tv-top{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 3vw 6px}
+.tv-top .t{font-family:var(--display);font-size:clamp(28px,4vw,64px);color:var(--accent);line-height:1}
+.tv-top .n{font-weight:700;font-size:clamp(16px,1.6vw,26px);color:var(--muted)}
+.stage{position:relative;overflow:hidden;margin:0 3vw}
+.sl{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2vh;animation:fadein .8s ease both}
+@keyframes fadein{from{opacity:0;transform:scale(.98)}}
+.sl.out{animation:fadeout .6s ease both}
+@keyframes fadeout{to{opacity:0}}
+.sl-foto .ph{max-width:100%;max-height:calc(100% - 11vh);min-height:0;object-fit:contain;border-radius:2vh;box-shadow:0 2vh 6vh rgba(0,0,0,.35);border:1vh solid #fff;animation:kb 10s ease-out both}
+@keyframes kb{from{transform:scale(1)}to{transform:scale(1.05)}}
+.sl .cap{font-family:var(--hand);font-size:clamp(26px,3.4vw,58px);text-align:center;max-width:90%;line-height:1.1}
+.sl .cap small{display:block;font-family:var(--body);font-weight:600;font-size:.45em;color:var(--muted);margin-top:.4em}
+.sl-texto .q{font-family:var(--hand);text-align:center;max-width:88%;line-height:1.1;word-break:break-word}
+.sl-texto .q::before{content:"“";display:block;font-family:var(--display);color:var(--accent);font-size:1.4em;line-height:.6}
+.sl-texto .by{font-weight:700;font-size:clamp(20px,2.4vw,40px);color:var(--accent)}
+.sl-video video{max-width:100%;max-height:calc(100% - 8vh);min-height:0;border-radius:2vh;box-shadow:0 2vh 6vh rgba(0,0,0,.35);background:#000}
+.eq{display:flex;align-items:flex-end;gap:1.2vh;height:28vh}
+.eq i{width:3.2vh;border-radius:1.6vh;background:var(--accent);animation:eq 1s ease-in-out infinite}
+.eq i:nth-child(2n){background:var(--accent2);animation-duration:.8s}
+.eq i:nth-child(3n){animation-duration:1.25s}
+@keyframes eq{0%,100%{height:15%}50%{height:100%}}
+.sl-audio .mic{font-size:12vh}
+.tv-bar{display:flex;align-items:center;gap:2vw;padding:1.2vh 3vw 2.2vh}
+.tv-bar .qr{background:#fff;padding:1vh;border-radius:1.4vh;line-height:0}
+.tv-bar .qr{width:17vh;flex:none}
+.tv-bar b{display:block;font-size:clamp(20px,2.6vw,44px);font-family:var(--display);color:var(--accent)}
+.tv-bar span{font-weight:600;font-size:clamp(14px,1.5vw,24px);color:var(--muted)}
+.tv-bar .acts-mini{margin-left:auto;font-size:clamp(28px,3.4vw,56px);letter-spacing:.2em}
+.tv-start{position:fixed;inset:0;z-index:20;display:grid;place-items:center;text-align:center;background:color-mix(in srgb,var(--bg) 88%, transparent);padding:16px}
+.tv-start .who{font-family:var(--display);font-size:clamp(48px,9vw,140px);color:var(--accent);line-height:1}
+.tv-empty{display:flex;flex-direction:column;align-items:center;gap:3vh;text-align:center}
+.tv-empty .qr{background:#fff;padding:2vh;border-radius:2vh;line-height:0}
+.tv-empty .qr{width:40vh}
+.tv-empty h2{font-family:var(--display);color:var(--accent);font-size:clamp(32px,5vw,80px);margin:0;font-weight:400}
+.tv-empty p{font-size:clamp(18px,2vw,32px);font-weight:600;margin:0;color:var(--muted)}
+.tv-hint{position:fixed;right:12px;bottom:8px;z-index:6;font-size:12px;color:var(--muted);opacity:.5}
+
+/* ---------- painéis ---------- */
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.top h1{margin:0;font-size:clamp(22px,4vw,32px)}
+.top h1 em{font-style:normal;font-family:var(--display);color:var(--accent);font-weight:400}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 16px}
+.tabs button{border:0;border-radius:999px;padding:9px 14px;font-weight:600;cursor:pointer;background:var(--surface);color:var(--ink);border:2px solid var(--line)}
+.tabs button[aria-pressed="true"]{background:var(--accent);color:var(--on);border-color:transparent}
+.tabs .n{display:inline-block;min-width:22px;padding:0 6px;margin-left:4px;border-radius:999px;background:var(--bad);color:#fff;font-size:12px;line-height:20px}
+.modgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.mod{display:flex;flex-direction:column;overflow:hidden}
+.mod .media img,.mod .media video{display:block;width:100%;max-height:300px;object-fit:cover;background:#000}
+.mod .media audio{width:100%;margin-top:10px}
+.mod .media blockquote{margin:0;padding:16px;font-family:var(--hand);font-size:24px;line-height:1.15;word-break:break-word;background:var(--bg)}
+.mod .info{padding:10px 12px;display:flex;justify-content:space-between;gap:8px;font-size:14px;color:var(--muted);font-weight:500}
+.mod .acts2{display:flex;gap:8px;padding:0 12px 12px}
+.mod .acts2 .btn{flex:1}
+.pill{font-size:12px;font-weight:700;padding:3px 8px;border-radius:999px;background:var(--bg)}
+.temas{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.tema{position:relative;border:3px solid transparent;border-radius:18px;padding:12px;cursor:pointer;text-align:left;min-height:100px;display:flex;flex-direction:column;justify-content:space-between;gap:6px;box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.tema[aria-pressed="true"]{border-color:var(--ink);box-shadow:0 0 0 3px var(--surface) inset}
+.tema .e{font-size:30px}
+.tema .nm{font-weight:700;font-size:15px}
+.tema .dots{display:flex;gap:4px}
+.tema .dots i{width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,.7)}
+.tema .rec{position:absolute;top:8px;right:8px;font-size:11px;font-weight:700;padding:2px 7px;border-radius:999px;background:rgba(255,255,255,.85);color:#333}
+.cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.cat{border:2px solid var(--line);background:var(--surface);border-radius:16px;padding:12px 8px;cursor:pointer;font-weight:600;display:flex;flex-direction:column;align-items:center;gap:4px}
+.cat .e{font-size:30px}
+.cat[aria-pressed="true"]{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 12%, var(--surface))}
+.fest{padding:14px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center}
+.fest h3{margin:0;font-size:18px}
+.fest .meta{font-size:14px;color:var(--muted);display:flex;gap:6px 14px;flex-wrap:wrap}
+.fest .stats{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.fest .acts3{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+@media (max-width:640px){.fest{grid-template-columns:1fr}.fest .acts3{justify-content:flex-start}}
+.linkbox{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;background:var(--bg);border:2px solid var(--line);border-radius:14px;padding:8px 8px 8px 12px}
+.linkbox code{font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar{height:12px;border-radius:999px;background:var(--bg);overflow:hidden;border:1px solid var(--line)}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.qrbig{background:#fff;padding:12px;border-radius:16px;display:inline-block;line-height:0;width:224px;max-width:100%}
+.landing .hero{padding:44px 20px 30px}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.step{padding:18px}
+.step .e{font-size:38px}
+.step h3{margin:6px 0 4px}
+.toast{position:fixed;left:50%;bottom:max(18px,env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:80;background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:14px;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,.3);max-width:calc(100% - 32px)}
+.spin{display:inline-block;width:18px;height:18px;border:3px solid currentColor;border-right-color:transparent;border-radius:50%;animation:sp .8s linear infinite;vertical-align:-3px}
+@keyframes sp{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<canvas id="fx" aria-hidden="true"></canvas>
+<div id="app"><div class="wrap center" style="padding-top:30vh"><span class="spin"></span></div></div>
+<div class="ov" id="ov" hidden><div class="sheet" id="sheet" role="dialog" aria-modal="true"></div></div>
+<div class="toast" id="toast" hidden></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+// ===== CONFIGURAÇÃO =====
+const SUPABASE_URL = 'https://dcddaxipusfthklmmhxq.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_jonZ2Lq8W33xfCpDxLvJqQ_OLcG87eV';
+const LIMITE_GRAVACAO = 60;   // segundos
+const LIMITE_MB = 45;         // tamanho máximo de um vídeo escolhido da galeria
+// ========================
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const Q = new URLSearchParams(location.search);
+const SLUG = (Q.get('f') || '').trim().toLowerCase();
+const MODE = Q.has('mestre') ? 'mestre' : SLUG ? (Q.has('telao') ? 'telao' : Q.has('admin') ? 'admin' : 'convidado') : 'inicio';
+const BASE = location.origin + location.pathname.replace(/index\.html$/, '');
+const linkFesta = (slug, extra) => BASE + '?f=' + slug + (extra ? '&' + extra : '');
+const midia = p => p ? `${SUPABASE_URL}/storage/v1/object/public/fe-midia/${p.split('/').map(encodeURIComponent).join('/')}` : '';
+const store = {
+  get(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } },
+  set(k,v){ try{ localStorage.setItem(k,v); }catch(e){} },
+  sget(k){ try{ return sessionStorage.getItem(k); }catch(e){ return null; } },
+  sset(k,v){ try{ v==null ? sessionStorage.removeItem(k) : sessionStorage.setItem(k,v); }catch(e){} }
+};
+function deviceId(){ let d=store.get('mf_aparelho'); if(!d){ d=Math.random().toString(36).slice(2,12)+Date.now().toString(36); store.set('mf_aparelho',d); } return d.slice(0,40); }
+function rnd(){ return Math.random().toString(36).slice(2,8); }
+function toast(t, ms=2600){ const el=$('toast'); el.textContent=t; el.hidden=false; clearTimeout(toast.t); toast.t=setTimeout(()=>el.hidden=true, ms); }
+async function copiar(txt, ok='Copiado!'){ try{ await navigator.clipboard.writeText(txt); toast(ok); }catch(e){ prompt('Copie o texto:', txt); } }
+function baixar(blob, nome){ const u=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=u; a.download=nome; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(u), 8000); }
+const sleep = ms => new Promise(r=>setTimeout(r,ms));
+const fmtDur = s => { s=Math.max(0,Math.round(s||0)); return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`; };
+
+// ---------- categorias e temas ----------
+const CATS = {
+  infantil:{n:'Festa Infantil', e:'🎈', tema:'baloes'},
+  menino:{n:'Menino', e:'🚀', tema:'espaco'},
+  menina:{n:'Menina', e:'👑', tema:'reino'},
+  quinze:{n:'15 Anos', e:'💃', tema:'neon'},
+  bodas:{n:'Bodas', e:'💍', tema:'ouro'},
+  aniversario:{n:'Aniversário', e:'🎂', tema:'confete'},
+  casamento:{n:'Casamento', e:'💒', tema:'rosegold'},
+  cha_bebe:{n:'Chá de Bebê', e:'🍼', tema:'nuvens'},
+  formatura:{n:'Formatura', e:'🎓', tema:'formatura'},
+  outra:{n:'Outra festa', e:'🎉', tema:'confete'}
+};
+const TEMAS = {
+  baloes:{n:'Balões Coloridos',e:'🎈',cats:['infantil','aniversario','menino','menina'],bg:'#fff7e8',bg2:'#ffe3c2',surface:'#ffffff',ink:'#2b2d42',muted:'#6b6f86',accent:'#ff5a5f',accent2:'#2ec4b6',on:'#ffffff',font:"'Luckiest Guy'",pat:'baloes',pal:['#ff5a5f','#2ec4b6','#ffbe0b','#8338ec','#3a86ff'],deco:['🎈','🎉','🎁'],paper:'#fffaf0'},
+  circo:{n:'Circo Mágico',e:'🎪',cats:['infantil','menino','menina'],bg:'#fff3e6',bg2:'#ffd6d6',surface:'#ffffff',ink:'#3d1d1d',muted:'#7a5555',accent:'#d62828',accent2:'#f4a261',on:'#ffffff',font:"'Luckiest Guy'",pat:'confete',pal:['#d62828','#f4a261','#2a9d8f','#e9c46a'],deco:['🎪','🤹','🍿'],paper:'#fff8ef'},
+  espaco:{n:'Viagem ao Espaço',e:'🚀',cats:['menino','infantil','aniversario'],bg:'#0b1026',bg2:'#1f2560',surface:'#161c45',ink:'#eef2ff',muted:'#a8b2e0',accent:'#ffb703',accent2:'#4cc9f0',on:'#1b1300',font:"'Bungee'",pat:'estrelas',pal:['#ffffff','#ffe8a3','#a5e9ff'],deco:['🚀','🪐','⭐'],paper:'#f2f4ff',dark:1},
+  herois:{n:'Super-heróis',e:'⚡',cats:['menino','infantil'],bg:'#eaf2ff',bg2:'#cfe0ff',surface:'#ffffff',ink:'#0d1b3d',muted:'#4d5d82',accent:'#e63946',accent2:'#ffc300',on:'#ffffff',font:"'Luckiest Guy'",pat:'confete',pal:['#e63946','#1d4ed8','#ffd60a'],deco:['⚡','💥','🦸'],paper:'#f5f8ff'},
+  dinos:{n:'Dinossauros',e:'🦖',cats:['menino','infantil'],bg:'#eef7e4',bg2:'#d3ebc0',surface:'#ffffff',ink:'#1f3b2c',muted:'#557a63',accent:'#2d6a4f',accent2:'#f77f00',on:'#ffffff',font:"'Luckiest Guy'",pat:'petalas',pal:['#52b788','#95d5b2','#f77f00'],deco:['🦖','🦕','🌋'],paper:'#f6fbef'},
+  reino:{n:'Reino Encantado',e:'👑',cats:['menina','infantil'],bg:'#fff0f7',bg2:'#f3dcff',surface:'#ffffff',ink:'#4a1d3f',muted:'#8a5c7e',accent:'#d63384',accent2:'#9b5de5',on:'#ffffff',font:"'Pacifico'",pat:'brilho',pal:['#f9c74f','#ff8fc7','#c8b6ff'],deco:['👑','🏰','✨'],paper:'#fff6fa'},
+  jardim:{n:'Jardim das Borboletas',e:'🦋',cats:['menina','infantil','cha_bebe','aniversario'],bg:'#f2fbf4',bg2:'#ffe3ef',surface:'#ffffff',ink:'#2f3e2f',muted:'#6a7d6a',accent:'#e85d9e',accent2:'#52b788',on:'#ffffff',font:"'Pacifico'",pat:'petalas',pal:['#ff9ec7','#ffd166','#b8e0c2'],deco:['🦋','🌸','🌼'],paper:'#f8fdf8'},
+  mar:{n:'Fundo do Mar',e:'🐠',cats:['infantil','menina','menino'],bg:'#e6f8fb',bg2:'#bde9f2',surface:'#ffffff',ink:'#063b4c',muted:'#3f6f7d',accent:'#0096c7',accent2:'#ff8fab',on:'#ffffff',font:"'Pacifico'",pat:'bolhas',pal:['#ffffff','#90e0ef','#caf0f8'],deco:['🐠','🐚','🐙'],paper:'#f2fbfd'},
+  neon:{n:'Glamour Neon',e:'💜',cats:['quinze','aniversario','formatura'],bg:'#14001f',bg2:'#3a0758',surface:'#24063a',ink:'#ffffff',muted:'#cdb4e6',accent:'#ff2fd0',accent2:'#00f5d4',on:'#14001f',font:"'Bungee'",pat:'brilho',pal:['#ff2fd0','#00f5d4','#fee440'],deco:['✨','💜','🎶'],paper:'#fbf5ff',dark:1},
+  rosegold:{n:'Rose Gold',e:'🌹',cats:['quinze','casamento','aniversario','bodas'],bg:'#fbefea',bg2:'#f4d9cf',surface:'#fffaf8',ink:'#4b2c2c',muted:'#8c6660',accent:'#b76e79',accent2:'#c9a27e',on:'#ffffff',font:"'Great Vibes'",pat:'brilho',pal:['#e8b4a8','#d4a373','#ffffff'],deco:['🌹','✨','🥂'],paper:'#fff8f5'},
+  ouro:{n:'Bodas de Ouro',e:'💍',cats:['bodas','casamento','formatura'],bg:'#fbf6e9',bg2:'#f1e2b8',surface:'#fffdf6',ink:'#3a2e12',muted:'#7d6a3f',accent:'#a8790a',accent2:'#d4af37',on:'#ffffff',font:"'Great Vibes'",pat:'brilho',pal:['#d4af37','#f3e5ab','#b8860b'],deco:['💍','🥂','🌹'],paper:'#fffcf3'},
+  prata:{n:'Bodas de Prata',e:'🤍',cats:['bodas','casamento'],bg:'#f3f5f8',bg2:'#dde3ea',surface:'#ffffff',ink:'#2b3440',muted:'#66717f',accent:'#5f7390',accent2:'#a3b1c4',on:'#ffffff',font:"'Great Vibes'",pat:'brilho',pal:['#c0c8d4','#ffffff','#9aa8ba'],deco:['💍','🕊️','🤍'],paper:'#f8fafc'},
+  classico:{n:'Clássico Elegante',e:'🥂',cats:['casamento','aniversario','formatura','bodas','outra'],bg:'#0f1b2d',bg2:'#21375a',surface:'#16243b',ink:'#f6efe0',muted:'#c9bda4',accent:'#d4af37',accent2:'#e8d9a8',on:'#1a1300',font:"'Playfair Display'",pat:'brilho',pal:['#c9a227','#f6efe0'],deco:['🥂','✨','🎶'],paper:'#fbf8f1',dark:1},
+  nuvens:{n:'Nuvem de Algodão',e:'☁️',cats:['cha_bebe','infantil'],bg:'#eef6ff',bg2:'#ffe8f0',surface:'#ffffff',ink:'#2d3a55',muted:'#6d7a95',accent:'#5b8def',accent2:'#ff8fab',on:'#ffffff',font:"'Pacifico'",pat:'bolhas',pal:['#ffffff','#cfe2ff','#ffd6e5'],deco:['☁️','🍼','🧸'],paper:'#f7fbff'},
+  formatura:{n:'Formatura',e:'🎓',cats:['formatura','outra'],bg:'#14213d',bg2:'#2a3f6e',surface:'#1b2b4f',ink:'#ffffff',muted:'#b9c3dc',accent:'#fca311',accent2:'#e5e5e5',on:'#1a1000',font:"'Cinzel'",pat:'confete',pal:['#fca311','#ffffff','#e5e5e5'],deco:['🎓','📜','🎉'],paper:'#f7f8fb',dark:1},
+  confete:{n:'Festa de Confete',e:'🎉',cats:['aniversario','outra','infantil','quinze'],bg:'#fffdf7',bg2:'#f3e8ff',surface:'#ffffff',ink:'#2a1745',muted:'#6d5c86',accent:'#7b2cbf',accent2:'#ff9f1c',on:'#ffffff',font:"'Luckiest Guy'",pat:'confete',pal:['#7b2cbf','#ff9f1c','#2ec4b6','#ff5a5f'],deco:['🎉','🎂','🥳'],paper:'#fffdf8'}
+};
+const BODAS = [[1,'Papel'],[2,'Algodão'],[3,'Couro'],[4,'Flores'],[5,'Madeira'],[6,'Açúcar'],[7,'Lã'],[8,'Barro'],[9,'Cerâmica'],[10,'Estanho'],[11,'Aço'],[12,'Seda'],[13,'Renda'],[14,'Marfim'],[15,'Cristal'],[20,'Porcelana'],[25,'Prata'],[30,'Pérola'],[35,'Coral'],[40,'Esmeralda'],[45,'Rubi'],[50,'Ouro'],[55,'Ametista'],[60,'Diamante'],[65,'Platina'],[70,'Vinho'],[75,'Brilhante']];
+const bodasNome = a => { const b=BODAS.find(x=>x[0]===+a); return b ? `Bodas de ${b[1]}` : 'Bodas'; };
+function subtitulo(f){
+  if(f.categoria==='bodas' && f.idade) return `${bodasNome(f.idade)} · ${f.idade} ${f.idade==1?'ano':'anos'} juntos`;
+  if(f.categoria==='quinze') return '15 anos';
+  if(f.idade!=null && ['infantil','menino','menina','aniversario'].includes(f.categoria)) return `${f.idade} ${f.idade==1?'aninho':'anos'}`;
+  return (CATS[f.categoria]||CATS.outra).n;
+}
+function dataBonita(f){ if(!f.data) return ''; const d=new Date(f.data+'T12:00:00'); const s=d.toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'}); return s.charAt(0).toUpperCase()+s.slice(1); }
+function tema(k){ return TEMAS[k] || TEMAS.confete; }
+function aplicarTema(k){
+  const t=tema(k), r=document.documentElement.style;
+  r.setProperty('--bg',t.bg); r.setProperty('--bg2',t.bg2); r.setProperty('--surface',t.surface); r.setProperty('--ink',t.ink);
+  r.setProperty('--muted',t.muted); r.setProperty('--accent',t.accent); r.setProperty('--accent2',t.accent2); r.setProperty('--on',t.on);
+  r.setProperty('--line', t.dark ? 'rgba(255,255,255,.14)' : 'rgba(0,0,0,.10)');
+  r.setProperty('--display', `${t.font}, 'Fredoka', system-ui, sans-serif`);
+  document.documentElement.style.colorScheme = t.dark ? 'dark' : 'light';
+  fx.start(t);
+}
+
+// ---------- efeito de fundo ----------
+const fx = (()=>{
+  const cv=$('fx'), c=cv.getContext('2d'); let parts=[], t=null, raf=0, W=0, H=0;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function size(){ const d=Math.min(2,devicePixelRatio||1); W=innerWidth; H=innerHeight; cv.width=W*d; cv.height=H*d; c.setTransform(d,0,0,d,0,0); }
+  function mk(i){ const p=t.pal; return {x:Math.random()*W, y:Math.random()*H, s:6+Math.random()*16, v:.2+Math.random()*.6, r:Math.random()*6.28, vr:(Math.random()-.5)*.03, c:p[i%p.length], ph:Math.random()*6.28}; }
+  function draw(){
+    c.clearRect(0,0,W,H);
+    for(const p of parts){
+      c.save(); c.translate(p.x,p.y); c.globalAlpha = t.dark ? .85 : .55;
+      switch(t.pat){
+        case 'confete': c.rotate(p.r); c.fillStyle=p.c; c.fillRect(-p.s/2,-p.s/5,p.s,p.s/2.4); break;
+        case 'baloes': { const s=p.s*1.8; c.fillStyle=p.c; c.beginPath(); c.ellipse(0,0,s*.42,s*.52,0,0,6.28); c.fill(); c.strokeStyle=p.c; c.lineWidth=1; c.beginPath(); c.moveTo(0,s*.52); c.quadraticCurveTo(6,s*.9,0,s*1.3); c.stroke(); c.globalAlpha*=.6; c.fillStyle='#fff'; c.beginPath(); c.ellipse(-s*.14,-s*.2,s*.08,s*.14,-.5,0,6.28); c.fill(); break; }
+        case 'estrelas': { const a=.35+.65*Math.abs(Math.sin(p.ph)); c.globalAlpha=a; c.fillStyle=p.c; c.beginPath(); c.arc(0,0,Math.max(.8,p.s/9),0,6.28); c.fill(); break; }
+        case 'bolhas': c.strokeStyle=p.c; c.lineWidth=2; c.beginPath(); c.arc(0,0,p.s*.7,0,6.28); c.stroke(); c.globalAlpha*=.5; c.fillStyle='#fff'; c.beginPath(); c.arc(-p.s*.25,-p.s*.25,p.s*.15,0,6.28); c.fill(); break;
+        case 'brilho': { const a=.25+.75*Math.abs(Math.sin(p.ph)); c.globalAlpha=a*(t.dark?.95:.7); c.fillStyle=p.c; const s=p.s*.7; c.beginPath(); c.moveTo(0,-s); c.quadraticCurveTo(0,0,s,0); c.quadraticCurveTo(0,0,0,s); c.quadraticCurveTo(0,0,-s,0); c.quadraticCurveTo(0,0,0,-s); c.fill(); break; }
+        case 'petalas': c.rotate(p.r); c.fillStyle=p.c; c.beginPath(); c.ellipse(0,0,p.s*.5,p.s*.22,0,0,6.28); c.fill(); break;
+      }
+      c.restore();
+    }
+  }
+  function step(){
+    for(const p of parts){
+      p.ph+=.03; p.r+=p.vr;
+      if(t.pat==='baloes'||t.pat==='bolhas'){ p.y-=p.v; p.x+=Math.sin(p.ph)*.3; if(p.y<-60){ p.y=H+40; p.x=Math.random()*W; } }
+      else if(t.pat==='estrelas'||t.pat==='brilho'){ p.y+=p.v*.08; if(p.y>H+10) p.y=-10; }
+      else { p.y+=p.v; p.x+=Math.sin(p.ph)*.5; if(p.y>H+20){ p.y=-20; p.x=Math.random()*W; } }
+    }
+    draw(); raf=requestAnimationFrame(step);
+  }
+  addEventListener('resize', ()=>{ if(t){ size(); draw(); } });
+  return {
+    start(th){ t=th; cancelAnimationFrame(raf); size(); const n = th.pat==='estrelas' ? 90 : th.pat==='brilho' ? 40 : 34; parts=Array.from({length:n},(_,i)=>mk(i)); draw(); if(!reduce) raf=requestAnimationFrame(step); },
+    stop(){ cancelAnimationFrame(raf); c.clearRect(0,0,W,H); }
+  };
+})();
+
+// ---------- QR ----------
+function qrCanvas(text, size=512){
+  const box=document.createElement('div'); box.style.cssText='position:fixed;left:-9999px;top:0';
+  document.body.appendChild(box);
+  new QRCode(box,{text, width:size, height:size, colorDark:'#111111', colorLight:'#ffffff', correctLevel:QRCode.CorrectLevel.M});
+  const src=box.querySelector('canvas'); const cv=document.createElement('canvas'); cv.width=src.width; cv.height=src.height; cv.getContext('2d').drawImage(src,0,0); box.remove(); return cv;
+}
+function qrInto(el, text, size){ el.innerHTML=''; const cv=qrCanvas(text, size||360); cv.style.display='block'; cv.style.width='100%'; cv.style.height='auto'; el.appendChild(cv); }
+
+// ---------- Supabase ----------
+const sb = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {auth:{persistSession:false}}) : null;
+async function rpc(fn, args){ const {data,error}=await sb.rpc(fn,args); if(error) throw error; return data; }
+async function carregarFesta(slug){ return await rpc('fe_festa',{p_slug:slug}); }
+async function postsAprovados(festaId){
+  const {data,error}=await sb.from('fe_posts').select('id,tipo,autor,texto,caminho,thumb,duracao,criado_em').eq('festa_id',festaId).order('criado_em',{ascending:true}).limit(1000);
+  if(error) throw error; return data;
+}
+const ERR = e => { const m=(e&&e.message)||''; if(/Calma/.test(m)) return 'Calma! Espere uns segundinhos para mandar outra.'; if(/Senha/.test(m)) return 'Senha incorreta.'; if(/row-level|policy/i.test(m)) return 'Esta festa não está aceitando homenagens agora.'; if(/size|large|exceed/i.test(m)) return 'Arquivo grande demais. Tente um menor.'; if(/mime|type/i.test(m)) return 'Tipo de arquivo não aceito.'; return 'Não deu certo agora. Confira a internet e tente de novo.'; };
+
+// ---------- imagens ----------
+async function encolher(file, max=1600, q=.82){
+  let bmp; try{ bmp=await createImageBitmap(file,{imageOrientation:'from-image'}); }catch(e){ bmp=await new Promise((res,rej)=>{ const i=new Image(); i.onload=()=>res(i); i.onerror=rej; i.src=URL.createObjectURL(file); }); }
+  const k=Math.min(1, max/Math.max(bmp.width,bmp.height)); const cv=document.createElement('canvas'); cv.width=Math.round(bmp.width*k); cv.height=Math.round(bmp.height*k);
+  cv.getContext('2d').drawImage(bmp,0,0,cv.width,cv.height); return await new Promise(r=>cv.toBlob(r,'image/jpeg',q));
+}
+function videoThumb(blob){
+  return new Promise(res=>{
+    const v=document.createElement('video'); v.muted=true; v.playsInline=true; v.preload='auto'; const url=URL.createObjectURL(blob); v.src=url;
+    let done=false; const fin=b=>{ if(done) return; done=true; URL.revokeObjectURL(url); res(b); };
+    const grab=()=>{ try{ const w=v.videoWidth||640, h=v.videoHeight||480, k=Math.min(1,900/Math.max(w,h)); const cv=document.createElement('canvas'); cv.width=Math.round(w*k); cv.height=Math.round(h*k); cv.getContext('2d').drawImage(v,0,0,cv.width,cv.height); cv.toBlob(b=>fin(b),'image/jpeg',.82); }catch(e){ fin(null); } };
+    v.addEventListener('loadeddata', async ()=>{ try{ await v.play(); await sleep(350); v.pause(); }catch(e){} grab(); }, {once:true});
+    v.addEventListener('error', ()=>fin(null), {once:true});
+    setTimeout(()=>fin(null), 6000);
+  });
+}
+function duracaoArquivo(file, tag){ return new Promise(res=>{ const el=document.createElement(tag); el.preload='metadata'; const u=URL.createObjectURL(file); el.src=u; el.onloadedmetadata=()=>{ const d=el.duration; URL.revokeObjectURL(u); res(isFinite(d)?d:null); }; el.onerror=()=>{ URL.revokeObjectURL(u); res(null); }; setTimeout(()=>res(null),5000); }); }
+
+// =====================================================================
+// CONVIDADO
+// =====================================================================
+let FESTA=null, POSTS=[], muralKey=null;
+async function telaConvidado(){
+  FESTA = await carregarFesta(SLUG).catch(()=>null);
+  if(!FESTA){ return telaNaoAchou(); }
+  aplicarTema(FESTA.tema); document.title = FESTA.homenageado ? `${FESTA.homenageado} · Mural da Festa` : FESTA.titulo;
+  const t=tema(FESTA.tema), f=FESTA;
+  $('app').innerHTML = `
+  <div class="wrap">
+    <section class="card hero">
+      <span class="deco" style="left:4%;top:10%">${t.deco[0]}</span><span class="deco" style="right:5%;top:14%;animation-delay:-1.5s">${t.deco[1]}</span><span class="deco" style="right:12%;bottom:8%;animation-delay:-2.5s;font-size:34px">${t.deco[2]}</span>
+      <span class="chip">${CATS[f.categoria]?.e||'🎉'} ${esc(CATS[f.categoria]?.n||'Festa')}</span>
+      <div class="who">${esc(f.homenageado||f.titulo)}</div>
+      ${f.homenageado?`<p class="tit">${esc(f.titulo)}</p>`:''}
+      <div class="sub">${esc(subtitulo(f))}</div>
+      <div class="meta">${f.data?`<span>📅 ${esc(dataBonita(f))}</span>`:''}${f.hora?`<span>⏰ ${esc(f.hora)}</span>`:''}${f.local?`<span>📍 ${esc(f.local)}</span>`:''}</div>
+      ${f.mensagem?`<p class="msgf">${esc(f.mensagem)}</p>`:''}
+    </section>
+    ${f.ativo ? `
+    <h2 class="sec">💌 Deixe sua homenagem</h2>
+    <div class="acts">
+      <button class="act" data-k="foto"><span class="ic">📸</span>Foto</button>
+      <button class="act" data-k="texto"><span class="ic">✍️</span>Recado</button>
+      <button class="act" data-k="audio"><span class="ic">🎤</span>Áudio</button>
+      <button class="act" data-k="video"><span class="ic">🎥</span>Vídeo</button>
+    </div>
+    <div class="namebar"><label for="nome" class="muted" style="font-weight:600">Seu nome:</label><input class="in" id="nome" maxlength="40" placeholder="Ex.: Tia Ana" value="${esc(store.get('mf_nome')||'')}"></div>
+    ${f.moderacao?`<p class="center muted" style="font-size:14px;margin:8px 0 0">As homenagens aparecem no telão depois que o anfitrião aprovar 💛</p>`:''}
+    ` : `<div class="closed">Esta festa já encerrou as homenagens. Obrigado por participar! 💛</div>`}
+    <h2 class="sec">🖼️ Mural <span class="muted" id="muralN" style="font-size:16px;font-weight:600"></span></h2>
+    <div class="mural" id="mural"></div>
+  </div>`;
+  document.querySelectorAll('.act').forEach(b=>b.onclick=()=>abrirEnvio(b.dataset.k));
+  const nome=$('nome'); if(nome) nome.addEventListener('change',()=>store.set('mf_nome',nome.value.trim().slice(0,40)));
+  await atualizarMural(); setInterval(()=>{ if(!document.hidden) atualizarMural(); }, 20000);
+}
+async function atualizarMural(){
+  try{ POSTS = await postsAprovados(FESTA.id); }catch(e){ return; }
+  const key=POSTS.map(p=>p.id).join(','); if(key===muralKey) return; muralKey=key;
+  $('muralN').textContent = POSTS.length ? `(${POSTS.length})` : '';
+  const m=$('mural'); const list=[...POSTS].reverse();
+  m.innerHTML = list.length ? list.map(cardPost).join('') : `<div class="empty">Ainda não tem nada aqui. Seja o primeiro a deixar uma homenagem! 🎉</div>`;
+}
+function cardPost(p){
+  const by = p.autor ? `<div class="by">— ${esc(p.autor)}</div>` : '';
+  if(p.tipo==='foto') return `<figure class="post"><img loading="lazy" src="${midia(p.caminho)}" alt="${esc(p.texto||'Foto da festa')}"><figcaption class="pb">${p.texto?`<div>${esc(p.texto)}</div>`:''}${by}</figcaption></figure>`;
+  if(p.tipo==='texto') return `<div class="post t"><div class="pb"><blockquote>${esc(p.texto)}</blockquote>${by}</div></div>`;
+  if(p.tipo==='audio') return `<div class="post a"><div class="pb"><div style="font-weight:700">🎤 Recado em áudio · ${fmtDur(p.duracao)}</div><audio controls preload="none" src="${midia(p.caminho)}"></audio>${by}</div></div>`;
+  if(p.tipo==='video') return `<div class="post"><video controls playsinline preload="none" poster="${p.thumb?midia(p.thumb):''}" src="${midia(p.caminho)}"></video><div class="pb"><div style="font-weight:700">🎥 Recado em vídeo · ${fmtDur(p.duracao)}</div>${by}</div></div>`;
+  return '';
+}
+function telaNaoAchou(){
+  aplicarTema('confete');
+  $('app').innerHTML = `<div class="wrap center" style="padding-top:12vh"><div style="font-size:72px">🔎</div><h1>Festa não encontrada</h1><p class="muted">Confira se o link está completo, do jeito que o anfitrião mandou.</p><a class="btn" href="${BASE}">Ir para o início</a></div>`;
+}
+
+// ---------- folhas de envio ----------
+let recState=null;
+function abrirFolha(html){ $('sheet').innerHTML=html; $('ov').hidden=false; }
+function fecharFolha(){ pararCaptura(); $('ov').hidden=true; $('sheet').innerHTML=''; }
+$('ov').addEventListener('click', e=>{ if(e.target.id==='ov' && !(recState&&recState.rec&&recState.rec.state==='recording')) fecharFolha(); });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape' && !$('ov').hidden) fecharFolha(); });
+function nomeAtual(){ const n=$('nome'); const v=(n?n.value:store.get('mf_nome')||'').trim().slice(0,40); if(v) store.set('mf_nome',v); return v||null; }
+
+function abrirEnvio(k){
+  if(k==='foto') return folhaFoto();
+  if(k==='texto') return folhaTexto();
+  return folhaGravar(k);
+}
+function rodapeEnvio(okTxt){ return `<div class="msg" id="eMsg"></div><div class="foot"><button class="btn ghost" id="eCancel" type="button">Cancelar</button><button class="btn" id="eSend" type="button">${okTxt}</button></div>`; }
+function ligarRodape(fn){ $('eCancel').onclick=fecharFolha; $('eSend').onclick=fn; }
+function msgE(t,cls){ const m=$('eMsg'); if(m){ m.className='msg '+(cls||''); m.innerHTML=t; } }
+function agradecer(tipo){
+  const ic={foto:'📸',texto:'💌',audio:'🎤',video:'🎥'}[tipo];
+  $('sheet').innerHTML = `<div class="thanks"><div class="big">${ic}</div><h3 style="justify-content:center">Obrigado${nomeAtual()?', '+esc(nomeAtual()):''}!</h3>
+   <p>${FESTA.moderacao?'Sua homenagem chegou! Ela aparece no telão assim que o anfitrião aprovar 💛':'Sua homenagem já está no mural e no telão! 🎉'}</p>
+   <div class="foot" style="justify-content:center"><button class="btn ghost" id="tOutra">Mandar outra</button><button class="btn" id="tOk">Fechar</button></div></div>`;
+  $('tOk').onclick=fecharFolha; $('tOutra').onclick=()=>{ fecharFolha(); setTimeout(()=>abrirEnvio(tipo),50); };
+  atualizarMural();
+}
+async function subir(blob, tipo, ext, contentType){
+  const path=`${FESTA.id}/${tipo}-${Date.now()}-${rnd()}.${ext}`;
+  const {error}=await sb.storage.from('fe-midia').upload(path, blob, {contentType, upsert:false, cacheControl:'31536000'});
+  if(error) throw error; return path;
+}
+async function gravarPost(row){ const {error}=await sb.from('fe_posts').insert({festa_id:FESTA.id, autor:nomeAtual(), aparelho:deviceId(), ...row}); if(error) throw error; }
+
+function folhaFoto(){
+  abrirFolha(`<h3>📸 Fotos da festa</h3>
+   <label class="drop"><input type="file" id="pF" accept="image/*" multiple><span class="ic">🖼️</span>Toque para tirar ou escolher fotos<span class="muted" style="font-weight:500;font-size:14px">Pode mandar várias de uma vez</span></label>
+   <div class="thumbs" id="pT"></div>
+   <label class="f" style="margin-top:12px">Legenda (opcional)<input class="in" id="pL" maxlength="80" placeholder="Ex.: A tia mais animada da pista!"></label>
+   ${rodapeEnvio('Enviar fotos')}`);
+  let files=[];
+  $('pF').onchange=e=>{ files=[...e.target.files].filter(f=>/^image\//.test(f.type)).slice(0,20); $('pT').innerHTML=files.map(f=>`<img src="${URL.createObjectURL(f)}" alt="">`).join(''); msgE(files.length?`${files.length} foto(s) prontas para enviar.`:''); };
+  ligarRodape(async()=>{
+    if(!files.length){ msgE('Escolha pelo menos uma foto.','err'); return; }
+    const btn=$('eSend'); btn.disabled=true; const leg=$('pL').value.trim().slice(0,80)||null;
+    try{ for(let i=0;i<files.length;i++){ msgE(`<span class="spin"></span> Enviando foto ${i+1} de ${files.length}…`); const b=await encolher(files[i]); const path=await subir(b,'foto','jpg','image/jpeg'); await gravarPost({tipo:'foto', caminho:path, texto:leg, bytes:b.size}); if(i<files.length-1) await sleep(3100); }
+      agradecer('foto'); }
+    catch(e){ msgE(ERR(e),'err'); btn.disabled=false; }
+  });
+}
+function folhaTexto(){
+  const sug=['Parabéns! 🎉','Muitas felicidades! 🥳','Que dia lindo! ✨','Te amamos muito! ❤️','Que Deus abençoe sempre 🙏','Felicidades ao casal! 💍'];
+  abrirFolha(`<h3>✍️ Recado</h3>
+   <textarea class="in" id="tT" maxlength="600" placeholder="Escreva seu carinho para ${esc(FESTA.homenageado||'o homenageado')}…"></textarea>
+   <div class="row" style="justify-content:space-between"><div class="sugs">${sug.map(s=>`<button type="button">${s}</button>`).join('')}</div><span class="muted" id="tC" style="font-size:13px">0/600</span></div>
+   ${rodapeEnvio('Enviar recado')}`);
+  const ta=$('tT'); ta.oninput=()=>$('tC').textContent=`${ta.value.length}/600`; setTimeout(()=>ta.focus(),60);
+  document.querySelectorAll('.sugs button').forEach(b=>b.onclick=()=>{ ta.value=(ta.value?ta.value.trimEnd()+' ':'')+b.textContent; ta.oninput(); ta.focus(); });
+  ligarRodape(async()=>{
+    const v=ta.value.trim(); if(!v){ msgE('Escreva um recadinho primeiro 😉','err'); return; }
+    $('eSend').disabled=true; msgE('<span class="spin"></span> Enviando…');
+    try{ await gravarPost({tipo:'texto', texto:v.slice(0,600)}); agradecer('texto'); }catch(e){ msgE(ERR(e),'err'); $('eSend').disabled=false; }
+  });
+}
+
+// ---------- gravação de áudio e vídeo ----------
+function escolherMime(kind){
+  const op = kind==='video' ? ['video/mp4;codecs=avc1,mp4a.40.2','video/mp4','video/webm;codecs=vp8,opus','video/webm'] : ['audio/mp4','audio/webm;codecs=opus','audio/webm','audio/ogg;codecs=opus'];
+  if(!window.MediaRecorder) return null; return op.find(m=>{ try{ return MediaRecorder.isTypeSupported(m); }catch(e){ return false; } }) || '';
+}
+function pararCaptura(){
+  if(!recState) return;
+  try{ if(recState.rec && recState.rec.state!=='inactive') recState.rec.stop(); }catch(e){}
+  try{ recState.stream && recState.stream.getTracks().forEach(t=>t.stop()); }catch(e){}
+  try{ recState.ac && recState.ac.close(); }catch(e){}
+  clearInterval(recState.timer); cancelAnimationFrame(recState.raf); recState=null;
+}
+function folhaGravar(kind){
+  const v = kind==='video';
+  const podeGravar = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && escolherMime(kind)!==null);
+  abrirFolha(`<h3>${v?'🎥 Recado em vídeo':'🎤 Recado em áudio'}</h3>
+   <div class="rec">
+     ${v?`<div class="vbox"><video id="gLive" class="live" autoplay muted playsinline></video><video id="gPrev" controls playsinline hidden></video><span class="badge" id="gBadge" hidden>● 0:00</span></div>`
+        :`<canvas id="gWave" width="600" height="120"></canvas><audio id="gPrev" controls hidden style="width:100%"></audio>`}
+     <div class="time" id="gTime">0:00 <span class="muted" style="font-size:16px">/ ${fmtDur(LIMITE_GRAVACAO)}</span></div>
+     <div class="row" style="justify-content:center">
+       <button class="recbtn" id="gRec" type="button" ${podeGravar?'':'hidden'}>● Gravar</button>
+       ${v?`<button class="btn ghost sm" id="gFlip" type="button" hidden>🔄 Trocar câmera</button>`:''}
+       <button class="btn ghost" id="gRedo" type="button" hidden>↺ Gravar de novo</button>
+     </div>
+     <p class="muted center" style="margin:0;font-size:14px">${podeGravar?`Até ${LIMITE_GRAVACAO/60} minuto. Fale com o coração 💛`:'Seu navegador não grava aqui, mas dá para mandar um arquivo:'}</p>
+     <div class="alt"><label>${v?'ou escolher um vídeo do celular':'ou escolher um áudio do celular'}<input type="file" id="gFile" accept="${v?'video/*':'audio/*'}"></label></div>
+   </div>
+   ${rodapeEnvio('Enviar')}`);
+  $('eSend').disabled=true;
+  let result=null, facing='user';
+  ligarRodape(async()=>{
+    if(!result) return; const btn=$('eSend'); btn.disabled=true;
+    try{
+      msgE(`<span class="spin"></span> Enviando ${(result.blob.size/1048576).toFixed(1)} MB… não feche a tela`);
+      const path=await subir(result.blob, kind, result.ext, result.type);
+      let thumb=null, tb=null;
+      if(v){ tb=await videoThumb(result.blob); if(tb) thumb=await subir(tb,'thumb','jpg','image/jpeg'); }
+      await gravarPost({tipo:kind, caminho:path, thumb, duracao:Math.min(75,Math.round(result.dur||0)), bytes:result.blob.size+(tb?tb.size:0)});
+      agradecer(kind);
+    }catch(e){ msgE(ERR(e),'err'); btn.disabled=false; }
+  });
+  async function abrirCamera(){
+    if(!v || !podeGravar) return;
+    try{
+      pararCaptura();
+      const stream=await navigator.mediaDevices.getUserMedia({audio:true, video:{facingMode:facing, width:{ideal:640}, height:{ideal:480}, frameRate:{ideal:24,max:30}}});
+      recState={stream}; const live=$('gLive'); live.srcObject=stream; live.hidden=false; $('gPrev').hidden=true; live.classList.toggle('live', facing==='user');
+      $('gFlip').hidden=false; msgE('');
+    }catch(e){ msgE('Não consegui abrir a câmera. Libere a permissão do navegador ou escolha um vídeo do celular.','err'); }
+  }
+  const prontos = r => { result=r; $('eSend').disabled=false; $('gRedo').hidden=false; $('gRec').hidden=true; if(v) $('gFlip').hidden=true; msgE(`Pronto! ${fmtDur(r.dur)} gravados. Confira e toque em <b>Enviar</b>.`,'ok'); };
+  if(v) abrirCamera();
+  if(v) $('gFlip').onclick=()=>{ facing = facing==='user' ? 'environment' : 'user'; abrirCamera(); };
+  $('gRedo').onclick=()=>{ result=null; $('eSend').disabled=true; $('gRedo').hidden=true; $('gRec').hidden=!podeGravar; $('gRec').textContent='● Gravar'; $('gTime').firstChild.textContent='0:00 '; const pv=$('gPrev'); pv.hidden=true; pv.removeAttribute('src'); if(v) abrirCamera(); else msgE(''); };
+  $('gRec').onclick=async()=>{
+    const btn=$('gRec');
+    if(recState && recState.rec && recState.rec.state==='recording'){ recState.rec.stop(); return; }
+    try{
+      if(!v){ pararCaptura(); const stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true}}); recState={stream}; }
+      if(!recState || !recState.stream){ await abrirCamera(); if(!recState) return; }
+      const mime=escolherMime(kind), base=(mime||'').split(';')[0] || (v?'video/webm':'audio/webm');
+      const opts = v ? {videoBitsPerSecond:900000, audioBitsPerSecond:96000} : {audioBitsPerSecond:64000};
+      if(mime) opts.mimeType=mime;
+      const rec=new MediaRecorder(recState.stream, opts); const chunks=[]; recState.rec=rec;
+      rec.ondataavailable=ev=>{ if(ev.data && ev.data.size) chunks.push(ev.data); };
+      const t0=Date.now();
+      rec.onstop=()=>{
+        const dur=(Date.now()-t0)/1000; clearInterval(recState&&recState.timer); cancelAnimationFrame(recState&&recState.raf);
+        btn.classList.remove('on'); if(v) $('gBadge').hidden=true;
+        const blob=new Blob(chunks,{type:base}); const ext = base.includes('mp4') ? (v?'mp4':'m4a') : base.includes('ogg') ? 'ogg' : 'webm';
+        if(v){ const live=$('gLive'); live.hidden=true; }
+        try{ recState.stream.getTracks().forEach(t=>t.stop()); }catch(e){}
+        const pv=$('gPrev'); pv.src=URL.createObjectURL(blob); pv.hidden=false;
+        prontos({blob, dur, ext, type:base});
+      };
+      rec.start(1000); btn.textContent='■ Parar'; btn.classList.add('on'); $('eSend').disabled=true;
+      if(v){ $('gFlip').hidden=true; $('gBadge').hidden=false; }
+      recState.timer=setInterval(()=>{ const s=(Date.now()-t0)/1000; $('gTime').firstChild.textContent=fmtDur(s)+' '; if(v) $('gBadge').textContent='● '+fmtDur(s); if(s>=LIMITE_GRAVACAO && rec.state==='recording') rec.stop(); },250);
+      if(!v){ // ondas do microfone
+        const AC=window.AudioContext||window.webkitAudioContext; if(AC){ const ac=new AC(); recState.ac=ac; const src=ac.createMediaStreamSource(recState.stream); const an=ac.createAnalyser(); an.fftSize=256; src.connect(an);
+          const data=new Uint8Array(an.frequencyBinCount), cv=$('gWave'), c=cv.getContext('2d'); const cs=getComputedStyle(document.documentElement); const a1=cs.getPropertyValue('--accent').trim(), a2=cs.getPropertyValue('--accent2').trim();
+          const loop=()=>{ an.getByteFrequencyData(data); c.clearRect(0,0,cv.width,cv.height); const n=40, w=cv.width/n; for(let i=0;i<n;i++){ const val=data[Math.floor(i*data.length/n/1.5)]/255; const h=Math.max(6,val*cv.height*.95); c.fillStyle=i%2?a2:a1; c.beginPath(); c.roundRect? c.roundRect(i*w+3,(cv.height-h)/2,w-6,h,6) : c.rect(i*w+3,(cv.height-h)/2,w-6,h); c.fill(); } if(recState) recState.raf=requestAnimationFrame(loop); };
+          loop(); } }
+    }catch(e){ msgE(v?'Não consegui gravar. Libere câmera e microfone ou escolha um vídeo do celular.':'Não consegui usar o microfone. Libere a permissão ou escolha um áudio do celular.','err'); }
+  };
+  $('gFile').onchange=async e=>{
+    const file=e.target.files[0]; e.target.value=''; if(!file) return;
+    if(file.size > LIMITE_MB*1048576){ msgE(`Esse arquivo tem ${(file.size/1048576).toFixed(0)} MB. O limite é ${LIMITE_MB} MB — grave um mais curtinho 😉`,'err'); return; }
+    const dur=await duracaoArquivo(file, v?'video':'audio');
+    if(dur && dur > LIMITE_GRAVACAO+2){ msgE(`Esse ${v?'vídeo':'áudio'} tem ${fmtDur(dur)}. O limite é ${fmtDur(LIMITE_GRAVACAO)}.`,'err'); return; }
+    pararCaptura(); if(v){ $('gLive').hidden=true; }
+    const pv=$('gPrev'); pv.src=URL.createObjectURL(file); pv.hidden=false;
+    const type=file.type || (v?'video/mp4':'audio/mpeg'); const ext=(file.name.split('.').pop()||'').toLowerCase().slice(0,5) || (v?'mp4':'mp3');
+    $('gTime').firstChild.textContent=fmtDur(dur||0)+' ';
+    prontos({blob:file, dur:dur||0, ext, type});
+  };
+}
+
+// =====================================================================
+// TELÃO
+// =====================================================================
+async function telaTelao(){
+  FESTA = await carregarFesta(SLUG).catch(()=>null);
+  if(!FESTA) return telaNaoAchou();
+  aplicarTema(FESTA.tema); document.title='Telão · '+(FESTA.homenageado||FESTA.titulo);
+  const f=FESTA, t=tema(f.tema), url=linkFesta(f.slug);
+  $('app').innerHTML = `
+   <div class="tv">
+     <div class="tv-top"><div class="t">${esc(f.homenageado||f.titulo)}</div><div class="n" id="tvN"></div></div>
+     <div class="stage" id="stage"></div>
+     <div class="tv-bar"><div class="qr" id="tvQr"></div><div><b>Deixe sua homenagem!</b><span>Aponte a câmera do celular para o código · foto, recado, áudio ou vídeo</span></div><div class="acts-mini">${t.deco.join('')}</div></div>
+   </div>
+   <div class="tv-start" id="tvStart"><div><div style="font-size:64px">${t.deco[0]}</div><div class="who">${esc(f.homenageado||f.titulo)}</div><p class="muted" style="font-size:20px;font-weight:600">${esc(subtitulo(f))}</p>
+     <button class="btn" id="tvGo" style="font-size:22px;padding:16px 30px">▶ Iniciar telão</button><p class="muted" style="font-size:14px;margin-top:14px">Dica: conecte o notebook na TV. Teclas: → próxima · ← anterior · espaço pausa · F tela cheia</p></div></div>
+   <div class="tv-hint" id="tvHint"></div>`;
+  qrInto($('tvQr'), url, 300);
+  const tv = {list:[], known:new Set(), queue:[], loop:0, cur:null, timer:null, paused:false, hist:[]};
+  async function puxar(){
+    try{ const l=await postsAprovados(f.id); tv.list=l; for(const p of l){ if(!tv.known.has(p.id)){ tv.known.add(p.id); if(tv.started) tv.queue.push(p); } } $('tvN').textContent = l.length ? `${l.length} homenage${l.length>1?'ns':'m'} 💛` : ''; }catch(e){}
+  }
+  function vazio(){
+    const st=$('stage'); st.innerHTML=`<div class="sl tv-empty"><div class="qr" id="tvQrBig"></div><h2>Mande a primeira homenagem!</h2><p>Aponte a câmera do celular para o código</p></div>`;
+    qrInto($('tvQrBig'), url, 600); tv.cur=null; clearTimeout(tv.timer); tv.timer=setTimeout(proxima, 5000);
+  }
+  function proxima(back){
+    clearTimeout(tv.timer); if(tv.paused) return;
+    let p;
+    if(back && tv.hist.length>1){ tv.hist.pop(); p=tv.hist.pop(); }
+    else if(tv.queue.length) p=tv.queue.shift();
+    else if(tv.list.length){ p=tv.list[tv.loop % tv.list.length]; tv.loop++; }
+    if(!p) return vazio();
+    if(!tv.list.find(x=>x.id===p.id)) return proxima();
+    tv.hist.push(p); if(tv.hist.length>50) tv.hist.shift();
+    mostrar(p);
+  }
+  function mostrar(p){
+    const st=$('stage'); const old=st.firstElementChild; if(old){ old.classList.add('out'); const o=old; setTimeout(()=>o.remove(),600); old.querySelectorAll('audio,video').forEach(m=>{ try{ m.pause(); }catch(e){} }); }
+    const el=document.createElement('div'); el.className='sl'; const by = p.autor ? esc(p.autor) : '';
+    let dur=8000;
+    if(p.tipo==='foto'){ el.classList.add('sl-foto'); el.innerHTML=`<img class="ph" src="${midia(p.caminho)}" alt="">${(p.texto||by)?`<div class="cap">${esc(p.texto||'')}${by?`<small>📸 ${by}</small>`:''}</div>`:''}`; dur=8000; }
+    else if(p.tipo==='texto'){ el.classList.add('sl-texto'); const L=(p.texto||'').length; const fs = L<40?9:L<90?7:L<180?5.4:L<320?4.2:3.4; el.innerHTML=`<div class="q" style="font-size:${fs}vw">${esc(p.texto)}</div>${by?`<div class="by">— ${by}</div>`:''}`; dur=Math.min(18000, 7000+L*45); }
+    else if(p.tipo==='audio'){ el.classList.add('sl-audio'); el.innerHTML=`<div class="mic">🎤</div><div class="eq">${'<i></i>'.repeat(12)}</div><div class="cap">Recado de ${by||'um convidado'}</div><audio src="${midia(p.caminho)}" preload="auto"></audio>`; dur=null; }
+    else if(p.tipo==='video'){ el.classList.add('sl-video'); el.innerHTML=`<video src="${midia(p.caminho)}" playsinline preload="auto" ${p.thumb?`poster="${midia(p.thumb)}"`:''}></video>${by?`<div class="cap"><small>🎥 Recado de ${by}</small></div>`:''}`; dur=null; }
+    st.appendChild(el); tv.cur=p;
+    const m=el.querySelector('audio,video');
+    if(m){ m.onended=()=>proxima(); m.onerror=()=>{ tv.timer=setTimeout(proxima,1500); }; m.play().catch(()=>{ tv.timer=setTimeout(proxima,3000); }); tv.timer=setTimeout(proxima, ((p.duracao||60)+6)*1000); }
+    else tv.timer=setTimeout(proxima, dur);
+  }
+  $('tvGo').onclick=async()=>{
+    $('tvStart').hidden=true; tv.started=true;
+    try{ await document.documentElement.requestFullscreen(); }catch(e){}
+    try{ if(navigator.wakeLock) await navigator.wakeLock.request('screen'); }catch(e){}
+    await puxar(); proxima();
+  };
+  document.addEventListener('keydown', e=>{
+    if(!tv.started) return;
+    if(e.key==='ArrowRight') proxima();
+    else if(e.key==='ArrowLeft') proxima(true);
+    else if(e.key===' '){ e.preventDefault(); tv.paused=!tv.paused; const m=$('stage').querySelector('.sl:last-child audio,.sl:last-child video'); if(tv.paused){ clearTimeout(tv.timer); m&&m.pause(); $('tvHint').textContent='⏸ pausado (espaço para continuar)'; } else { $('tvHint').textContent=''; m ? m.play().catch(()=>{}) : proxima(); } }
+    else if(e.key.toLowerCase()==='f'){ document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen().catch(()=>{}); }
+  });
+  await puxar(); setInterval(puxar, 10000);
+}
+
+// =====================================================================
+// ANFITRIÃO
+// =====================================================================
+let PIN=null, ADM={posts:[], aba:'pendente'};
+async function telaAdmin(){
+  FESTA = await carregarFesta(SLUG).catch(()=>null);
+  if(!FESTA) return telaNaoAchou();
+  aplicarTema(FESTA.tema); document.title='Anfitrião · '+(FESTA.homenageado||FESTA.titulo);
+  const salvo=store.sget('mf_pin_'+SLUG);
+  if(salvo && await rpc('fe_admin_login',{p_slug:SLUG,p_pin:salvo}).catch(()=>false)){ PIN=salvo; return painelAdmin(); }
+  telaLogin(`Área do anfitrião`, `${esc(FESTA.homenageado||FESTA.titulo)}`, async pin=>{
+    const ok=await rpc('fe_admin_login',{p_slug:SLUG,p_pin:pin}); if(!ok) return false; PIN=pin; store.sset('mf_pin_'+SLUG,pin); painelAdmin(); return true;
+  });
+}
+function telaLogin(titulo, sub, entrar){
+  $('app').innerHTML=`<div class="wrap" style="max-width:440px;padding-top:12vh"><form class="card" id="lg" style="padding:24px" autocomplete="off">
+    <div style="font-size:48px">🔐</div><h1 style="margin:6px 0 2px;font-size:26px">${titulo}</h1><p class="muted" style="margin:0 0 16px">${sub}</p>
+    <label class="f">Senha<input class="in" id="lgP" type="password" inputmode="numeric" autocomplete="off" required></label>
+    <div class="msg" id="lgM"></div><button class="btn" style="width:100%;margin-top:8px">Entrar</button></form></div>`;
+  setTimeout(()=>$('lgP').focus(),50);
+  $('lg').onsubmit=async e=>{ e.preventDefault(); const p=$('lgP').value.trim(); if(!p) return; $('lgM').className='msg'; $('lgM').innerHTML='<span class="spin"></span>';
+    try{ const ok=await entrar(p); if(ok===false){ $('lgM').className='msg err'; $('lgM').textContent='Senha incorreta.'; } }catch(err){ $('lgM').className='msg err'; $('lgM').textContent=ERR(err); } };
+}
+function painelAdmin(){
+  const f=FESTA;
+  $('app').innerHTML=`<div class="wrap">
+   <div class="top"><h1>Anfitrião · <em>${esc(f.homenageado||f.titulo)}</em></h1><div class="row"><a class="btn ghost sm" href="${linkFesta(f.slug)}" target="_blank" rel="noopener">👀 Ver como convidado</a><a class="btn sm" href="${linkFesta(f.slug,'telao')}" target="_blank" rel="noopener">📺 Abrir telão</a><button class="btn ghost sm" id="sair">Sair</button></div></div>
+   <div class="tabs" id="abasTop">
+     <button data-v="moderar" aria-pressed="true">💌 Homenagens <span class="n" id="nPend" hidden></span></button>
+     <button data-v="festa" aria-pressed="false">🎨 Festa e tema</button>
+     <button data-v="compartilhar" aria-pressed="false">📲 Compartilhar</button>
+     <button data-v="recordacoes" aria-pressed="false">📖 Recordações</button>
+   </div>
+   <div id="vw"></div></div>`;
+  $('sair').onclick=()=>{ store.sset('mf_pin_'+SLUG,null); location.reload(); };
+  const abas=$('abasTop');
+  abas.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; abas.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed', x===b)); ({moderar:vModerar, festa:vFesta, compartilhar:vCompartilhar, recordacoes:vRecordacoes})[b.dataset.v](); };
+  vModerar(); setInterval(()=>{ if(!document.hidden && ADM.view==='moderar') carregarAdmPosts(); }, 12000);
+}
+async function carregarAdmPosts(){
+  try{ ADM.posts = await rpc('fe_admin_posts',{p_slug:SLUG,p_pin:PIN}); }catch(e){ toast(ERR(e)); return; }
+  const np=ADM.posts.filter(p=>p.status==='pendente').length; const n=$('nPend'); n.hidden=!np; n.textContent=np;
+  if(ADM.view==='moderar') renderModeracao();
+}
+function vModerar(){
+  ADM.view='moderar';
+  $('vw').innerHTML=`<div class="row" style="justify-content:space-between;margin-bottom:12px"><div class="tabs" id="abasMod" style="margin:0">
+     <button data-s="pendente" aria-pressed="${ADM.aba==='pendente'}">⏳ Aguardando</button><button data-s="aprovado" aria-pressed="${ADM.aba==='aprovado'}">✅ No telão</button><button data-s="oculto" aria-pressed="${ADM.aba==='oculto'}">🙈 Ocultos</button></div>
+     <button class="btn ok" id="aprTodos" hidden>✓ Aprovar todas</button></div>
+     <div id="modList"><div class="empty"><span class="spin"></span></div></div>`;
+  $('abasMod').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; ADM.aba=b.dataset.s; $('abasMod').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b)); renderModeracao(); };
+  $('aprTodos').onclick=async()=>{ const ids=ADM.posts.filter(p=>p.status==='pendente').map(p=>p.id); if(!ids.length) return; await moderar(ids,'aprovado'); toast(`${ids.length} homenage${ids.length>1?'ns':'m'} no telão! 🎉`); };
+  carregarAdmPosts();
+}
+function renderModeracao(){
+  const list=ADM.posts.filter(p=>p.status===ADM.aba).reverse();
+  const cnt={pendente:0,aprovado:0,oculto:0}; ADM.posts.forEach(p=>cnt[p.status]++);
+  const lb={pendente:'⏳ Aguardando',aprovado:'✅ No telão',oculto:'🙈 Ocultos'};
+  document.querySelectorAll('#abasMod button').forEach(b=>b.textContent=`${lb[b.dataset.s]} (${cnt[b.dataset.s]})`);
+  $('aprTodos').hidden = !(ADM.aba==='pendente' && cnt.pendente>1);
+  const box=$('modList'); if(!box) return;
+  if(!list.length){ box.innerHTML=`<div class="empty">${ADM.aba==='pendente'?'Nada aguardando aprovação. Quando os convidados mandarem, aparece aqui. 💌':ADM.aba==='aprovado'?'Nenhuma homenagem no telão ainda.':'Nada oculto.'}</div>`; return; }
+  const ic={foto:'📸',texto:'✍️',audio:'🎤',video:'🎥'};
+  box.innerHTML=`<div class="modgrid">${list.map(p=>`<div class="card mod">
+    <div class="media">${p.tipo==='foto'?`<img loading="lazy" src="${midia(p.caminho)}" alt="">`:p.tipo==='texto'?`<blockquote>${esc(p.texto)}</blockquote>`:p.tipo==='video'?`<video controls playsinline preload="none" poster="${p.thumb?midia(p.thumb):''}" src="${midia(p.caminho)}"></video>`:`<div style="padding:12px 12px 0"><b>🎤 Áudio · ${fmtDur(p.duracao)}</b><audio controls preload="none" src="${midia(p.caminho)}"></audio></div>`}</div>
+    ${p.tipo==='foto'&&p.texto?`<div style="padding:8px 12px 0">${esc(p.texto)}</div>`:''}
+    <div class="info"><span>${ic[p.tipo]} ${esc(p.autor||'Sem nome')}</span><span>${new Date(p.criado_em).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}</span></div>
+    <div class="acts2">${p.status!=='aprovado'?`<button class="btn ok sm" data-id="${p.id}" data-s="aprovado">✓ Aprovar</button>`:''}${p.status!=='oculto'?`<button class="btn bad sm" data-id="${p.id}" data-s="oculto">✕ Ocultar</button>`:''}</div></div>`).join('')}</div>`;
+  box.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>moderar([+b.dataset.id], b.dataset.s));
+}
+async function moderar(ids, s){ try{ await rpc('fe_moderar',{p_slug:SLUG,p_pin:PIN,p_ids:ids,p_status:s}); ADM.posts.forEach(p=>{ if(ids.includes(p.id)) p.status=s; }); carregarAdmPosts(); }catch(e){ toast(ERR(e)); } }
+
+function formFesta(f, {mestre}={}){
+  const cat=f.categoria||'aniversario';
+  return `
+  <div class="card" style="padding:18px">
+   <h3 style="margin:0 0 10px">Tipo de festa</h3>
+   <div class="cats" id="ffCats">${Object.entries(CATS).map(([k,c])=>`<button type="button" class="cat" data-k="${k}" aria-pressed="${k===cat}"><span class="e">${c.e}</span>${c.n}</button>`).join('')}</div>
+   <div class="grid2" style="margin-top:16px">
+     <label class="f">Homenageado(s)<input class="in" id="ffHom" maxlength="80" value="${esc(f.homenageado||'')}"></label>
+     <label class="f">Título da festa<input class="in" id="ffTit" maxlength="80" value="${esc(f.titulo||'')}" placeholder="Deixe vazio que eu sugiro"></label>
+     <label class="f" id="ffIdadeL">Idade<input class="in" id="ffIdade" type="number" min="0" max="120" value="${f.idade??''}"></label>
+     <label class="f">Data<input class="in" id="ffData" type="date" value="${f.data||''}"></label>
+     <label class="f">Horário<input class="in" id="ffHora" maxlength="10" placeholder="Ex.: 16h" value="${esc(f.hora||'')}"></label>
+     <label class="f">Local<input class="in" id="ffLocal" maxlength="120" value="${esc(f.local||'')}"></label>
+   </div>
+   <label class="f" style="margin-top:12px">Mensagem de boas-vindas (opcional)<textarea class="in" id="ffMsg" maxlength="300" style="min-height:80px" placeholder="Ex.: Deixe aqui seu carinho para a Maria Clara!">${esc(f.mensagem||'')}</textarea></label>
+   <label class="row" style="margin-top:12px;font-weight:600;gap:8px"><input type="checkbox" id="ffMod" ${f.moderacao!==false?'checked':''} style="width:22px;height:22px"> Aprovar as homenagens antes de irem para o telão</label>
+  </div>
+  <div class="card" style="padding:18px;margin-top:12px">
+   <div class="row" style="justify-content:space-between"><h3 style="margin:0">Tema</h3><label class="row" style="gap:6px;font-size:14px;font-weight:600"><input type="checkbox" id="ffTodos"> ver todos os temas</label></div>
+   <div class="temas" id="ffTemas" style="margin-top:12px"></div>
+  </div>
+  ${mestre?`<div class="card" style="padding:18px;margin-top:12px"><h3 style="margin:0 0 10px">Cliente e acesso</h3><div class="grid2">
+     <label class="f">Senha do anfitrião<input class="in" id="ffSenha" maxlength="20" value="${String(Math.floor(100000+Math.random()*900000))}"></label>
+     <label class="f">Cliente (quem contratou)<input class="in" id="ffCli" maxlength="80"></label>
+     <label class="f">Contato<input class="in" id="ffCont" maxlength="80" placeholder="WhatsApp ou e-mail"></label>
+     <label class="f">Válido até (opcional)<input class="in" id="ffExp" type="date"></label></div></div>`
+   :`<div class="card" style="padding:18px;margin-top:12px"><h3 style="margin:0 0 10px">Senha do anfitrião</h3><label class="f">Nova senha (deixe vazio para manter)<input class="in" id="ffSenha" maxlength="20" type="password" autocomplete="new-password"></label></div>`}`;
+}
+function ligarFormFesta(f, onTema){
+  let cat=f.categoria||'aniversario', tem=f.tema||CATS[cat].tema;
+  const ajustarIdade=()=>{ const L=$('ffIdadeL'); const lab={bodas:'Anos de casados',quinze:null,casamento:null,cha_bebe:null,formatura:null,outra:null}[cat]; const show = !(cat in {quinze:1,casamento:1,cha_bebe:1,formatura:1,outra:1}); L.hidden=!show; L.firstChild.textContent = lab || 'Idade que vai fazer';
+    const ph={menina:'Ex.: Maria Clara',menino:'Ex.: Pedro Henrique',infantil:'Ex.: Theo',quinze:'Ex.: Isabela',bodas:'Ex.: Ana & José',casamento:'Ex.: Júlia & Rafael',cha_bebe:'Ex.: Bebê Helena',formatura:'Ex.: Turma de Medicina 2026',aniversario:'Ex.: Dona Lúcia',outra:'Ex.: Família Silva'}[cat]; $('ffHom').placeholder=ph; };
+  const pintar=()=>{ const todos=$('ffTodos').checked; const ks=Object.keys(TEMAS).filter(k=>todos||TEMAS[k].cats.includes(cat)||k===tem);
+    $('ffTemas').innerHTML=ks.map(k=>{ const t=TEMAS[k]; return `<button type="button" class="tema" data-k="${k}" aria-pressed="${k===tem}" style="background:linear-gradient(135deg,${t.bg} 0%,${t.bg2} 100%);color:${t.ink}">${CATS[cat].tema===k?'<span class="rec">sugerido</span>':''}<span class="e">${t.e}</span><span class="nm" style="font-family:${t.font},Fredoka,sans-serif;font-weight:400;font-size:${/Great|Pacifico/.test(t.font)?'20px':'15px'}">${t.n}</span><span class="dots"><i style="background:${t.accent}"></i><i style="background:${t.accent2}"></i><i style="background:${t.surface}"></i></span></button>`; }).join('');
+    $('ffTemas').querySelectorAll('.tema').forEach(b=>b.onclick=()=>{ tem=b.dataset.k; pintar(); onTema&&onTema(tem); }); };
+  $('ffCats').onclick=e=>{ const b=e.target.closest('.cat'); if(!b) return; cat=b.dataset.k; $('ffCats').querySelectorAll('.cat').forEach(x=>x.setAttribute('aria-pressed',x===b)); if(!TEMAS[tem].cats.includes(cat)){ tem=CATS[cat].tema; onTema&&onTema(tem); } if(cat==='quinze') $('ffIdade').value=15; ajustarIdade(); pintar(); };
+  $('ffTodos').onchange=pintar; ajustarIdade(); pintar();
+  return ()=>{ const hom=$('ffHom').value.trim(); let tit=$('ffTit').value.trim(); const idade=$('ffIdade').value;
+    if(!tit) tit = sugerirTitulo(cat, hom, idade);
+    return {categoria:cat, tema:tem, homenageado:hom, titulo:tit, idade: (cat==='quinze'?'15':($('ffIdadeL').hidden?'':idade)), data:$('ffData').value, hora:$('ffHora').value.trim(), local:$('ffLocal').value.trim(), mensagem:$('ffMsg').value.trim(), moderacao:$('ffMod').checked}; };
+}
+function sugerirTitulo(cat, hom, idade){
+  const n=hom||'';
+  switch(cat){ case 'quinze': return n?`15 Anos de ${n}`:'Festa de 15 Anos';
+    case 'bodas': return n?`${bodasNome(idade)} de ${n}`:bodasNome(idade);
+    case 'casamento': return n?`Casamento de ${n}`:'Nosso Casamento';
+    case 'cha_bebe': return n?`Chá de Bebê · ${n}`:'Chá de Bebê';
+    case 'formatura': return n?`Formatura · ${n}`:'Formatura';
+    case 'outra': return n||'Nossa Festa';
+    default: return n?`Aniversário de ${n}`:'Festa de Aniversário'; }
+}
+function vFesta(){
+  ADM.view='festa'; const f=FESTA;
+  $('vw').innerHTML = formFesta(f) + `<div class="row" style="justify-content:flex-end;margin-top:12px"><span class="msg" id="ffM"></span><button class="btn" id="ffSalvar">Salvar alterações</button></div>`;
+  const ler=ligarFormFesta(f, k=>aplicarTema(k));
+  $('ffSalvar').onclick=async()=>{ const d=ler(); const s=$('ffSenha').value.trim(); if(s && s.length<4){ $('ffM').className='msg err'; $('ffM').textContent='A senha precisa de pelo menos 4 dígitos.'; return; } if(s) d.nova_senha=s;
+    try{ FESTA=await rpc('fe_admin_editar',{p_slug:SLUG,p_pin:PIN,d}); if(s){ PIN=s; store.sset('mf_pin_'+SLUG,s); } aplicarTema(FESTA.tema); $('ffM').className='msg ok'; $('ffM').textContent='Salvo! ✨'; }catch(e){ $('ffM').className='msg err'; $('ffM').textContent=ERR(e); } };
+}
+function textoConvite(f, senha){
+  return `${CATS[f.categoria]?.e||'🎉'} *${f.titulo}*\n\nDeixe sua homenagem para ${f.homenageado||'o homenageado'}: foto, recado, áudio ou vídeo! Vai aparecer no telão da festa 💛\n\n👉 ${linkFesta(f.slug)}`;
+}
+function vCompartilhar(){
+  ADM.view='compartilhar'; const f=FESTA; const L=[['Convidados','📲',linkFesta(f.slug)],['Telão (abrir no notebook/TV)','📺',linkFesta(f.slug,'telao')],['Área do anfitrião','🔐',linkFesta(f.slug,'admin')]];
+  $('vw').innerHTML=`<div class="grid2">
+   <div class="card" style="padding:18px;text-align:center"><h3 style="margin:0 0 10px">QR Code dos convidados</h3><div class="qrbig" id="shQr"></div><p class="muted" style="font-size:14px">Mostre na entrada ou imprima nas mesas</p><button class="btn" id="shCartoes">🖨️ Cartões de mesa (PDF)</button></div>
+   <div class="card" style="padding:18px;display:flex;flex-direction:column;gap:10px"><h3 style="margin:0">Links</h3>
+     ${L.map(([n,e,u])=>`<div><div style="font-weight:600;font-size:14px;margin-bottom:4px">${e} ${n}</div><div class="linkbox"><code>${esc(u)}</code><button class="btn sm" data-copy="${esc(u)}">Copiar</button></div></div>`).join('')}
+     <h3 style="margin:8px 0 0">Mensagem para o grupo</h3><textarea class="in" id="shTxt" style="min-height:130px">${esc(textoConvite(f))}</textarea><button class="btn alt" id="shCopy">📋 Copiar mensagem</button></div></div>`;
+  qrInto($('shQr'), linkFesta(f.slug), 220);
+  document.querySelectorAll('[data-copy]').forEach(b=>b.onclick=()=>copiar(b.dataset.copy,'Link copiado!'));
+  $('shCopy').onclick=()=>copiar($('shTxt').value,'Mensagem copiada!');
+  $('shCartoes').onclick=async()=>{ const b=$('shCartoes'); b.disabled=true; try{ baixar(await pdfCartoes(f), `Cartoes_${f.slug}.pdf`); }catch(e){ toast('Não consegui gerar o PDF.'); } b.disabled=false; };
+}
+function vRecordacoes(){
+  ADM.view='recordacoes';
+  const ap=ADM.posts.filter(p=>p.status==='aprovado'); const c={foto:0,texto:0,audio:0,video:0}; ap.forEach(p=>c[p.tipo]++);
+  $('vw').innerHTML=`<div class="grid2">
+   <div class="card" style="padding:18px"><div style="font-size:44px">📖</div><h3 style="margin:4px 0">Álbum de recordações (PDF)</h3><p class="muted">Capa no tema da festa, fotos em polaroid, recados escritos à mão e um QR Code em cada áudio e vídeo para ouvir de novo pelo celular. Entra só o que foi aprovado.</p>
+     <p style="font-weight:600">${c.foto} fotos · ${c.texto} recados · ${c.audio} áudios · ${c.video} vídeos</p><button class="btn" id="rcBook">📖 Baixar álbum</button><div class="msg" id="rcM1"></div></div>
+   <div class="card" style="padding:18px"><div style="font-size:44px">🗂️</div><h3 style="margin:4px 0">Baixar tudo (.zip)</h3><p class="muted">Todas as fotos, áudios e vídeos originais aprovados, mais um arquivo com todos os recados escritos. Para guardar para sempre.</p><button class="btn alt" id="rcZip">⬇️ Baixar tudo</button><div class="msg" id="rcM2"></div></div></div>`;
+  $('rcBook').onclick=async()=>{ const b=$('rcBook'); b.disabled=true; try{ const r=await pdfAlbum(FESTA, ap, t=>{ $('rcM1').className='msg'; $('rcM1').innerHTML=`<span class="spin"></span> ${t}`; }); baixar(r.blob, `Album_${FESTA.slug}.pdf`); $('rcM1').className='msg ok'; $('rcM1').textContent=`Álbum pronto: ${r.paginas} páginas! 💛`; }catch(e){ console.error(e); $('rcM1').className='msg err'; $('rcM1').textContent='Não consegui montar o álbum agora. Tente de novo.'; } b.disabled=false; };
+  $('rcZip').onclick=async()=>{ const b=$('rcZip'); b.disabled=true; try{ const blob=await zipTudo(FESTA, ap, t=>{ $('rcM2').className='msg'; $('rcM2').innerHTML=`<span class="spin"></span> ${t}`; }); baixar(blob, `Recordacoes_${FESTA.slug}.zip`); $('rcM2').className='msg ok'; $('rcM2').textContent='Arquivo pronto! 🗂️'; }catch(e){ $('rcM2').className='msg err'; $('rcM2').textContent='Não consegui montar o arquivo agora.'; } b.disabled=false; };
+}
+async function zipTudo(f, posts, prog){
+  const z=new JSZip(); const pastas={foto:'Fotos',audio:'Audios',video:'Videos'}; let i=0; const media=posts.filter(p=>p.caminho);
+  for(const p of media){ i++; prog(`Juntando arquivo ${i} de ${media.length}…`); try{ const b=await fetch(midia(p.caminho)).then(r=>r.blob()); const ext=p.caminho.split('.').pop(); const nome=`${String(i).padStart(3,'0')}_${(p.autor||'convidado').replace(/[^\wÀ-ú ]+/g,'').trim().replace(/\s+/g,'_')||'convidado'}.${ext}`; z.folder(pastas[p.tipo]).file(nome,b); }catch(e){} }
+  const rec=posts.filter(p=>p.tipo==='texto'||p.texto).map(p=>`${new Date(p.criado_em).toLocaleString('pt-BR')} — ${p.autor||'Convidado'}${p.tipo==='foto'?' (legenda de foto)':''}\n${p.texto}\n`).join('\n');
+  z.file('Recados.txt', `${f.titulo}\n${f.homenageado||''}\n\n${rec}`);
+  prog('Compactando…'); return await z.generateAsync({type:'blob'});
+}
+
+// =====================================================================
+// PDFs (álbum e cartões)
+// =====================================================================
+const PW=1240, PH=1754;
+function pg(){ const c=document.createElement('canvas'); c.width=PW; c.height=PH; return [c,c.getContext('2d')]; }
+function rr(c,x,y,w,h,r){ c.beginPath(); c.moveTo(x+r,y); c.arcTo(x+w,y,x+w,y+h,r); c.arcTo(x+w,y+h,x,y+h,r); c.arcTo(x,y+h,x,y,r); c.arcTo(x,y,x+w,y,r); c.closePath(); }
+function wrap(c,text,maxW){ const out=[]; for(const par of String(text).split(/\n/)){ const ws=par.split(/\s+/); let cur=''; for(const w of ws){ const t=cur?cur+' '+w:w; if(c.measureText(t).width>maxW && cur){ out.push(cur); cur=w; } else cur=t; } out.push(cur); } return out; }
+function fonte(t){ return `${t.font}, Fredoka, sans-serif`; }
+async function fontesProntas(t){ await Promise.all([`400 80px ${t.font}`,'700 40px Caveat','500 30px Caveat','600 30px Fredoka','700 30px Fredoka'].map(x=>document.fonts.load(x).catch(()=>{}))); }
+function papel(c, t, f, n){
+  const g=c.createLinearGradient(0,0,0,PH); g.addColorStop(0,t.paper); g.addColorStop(1,mix(t.paper,t.bg2,.35)); c.fillStyle=g; c.fillRect(0,0,PW,PH);
+  c.save(); c.globalAlpha=.35; for(let i=0;i<26;i++){ const x=(i*397)%PW, y=(i*631)%PH; c.fillStyle=t.pal[i%t.pal.length]; c.beginPath(); c.arc(x,y,6+(i%4)*3,0,6.28); c.fill(); } c.restore();
+  c.textAlign='center'; c.fillStyle=t.dark?t.bg:t.ink; c.font='600 26px Fredoka, sans-serif'; c.fillText(`${f.homenageado||f.titulo}${f.data?' · '+new Date(f.data+'T12:00:00').toLocaleDateString('pt-BR'):''}`, PW/2, 70);
+  c.strokeStyle=t.accent; c.globalAlpha=.6; c.lineWidth=3; c.beginPath(); c.moveTo(380,90); c.lineTo(PW-380,90); c.stroke(); c.globalAlpha=1;
+  c.font='44px serif'; c.fillText(t.deco[0],90,PH-70); c.fillText(t.deco[1],PW-90,PH-70);
+  c.font='600 26px Fredoka, sans-serif'; c.fillStyle=t.dark?t.bg:t.muted; c.fillText(String(n), PW/2, PH-58);
+}
+function mix(a,b,k){ const p=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)); const A=p(a),B=p(b); return '#'+A.map((v,i)=>Math.round(v*(1-k)+B[i]*k).toString(16).padStart(2,'0')).join(''); }
+function tituloSecao(c,t,txt,sub,y=200){
+  c.textAlign='center'; c.fillStyle=t.dark?t.bg:t.accent; c.font=`400 ${/Great|Pacifico/.test(t.font)?110:88}px ${fonte(t)}`; c.fillText(txt, PW/2, y);
+  if(sub){ c.font='600 34px Fredoka, sans-serif'; c.fillStyle=t.dark?t.bg:t.ink; c.fillText(sub, PW/2, y+56); }
+  return y+(sub?100:50);
+}
+function polaroid(c,im,cx,cy,pw,ph,rot,cap1,cap2,t){
+  const pad=24, bottom=cap2?118:94, W=pw+pad*2, H=ph+pad+bottom;
+  c.save(); c.translate(cx,cy); c.rotate(rot*Math.PI/180);
+  c.shadowColor='rgba(0,0,0,.28)'; c.shadowBlur=26; c.shadowOffsetY=10; c.fillStyle='#fff'; c.fillRect(-W/2,-H/2,W,H); c.shadowColor='transparent';
+  const ar=pw/ph, iar=im.width/im.height; let sx=0,sy=0,sw=im.width,sh=im.height; if(iar>ar){ sw=im.height*ar; sx=(im.width-sw)/2; } else { sh=im.width/ar; sy=(im.height-sh)/2; }
+  c.drawImage(im,sx,sy,sw,sh,-W/2+pad,-H/2+pad,pw,ph);
+  c.fillStyle=t.accent2; c.globalAlpha=.55; c.save(); c.translate(0,-H/2+4); c.rotate(-.04); c.fillRect(-70,-18,140,36); c.restore(); c.globalAlpha=1;
+  c.textAlign='center'; c.fillStyle='#2b2b3a';
+  if(cap1){ let fs=44; c.font=`700 ${fs}px Caveat, cursive`; while(fs>32 && c.measureText(cap1).width>W-50){ fs-=2; c.font=`700 ${fs}px Caveat, cursive`; } let ls=wrap(c,cap1,W-50); if(ls.length>2){ ls=ls.slice(0,2); ls[1]+='…'; }
+    if(ls.length===1) c.fillText(ls[0],0,H/2-bottom+60); else { c.font=`700 ${Math.min(fs,34)}px Caveat, cursive`; c.fillText(ls[0],0,H/2-bottom+38); c.fillText(ls[1],0,H/2-bottom+70); } }
+  if(cap2){ c.font='500 28px Caveat, cursive'; c.fillStyle='#6b6b80'; c.fillText(cap2,0,H/2-18); }
+  c.restore();
+}
+async function carregarImg(path, max=1400){ try{ const b=await fetch(midia(path)).then(r=>{ if(!r.ok) throw 0; return r.blob(); }); const bmp=await createImageBitmap(b); const k=Math.min(1,max/Math.max(bmp.width,bmp.height)); const cv=document.createElement('canvas'); cv.width=Math.round(bmp.width*k); cv.height=Math.round(bmp.height*k); cv.getContext('2d').drawImage(bmp,0,0,cv.width,cv.height); return cv; }catch(e){ return null; } }
+function capa(c,t,f,foto){
+  const g=c.createLinearGradient(0,0,PW,PH); g.addColorStop(0,t.bg); g.addColorStop(1,t.bg2); c.fillStyle=g; c.fillRect(0,0,PW,PH);
+  c.save(); for(let i=0;i<70;i++){ const x=(i*211)%PW, y=(i*389)%PH; c.globalAlpha=.25+((i*7)%10)/20; c.fillStyle=t.pal[i%t.pal.length]; if(t.pat==='confete'){ c.save(); c.translate(x,y); c.rotate(i); c.fillRect(-10,-4,20,9); c.restore(); } else { c.beginPath(); c.arc(x,y,3+(i%5)*2.4,0,6.28); c.fill(); } } c.restore();
+  c.textAlign='center'; c.font='96px serif'; c.fillText(t.deco[0], 170, 210); c.fillText(t.deco[1], PW-170, 230); c.fillText(t.deco[2], PW-200, PH-170);
+  c.fillStyle=t.muted; c.font='700 34px Fredoka, sans-serif'; c.fillText(`${CATS[f.categoria]?.e||''} ${(CATS[f.categoria]?.n||'').toUpperCase()}`, PW/2, 180);
+  const nome=f.homenageado||f.titulo; let fs=/Great|Pacifico/.test(t.font)?190:150; c.font=`400 ${fs}px ${fonte(t)}`; while(c.measureText(nome).width>PW-160 && fs>70){ fs-=8; c.font=`400 ${fs}px ${fonte(t)}`; }
+  c.fillStyle=t.accent; c.fillText(nome, PW/2, 360);
+  c.fillStyle=t.ink; c.font='700 46px Fredoka, sans-serif'; c.fillText(subtitulo(f), PW/2, 440);
+  c.font='500 34px Fredoka, sans-serif'; c.fillStyle=t.muted; c.fillText([dataBonita(f), f.local].filter(Boolean).join(' · '), PW/2, 495);
+  if(foto) polaroid(c, foto, PW/2, 1010, 760, 570, -2, '', '', t);
+  else { c.font='300px serif'; c.fillText(t.e, PW/2, 1150); }
+  c.fillStyle=t.accent; c.font='400 64px Caveat, cursive'; c.fillText('Álbum de recordações', PW/2, PH-220);
+  c.fillStyle=t.muted; c.font='600 30px Fredoka, sans-serif'; c.fillText('com o carinho de todos os convidados', PW/2, PH-168);
+}
+async function pdfAlbum(f, posts, prog){
+  const t=tema(f.tema); await fontesProntas(t);
+  const {jsPDF}=window.jspdf; const doc=new jsPDF({orientation:'p',unit:'mm',format:'a4',compress:true}); let n=0;
+  const add=cv=>{ if(n) doc.addPage(); doc.addImage(cv.toDataURL('image/jpeg',.86),'JPEG',0,0,210,297,undefined,'FAST'); n++; };
+  const fotos=posts.filter(p=>p.tipo==='foto'), textos=posts.filter(p=>p.tipo==='texto'), grav=posts.filter(p=>p.tipo==='audio'||p.tipo==='video');
+  prog('Montando a capa…'); const fotoCapa = fotos.length ? await carregarImg(fotos[0].caminho) : null;
+  { const [cv,c]=pg(); capa(c,t,f,fotoCapa); add(cv); }
+  // recados escritos: 4 por página
+  for(let i=0;i<textos.length;i+=4){
+    prog(`Escrevendo os recados… ${Math.min(i+4,textos.length)}/${textos.length}`);
+    const [cv,c]=pg(); papel(c,t,f,n+1); let top=150; if(i===0) top=tituloSecao(c,t,'Recados','palavras de carinho',230)+10;
+    const grupo=textos.slice(i,i+4), colW=(PW-180)/2, rows=Math.ceil(grupo.length/2), rowH=(PH-top-140)/Math.max(rows,2);
+    grupo.forEach((p,j)=>{ const x=70+(j%2)*(colW+40), y=top+Math.floor(j/2)*rowH; const h=rowH-36; const rot=(j%2?1:-1)*0.8;
+      c.save(); c.translate(x+colW/2,y+h/2); c.rotate(rot*Math.PI/180); c.shadowColor='rgba(0,0,0,.16)'; c.shadowBlur=18; c.shadowOffsetY=8; rr(c,-colW/2,-h/2,colW,h,26); c.fillStyle='#fff'; c.fill(); c.shadowColor='transparent';
+      c.fillStyle=t.accent; c.font='120px Playfair Display, serif'; c.textAlign='left'; c.globalAlpha=.25; c.fillText('“',-colW/2+24,-h/2+110); c.globalAlpha=1;
+      let fs=50; c.font=`700 ${fs}px Caveat, cursive`; let ls=wrap(c,p.texto,colW-80); while((ls.length*fs*1.1>h-130) && fs>26){ fs-=2; c.font=`700 ${fs}px Caveat, cursive`; ls=wrap(c,p.texto,colW-80); }
+      c.fillStyle='#2b2b3a'; c.textAlign='center'; const lh=fs*1.1, y0=-((ls.length-1)*lh)/2-20; ls.forEach((l,k)=>c.fillText(l,0,y0+k*lh));
+      c.fillStyle=t.accent; c.font='700 30px Fredoka, sans-serif'; c.fillText(`— ${p.autor||'Um convidado'}`,0,h/2-36); c.restore(); });
+    add(cv);
+  }
+  // fotos em polaroid: alterna 1, 2 e 3 por página
+  const imgs=[]; for(let i=0;i<fotos.length;i++){ prog(`Revelando foto ${i+1} de ${fotos.length}…`); const im=await carregarImg(fotos[i].caminho); if(im) imgs.push({p:fotos[i],im}); }
+  const blocos=[]; let r=imgs.length, cyc=[3,1,2], k=0; while(r>0){ let q=cyc[k%3]; k++; if(q>r) q=r; if(r-q===1 && q===3) q=2; blocos.push(q); r-=q; }
+  let off=0;
+  for(const [bi,q] of blocos.entries()){
+    prog(`Diagramando as fotos… página ${n+1}`); const [cv,c]=pg(); papel(c,t,f,n+1); let top=140; if(bi===0) top=tituloSecao(c,t,'Momentos','os cliques da festa',230);
+    const g=imgs.slice(off,off+q); off+=q; const avail=PH-120-top; const cap=x=>[x.p.texto||'', x.p.autor?`por ${x.p.autor}`:''];
+    if(q===1){ const land=g[0].im.width>=g[0].im.height; polaroid(c,g[0].im,PW/2,top+avail/2,land?960:740,Math.min(land?720:980,avail-170),-1.5,...cap(g[0]),t); }
+    else if(q===2){ const h=(avail-30)/2, ph=Math.min(h-150,560), pw=Math.round(ph*4/3); polaroid(c,g[0].im,PW/2-90,top+h/2+8,pw,ph,-3,...cap(g[0]),t); polaroid(c,g[1].im,PW/2+90,top+h+30+h/2-8,pw,ph,2.5,...cap(g[1]),t); }
+    else { const h1=avail*.54, h2=avail-h1, ph=Math.min(h1-150,520), pw=Math.round(ph*4/3); polaroid(c,g[0].im,PW/2,top+h1/2,pw,ph,-2,...cap(g[0]),t); const ph2=Math.min(h2-140,360), pw2=Math.min(470,Math.round(ph2*1.1)); polaroid(c,g[1].im,PW/2-285,top+h1+h2/2,pw2,ph2,3,...cap(g[1]),t); polaroid(c,g[2].im,PW/2+285,top+h1+h2/2+12,pw2,ph2,-2.5,...cap(g[2]),t); }
+    add(cv);
+  }
+  // áudios e vídeos: cartão com QR para ouvir/assistir
+  for(let i=0;i<grav.length;i+=2){
+    prog(`Preparando os recados gravados… ${Math.min(i+2,grav.length)}/${grav.length}`);
+    const [cv,c]=pg(); papel(c,t,f,n+1); let top=150; if(i===0) top=tituloSecao(c,t,'Recados gravados','aponte a câmera do celular para ouvir de novo',230)+20;
+    const g=grav.slice(i,i+2), h=(PH-top-160)/2;
+    for(const [j,p] of g.entries()){
+      const y=top+j*(h+30), x=90, w=PW-180;
+      c.save(); c.shadowColor='rgba(0,0,0,.15)'; c.shadowBlur=20; c.shadowOffsetY=8; rr(c,x,y,w,h,32); c.fillStyle='#fff'; c.fill(); c.restore();
+      const thumbW=Math.min(h-60, 340), tx=x+30, ty=y+30;
+      if(p.tipo==='video' && p.thumb){ const im=await carregarImg(p.thumb,900); if(im){ c.save(); rr(c,tx,ty,thumbW,h-60,22); c.clip(); const ar=thumbW/(h-60), iar=im.width/im.height; let sx=0,sy=0,sw=im.width,sh=im.height; if(iar>ar){ sw=im.height*ar; sx=(im.width-sw)/2; } else { sh=im.width/ar; sy=(im.height-sh)/2; } c.drawImage(im,sx,sy,sw,sh,tx,ty,thumbW,h-60); c.restore();
+        c.fillStyle='rgba(0,0,0,.45)'; c.beginPath(); c.arc(tx+thumbW/2,ty+(h-60)/2,56,0,6.28); c.fill(); c.fillStyle='#fff'; c.beginPath(); c.moveTo(tx+thumbW/2-18,ty+(h-60)/2-28); c.lineTo(tx+thumbW/2+30,ty+(h-60)/2); c.lineTo(tx+thumbW/2-18,ty+(h-60)/2+28); c.fill(); } }
+      else { rr(c,tx,ty,thumbW,h-60,22); const gg=c.createLinearGradient(tx,ty,tx+thumbW,ty+h); gg.addColorStop(0,t.accent); gg.addColorStop(1,t.accent2); c.fillStyle=gg; c.fill(); c.textAlign='center'; c.font='160px serif'; c.fillStyle='#fff'; c.fillText(p.tipo==='video'?'🎥':'🎤', tx+thumbW/2, ty+(h-60)/2+56); }
+      const QS=230, qx=x+w-30-QS, qy=y+(h-QS)/2-14; const qr=qrCanvas(midia(p.caminho), 480); c.drawImage(qr,qx,qy,QS,QS); c.textAlign='center'; c.fillStyle='#777'; c.font='600 22px Fredoka, sans-serif'; c.fillText(p.tipo==='video'?'assistir':'ouvir', qx+QS/2, qy+QS+30);
+      c.textAlign='left'; const mx=tx+thumbW+36, mw=qx-mx-24;
+      const fit=(txt,max,base,fam)=>{ let s=base; c.font=`${fam.replace('{s}',s)}`; while(c.measureText(txt).width>max && s>16){ s-=2; c.font=fam.replace('{s}',s); } };
+      c.fillStyle=t.accent; fit(p.tipo==='video'?'RECADO EM VÍDEO':'RECADO EM ÁUDIO', mw, 28, '700 {s}px Fredoka, sans-serif'); c.fillText(p.tipo==='video'?'RECADO EM VÍDEO':'RECADO EM ÁUDIO', mx, y+h/2-50);
+      let fs=60; c.font=`700 ${fs}px Caveat, cursive`; const nm=p.autor||'Um convidado'; while(c.measureText(nm).width>mw && fs>34){ fs-=2; c.font=`700 ${fs}px Caveat, cursive`; } c.fillStyle='#2b2b3a'; c.fillText(nm, mx, y+h/2+14);
+      c.fillStyle='#777'; const l3=`${fmtDur(p.duracao)} · ${new Date(p.criado_em).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}`; fit(l3, mw, 28, '600 {s}px Fredoka, sans-serif'); c.fillText(l3, mx, y+h/2+62);
+    }
+    add(cv);
+  }
+  // contracapa
+  prog('Fechando o álbum…'); { const [cv,c]=pg(); papel(c,t,f,n+1); c.textAlign='center'; c.font='220px serif'; c.fillText(t.e, PW/2, 470);
+    c.fillStyle=t.dark?t.bg:t.accent; c.font=`400 ${/Great|Pacifico/.test(t.font)?120:92}px ${fonte(t)}`; c.fillText('Obrigado!', PW/2, 650);
+    const st=[[posts.filter(p=>p.tipo==='foto').length,'fotos'],[textos.length,'recados'],[grav.length,'gravações'],[new Set(posts.map(p=>p.autor).filter(Boolean)).size,'convidados']];
+    st.forEach((s,i)=>{ const bx=110+i*265; rr(c,bx,740,240,190,28); c.fillStyle='#fff'; c.fill(); c.lineWidth=4; c.strokeStyle=t.accent; c.stroke(); c.fillStyle=t.accent; c.font=`700 84px Fredoka, sans-serif`; c.fillText(String(s[0]),bx+120,850); c.fillStyle='#555'; c.font='600 28px Fredoka, sans-serif'; c.fillText(s[1],bx+120,895); });
+    c.fillStyle=t.dark?t.bg:t.ink; c.font='600 54px Caveat, cursive'; ['Cada foto, cada recado e cada voz','fizeram deste dia uma lembrança para sempre.',`Com carinho, ${f.homenageado||'os anfitriões'} 💛`].forEach((l,i)=>c.fillText(l,PW/2,1080+i*74));
+    c.font='600 26px Fredoka, sans-serif'; c.fillStyle=t.dark?t.bg:t.muted; c.fillText('feito com o Mural da Festa', PW/2, PH-130); add(cv); }
+  return {blob:doc.output('blob'), paginas:n};
+}
+async function pdfCartoes(f){
+  const t=tema(f.tema); await fontesProntas(t); const {jsPDF}=window.jspdf; const doc=new jsPDF({orientation:'p',unit:'mm',format:'a4'});
+  const [cv,c]=pg(); c.fillStyle='#fff'; c.fillRect(0,0,PW,PH); const qr=qrCanvas(linkFesta(f.slug), 600);
+  const w=PW/2, h=PH/2;
+  for(let i=0;i<4;i++){ const x=(i%2)*w, y=Math.floor(i/2)*h;
+    const g=c.createLinearGradient(x,y,x+w,y+h); g.addColorStop(0,t.bg); g.addColorStop(1,t.bg2); c.fillStyle=g; c.fillRect(x+14,y+14,w-28,h-28);
+    c.textAlign='center'; c.font='54px serif'; c.fillText(t.deco[0],x+70,y+90); c.fillText(t.deco[1],x+w-70,y+90);
+    c.fillStyle=t.muted; c.font='700 24px Fredoka, sans-serif'; c.fillText(subtitulo(f).toUpperCase(), x+w/2, y+80);
+    const nome=f.homenageado||f.titulo; let fs=/Great|Pacifico/.test(t.font)?86:66; c.font=`400 ${fs}px ${fonte(t)}`; while(c.measureText(nome).width>w-100 && fs>34){ fs-=4; c.font=`400 ${fs}px ${fonte(t)}`; } c.fillStyle=t.accent; c.fillText(nome, x+w/2, y+170);
+    c.fillStyle=t.ink; c.font='700 34px Fredoka, sans-serif'; c.fillText('Deixe sua homenagem!', x+w/2, y+228);
+    rr(c,x+w/2-170,y+258,340,340,24); c.fillStyle='#fff'; c.fill(); c.drawImage(qr,x+w/2-150,y+278,300,300);
+    c.fillStyle=t.ink; c.font='600 26px Fredoka, sans-serif'; c.fillText('📸 foto · ✍️ recado · 🎤 áudio · 🎥 vídeo', x+w/2, y+650);
+    c.fillStyle=t.muted; c.font='500 22px Fredoka, sans-serif'; c.fillText('Aponte a câmera do celular para o código', x+w/2, y+690);
+    c.fillStyle=t.accent; c.font='600 22px Fredoka, sans-serif'; c.fillText('Aparece no telão da festa! 📺', x+w/2, y+728);
+  }
+  c.setLineDash([14,12]); c.strokeStyle='#bbb'; c.lineWidth=2; c.beginPath(); c.moveTo(w,0); c.lineTo(w,PH); c.moveTo(0,h); c.lineTo(PW,h); c.stroke();
+  doc.addImage(cv.toDataURL('image/jpeg',.9),'JPEG',0,0,210,297); return doc.output('blob');
+}
+
+// =====================================================================
+// PAINEL MESTRE
+// =====================================================================
+let MPIN=null, FESTAS=[];
+async function telaMestre(){
+  aplicarTema('confete'); document.title='Organizador · Mural da Festa';
+  const salvo=store.sget('mf_mestre');
+  if(salvo && await rpc('fe_mestre_login',{p_pin:salvo}).catch(()=>false)){ MPIN=salvo; return painelMestre(); }
+  telaLogin('Área do organizador','Mural da Festa', async pin=>{ const ok=await rpc('fe_mestre_login',{p_pin:pin}); if(!ok) return false; MPIN=pin; store.sset('mf_mestre',pin); painelMestre(); return true; });
+}
+function painelMestre(){
+  $('app').innerHTML=`<div class="wrap"><div class="top"><h1>🎉 <em>Mural da Festa</em> · organizador</h1><div class="row"><button class="btn" id="mNova">＋ Nova festa</button><button class="btn ghost sm" id="mSenha">Trocar senha mestra</button><button class="btn ghost sm" id="mSair">Sair</button></div></div>
+   <div class="card" style="padding:14px 16px;margin-bottom:14px"><div class="row" style="justify-content:space-between"><b>Espaço usado</b><span class="muted" id="mUso"></span></div><div class="bar" style="margin-top:8px"><i id="mBar" style="width:0%"></i></div><p class="muted" style="font-size:13px;margin:6px 0 0">Plano gratuito do Supabase: 1 GB para todas as festas (inclui o Halloween).</p></div>
+   <div id="mList"><div class="empty"><span class="spin"></span></div></div></div>`;
+  $('mSair').onclick=()=>{ store.sset('mf_mestre',null); location.reload(); };
+  $('mNova').onclick=novaFesta; $('mSenha').onclick=trocarMestra;
+  listarFestas();
+}
+async function listarFestas(){
+  try{ FESTAS = await rpc('fe_mestre_festas',{p_pin:MPIN}); }catch(e){ $('mList').innerHTML=`<div class="empty">${ERR(e)}</div>`; return; }
+  const mb=FESTAS.reduce((s,f)=>s+(+f.mb||0),0); $('mUso').textContent=`${mb.toFixed(1)} MB de 1024 MB`; $('mBar').style.width=Math.min(100,mb/1024*100)+'%';
+  if(!FESTAS.length){ $('mList').innerHTML=`<div class="empty">Nenhuma festa ainda. Toque em <b>＋ Nova festa</b> para criar a primeira! 🎈</div>`; return; }
+  $('mList').innerHTML=FESTAS.map((f,i)=>{ const t=tema(f.tema); return `<div class="card fest" style="margin-bottom:10px;border-left:8px solid ${t.accent}">
+    <div><h3>${CATS[f.categoria]?.e||'🎉'} ${esc(f.homenageado||f.titulo)} <span class="pill" style="background:${f.ativo?'#d3f9d8':'#ffe3e3'};color:${f.ativo?'#2b8a3e':'#c92a2a'}">${f.ativo?'ativa':'encerrada'}</span></h3>
+      <div class="meta"><span>${esc(f.titulo)}</span>${f.data?`<span>📅 ${new Date(f.data+'T12:00:00').toLocaleDateString('pt-BR')}</span>`:''}<span>${t.e} ${t.n}</span>${f.cliente?`<span>👤 ${esc(f.cliente)}${f.contato?' · '+esc(f.contato):''}</span>`:''}${f.expira_em?`<span>⏳ até ${new Date(f.expira_em+'T12:00:00').toLocaleDateString('pt-BR')}</span>`:''}</div>
+      <div class="stats"><span class="pill">💌 ${f.total} homenagens</span>${f.pendentes?`<span class="pill" style="background:#fff3bf">⏳ ${f.pendentes} aguardando</span>`:''}<span class="pill">💾 ${(+f.mb).toFixed(1)} MB</span></div></div>
+    <div class="acts3"><a class="btn sm" href="${linkFesta(f.slug,'admin')}" target="_blank" rel="noopener">🔐 Anfitrião</a><a class="btn ghost sm" href="${linkFesta(f.slug,'telao')}" target="_blank" rel="noopener">📺 Telão</a><a class="btn ghost sm" href="${linkFesta(f.slug)}" target="_blank" rel="noopener">👀 Ver</a><button class="btn ghost sm" data-i="${i}" data-a="msg">📋 Mensagem</button><button class="btn ghost sm" data-i="${i}" data-a="cfg">⚙️ Ajustes</button></div></div>`; }).join('');
+  $('mList').querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{ const f=FESTAS[+b.dataset.i]; b.dataset.a==='msg' ? copiar(msgCliente(f),'Mensagem para o cliente copiada!') : ajustesFesta(f); });
+}
+function msgCliente(f, senha){
+  return `🎉 *Mural da Festa · ${f.titulo}*\n\nO mural está pronto!\n\n📲 *Link para os convidados:*\n${linkFesta(f.slug)}\n\n📺 *Telão* (abra no notebook ligado na TV):\n${linkFesta(f.slug,'telao')}\n\n🔐 *Área do anfitrião* (aprovar homenagens, trocar o tema e baixar o álbum):\n${linkFesta(f.slug,'admin')}${senha?`\nSenha: *${senha}*`:''}\n\nNo fim da festa, baixe o álbum de recordações na área do anfitrião 💛`;
+}
+function novaFesta(){
+  $('app').innerHTML=`<div class="wrap"><div class="top"><h1>＋ Nova festa</h1><button class="btn ghost sm" id="nfVoltar">← Voltar</button></div>${formFesta({categoria:'aniversario',tema:'confete',moderacao:true},{mestre:true})}
+    <div class="row" style="justify-content:flex-end;margin-top:12px"><span class="msg" id="nfM"></span><button class="btn" id="nfCriar">🎉 Criar festa</button></div></div>`;
+  $('nfVoltar').onclick=()=>{ aplicarTema('confete'); painelMestre(); };
+  const ler=ligarFormFesta({categoria:'aniversario',tema:'confete'}, k=>aplicarTema(k));
+  $('nfCriar').onclick=async()=>{
+    const d=ler(); if(!d.homenageado && !$('ffTit').value.trim()){ $('nfM').className='msg err'; $('nfM').textContent='Preencha o nome do homenageado.'; return; }
+    const senha=$('ffSenha').value.trim(); if(senha.length<4){ $('nfM').className='msg err'; $('nfM').textContent='A senha do anfitrião precisa de pelo menos 4 dígitos.'; return; }
+    Object.assign(d,{senha_anfitriao:senha, cliente:$('ffCli').value.trim(), contato:$('ffCont').value.trim(), expira_em:$('ffExp').value});
+    $('nfCriar').disabled=true; $('nfM').className='msg'; $('nfM').innerHTML='<span class="spin"></span>';
+    try{ const f=await rpc('fe_criar_festa',{p_pin:MPIN, d}); festaCriada(f, senha); }catch(e){ $('nfM').className='msg err'; $('nfM').textContent=ERR(e)+' '+(e.message||''); $('nfCriar').disabled=false; }
+  };
+}
+function festaCriada(f, senha){
+  aplicarTema(f.tema);
+  $('app').innerHTML=`<div class="wrap" style="max-width:720px"><div class="card" style="padding:24px;text-align:center"><div style="font-size:64px">${tema(f.tema).e}</div><h1 style="margin:4px 0">Festa criada!</h1>
+    <p class="muted">${esc(f.titulo)}</p><div class="qrbig" id="fcQr"></div>
+    <div style="text-align:left;margin-top:16px;display:flex;flex-direction:column;gap:10px">
+     ${[['📲 Convidados',linkFesta(f.slug)],['📺 Telão',linkFesta(f.slug,'telao')],['🔐 Anfitrião',linkFesta(f.slug,'admin')]].map(([n,u])=>`<div><div style="font-weight:600;font-size:14px;margin-bottom:4px">${n}</div><div class="linkbox"><code>${esc(u)}</code><button class="btn sm" data-copy="${esc(u)}">Copiar</button></div></div>`).join('')}
+     <div class="linkbox"><code>Senha do anfitrião: <b>${esc(senha)}</b></code><button class="btn sm" data-copy="${esc(senha)}">Copiar</button></div></div>
+    <div class="row" style="justify-content:center;margin-top:16px"><button class="btn alt" id="fcMsg">📋 Copiar mensagem para o cliente</button><button class="btn ghost" id="fcVoltar">Ir para a lista</button></div></div></div>`;
+  qrInto($('fcQr'), linkFesta(f.slug), 200);
+  document.querySelectorAll('[data-copy]').forEach(b=>b.onclick=()=>copiar(b.dataset.copy));
+  $('fcMsg').onclick=()=>copiar(msgCliente(f, senha),'Mensagem copiada! Agora é só colar no WhatsApp do cliente.');
+  $('fcVoltar').onclick=()=>{ aplicarTema('confete'); painelMestre(); };
+}
+function ajustesFesta(f){
+  abrirFolha(`<h3>⚙️ ${esc(f.homenageado||f.titulo)}</h3>
+    <label class="row" style="font-weight:600;gap:8px"><input type="checkbox" id="ajAtivo" ${f.ativo_flag?'checked':''} style="width:22px;height:22px"> Festa ativa (aceitando homenagens)</label>
+    <div class="grid2" style="margin-top:12px"><label class="f">Cliente<input class="in" id="ajCli" maxlength="80" value="${esc(f.cliente||'')}"></label><label class="f">Contato<input class="in" id="ajCont" maxlength="80" value="${esc(f.contato||'')}"></label>
+    <label class="f">Válido até<input class="in" id="ajExp" type="date" value="${f.expira_em||''}"></label><label class="f">Nova senha do anfitrião<input class="in" id="ajSenha" maxlength="20" placeholder="deixe vazio para manter"></label></div>
+    <div class="msg" id="eMsg"></div><div class="foot" style="justify-content:space-between"><button class="btn bad sm" id="ajDel">🗑️ Excluir festa</button><span class="row"><button class="btn ghost" id="eCancel">Cancelar</button><button class="btn" id="eSend">Salvar</button></span></div>`);
+  $('eCancel').onclick=fecharFolha;
+  let delArm=false; $('ajDel').onclick=async()=>{ if(!delArm){ delArm=true; $('ajDel').textContent='Toque de novo: apaga tudo desta festa'; setTimeout(()=>{ delArm=false; const b=$('ajDel'); if(b) b.textContent='🗑️ Excluir festa'; },4000); return; }
+    try{ await rpc('fe_excluir_festa',{p_pin:MPIN,p_id:f.id}); fecharFolha(); toast('Festa excluída.'); listarFestas(); }catch(e){ msgE(ERR(e),'err'); } };
+  $('eSend').onclick=async()=>{ const s=$('ajSenha').value.trim(); if(s && s.length<4){ msgE('A senha precisa de pelo menos 4 dígitos.','err'); return; }
+    const d={ativo:$('ajAtivo').checked, cliente:$('ajCli').value.trim(), contato:$('ajCont').value.trim(), expira_em:$('ajExp').value}; if(s) d.nova_senha=s;
+    try{ await rpc('fe_mestre_editar',{p_pin:MPIN,p_id:f.id,d}); fecharFolha(); toast(s?`Salvo! Nova senha do anfitrião: ${s}`:'Salvo!', 4000); listarFestas(); }catch(e){ msgE(ERR(e),'err'); } };
+}
+function trocarMestra(){
+  abrirFolha(`<h3>🔑 Trocar senha mestra</h3><p class="muted" style="margin-top:0">A senha mestra abre o painel do organizador e a área de qualquer festa.</p>
+   <label class="f">Nova senha (6 ou mais caracteres)<input class="in" id="tmN" type="password" autocomplete="new-password"></label><label class="f" style="margin-top:10px">Repita a nova senha<input class="in" id="tmR" type="password" autocomplete="new-password"></label>
+   <div class="msg" id="eMsg"></div><div class="foot"><button class="btn ghost" id="eCancel">Cancelar</button><button class="btn" id="eSend">Trocar</button></div>`);
+  $('eCancel').onclick=fecharFolha;
+  $('eSend').onclick=async()=>{ const a=$('tmN').value, b=$('tmR').value; if(a.length<6){ msgE('Use pelo menos 6 caracteres.','err'); return; } if(a!==b){ msgE('As duas senhas não estão iguais.','err'); return; }
+    try{ await rpc('fe_trocar_mestre',{p_pin:MPIN,p_nova:a}); MPIN=a; store.sset('mf_mestre',a); fecharFolha(); toast('Senha mestra trocada!'); }catch(e){ msgE(ERR(e),'err'); } };
+}
+
+// =====================================================================
+// INÍCIO (página de apresentação)
+// =====================================================================
+function telaInicio(){
+  aplicarTema('confete');
+  $('app').innerHTML=`<div class="wrap landing">
+   <section class="card hero"><span class="deco" style="left:5%;top:12%">🎈</span><span class="deco" style="right:6%;top:16%;animation-delay:-1.4s">🎂</span><span class="deco" style="right:14%;bottom:10%;animation-delay:-2.2s">💍</span>
+     <span class="chip">📸 ✍️ 🎤 🎥</span><div class="who" style="font-size:clamp(46px,10vw,92px)">Mural da Festa</div>
+     <p class="tit" style="max-width:640px;margin:6px auto 0">Os convidados mandam fotos, recados, áudios e vídeos pelo celular. As homenagens aparecem no telão durante a festa e viram um álbum de recordações no final.</p>
+     <form class="row" id="inF" style="justify-content:center;margin-top:20px"><input class="in" id="inC" placeholder="Código da festa (ex.: maria-clara-5068)" style="max-width:320px"><button class="btn">Entrar na festa</button></form></section>
+   <h2 class="sec">Como funciona</h2>
+   <div class="steps">
+     <div class="card step"><div class="e">📲</div><h3>1. Convidado aponta a câmera</h3><p class="muted">QR Code na mesa ou link no grupo. Sem baixar aplicativo e sem cadastro.</p></div>
+     <div class="card step"><div class="e">💌</div><h3>2. Manda a homenagem</h3><p class="muted">Foto, recado escrito, áudio ou vídeo de até 1 minuto.</p></div>
+     <div class="card step"><div class="e">✅</div><h3>3. Anfitrião aprova</h3><p class="muted">Nada aparece no telão sem passar pelo filtro de quem organiza.</p></div>
+     <div class="card step"><div class="e">📺</div><h3>4. Telão e álbum</h3><p class="muted">Tudo passa no telão durante a festa. No fim, o álbum em PDF e todos os arquivos.</p></div>
+   </div>
+   <h2 class="sec">Para todo tipo de festa</h2>
+   <div class="cats">${Object.values(CATS).map(c=>`<div class="cat" style="cursor:default"><span class="e">${c.e}</span>${c.n}</div>`).join('')}</div>
+   <p class="center" style="margin-top:30px"><a class="btn ghost" href="?mestre">🔐 Área do organizador</a></p></div>`;
+  $('inF').onsubmit=e=>{ e.preventDefault(); const v=$('inC').value.trim().toLowerCase().replace(/.*[?&]f=/,'').replace(/[^a-z0-9-]/g,''); if(v) location.href=linkFesta(v); };
+}
+
+// =====================================================================
+(async function iniciar(){
+  if(!sb){ $('app').innerHTML='<div class="wrap center" style="padding-top:20vh"><h2>Sem conexão</h2><p>Recarregue a página.</p></div>'; return; }
+  try{
+    if(MODE==='convidado') await telaConvidado();
+    else if(MODE==='telao') await telaTelao();
+    else if(MODE==='admin') await telaAdmin();
+    else if(MODE==='mestre') await telaMestre();
+    else telaInicio();
+  }catch(e){ console.error(e); $('app').innerHTML='<div class="wrap center" style="padding-top:20vh"><h2>Ops!</h2><p>Não consegui carregar agora. Confira a internet e recarregue.</p></div>'; }
+})();
+</script>
+</body>
+</html>

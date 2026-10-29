@@ -152,6 +152,7 @@ h2.sec{font-weight:700;font-size:22px;margin:28px 0 12px;display:flex;align-item
 .tv-empty{display:flex;flex-direction:column;align-items:center;gap:3vh;text-align:center}
 .tv-empty .qr{background:#fff;padding:2vh;border-radius:2vh;line-height:0}
 .tv-empty .qr{width:40vh}
+.stage .sl.tv-empty{z-index:3}
 .tv-empty h2{font-family:var(--display);color:var(--accent);font-size:clamp(32px,5vw,80px);margin:0;font-weight:400}
 .tv-empty p{font-size:clamp(18px,2vw,32px);font-weight:600;margin:0;color:var(--muted)}
 .chars{position:fixed;inset:0;pointer-events:none;z-index:6;overflow:hidden}
@@ -309,7 +310,10 @@ h2.sec{font-weight:700;font-size:22px;margin:28px 0 12px;display:flex;align-item
 .hist figure{margin:0;flex:none;background:#fff;padding:7px 7px 26px;border-radius:6px;box-shadow:0 8px 22px rgba(0,0,0,.18);scroll-snap-align:start}
 .hist figure:nth-child(odd){transform:rotate(-1.5deg)} .hist figure:nth-child(even){transform:rotate(1.5deg)}
 .hist img{height:190px;width:auto;max-width:72vw;display:block;object-fit:cover;border-radius:2px}
-.demo{position:fixed;left:0;right:0;top:46%;z-index:7;text-align:center;pointer-events:none;font:800 6vw/1 Fredoka,sans-serif;color:rgba(255,255,255,.16);text-shadow:0 0 2px rgba(0,0,0,.25);transform:rotate(-12deg);letter-spacing:.06em}
+.tv-bar .qr{position:relative;z-index:3}
+.demo{position:fixed;inset:-30vh -30vw;z-index:2;pointer-events:none;display:flex;flex-wrap:wrap;align-content:center;justify-content:center;gap:5vh 5vw;transform:rotate(-24deg)}
+.demo span{font:900 clamp(30px,6.5vw,120px)/1 Fredoka,sans-serif;color:rgba(255,255,255,.5);-webkit-text-stroke:.25vw rgba(170,20,20,.55);letter-spacing:.06em;white-space:nowrap}
+.demo-faixa{position:fixed;left:0;right:0;top:0;z-index:10;background:#c92a2a;color:#fff;text-align:center;font:800 clamp(13px,1.8vw,30px)/1.25 Fredoka,sans-serif;padding:.9vh 2vw;box-shadow:0 .5vh 2vh rgba(0,0,0,.3)}
 .teste-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;padding:12px 14px;border-radius:16px;background:#fff3bf;color:#5c4400;margin-bottom:12px}
 .teste-bar b{font-size:16px}
 .passos{padding:16px 18px;margin-bottom:12px;border:3px solid var(--accent)}
@@ -574,7 +578,7 @@ async function telaConvidado(){
   FESTA = await carregarFesta(SLUG).catch(()=>null);
   if(!FESTA){ return telaNaoAchou(); }
   const t=temaDe(FESTA), f=FESTA; aplicarTema(t); document.title = FESTA.homenageado ? `${FESTA.homenageado} · Mural da Festa` : FESTA.titulo;
-  $('app').innerHTML = `
+  $('app').innerHTML = `${f.plano==='teste'?'<div class="demo-faixa" style="position:sticky">🧪 VERSÃO DE TESTE · Mural da Festa</div>':''}
   <div class="wrap">
     <section class="card hero${t.enfeite?' tem-enf':''}">
       ${t.enfeite ? `<img class="enf e1" src="${midia(t.enfeites[0])}" alt=""><img class="enf e2" src="${midia(t.enfeites[1]||t.enfeites[0])}" alt="">` : `<span class="deco" style="left:4%;top:10%">${t.deco[0]}</span><span class="deco" style="right:5%;top:14%;animation-delay:-1.5s">${t.deco[1]}</span><span class="deco" style="right:12%;bottom:8%;animation-delay:-2.5s;font-size:34px">${t.deco[2]}</span>`}
@@ -799,11 +803,12 @@ async function telaTelao(){
    <div class="tv">
      <div class="tv-top"><div class="t">${esc(nome)}</div><div class="n" id="tvN"></div></div>
      <div class="stage" id="stage"></div>
+     ${f.plano==='teste'?'<div class="demo">'+'<span>MODO TESTE</span>'.repeat(40)+'</div>':''}
      <div class="tv-bar"><div class="qr" id="tvQr"></div><div><b>Deixe sua homenagem!</b><span>Aponte a câmera do celular para o código · foto, recado, áudio ou vídeo</span></div></div>
    </div>
    <div class="tv-start" id="tvStart"><div>${t.enfeite?`<img class="enf-big" src="${midia(t.enfeite)}" alt="">`:`<div style="font-size:64px">${t.deco[0]}</div>`}<div class="who">${esc(nome)}</div><p class="muted" style="font-size:20px;font-weight:600">${esc(subtitulo(f))}</p>
      <button class="btn" id="tvGo" style="font-size:22px;padding:16px 30px">▶ Iniciar telão</button><p class="muted" style="font-size:14px;margin-top:14px">Dica: conecte o notebook na TV. Teclas: → próxima · ← anterior · espaço pausa · F tela cheia${t.musica&&t.musica.tipo&&t.musica.tipo!=='nenhuma'?' · M música':''}</p></div></div>
-   <div class="tv-hint" id="tvHint"></div>${f.plano==='teste'?'<div class="demo">MODO TESTE</div>':''}`;
+   <div class="tv-hint" id="tvHint"></div>${f.plano==='teste'?'<div class="demo-faixa">🧪 VERSÃO DE TESTE · Mural da Festa · ative a festa para tirar esta marca</div>':''}`;
   qrInto($('tvQr'), url, 300);
   const medir=()=>{ const h=$('stage')?$('stage').clientHeight:0; if(h) document.documentElement.style.setProperty('--sh', h+'px'); const bb=document.querySelector('.tv-bar'); if(bb) document.documentElement.style.setProperty('--bh', bb.offsetHeight+'px'); }; medir(); addEventListener('resize', medir); setTimeout(medir,500);
   const tv = {list:[], known:new Set(), queue:[], loop:0, cur:null, timer:null, paused:false, hist:[], hi:0, pv:1, pm:0, since:0};
@@ -1234,7 +1239,7 @@ function vRecordacoes(){
      <p style="font-weight:600">${c.foto} fotos · ${c.texto} recados · ${c.audio} áudios · ${c.video} vídeos</p><button class="btn" id="rcBook">📖 Baixar álbum</button><div class="msg" id="rcM1"></div></div>
    <div class="card" style="padding:18px"><div style="font-size:44px">🗂️</div><h3 style="margin:4px 0">Baixar tudo (.zip)</h3><p class="muted">Todas as fotos, áudios e vídeos originais aprovados, mais um arquivo com todos os recados escritos. Para guardar para sempre.</p><button class="btn alt" id="rcZip">⬇️ Baixar tudo</button><div class="msg" id="rcM2"></div></div></div>`;
   $('rcBook').onclick=async()=>{ const b=$('rcBook'); b.disabled=true; try{ const r=await pdfAlbum(FESTA, ap, t=>{ $('rcM1').className='msg'; $('rcM1').innerHTML=`<span class="spin"></span> ${t}`; }); baixar(r.blob, `Album_${FESTA.slug}.pdf`); $('rcM1').className='msg ok'; $('rcM1').textContent=`Álbum pronto: ${r.paginas} páginas! 💛`; }catch(e){ console.error(e); $('rcM1').className='msg err'; $('rcM1').textContent='Não consegui montar o álbum agora. Tente de novo.'; } b.disabled=false; };
-  $('rcZip').onclick=async()=>{ const b=$('rcZip'); b.disabled=true; try{ const blob=await zipTudo(FESTA, ap, t=>{ $('rcM2').className='msg'; $('rcM2').innerHTML=`<span class="spin"></span> ${t}`; }); baixar(blob, `Recordacoes_${FESTA.slug}.zip`); $('rcM2').className='msg ok'; $('rcM2').textContent='Arquivo pronto! 🗂️'; }catch(e){ $('rcM2').className='msg err'; $('rcM2').textContent='Não consegui montar o arquivo agora.'; } b.disabled=false; };
+  $('rcZip').onclick=async()=>{ if(FESTA.plano==='teste'){ $('rcM2').className='msg err'; $('rcM2').textContent='Baixar todos os arquivos é liberado depois de ativar a festa.'; return; } const b=$('rcZip'); b.disabled=true; try{ const blob=await zipTudo(FESTA, ap, t=>{ $('rcM2').className='msg'; $('rcM2').innerHTML=`<span class="spin"></span> ${t}`; }); baixar(blob, `Recordacoes_${FESTA.slug}.zip`); $('rcM2').className='msg ok'; $('rcM2').textContent='Arquivo pronto! 🗂️'; }catch(e){ $('rcM2').className='msg err'; $('rcM2').textContent='Não consegui montar o arquivo agora.'; } b.disabled=false; };
 }
 async function zipTudo(f, posts, prog){
   const z=new JSZip(); const pastas={foto:'Fotos',audio:'Audios',video:'Videos'}; let i=0; const media=posts.filter(p=>p.caminho);
@@ -1303,7 +1308,7 @@ async function temaPdf(f){ const t={...temaDe(f)}; await fontesProntas(t); if(t.
 async function pdfAlbum(f, posts, prog){
   const t=await temaPdf(f);
   const {jsPDF}=window.jspdf; const doc=new jsPDF({orientation:'p',unit:'mm',format:'a4',compress:true}); let n=0;
-  const add=cv=>{ if(f.plano==='teste'){ const c=cv.getContext('2d'); c.save(); c.translate(PW/2,PH/2); c.rotate(-.55); c.textAlign='center'; c.fillStyle='rgba(200,30,30,.14)'; c.font='800 170px Fredoka, sans-serif'; c.fillText('MODO TESTE',0,0); c.font='700 46px Fredoka, sans-serif'; c.fillText('ative a festa para tirar esta marca',0,80); c.restore(); }
+  const add=cv=>{ if(f.plano==='teste') marcaTeste(cv.getContext('2d'), PW, PH);
     if(n) doc.addPage(); doc.addImage(cv.toDataURL('image/jpeg',.86),'JPEG',0,0,210,297,undefined,'FAST'); n++; };
   const fotos=posts.filter(p=>p.tipo==='foto'), textos=posts.filter(p=>p.tipo==='texto'), grav=posts.filter(p=>p.tipo==='audio'||p.tipo==='video');
   prog('Montando a capa…'); const hist=t.fotos||[];
@@ -1372,6 +1377,14 @@ async function pdfAlbum(f, posts, prog){
     c.font='600 26px Fredoka, sans-serif'; c.fillStyle=t.dark?t.bg:t.muted; c.fillText('feito com o Mural da Festa', PW/2, PH-130); add(cv); }
   return {blob:doc.output('blob'), paginas:n};
 }
+function marcaTeste(c, W, H){
+  const u=W/1240; c.save(); c.translate(W/2,H/2); c.rotate(-.45); c.textAlign='center'; c.textBaseline='middle';
+  c.font=`900 ${Math.round(120*u)}px Fredoka, sans-serif`; c.lineWidth=Math.max(2,5*u); c.strokeStyle='rgba(170,20,20,.55)'; c.fillStyle='rgba(255,255,255,.55)';
+  const passoY=230*u, passoX=820*u, D=Math.hypot(W,H);
+  for(let y=-D/2, l=0; y<D/2; y+=passoY, l++) for(let x=-D/2+(l%2)*passoX/2; x<D/2; x+=passoX){ c.strokeText('MODO TESTE',x,y); c.fillText('MODO TESTE',x,y); }
+  c.restore();
+  c.save(); c.fillStyle='#c92a2a'; c.fillRect(0,0,W,70*u); c.fillStyle='#fff'; c.font=`800 ${Math.round(34*u)}px Fredoka, sans-serif`; c.textAlign='center'; c.textBaseline='middle'; c.fillText('VERSÃO DE TESTE · ative a festa para tirar esta marca', W/2, 36*u); c.restore();
+}
 async function conviteCanvas(f, W, H){
   const t=await temaPdf(f); const cv=document.createElement('canvas'); cv.width=W; cv.height=H; const c=cv.getContext('2d'); const u=W/1080;
   const g=c.createLinearGradient(0,0,W,H); g.addColorStop(0,t.bg); g.addColorStop(1,t.bg2); c.fillStyle=g; c.fillRect(0,0,W,H);
@@ -1393,6 +1406,7 @@ async function conviteCanvas(f, W, H){
   rr(c,(W-qs)/2-30*u,qy-30*u,qs+60*u,qs+60*u,36*u); c.fillStyle='#fff'; c.fill(); c.drawImage(qrCanvas(linkFesta(f.slug),600),(W-qs)/2,qy,qs,qs);
   c.fillStyle=ink; c.font=`700 ${40*u}px Fredoka, sans-serif`; c.fillText('Na festa, aponte a câmera aqui 📲', W/2, qy+qs+95*u);
   c.font=`500 ${32*u}px Fredoka, sans-serif`; c.fillStyle=t.muted; c.fillText('e deixe sua homenagem: foto, recado, áudio ou vídeo', W/2, qy+qs+145*u);
+  if(f.plano==='teste') marcaTeste(c, W, H);
   return cv;
 }
 async function pdfConvite(f){
@@ -1417,6 +1431,7 @@ async function pdfCartoes(f){
     c.fillStyle=t.accent; c.font='600 22px Fredoka, sans-serif'; c.fillText('Aparece no telão da festa! 📺', x+w/2, y+728);
   }
   c.setLineDash([14,12]); c.strokeStyle='#bbb'; c.lineWidth=2; c.beginPath(); c.moveTo(w,0); c.lineTo(w,PH); c.moveTo(0,h); c.lineTo(PW,h); c.stroke();
+  if(f.plano==='teste') marcaTeste(c, PW, PH);
   doc.addImage(cv.toDataURL('image/jpeg',.9),'JPEG',0,0,210,297); return doc.output('blob');
 }
 

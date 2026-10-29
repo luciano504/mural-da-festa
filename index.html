@@ -38,7 +38,7 @@ button,input,textarea,select{font:inherit;color:inherit}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;padding:11px 18px;font-weight:600;cursor:pointer;
   background:var(--accent);color:var(--on);transition:transform .12s, filter .15s;text-decoration:none;white-space:nowrap}
 .btn:hover{filter:brightness(1.07)} .btn:active{transform:scale(.97)}
-.btn.alt{background:var(--accent2);color:var(--ink)}
+.btn.alt{background:var(--accent2);color:var(--on2,var(--ink))}
 .btn.ghost{background:transparent;color:var(--ink);border:2px solid var(--line)}
 .btn.ok{background:var(--ok);color:#fff} .btn.bad{background:var(--bad);color:#fff}
 .btn.sm{padding:7px 12px;font-size:14px}
@@ -221,6 +221,45 @@ h2.sec{font-weight:700;font-size:22px;margin:28px 0 12px;display:flex;align-item
 .cores input[type=color]{width:56px;height:44px;border:2px solid var(--line);border-radius:12px;padding:2px;background:var(--surface);cursor:pointer}
 .decl{border:2px solid var(--accent);border-radius:16px;padding:14px;background:color-mix(in srgb,var(--accent) 7%, var(--surface))}
 .decl p{margin:0 0 10px;font-size:14px}
+.kitsec{border-top:2px dashed var(--line);padding-top:16px;display:flex;flex-direction:column;gap:8px}
+.kitsec h4{margin:0;font-size:18px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.kitsec .dica{margin:0;font-size:14px;color:var(--muted)}
+.kitguia{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.kitguia div{background:color-mix(in srgb,var(--accent) 9%, var(--surface));border-radius:14px;padding:10px 12px;font-size:14px}
+.kitguia b{display:block;font-size:20px;color:var(--accent)}
+.thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px}
+.thumb{position:relative;aspect-ratio:1;border-radius:14px;overflow:hidden;background:#f1f1f5;border:2px solid var(--line)}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb.png{background-color:#fff;background-image:linear-gradient(45deg,#ececf2 25%,transparent 25%),linear-gradient(-45deg,#ececf2 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#ececf2 75%),linear-gradient(-45deg,transparent 75%,#ececf2 75%);background-size:16px 16px;background-position:0 0,0 8px,8px -8px,-8px 0}
+.thumb.png img{object-fit:contain;padding:6px}
+.thumb .x{position:absolute;top:4px;right:4px;width:28px;height:28px;border-radius:50%;border:0;background:rgba(0,0,0,.62);color:#fff;font-weight:700;cursor:pointer;line-height:28px;padding:0}
+.thumb .n1{position:absolute;left:6px;bottom:6px;background:rgba(0,0,0,.6);color:#fff;font-size:11px;font-weight:700;border-radius:8px;padding:2px 6px}
+.thumb.add{display:grid;place-items:center;border:3px dashed var(--line);cursor:pointer;font-weight:700;color:var(--muted);text-align:center;font-size:13px;background:var(--bg);padding:6px}
+.thumb.add span{font-size:30px;display:block}
+.thumb.add input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.kpill{font-size:13px;font-weight:700;padding:3px 10px;border-radius:999px;background:#fff3bf;color:#6b5000}
+.kpill.ok{background:#d3f9d8;color:#1b5e20}
+.opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.opt{position:relative;border:3px solid var(--line);border-radius:16px;padding:12px;background:var(--surface);color:var(--ink);text-align:left;cursor:pointer;font:inherit;display:flex;flex-direction:column;gap:4px;min-height:84px}
+.opt[aria-pressed=true]{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%, var(--surface))}
+.opt .e{font-size:26px}
+.opt b{font-size:15px}
+.opt small{color:var(--muted);font-size:12px}
+.opt .play{position:absolute;right:8px;top:8px;width:36px;height:36px;border-radius:50%;border:0;background:var(--accent);color:var(--on);font-size:15px;cursor:pointer}
+.faixas{display:flex;flex-direction:column;gap:8px}
+.faixa{display:flex;align-items:center;gap:10px;border:2px solid var(--line);border-radius:14px;padding:8px 10px;background:var(--surface)}
+.faixa .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.faixa audio{height:34px;max-width:46%}
+.hist{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 4px 16px;-webkit-overflow-scrolling:touch}
+.hist figure{margin:0;flex:none;background:#fff;padding:7px 7px 26px;border-radius:6px;box-shadow:0 8px 22px rgba(0,0,0,.18);scroll-snap-align:start}
+.hist figure:nth-child(odd){transform:rotate(-1.5deg)} .hist figure:nth-child(even){transform:rotate(1.5deg)}
+.hist img{height:190px;width:auto;max-width:72vw;display:block;object-fit:cover;border-radius:2px}
+.demo{position:fixed;left:0;right:0;top:46%;z-index:7;text-align:center;pointer-events:none;font:800 6vw/1 Fredoka,sans-serif;color:rgba(255,255,255,.16);text-shadow:0 0 2px rgba(0,0,0,.25);transform:rotate(-12deg);letter-spacing:.06em}
+.teste-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;padding:12px 14px;border-radius:16px;background:#fff3bf;color:#5c4400;margin-bottom:12px}
+.teste-bar b{font-size:16px}
+.passos{padding:16px 18px;margin-bottom:12px;border:3px solid var(--accent)}
+.passos ol{margin:8px 0 0;padding-left:22px;display:flex;flex-direction:column;gap:6px}
+.passos button.link{background:none;border:0;padding:0;font:inherit;font-weight:700;color:var(--accent);text-decoration:underline;cursor:pointer}
 .aviso{padding:12px 14px;border-radius:14px;background:#fff3bf;color:#5c4400;font-weight:600}
 .legal{max-width:780px}
 .legal h2{font-size:20px;margin:26px 0 8px}
@@ -253,13 +292,13 @@ const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const Q = new URLSearchParams(location.search);
 const SLUG = (Q.get('f') || '').trim().toLowerCase();
-const MODE = Q.has('termos') ? 'termos' : Q.has('mestre') ? 'mestre' : SLUG ? (Q.has('telao') ? 'telao' : Q.has('admin') ? 'admin' : 'convidado') : 'inicio';
+const MODE = Q.has('termos') ? 'termos' : Q.has('criar') ? 'criar' : Q.has('mestre') ? 'mestre' : SLUG ? (Q.has('telao') ? 'telao' : Q.has('admin') ? 'admin' : 'convidado') : 'inicio';
 const BASE = location.origin + location.pathname.replace(/index\.html$/, '');
 const linkFesta = (slug, extra) => BASE + '?f=' + slug + (extra ? '&' + extra : '');
 const midia = p => !p ? '' : /^(blob:|data:|https?:)/.test(p) ? p : `${SUPABASE_URL}/storage/v1/object/public/fe-midia/${p.split('/').map(encodeURIComponent).join('/')}`;
 const store = {
   get(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } },
-  set(k,v){ try{ localStorage.setItem(k,v); }catch(e){} },
+  set(k,v){ try{ v==null ? localStorage.removeItem(k) : localStorage.setItem(k,v); }catch(e){} },
   sget(k){ try{ return sessionStorage.getItem(k); }catch(e){ return null; } },
   sset(k,v){ try{ v==null ? sessionStorage.removeItem(k) : sessionStorage.setItem(k,v); }catch(e){} }
 };
@@ -317,21 +356,72 @@ function lum(h){ const v=[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)/255).map(c=>
 function escurecer(h,k){ return mix(h,'#000000',k); }
 function temaDe(f){
   const base=tema(f && f.tema), c=f && f.custom; if(!c) return base;
+  const enfs = Array.isArray(c.enfeites) && c.enfeites.length ? c.enfeites.filter(Boolean).slice(0,3) : (c.enfeite ? [c.enfeite] : []);
+  const kit = {enfeites:enfs, enfeite:enfs[0]||null, fotos:Array.isArray(c.fotos)?c.fotos.filter(Boolean).slice(0,12):[], musica:c.musica||null, custom:1};
+  if(c.visual===false) return {...base, ...kit};
   const accent=c.accent||base.accent, accent2=c.accent2||base.accent2, bg=c.bg||mix(accent,'#ffffff',.9);
   const acc = lum(accent)>.45 ? escurecer(accent,.35) : accent;   // garante leitura do nome sobre fundo claro
   return {...base, n:'Tema próprio', e:base.e, bg, bg2:mix(bg,accent2,.25), surface:'#ffffff', ink:'#2b2335', muted:'#6b6478',
     accent:acc, accent2, on: lum(acc)>.5?'#1a1a1a':'#ffffff', font:c.font||base.font, pal:[accent,accent2,mix(accent,'#ffffff',.5)],
-    paper:mix(bg,'#ffffff',.55), dark:0, fundo:c.fundo||null, enfeite:c.enfeite||null, custom:1};
+    paper:mix(bg,'#ffffff',.55), dark:0, fundo:c.fundo||null, ...kit};
 }
 function aplicarTema(k, veu){
   const t = typeof k==='object' && k ? k : tema(k), r=document.documentElement.style;
   const bgi=$('bgimg'); if(t.fundo){ bgi.style.backgroundImage=`url("${midia(t.fundo)}")`; bgi.hidden=false; r.setProperty('--veu', veu ?? .8); } else { bgi.style.backgroundImage=''; bgi.hidden=true; }
   r.setProperty('--bg',t.bg); r.setProperty('--bg2',t.bg2); r.setProperty('--surface',t.surface); r.setProperty('--ink',t.ink);
-  r.setProperty('--muted',t.muted); r.setProperty('--accent',t.accent); r.setProperty('--accent2',t.accent2); r.setProperty('--on',t.on);
+  r.setProperty('--muted',t.muted); r.setProperty('--accent',t.accent); r.setProperty('--accent2',t.accent2); r.setProperty('--on',t.on); r.setProperty('--on2', /^#[0-9a-f]{6}$/i.test(t.accent2) && lum(t.accent2)<.3 ? '#ffffff' : '#1a1a1a');
   r.setProperty('--line', t.dark ? 'rgba(255,255,255,.14)' : 'rgba(0,0,0,.10)');
   r.setProperty('--display', `${t.font}, 'Fredoka', system-ui, sans-serif`);
   document.documentElement.style.colorScheme = t.dark ? 'dark' : 'light';
   fx.start(t);
+}
+
+// ---------- música de fundo ----------
+const TRILHAS = {
+  festa:    {n:'Festa animada', e:'🎉', d:'alegre, para dançar',        bpm:116, root:60, wave:'triangle', prog:[[0,4,7],[-3,0,4],[-7,-3,0],[-5,-1,2]], pat:[0,1,2,1,0,2,1,2], hat:1},
+  doce:     {n:'Doce e suave',  e:'🧸', d:'calminha, para chá e bebê', bpm:80,  root:65, wave:'sine',     prog:[[0,4,7,11],[5,9,12,16],[2,5,9,12],[7,11,14,17]], pat:[0,2,1,3,0,2,1,3]},
+  romantica:{n:'Romântica',     e:'💞', d:'para bodas, casamento, 15 anos', bpm:68, root:57, wave:'sine', prog:[[0,4,7,11],[-3,0,4,7],[5,9,12,16],[7,11,14,17]], pat:[0,1,2,3,2,1,2,3]},
+  infantil: {n:'Brincadeira',   e:'🎈', d:'saltitante, para a criançada', bpm:132, root:67, wave:'square', prog:[[0,4,7],[5,9,12],[7,11,14],[0,4,7]], pat:[0,1,2,1,2,1,0,2], hat:1}
+};
+function motorTrilha(tr){
+  const AC=window.AudioContext||window.webkitAudioContext; if(!AC) return null;
+  let ac=null, master=null, timer=null, next=0, step=0, ruido=null;
+  const hz=n=>440*Math.pow(2,(n-69)/12), e8=60/tr.bpm/2;
+  function nota(n,t,dur,g,wave){ const o=ac.createOscillator(), e=ac.createGain(); o.type=wave; o.frequency.value=hz(n); e.gain.setValueAtTime(0,t); e.gain.linearRampToValueAtTime(g,t+.015); e.gain.exponentialRampToValueAtTime(.0001,t+dur); o.connect(e); e.connect(master); o.start(t); o.stop(t+dur+.05); }
+  function pad(ch,t,dur){ ch.forEach(x=>{ const o=ac.createOscillator(), e=ac.createGain(); o.type='sine'; o.frequency.value=hz(tr.root+x); e.gain.setValueAtTime(0,t); e.gain.linearRampToValueAtTime(.03,t+dur*.35); e.gain.linearRampToValueAtTime(0,t+dur); o.connect(e); e.connect(master); o.start(t); o.stop(t+dur+.05); }); }
+  function hat(t){ if(!ruido){ ruido=ac.createBuffer(1,ac.sampleRate*.05,ac.sampleRate); const d=ruido.getChannelData(0); for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*(1-i/d.length); } const s=ac.createBufferSource(), f=ac.createBiquadFilter(), g=ac.createGain(); s.buffer=ruido; f.type='highpass'; f.frequency.value=7000; g.gain.value=.05; s.connect(f); f.connect(g); g.connect(master); s.start(t); }
+  function agenda(){ while(next < ac.currentTime+.3){ const bar=Math.floor(step/8)%tr.prog.length, ch=tr.prog[bar], k=step%8;
+      if(k===0) pad(ch,next,e8*8);
+      if(k===0||k===4) nota(tr.root+ch[0]-24,next,e8*3.6,.2,'sine');
+      nota(tr.root+12+ch[tr.pat[k]%ch.length],next,e8*1.7,tr.wave==='square'?.028:tr.wave==='triangle'?.07:.09,tr.wave);
+      if(tr.hat && (k===2||k===6)) hat(next);
+      next+=e8; step++; } }
+  return {
+    start(){ if(!ac){ ac=new AC(); master=ac.createGain(); master.gain.value=0; master.connect(ac.destination); next=ac.currentTime+.12; timer=setInterval(agenda,90); agenda(); } if(ac.resume) ac.resume(); },
+    level(v){ if(!ac) return; master.gain.cancelScheduledValues(ac.currentTime); master.gain.setTargetAtTime(v*.9, ac.currentTime, .35); },
+    stop(){ clearInterval(timer); if(ac) ac.close().catch(()=>{}); ac=null; }
+  };
+}
+function motorArquivos(faixas){
+  const a=new Audio(); a.preload='auto'; let i=0, alvo=0, fadeT=null;
+  a.src=midia(faixas[0]); a.volume=0;
+  a.onended=()=>{ i=(i+1)%faixas.length; a.src=midia(faixas[i]); if(alvo>0) a.play().catch(()=>{}); };
+  a.onerror=()=>{ if(faixas.length>1){ i=(i+1)%faixas.length; a.src=midia(faixas[i]); if(alvo>0) a.play().catch(()=>{}); } };
+  return {
+    start(){ a.play().catch(()=>{}); },
+    level(v){ alvo=v; clearInterval(fadeT); if(v>0 && a.paused) a.play().catch(()=>{});
+      fadeT=setInterval(()=>{ const d=alvo-a.volume; if(Math.abs(d)<.05){ a.volume=alvo; clearInterval(fadeT); if(alvo===0) a.pause(); return; } a.volume=Math.max(0,Math.min(1,a.volume+Math.sign(d)*.05)); },50); },
+    stop(){ clearInterval(fadeT); a.pause(); }
+  };
+}
+function criarMusica(m){
+  if(!m || !m.tipo || m.tipo==='nenhuma') return null;
+  const faixas=(m.faixas||[]).filter(Boolean);
+  const eng = m.tipo==='upload' ? (faixas.length ? motorArquivos(faixas) : null) : motorTrilha(TRILHAS[m.trilha]||TRILHAS.festa);
+  if(!eng) return null;
+  let duck=false, mudo=false; const vol=Math.max(.1,Math.min(1,m.volume ?? .55));
+  const ap=()=>eng.level(mudo||duck?0:vol);
+  return { start(){ eng.start(); ap(); }, duck(on){ duck=!!on; ap(); }, mute(){ mudo=!mudo; ap(); return mudo; }, stop(){ eng.stop(); } };
 }
 
 // ---------- efeito de fundo ----------
@@ -388,7 +478,7 @@ async function postsAprovados(festaId){
   const {data,error}=await sb.from('fe_posts').select('id,tipo,autor,texto,caminho,thumb,duracao,criado_em').eq('festa_id',festaId).order('criado_em',{ascending:true}).limit(1000);
   if(error) throw error; return data;
 }
-const ERR = e => { const m=(e&&e.message)||''; if(/Calma/.test(m)) return 'Calma! Espere uns segundinhos para mandar outra.'; if(/Senha/.test(m)) return 'Senha incorreta.'; if(/row-level|policy/i.test(m)) return 'Esta festa não está aceitando homenagens agora.'; if(/size|large|exceed/i.test(m)) return 'Arquivo grande demais. Tente um menor.'; if(/mime|type/i.test(m)) return 'Tipo de arquivo não aceito.'; return 'Não deu certo agora. Confira a internet e tente de novo.'; };
+const ERR = e => { const m=(e&&e.message)||''; if(/Calma/.test(m)) return 'Calma! Espere uns segundinhos para mandar outra.'; if(/Limite do teste/.test(m)) return 'Esta festa está em modo teste e já recebeu as 10 homenagens do teste. O anfitrião precisa ativar a festa para receber mais.'; if(/Código inválido/.test(m)) return 'Código inválido ou já usado. Confira as letras e os números.'; if(/Muitas festas/.test(m)) return m; if(/Informe|Aceite/.test(m)) return m+'.'; if(/Senha/.test(m)) return 'Senha incorreta.'; if(/row-level|policy/i.test(m)) return 'Esta festa não está aceitando homenagens agora.'; if(/size|large|exceed/i.test(m)) return 'Arquivo grande demais. Tente um menor.'; if(/mime|type/i.test(m)) return 'Tipo de arquivo não aceito.'; return 'Não deu certo agora. Confira a internet e tente de novo.'; };
 
 // ---------- imagens ----------
 async function encolher(file, max=1600, q=.82){
@@ -419,7 +509,7 @@ async function telaConvidado(){
   $('app').innerHTML = `
   <div class="wrap">
     <section class="card hero${t.enfeite?' tem-enf':''}">
-      ${t.enfeite ? `<img class="enf e1" src="${midia(t.enfeite)}" alt=""><img class="enf e2" src="${midia(t.enfeite)}" alt="">` : `<span class="deco" style="left:4%;top:10%">${t.deco[0]}</span><span class="deco" style="right:5%;top:14%;animation-delay:-1.5s">${t.deco[1]}</span><span class="deco" style="right:12%;bottom:8%;animation-delay:-2.5s;font-size:34px">${t.deco[2]}</span>`}
+      ${t.enfeite ? `<img class="enf e1" src="${midia(t.enfeites[0])}" alt=""><img class="enf e2" src="${midia(t.enfeites[1]||t.enfeites[0])}" alt="">` : `<span class="deco" style="left:4%;top:10%">${t.deco[0]}</span><span class="deco" style="right:5%;top:14%;animation-delay:-1.5s">${t.deco[1]}</span><span class="deco" style="right:12%;bottom:8%;animation-delay:-2.5s;font-size:34px">${t.deco[2]}</span>`}
       <span class="chip">${CATS[f.categoria]?.e||'🎉'} ${esc(CATS[f.categoria]?.n||'Festa')}</span>
       <div class="who">${esc(f.homenageado||f.titulo)}</div>
       ${f.homenageado?`<p class="tit">${esc(f.titulo)}</p>`:''}
@@ -427,6 +517,7 @@ async function telaConvidado(){
       <div class="meta">${f.data?`<span>📅 ${esc(dataBonita(f))}</span>`:''}${f.hora?`<span>⏰ ${esc(f.hora)}</span>`:''}${f.local?`<span>📍 ${esc(f.local)}</span>`:''}</div>
       ${f.mensagem?`<p class="msgf">${esc(f.mensagem)}</p>`:''}
     </section>
+    ${(t.fotos||[]).length ? `<h2 class="sec">📖 A história de ${esc(f.homenageado||'quem a gente ama')}</h2><div class="hist">${t.fotos.map(p=>`<figure><img loading="lazy" src="${midia(p)}" alt=""></figure>`).join('')}</div>` : ''}
     ${f.ativo ? `
     <h2 class="sec">💌 Deixe sua homenagem</h2>
     <div class="acts">
@@ -638,13 +729,15 @@ async function telaTelao(){
    <div class="tv">
      <div class="tv-top"><div class="t">${esc(f.homenageado||f.titulo)}</div><div class="n" id="tvN"></div></div>
      <div class="stage" id="stage"></div>
-     <div class="tv-bar"><div class="qr" id="tvQr"></div><div><b>Deixe sua homenagem!</b><span>Aponte a câmera do celular para o código · foto, recado, áudio ou vídeo</span></div>${t.enfeite?`<img class="tv-enf" src="${midia(t.enfeite)}" alt="">`:`<div class="acts-mini">${t.deco.join('')}</div>`}</div>
+     <div class="tv-bar"><div class="qr" id="tvQr"></div><div><b>Deixe sua homenagem!</b><span>Aponte a câmera do celular para o código · foto, recado, áudio ou vídeo</span></div>${t.enfeite?`<img class="tv-enf" id="tvEnf" src="${midia(t.enfeite)}" alt="">`:`<div class="acts-mini">${t.deco.join('')}</div>`}</div>
    </div>
    <div class="tv-start" id="tvStart"><div>${t.enfeite?`<img class="enf-big" src="${midia(t.enfeite)}" alt="">`:`<div style="font-size:64px">${t.deco[0]}</div>`}<div class="who">${esc(f.homenageado||f.titulo)}</div><p class="muted" style="font-size:20px;font-weight:600">${esc(subtitulo(f))}</p>
-     <button class="btn" id="tvGo" style="font-size:22px;padding:16px 30px">▶ Iniciar telão</button><p class="muted" style="font-size:14px;margin-top:14px">Dica: conecte o notebook na TV. Teclas: → próxima · ← anterior · espaço pausa · F tela cheia</p></div></div>
-   <div class="tv-hint" id="tvHint"></div>`;
+     <button class="btn" id="tvGo" style="font-size:22px;padding:16px 30px">▶ Iniciar telão</button><p class="muted" style="font-size:14px;margin-top:14px">Dica: conecte o notebook na TV. Teclas: → próxima · ← anterior · espaço pausa · F tela cheia${t.musica&&t.musica.tipo&&t.musica.tipo!=='nenhuma'?' · M música':''}</p></div></div>
+   <div class="tv-hint" id="tvHint"></div>${f.plano==='teste'?'<div class="demo">MODO TESTE</div>':''}`;
   qrInto($('tvQr'), url, 300);
-  const tv = {list:[], known:new Set(), queue:[], loop:0, cur:null, timer:null, paused:false, hist:[]};
+  const tv = {list:[], known:new Set(), queue:[], loop:0, cur:null, timer:null, paused:false, hist:[], n:0, hi:0, ei:0, vz:false};
+  const fotosH = t.fotos||[], enfs = t.enfeites||[], mus = criarMusica(t.musica);
+  const itemHist = () => ({id:'h'+tv.hi, tipo:'hist', caminho:fotosH[(tv.hi++)%fotosH.length]});
   async function puxar(){
     try{ const l=await postsAprovados(f.id); tv.list=l; for(const p of l){ if(!tv.known.has(p.id)){ tv.known.add(p.id); if(tv.started) tv.queue.push(p); } } $('tvN').textContent = l.length ? `${l.length} homenage${l.length>1?'ns':'m'} 💛` : ''; }catch(e){}
   }
@@ -655,10 +748,11 @@ async function telaTelao(){
   function proxima(back){
     clearTimeout(tv.timer); if(tv.paused) return;
     let p;
+    if(!back){ tv.n++; if(fotosH.length && tv.list.length && !tv.queue.length && tv.n%5===0) return mostrar(itemHist()); }
     if(back && tv.hist.length>1){ tv.hist.pop(); p=tv.hist.pop(); }
     else if(tv.queue.length) p=tv.queue.shift();
     else if(tv.list.length){ p=tv.list[tv.loop % tv.list.length]; tv.loop++; }
-    if(!p) return vazio();
+    if(!p){ tv.vz=!tv.vz; if(fotosH.length && tv.vz) return mostrar(itemHist()); return vazio(); }
     if(!tv.list.find(x=>x.id===p.id)) return proxima();
     tv.hist.push(p); if(tv.hist.length>50) tv.hist.shift();
     mostrar(p);
@@ -667,17 +761,19 @@ async function telaTelao(){
     const st=$('stage'); const old=st.firstElementChild; if(old){ old.classList.add('out'); const o=old; setTimeout(()=>o.remove(),600); old.querySelectorAll('audio,video').forEach(m=>{ try{ m.pause(); }catch(e){} }); }
     const el=document.createElement('div'); el.className='sl'; const by = p.autor ? esc(p.autor) : '';
     let dur=8000;
-    if(p.tipo==='foto'){ el.classList.add('sl-foto'); el.innerHTML=`<img class="ph" src="${midia(p.caminho)}" alt="">${(p.texto||by)?`<div class="cap">${esc(p.texto||'')}${by?`<small>📸 ${by}</small>`:''}</div>`:''}`; dur=8000; }
+    if(enfs.length>1 && $('tvEnf')){ tv.ei=(tv.ei+1)%enfs.length; $('tvEnf').src=midia(enfs[tv.ei]); }
+    if(p.tipo==='hist'){ el.classList.add('sl-foto'); el.innerHTML=`<img class="ph" src="${midia(p.caminho)}" alt=""><div class="cap">📖 A história de ${esc(f.homenageado||f.titulo)}</div>`; dur=6500; }
+    else if(p.tipo==='foto'){ el.classList.add('sl-foto'); el.innerHTML=`<img class="ph" src="${midia(p.caminho)}" alt="">${(p.texto||by)?`<div class="cap">${esc(p.texto||'')}${by?`<small>📸 ${by}</small>`:''}</div>`:''}`; dur=8000; }
     else if(p.tipo==='texto'){ el.classList.add('sl-texto'); const L=(p.texto||'').length; const fs = L<40?9:L<90?7:L<180?5.4:L<320?4.2:3.4; el.innerHTML=`<div class="q${t.fundo?' card-on':''}" style="font-size:${fs}vw">${esc(p.texto)}</div>${by?`<div class="by">— ${by}</div>`:''}`; dur=Math.min(18000, 7000+L*45); }
     else if(p.tipo==='audio'){ el.classList.add('sl-audio'); el.innerHTML=`<div class="mic">🎤</div><div class="eq">${'<i></i>'.repeat(12)}</div><div class="cap">Recado de ${by||'um convidado'}</div><audio src="${midia(p.caminho)}" preload="auto"></audio>`; dur=null; }
     else if(p.tipo==='video'){ el.classList.add('sl-video'); el.innerHTML=`<video src="${midia(p.caminho)}" playsinline preload="auto" ${p.thumb?`poster="${midia(p.thumb)}"`:''}></video>${by?`<div class="cap"><small>🎥 Recado de ${by}</small></div>`:''}`; dur=null; }
     st.appendChild(el); tv.cur=p;
-    const m=el.querySelector('audio,video');
+    const m=el.querySelector('audio,video'); if(mus) mus.duck(!!m);
     if(m){ m.onended=()=>proxima(); m.onerror=()=>{ tv.timer=setTimeout(proxima,1500); }; m.play().catch(()=>{ tv.timer=setTimeout(proxima,3000); }); tv.timer=setTimeout(proxima, ((p.duracao||60)+6)*1000); }
     else tv.timer=setTimeout(proxima, dur);
   }
   $('tvGo').onclick=async()=>{
-    $('tvStart').hidden=true; tv.started=true;
+    $('tvStart').hidden=true; tv.started=true; if(mus) mus.start();
     try{ await document.documentElement.requestFullscreen(); }catch(e){}
     try{ if(navigator.wakeLock) await navigator.wakeLock.request('screen'); }catch(e){}
     await puxar(); proxima();
@@ -687,6 +783,7 @@ async function telaTelao(){
     if(e.key==='ArrowRight') proxima();
     else if(e.key==='ArrowLeft') proxima(true);
     else if(e.key===' '){ e.preventDefault(); tv.paused=!tv.paused; const m=$('stage').querySelector('.sl:last-child audio,.sl:last-child video'); if(tv.paused){ clearTimeout(tv.timer); m&&m.pause(); $('tvHint').textContent='⏸ pausado (espaço para continuar)'; } else { $('tvHint').textContent=''; m ? m.play().catch(()=>{}) : proxima(); } }
+    else if(e.key.toLowerCase()==='m' && mus){ const mudo=mus.mute(); $('tvHint').textContent = mudo ? '🔇 música desligada (M para ligar)' : ''; }
     else if(e.key.toLowerCase()==='f'){ document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen().catch(()=>{}); }
   });
   await puxar(); setInterval(puxar, 10000);
@@ -719,10 +816,16 @@ function painelAdmin(){
   const f=FESTA;
   $('app').innerHTML=`<div class="wrap">
    <div class="top"><h1>Anfitrião · <em>${esc(f.homenageado||f.titulo)}</em></h1><div class="row"><a class="btn ghost sm" href="${linkFesta(f.slug)}" target="_blank" rel="noopener">👀 Ver como convidado</a><a class="btn sm" href="${linkFesta(f.slug,'telao')}" target="_blank" rel="noopener">📺 Abrir telão</a><button class="btn ghost sm" id="sair">Sair</button></div></div>
+   ${f.plano==='teste'?`<div class="teste-bar"><div><b>🧪 Festa em modo teste</b><br><span style="font-size:14px">Funciona de verdade, com até 10 homenagens e a marca “teste” no telão e no álbum. Ative para liberar tudo.</span></div><div class="row">${COMPRA_URL?`<a class="btn alt sm" href="${COMPRA_URL}" target="_blank" rel="noopener">💳 Comprar ativação</a>`:''}<button class="btn sm" id="btAtivar">🔓 Tenho um código</button></div></div>`:''}
+   ${store.get('mf_novo_'+f.slug)?`<div class="card passos" id="passos"><div class="row" style="justify-content:space-between"><b style="font-size:18px">🎉 Sua festa está criada! Próximos passos:</b><button class="btn ghost sm" id="psOk">Entendi</button></div><ol>
+     <li><button class="link" data-ir="meutema">Monte o tema</button>: imagem de fundo, personagens, 8 a 12 fotos do homenageado e a música do telão.</li>
+     <li><button class="link" data-ir="compartilhar">Mande o convite com QR Code</button> no grupo da família e imprima os cartões de mesa.</li>
+     <li>No dia, abra o <b>📺 telão</b> no notebook ligado na TV. Na aba <b>💌 Homenagens</b> você aprova o que aparece.</li>
+     <li>Depois da festa, baixe o álbum em <button class="link" data-ir="recordacoes">📖 Recordações</button>.</li></ol></div>`:''}
    <div class="tabs" id="abasTop">
      <button data-v="moderar" aria-pressed="true">💌 Homenagens <span class="n" id="nPend" hidden></span></button>
-     <button data-v="festa" aria-pressed="false">🎨 Festa e tema</button>
-     <button data-v="meutema" aria-pressed="false">🖼️ Meu tema</button>
+     <button data-v="festa" aria-pressed="false">📝 Dados da festa</button>
+     <button data-v="meutema" aria-pressed="false">🎨 Tema, fotos e música</button>
      <button data-v="compartilhar" aria-pressed="false">📲 Compartilhar</button>
      <button data-v="recordacoes" aria-pressed="false">📖 Recordações</button>
    </div>
@@ -730,7 +833,20 @@ function painelAdmin(){
   $('sair').onclick=()=>{ store.sset('mf_pin_'+SLUG,null); location.reload(); };
   const abas=$('abasTop');
   abas.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; abas.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed', x===b)); ({moderar:vModerar, festa:vFesta, meutema:vMeuTema, compartilhar:vCompartilhar, recordacoes:vRecordacoes})[b.dataset.v](); };
+  const ir=v=>{ const b=abas.querySelector(`[data-v="${v}"]`); if(b) b.click(); };
+  document.querySelectorAll('[data-ir]').forEach(b=>b.onclick=()=>ir(b.dataset.ir));
+  if($('psOk')) $('psOk').onclick=()=>{ store.set('mf_novo_'+f.slug,null); $('passos').remove(); };
+  if($('btAtivar')) $('btAtivar').onclick=ativarFesta;
   vModerar(); setInterval(()=>{ if(!document.hidden && ADM.view==='moderar') carregarAdmPosts(); }, 12000);
+}
+function ativarFesta(){
+  abrirFolha(`<h3>🔓 Ativar a festa</h3><p class="muted" style="margin-top:0">Digite o código de ativação que você recebeu depois da compra. A festa passa a aceitar homenagens sem limite e sai a marca “teste”.</p>
+    <label class="f">Código de ativação<input class="in" id="atC" maxlength="24" placeholder="FESTA-XXXX-XXXX" style="text-transform:uppercase;letter-spacing:.06em" autocomplete="off"></label>
+    ${COMPRA_URL?`<p style="margin:10px 0 0;font-size:14px">Ainda não tem? <a href="${COMPRA_URL}" target="_blank" rel="noopener">Comprar a ativação</a></p>`:''}
+    <div class="msg" id="eMsg"></div><div class="foot"><button class="btn ghost" id="eCancel">Cancelar</button><button class="btn" id="eSend">Ativar</button></div>`);
+  $('eCancel').onclick=fecharFolha; setTimeout(()=>$('atC').focus(),60);
+  $('eSend').onclick=async()=>{ const c=$('atC').value.trim(); if(c.length<8){ msgE('Digite o código completo.','err'); return; }
+    try{ FESTA=await rpc('fe_ativar',{p_slug:SLUG,p_pin:PIN,p_codigo:c}); fecharFolha(); toast('Festa ativada! Agora é sem limite 🎉',4000); painelAdmin(); }catch(e){ msgE(ERR(e),'err'); } };
 }
 async function carregarAdmPosts(){
   try{ ADM.posts = await rpc('fe_admin_posts',{p_slug:SLUG,p_pin:PIN}); }catch(e){ toast(ERR(e)); return; }
@@ -765,7 +881,7 @@ function renderModeracao(){
 }
 async function moderar(ids, s){ try{ await rpc('fe_moderar',{p_slug:SLUG,p_pin:PIN,p_ids:ids,p_status:s}); ADM.posts.forEach(p=>{ if(ids.includes(p.id)) p.status=s; }); carregarAdmPosts(); }catch(e){ toast(ERR(e)); } }
 
-function formFesta(f, {mestre}={}){
+function formFesta(f, {mestre, auto}={}){
   const cat=f.categoria||'aniversario';
   return `
   <div class="card" style="padding:18px">
@@ -791,6 +907,14 @@ function formFesta(f, {mestre}={}){
      <label class="f">Cliente (quem contratou)<input class="in" id="ffCli" maxlength="80"></label>
      <label class="f">Contato<input class="in" id="ffCont" maxlength="80" placeholder="WhatsApp ou e-mail"></label>
      <label class="f">Válido até (opcional)<input class="in" id="ffExp" type="date"></label></div></div>`
+   :auto?`<div class="card" style="padding:18px;margin-top:12px"><h3 style="margin:0 0 4px">Seus dados e a senha do anfitrião</h3><p class="muted" style="margin:0 0 12px;font-size:14px">Com a senha você aprova as homenagens, monta o tema e baixa o álbum. Guarde bem!</p><div class="grid2">
+     <label class="f">Seu nome<input class="in" id="ffCli" maxlength="80" autocomplete="name"></label>
+     <label class="f">WhatsApp ou e-mail<input class="in" id="ffCont" maxlength="80" placeholder="(81) 9 9999-9999"></label>
+     <label class="f">Crie a senha do anfitrião<input class="in" id="ffSenha" maxlength="20" type="password" autocomplete="new-password" placeholder="4 dígitos ou mais"></label>
+     <label class="f">Repita a senha<input class="in" id="ffSenha2" maxlength="20" type="password" autocomplete="new-password"></label>
+     <label class="f">Código de ativação <span class="muted" style="font-weight:500">(se já comprou)</span><input class="in" id="ffCod" maxlength="24" placeholder="FESTA-XXXX-XXXX" style="text-transform:uppercase" autocomplete="off"></label></div>
+     <p class="muted" style="font-size:14px;margin:10px 0 0">Sem código, a festa começa em <b>modo teste</b>: funciona de verdade, com até 10 homenagens e a marca “teste”. Você ativa depois, na sua área.</p>
+     <label class="row" style="margin-top:12px;font-weight:600;gap:8px;align-items:flex-start"><input type="checkbox" id="ffAceite" style="width:22px;height:22px;flex:none"> Li e aceito os <a href="${BASE}?termos" target="_blank" rel="noopener">Termos de uso e Privacidade</a></label></div>`
    :`<div class="card" style="padding:18px;margin-top:12px"><h3 style="margin:0 0 10px">Senha do anfitrião</h3><label class="f">Nova senha (deixe vazio para manter)<input class="in" id="ffSenha" maxlength="20" type="password" autocomplete="new-password"></label></div>`}`;
 }
 function ligarFormFesta(f, onTema){
@@ -820,11 +944,13 @@ function vFesta(){
   ADM.view='festa'; const f=FESTA;
   $('vw').innerHTML = formFesta(f) + `<div class="row" style="justify-content:flex-end;margin-top:12px"><span class="msg" id="ffM"></span><button class="btn" id="ffSalvar">Salvar alterações</button></div>`;
   const ler=ligarFormFesta(f, k=>aplicarTema(FESTA.custom ? temaDe(FESTA) : k));
-  if(FESTA.custom) $('ffTemas').insertAdjacentHTML('beforebegin','<p class="aviso" style="margin:10px 0 0">Você está usando um tema próprio (aba 🖼️ Meu tema). O tema pronto escolhido aqui só aparece se você desligar o tema próprio.</p>');
+  $('vw').insertAdjacentHTML('afterbegin', `<div class="aviso" style="margin-bottom:12px;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:color-mix(in srgb,var(--accent) 12%, var(--surface));color:var(--ink)"><span>🎨 Quer usar <b>imagens do tema, personagens, fotos do homenageado e música</b>? Fica na aba ao lado.</span><button class="btn sm" id="irKit">Abrir Tema, fotos e música</button></div>`);
+  $('irKit').onclick=()=>document.querySelector('#abasTop [data-v="meutema"]').click();
+  if(FESTA.custom && FESTA.custom.visual!==false) $('ffTemas').insertAdjacentHTML('beforebegin','<p class="aviso" style="margin:10px 0 0">Você está usando cores e imagem de fundo próprias (aba 🎨 Tema, fotos e música). O tema pronto escolhido aqui só aparece se lá você escolher “usar o tema pronto”.</p>');
   $('ffSalvar').onclick=async()=>{ const d=ler(); const s=$('ffSenha').value.trim(); if(s && s.length<4){ $('ffM').className='msg err'; $('ffM').textContent='A senha precisa de pelo menos 4 dígitos.'; return; } if(s) d.nova_senha=s;
     try{ FESTA=await rpc('fe_admin_editar',{p_slug:SLUG,p_pin:PIN,d}); if(s){ PIN=s; store.sset('mf_pin_'+SLUG,s); } aplicarTema(temaDe(FESTA)); $('ffM').className='msg ok'; $('ffM').textContent='Salvo! ✨'; }catch(e){ $('ffM').className='msg err'; $('ffM').textContent=ERR(e); } };
 }
-const DECLARACAO = 'Declaro que tenho autorização para usar as imagens, personagens, marcas e demais elementos enviados neste tema, e assumo integral e exclusiva responsabilidade por eles, inclusive por eventuais direitos autorais e de imagem de terceiros, isentando o Mural da Festa. Estou ciente de que o tema pode ser desligado a qualquer momento em caso de reclamação.';
+const DECLARACAO = 'Declaro que tenho autorização para usar as imagens, fotos, personagens, marcas, músicas e demais elementos enviados neste tema, e assumo integral e exclusiva responsabilidade por eles, inclusive por direitos autorais, direitos de imagem e execução pública de músicas, isentando o Mural da Festa. Estou ciente de que o tema pode ser desligado a qualquer momento em caso de reclamação.';
 async function paletaDe(blob){
   const bmp=await createImageBitmap(blob); const k=90/Math.max(bmp.width,bmp.height); const cv=document.createElement('canvas'); cv.width=Math.max(1,Math.round(bmp.width*k)); cv.height=Math.max(1,Math.round(bmp.height*k));
   const c=cv.getContext('2d'); c.drawImage(bmp,0,0,cv.width,cv.height); const d=c.getImageData(0,0,cv.width,cv.height).data; const caixa={};
@@ -835,55 +961,124 @@ async function paletaDe(blob){
   const a1=cores[0]||{hex:'#7b2cbf',h:270}; const a2=cores.find(x=>{ const dh=Math.abs(x.h-a1.h); return Math.min(dh,360-dh)>40 && x.s>.25; }) || cores[1] || {hex:'#ff9f1c'};
   return {accent:a1.hex, accent2:a2.hex, bg:mix(a1.hex,'#ffffff',.9)};
 }
+const MAX_FOTOS=12, IDEAL_FOTOS=8, MAX_ENF=3, MAX_FAIXAS=3, MAX_MB_MUSICA=15;
+function tipoAudio(file){ const ext=(file.name.split('.').pop()||'').toLowerCase(); const map={mp3:'audio/mpeg',m4a:'audio/mp4',aac:'audio/aac',wav:'audio/wav',ogg:'audio/ogg',webm:'audio/webm'}; const ct=/^audio\//.test(file.type)?file.type:(map[ext]||'audio/mpeg'); const e2=map[ext]?ext:(ct==='audio/mp4'?'m4a':ct==='audio/wav'?'wav':ct==='audio/ogg'?'ogg':'mp3'); return [e2, ct]; }
 async function vMeuTema(){
   ADM.view='meutema'; $('vw').innerHTML='<div class="empty"><span class="spin"></span></div>';
   let info; try{ info=await rpc('fe_admin_tema_get',{p_slug:SLUG,p_pin:PIN}); }catch(e){ $('vw').innerHTML=`<div class="empty">${ERR(e)}</div>`; return; }
-  const base=tema(FESTA.tema); const c=Object.assign({accent:base.accent, accent2:base.accent2, bg:base.dark?mix(base.accent,'#ffffff',.9):base.bg, font:base.font}, info.tema_custom||{});
-  const novo={fundo:null, enfeite:null};   // arquivos escolhidos agora (ainda não enviados)
-  const status = info.bloqueado ? `<p class="aviso">🚫 O tema próprio desta festa foi desligado pelo organizador. Fale com ele para liberar.</p>`
-    : info.ativo ? `<p class="aviso" style="background:#d3f9d8;color:#1b5e20">✅ Tema próprio ligado — é ele que os convidados e o telão estão vendo.</p>` : `<p class="muted" style="margin:0">Hoje a festa usa o tema pronto <b>${esc(base.n)}</b>. Monte o seu abaixo, com a arte do convite ou do personagem da festa.</p>`;
-  $('vw').innerHTML=`<div class="card" style="padding:18px;display:flex;flex-direction:column;gap:14px">
-    <h3 style="margin:0">🖼️ Tema próprio da festa</h3>${status}
-    <div class="up2">
-      <div class="upbox"><b>Imagem de fundo</b><span class="muted" style="font-size:13px">A arte do convite, o painel da festa, uma foto do cenário</span><div class="pv" id="mtPvF">sem imagem</div>
-        <div class="row" style="justify-content:center"><label class="btn sm" style="position:relative">Escolher imagem<input type="file" accept="image/*" id="mtF" style="position:absolute;inset:0;opacity:0;cursor:pointer"></label><button class="btn ghost sm" id="mtFx" type="button">Tirar</button></div></div>
-      <div class="upbox"><b>Personagem ou enfeite</b><span class="muted" style="font-size:13px">De preferência PNG com fundo transparente</span><div class="pv xadrez" id="mtPvE">sem imagem</div>
-        <div class="row" style="justify-content:center"><label class="btn sm" style="position:relative">Escolher imagem<input type="file" accept="image/png,image/webp,image/*" id="mtE" style="position:absolute;inset:0;opacity:0;cursor:pointer"></label><button class="btn ghost sm" id="mtEx" type="button">Tirar</button></div></div>
-    </div>
-    <div class="cores"><label>Cor principal<input type="color" id="mtA" value="${c.accent}"></label><label>Cor de destaque<input type="color" id="mtB" value="${c.accent2}"></label><label>Fundo das telas<input type="color" id="mtC" value="${c.bg}"></label>
-      <button class="btn alt sm" id="mtPal" type="button">🎯 Pegar cores da imagem</button></div>
-    <label class="f">Letra do nome do homenageado<select class="in" id="mtFont">${FONTES.map(([v,n])=>`<option value="${esc(v)}" ${v===c.font?'selected':''} style="font-family:${v}">${n} — ${esc(FESTA.homenageado||'Maria')}</option>`).join('')}</select></label>
-    <div class="decl"><p><b>Declaração de responsabilidade</b><br>${DECLARACAO}</p>
-      <label class="row" style="gap:8px;font-weight:600;align-items:flex-start"><input type="checkbox" id="mtOk" style="width:22px;height:22px;flex:none"> Li e concordo. As imagens são de minha responsabilidade.</label>
+  const base=tema(FESTA.tema), tc=info.tema_custom||{}, mu=tc.musica||{};
+  const c=Object.assign({accent:base.accent, accent2:base.accent2, bg:base.dark?mix(base.accent,'#ffffff',.9):base.bg, font:base.font}, tc);
+  const K={
+    visual: info.tema_custom ? tc.visual!==false : false,
+    fundo: tc.fundo ? {path:tc.fundo} : null,
+    enfeites: (Array.isArray(tc.enfeites)&&tc.enfeites.length ? tc.enfeites : tc.enfeite ? [tc.enfeite] : []).map(p=>({path:p})),
+    fotos: (tc.fotos||[]).map(p=>({path:p})),
+    mus: {tipo:mu.tipo||'nenhuma', trilha:mu.trilha||'festa', volume:mu.volume ?? .55},
+    faixas: (mu.faixas||[]).map((p,i)=>({path:p, nome:(mu.nomes||[])[i]||`Música ${i+1}`}))
+  };
+  const src=x=>x ? (x.url||midia(x.path)) : null;
+  const nome=FESTA.homenageado||'o homenageado';
+  const status = info.bloqueado ? `<p class="aviso">🚫 O tema desta festa foi desligado pelo organizador. Fale com ele para liberar.</p>`
+    : info.ativo ? `<p class="aviso" style="background:#d3f9d8;color:#1b5e20">✅ Ligado: convidados, telão e álbum já estão usando o que está salvo aqui.</p>` : '';
+  $('vw').innerHTML=`<div class="card" style="padding:18px;display:flex;flex-direction:column;gap:16px">
+    <div><h3 style="margin:0 0 4px">🎨 Tema, fotos e música</h3><p class="muted" style="margin:0">Deixe o telão e o álbum com a cara da festa. Para ficar bonito, sugerimos:</p></div>${status}
+    <div class="kitguia"><div><b>1 fundo</b>a arte do convite ou do painel, de preferência deitada</div><div><b>até 3 personagens</b>PNG sem fundo: o tema, o mascote, o brasão</div><div><b>8 a 12 fotos</b>a história de ${esc(nome)}: bebê, infância, hoje</div><div><b>1 música</b>uma trilha pronta ou até 3 músicas suas</div></div>
+
+    <div class="kitsec"><h4>1 · Cores e imagem de fundo</h4>
+      <div class="opts" id="kVis"><button type="button" class="opt" data-v="0"><span class="e">${base.e}</span><b>Usar o tema pronto</b><small>${esc(base.n)} · troque na aba Dados da festa</small></button><button type="button" class="opt" data-v="1"><span class="e">🖼️</span><b>Minhas cores e fundo</b><small>a arte do convite, o painel da festa</small></button></div>
+      <div id="kVisBox" style="display:flex;flex-direction:column;gap:12px">
+        <div class="up2"><div class="upbox"><b>Imagem de fundo</b><span class="muted" style="font-size:13px">Aparece atrás do telão, do mural, da capa do álbum e do convite</span><div class="pv" id="mtPvF">sem imagem</div>
+          <div class="row" style="justify-content:center"><label class="btn sm" style="position:relative">Escolher imagem<input type="file" accept="image/*" id="mtF" style="position:absolute;inset:0;opacity:0;cursor:pointer"></label><button class="btn ghost sm" id="mtFx" type="button">Tirar</button></div></div></div>
+        <div class="cores"><label>Cor principal<input type="color" id="mtA" value="${c.accent}"></label><label>Cor de destaque<input type="color" id="mtB" value="${c.accent2}"></label><label>Fundo das telas<input type="color" id="mtC" value="${c.bg}"></label>
+          <button class="btn alt sm" id="mtPal" type="button">🎯 Pegar cores da imagem</button></div>
+        <label class="f">Letra do nome<select class="in" id="mtFont">${FONTES.map(([v,n])=>`<option value="${esc(v)}" ${v===c.font?'selected':''} style="font-family:${v}">${n} · ${esc(FESTA.homenageado||'Maria')}</option>`).join('')}</select></label>
+      </div></div>
+
+    <div class="kitsec"><h4>2 · Personagens e enfeites <span class="kpill" id="kEnfN"></span></h4><p class="dica">Até 3 imagens, de preferência PNG com fundo transparente. Eles se revezam no telão, enfeitam o mural e as páginas do álbum.</p><div class="thumbs" id="kEnf"></div></div>
+
+    <div class="kitsec"><h4>3 · A história de ${esc(nome)} <span class="kpill" id="kFotN"></span></h4><p class="dica">Fotos da vida do homenageado, em ordem: do bebê até hoje. Entram no telão entre as homenagens, numa galeria para os convidados e em páginas próprias no álbum. O ideal é de 8 a 12.</p><div class="thumbs" id="kFot"></div></div>
+
+    <div class="kitsec"><h4>4 · Música de fundo do telão</h4><p class="dica">Toca baixinho no telão e para sozinha quando entra um áudio ou vídeo dos convidados. No telão, a tecla M liga e desliga.</p>
+      <div class="opts" id="kMus"></div>
+      <div id="kUp" class="faixas"></div>
+      <label class="f" style="max-width:360px">Volume da música<input type="range" id="kVol" min="0.15" max="1" step="0.05" value="${K.mus.volume}"></label></div>
+
+    <div class="decl" id="kDecl"><p><b>Declaração de responsabilidade</b><br>${DECLARACAO}</p>
+      <label class="row" style="gap:8px;font-weight:600;align-items:flex-start"><input type="checkbox" id="mtOk" style="width:22px;height:22px;flex:none"> Li e concordo. As imagens, fotos e músicas enviadas são de minha responsabilidade.</label>
       <label class="f" style="margin-top:10px">Nome completo do responsável<input class="in" id="mtNome" maxlength="80" placeholder="Quem está declarando"></label>
       ${info.aceite?`<p class="muted" style="margin:8px 0 0;font-size:13px">Última declaração: ${esc(info.aceite.responsavel)} em ${new Date(info.aceite.criado_em).toLocaleString('pt-BR')}</p>`:''}
       <p class="muted" style="margin:8px 0 0;font-size:13px">Veja os <a href="${BASE}?termos" target="_blank" rel="noopener">Termos de uso</a>.</p></div>
-    <div class="row" style="justify-content:flex-end"><span class="msg" id="mtM"></span>${info.ativo?'<button class="btn ghost" id="mtOff" type="button">Voltar ao tema pronto</button>':''}<button class="btn" id="mtSave" type="button" ${info.bloqueado?'disabled':''}>Salvar e ligar tema próprio</button></div>
+    <div class="row" style="justify-content:flex-end"><span class="msg" id="mtM"></span>${info.ativo?'<button class="btn ghost" id="mtOff" type="button">Desligar tudo</button>':''}<button class="btn" id="mtSave" type="button" ${info.bloqueado?'disabled':''}>💾 Salvar e ligar</button></div>
   </div>`;
-  const cur={fundo:c.fundo||null, enfeite:c.enfeite||null};
-  const pv=(id,src)=>{ const el=$(id); el.innerHTML = src ? `<img src="${midia(src)}" alt="">` : 'sem imagem'; };
-  const preview=()=>{ const t=temaDe({...FESTA, custom:{accent:$('mtA').value, accent2:$('mtB').value, bg:$('mtC').value, font:$('mtFont').value, fundo:novo.fundoUrl||cur.fundo, enfeite:novo.enfeiteUrl||cur.enfeite}}); aplicarTema(t); };
-  pv('mtPvF',cur.fundo); pv('mtPvE',cur.enfeite);
-  const escolher=(inp,k,pid)=>$(inp).onchange=async e=>{ const file=e.target.files[0]; e.target.value=''; if(!file) return; if(file.size>8*1048576){ $('mtM').className='msg err'; $('mtM').textContent='Imagem acima de 8 MB. Escolha uma menor.'; return; }
-    novo[k]=file; novo[k+'Url']=URL.createObjectURL(file); pv(pid, novo[k+'Url']); if(k==='fundo' || !cur.fundo&&!novo.fundo){ try{ const p=await paletaDe(file); $('mtA').value=p.accent; $('mtB').value=p.accent2; $('mtC').value=p.bg; }catch(_){} } preview(); };
-  escolher('mtF','fundo','mtPvF'); escolher('mtE','enfeite','mtPvE');
-  $('mtFx').onclick=()=>{ cur.fundo=null; novo.fundo=null; novo.fundoUrl=null; pv('mtPvF',null); preview(); };
-  $('mtEx').onclick=()=>{ cur.enfeite=null; novo.enfeite=null; novo.enfeiteUrl=null; pv('mtPvE',null); preview(); };
+  const M=$('mtM'), erro=t=>{ M.className='msg err'; M.textContent=t; };
+  const dados=()=>({visual:K.visual, accent:$('mtA').value, accent2:$('mtB').value, bg:$('mtC').value, font:$('mtFont').value, fundo:src(K.fundo), enfeites:K.enfeites.map(src), fotos:K.fotos.map(src)});
+  const preview=()=>aplicarTema(temaDe({...FESTA, custom:dados()}));
+  const temArquivo=()=>!!(K.fundo&&K.visual) || K.enfeites.length || K.fotos.length || (K.mus.tipo==='upload' && K.faixas.length);
+  const rDecl=()=>{ $('kDecl').style.display = temArquivo() ? '' : 'none'; };
+  // 1 · visual
+  const rVis=()=>{ $('kVis').querySelectorAll('.opt').forEach(b=>b.setAttribute('aria-pressed', String(b.dataset.v==='1')===String(K.visual))); $('kVisBox').style.display=K.visual?'flex':'none'; const el=$('mtPvF'); el.innerHTML = K.fundo ? `<img src="${src(K.fundo)}" alt="">` : 'sem imagem'; rDecl(); preview(); };
+  $('kVis').onclick=e=>{ const b=e.target.closest('.opt'); if(!b) return; K.visual=b.dataset.v==='1'; rVis(); };
+  $('mtF').onchange=async e=>{ const file=e.target.files[0]; e.target.value=''; if(!file) return; if(file.size>12*1048576) return erro('Imagem acima de 12 MB. Escolha uma menor.');
+    K.fundo={file, url:URL.createObjectURL(file)}; try{ const p=await paletaDe(file); $('mtA').value=p.accent; $('mtB').value=p.accent2; $('mtC').value=p.bg; }catch(_){} rVis(); };
+  $('mtFx').onclick=()=>{ K.fundo=null; rVis(); };
   ['mtA','mtB','mtC','mtFont'].forEach(id=>$(id).addEventListener('input',preview));
-  $('mtPal').onclick=async()=>{ const src=novo.fundo||novo.enfeite; let blob=src; if(!blob){ const p=cur.fundo||cur.enfeite; if(!p){ $('mtM').className='msg err'; $('mtM').textContent='Escolha uma imagem primeiro.'; return; } blob=await fetch(midia(p)).then(r=>r.blob()); } const pl=await paletaDe(blob); $('mtA').value=pl.accent; $('mtB').value=pl.accent2; $('mtC').value=pl.bg; preview(); };
-  if(info.ativo) $('mtOff').onclick=async()=>{ try{ FESTA=await rpc('fe_admin_tema_off',{p_slug:SLUG,p_pin:PIN}); aplicarTema(temaDe(FESTA)); toast('Voltou ao tema pronto.'); vMeuTema(); }catch(e){ toast(ERR(e)); } };
+  $('mtPal').onclick=async()=>{ const it=K.fundo||K.enfeites[0]; if(!it) return erro('Escolha uma imagem primeiro.'); const blob = it.file || await fetch(src(it)).then(r=>r.blob()); const pl=await paletaDe(blob); $('mtA').value=pl.accent; $('mtB').value=pl.accent2; $('mtC').value=pl.bg; preview(); };
+  // 2 e 3 · grades de imagens
+  function grade(box, lista, max, png, rotulo, cont){
+    const r=()=>{ const n=lista.length;
+      $(box).innerHTML = lista.map((x,i)=>`<div class="thumb${png?' png':''}"><img src="${src(x)}" alt=""><button class="x" type="button" data-i="${i}" aria-label="Tirar">✕</button>${!png?`<span class="n1">${i+1}</span>`:''}</div>`).join('')
+        + (n<max ? `<label class="thumb add"><div><span>＋</span>${rotulo}</div><input type="file" accept="${png?'image/png,image/webp,image/*':'image/*'}" multiple></label>` : '');
+      $(box).querySelectorAll('.x').forEach(b=>b.onclick=()=>{ lista.splice(+b.dataset.i,1); r(); });
+      const inp=$(box).querySelector('input'); if(inp) inp.onchange=e=>{ const fs=[...e.target.files]; e.target.value=''; let sobra=max-lista.length, grandes=0;
+        for(const file of fs){ if(sobra<=0) break; if(file.size>15*1048576){ grandes++; continue; } lista.push({file, url:URL.createObjectURL(file)}); sobra--; }
+        if(fs.length>max-n+grandes) toast(`Cabem no máximo ${max}.`); if(grandes) toast('Algumas imagens passam de 15 MB e ficaram de fora.'); r(); };
+      cont(n); rDecl(); preview(); };
+    r(); return r;
+  }
+  grade('kEnf', K.enfeites, MAX_ENF, true, 'personagem', n=>{ const p=$('kEnfN'); p.textContent=`${n} de ${MAX_ENF}`; p.className='kpill'+(n?' ok':''); });
+  grade('kFot', K.fotos, MAX_FOTOS, false, 'fotos', n=>{ const p=$('kFotN'); p.textContent = n>=IDEAL_FOTOS ? `${n} fotos ✓` : n ? `${n} de ${IDEAL_FOTOS} (faltam ${IDEAL_FOTOS-n} para o ideal)` : `nenhuma ainda`; p.className='kpill'+(n>=IDEAL_FOTOS?' ok':''); });
+  // 4 · música
+  let tocando=null, tocK=null, tocT=null;
+  const pararPrev=()=>{ if(tocando){ tocando.stop(); tocando=null; } tocK=null; clearTimeout(tocT); document.querySelectorAll('#kMus .play').forEach(b=>b.textContent='▶'); };
+  const rMus=()=>{
+    const ops=[['nenhuma','🔇','Sem música','só os sons das homenagens'], ...Object.entries(TRILHAS).map(([k,t])=>['trilha:'+k,t.e,t.n,t.d]), ['upload','🎵','Minhas músicas','envie até 3 músicas (MP3)']];
+    const cur = K.mus.tipo==='trilha' ? 'trilha:'+K.mus.trilha : K.mus.tipo;
+    $('kMus').innerHTML=ops.map(([k,e,n,d])=>`<button type="button" class="opt" data-k="${k}" aria-pressed="${k===cur}"><span class="e">${e}</span><b>${n}</b><small>${d}</small>${k.startsWith('trilha:')?`<span class="play" role="button" tabindex="0" data-p="${k.slice(7)}" aria-label="Ouvir">${tocK===k.slice(7)?'⏹':'▶'}</span>`:''}</button>`).join('');
+    $('kMus').querySelectorAll('.play').forEach(b=>b.onclick=ev=>{ ev.stopPropagation(); const k=b.dataset.p; if(tocK===k){ pararPrev(); return; } pararPrev(); tocando=criarMusica({tipo:'trilha',trilha:k,volume:+$('kVol').value}); if(tocando){ tocando.start(); tocK=k; b.textContent='⏹'; tocT=setTimeout(pararPrev,15000); } });
+    $('kMus').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{ const k=b.dataset.k; if(k.startsWith('trilha:')){ K.mus.tipo='trilha'; K.mus.trilha=k.slice(7); } else K.mus.tipo=k; rMus(); });
+    const up=$('kUp');
+    if(K.mus.tipo!=='upload'){ up.innerHTML=''; rDecl(); return; }
+    up.innerHTML = K.faixas.map((x,i)=>`<div class="faixa"><span>🎵</span><span class="nm">${esc(x.nome)}</span><audio controls preload="none" src="${src(x)}"></audio><button class="btn ghost sm" type="button" data-i="${i}">Tirar</button></div>`).join('')
+      + (K.faixas.length<MAX_FAIXAS ? `<label class="btn alt sm" style="position:relative;align-self:flex-start">＋ Adicionar música (MP3, até ${MAX_MB_MUSICA} MB)<input type="file" accept="audio/*,.mp3,.m4a" multiple style="position:absolute;inset:0;opacity:0;cursor:pointer"></label>` : '')
+      + `<p class="dica" style="margin:0">As músicas tocam em sequência, em loop. Use músicas que você tem direito de tocar na festa.</p>`;
+    up.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>{ K.faixas.splice(+b.dataset.i,1); rMus(); });
+    const inp=up.querySelector('input'); if(inp) inp.onchange=e=>{ const fs=[...e.target.files]; e.target.value=''; for(const file of fs){ if(K.faixas.length>=MAX_FAIXAS) break; if(file.size>MAX_MB_MUSICA*1048576){ toast(`${file.name} passa de ${MAX_MB_MUSICA} MB.`); continue; } K.faixas.push({file, url:URL.createObjectURL(file), nome:file.name.replace(/\.[^.]+$/,'').slice(0,60)}); } rMus(); };
+    rDecl();
+  };
+  rMus(); rVis();
+  $('kVol').oninput=()=>{ K.mus.volume=+$('kVol').value; };
+  if(info.ativo) $('mtOff').onclick=async()=>{ pararPrev(); try{ FESTA=await rpc('fe_admin_tema_off',{p_slug:SLUG,p_pin:PIN}); aplicarTema(temaDe(FESTA)); toast('Desligado. A festa voltou ao tema pronto, sem fotos nem música.'); vMeuTema(); }catch(e){ toast(ERR(e)); } };
   $('mtSave').onclick=async()=>{
-    const m=$('mtM'); const temImg = !!(novo.fundo||novo.enfeite||cur.fundo||cur.enfeite);
-    if(temImg && !$('mtOk').checked){ m.className='msg err'; m.textContent='Para usar imagens, marque a declaração de responsabilidade.'; return; }
-    const nome=$('mtNome').value.trim(); if(temImg && nome.length<3){ m.className='msg err'; m.textContent='Escreva o nome completo do responsável.'; return; }
-    const b=$('mtSave'); b.disabled=true; m.className='msg'; m.innerHTML='<span class="spin"></span> Salvando…';
+    pararPrev();
+    if(K.mus.tipo==='upload' && !K.faixas.length) return erro('Adicione pelo menos uma música, ou escolha uma trilha pronta.');
+    const precisa=temArquivo(), resp=$('mtNome').value.trim();
+    if(precisa && !$('mtOk').checked) return erro('Para enviar imagens, fotos ou músicas, marque a declaração de responsabilidade.');
+    if(precisa && resp.length<3) return erro('Escreva o nome completo do responsável.');
+    const b=$('mtSave'); b.disabled=true; M.className='msg';
+    const passo=t=>{ M.innerHTML=`<span class="spin"></span> ${t}`; };
     try{
-      if(novo.fundo){ const bl=await encolher(novo.fundo,1920,.85); cur.fundo=await subir(bl,'tema/fundo','jpg','image/jpeg'); }
-      if(novo.enfeite){ const bl=await encolherPng(novo.enfeite,900); cur.enfeite=await subir(bl,'tema/enfeite','png','image/png'); }
-      const d={accent:$('mtA').value, accent2:$('mtB').value, bg:$('mtC').value, font:$('mtFont').value}; if(cur.fundo) d.fundo=cur.fundo; if(cur.enfeite) d.enfeite=cur.enfeite;
-      FESTA=await rpc('fe_admin_tema',{p_slug:SLUG,p_pin:PIN,d,p_responsavel:nome,p_declaracao:DECLARACAO});
-      aplicarTema(temaDe(FESTA)); toast('Tema próprio ligado! 🎉'); vMeuTema();
-    }catch(e){ m.className='msg err'; m.textContent=/bloqueado/i.test(e.message||'')?'O organizador desligou o tema próprio desta festa.':ERR(e); b.disabled=false; }
+      if(K.visual && K.fundo && K.fundo.file){ passo('Enviando o fundo…'); K.fundo={path:await subir(await encolher(K.fundo.file,1920,.85),'tema/fundo','jpg','image/jpeg')}; }
+      for(const [i,x] of K.enfeites.entries()) if(x.file){ passo(`Enviando personagem ${i+1}…`); K.enfeites[i]={path:await subir(await encolherPng(x.file,900),'tema/enfeite','png','image/png')}; }
+      for(const [i,x] of K.fotos.entries()) if(x.file){ passo(`Enviando foto ${i+1} de ${K.fotos.length}…`); K.fotos[i]={path:await subir(await encolher(x.file,1600,.85),'tema/foto','jpg','image/jpeg')}; }
+      if(K.mus.tipo==='upload') for(const [i,x] of K.faixas.entries()) if(x.file){ passo(`Enviando música ${i+1}…`); const [ext,ct]=tipoAudio(x.file); K.faixas[i]={path:await subir(x.file,'tema/musica',ext,ct), nome:x.nome}; }
+      passo('Salvando…');
+      const d={visual:K.visual, accent:$('mtA').value, accent2:$('mtB').value, bg:$('mtC').value, font:$('mtFont').value,
+        enfeites:K.enfeites.map(x=>x.path), fotos:K.fotos.map(x=>x.path),
+        musica: K.mus.tipo==='upload' ? {tipo:'upload', volume:K.mus.volume, faixas:K.faixas.map(x=>x.path), nomes:K.faixas.map(x=>x.nome)} : {tipo:K.mus.tipo, trilha:K.mus.trilha, volume:K.mus.volume}};
+      if(K.visual && K.fundo) d.fundo=K.fundo.path;
+      FESTA=await rpc('fe_admin_tema',{p_slug:SLUG,p_pin:PIN,d,p_responsavel:resp,p_declaracao:DECLARACAO});
+      aplicarTema(temaDe(FESTA)); toast('Salvo e ligado! Abra o telão para ver 🎉',4000); vMeuTema();
+    }catch(e){ M.className='msg err'; M.textContent=/bloqueado/i.test(e.message||'')?'O organizador desligou o tema desta festa.':ERR(e); b.disabled=false; }
   };
 }
 async function encolherPng(file, max){ const bmp=await createImageBitmap(file); const k=Math.min(1,max/Math.max(bmp.width,bmp.height)); const cv=document.createElement('canvas'); cv.width=Math.round(bmp.width*k); cv.height=Math.round(bmp.height*k); cv.getContext('2d').drawImage(bmp,0,0,cv.width,cv.height); return await new Promise(r=>cv.toBlob(r,'image/png')); }
@@ -939,7 +1134,7 @@ function wrap(c,text,maxW){ const out=[]; for(const par of String(text).split(/\
 function fonte(t){ return `${t.font}, Fredoka, sans-serif`; }
 async function fontesProntas(t){ await Promise.all([`400 80px ${t.font}`,'700 40px Caveat','500 30px Caveat','600 30px Fredoka','700 30px Fredoka'].map(x=>document.fonts.load(x).catch(()=>{}))); }
 function papel(c, t, f, n){
-  const enf=t._enf;
+  const enf = t._enfs && t._enfs.length ? t._enfs[n % t._enfs.length] : t._enf;
   const g=c.createLinearGradient(0,0,0,PH); g.addColorStop(0,t.paper); g.addColorStop(1,mix(t.paper,t.bg2,.35)); c.fillStyle=g; c.fillRect(0,0,PW,PH);
   c.save(); c.globalAlpha=.35; for(let i=0;i<26;i++){ const x=(i*397)%PW, y=(i*631)%PH; c.fillStyle=t.pal[i%t.pal.length]; c.beginPath(); c.arc(x,y,6+(i%4)*3,0,6.28); c.fill(); } c.restore();
   c.textAlign='center'; c.fillStyle=t.dark?t.bg:t.ink; c.font='600 26px Fredoka, sans-serif'; c.fillText(`${f.homenageado||f.titulo}${f.data?' · '+new Date(f.data+'T12:00:00').toLocaleDateString('pt-BR'):''}`, PW/2, 70);
@@ -949,7 +1144,7 @@ function papel(c, t, f, n){
 }
 function mix(a,b,k){ const p=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)); const A=p(a),B=p(b); return '#'+A.map((v,i)=>Math.round(v*(1-k)+B[i]*k).toString(16).padStart(2,'0')).join(''); }
 function tituloSecao(c,t,txt,sub,y=200){
-  c.textAlign='center'; c.fillStyle=t.dark?t.bg:t.accent; c.font=`400 ${/Great|Pacifico/.test(t.font)?110:88}px ${fonte(t)}`; c.fillText(txt, PW/2, y);
+  c.textAlign='center'; c.fillStyle=t.dark?t.bg:t.accent; let fs=/Great|Pacifico/.test(t.font)?110:88; c.font=`400 ${fs}px ${fonte(t)}`; while(c.measureText(txt).width>PW-140 && fs>44){ fs-=4; c.font=`400 ${fs}px ${fonte(t)}`; } c.fillText(txt, PW/2, y);
   if(sub){ c.font='600 34px Fredoka, sans-serif'; c.fillStyle=t.dark?t.bg:t.ink; c.fillText(sub, PW/2, y+56); }
   return y+(sub?100:50);
 }
@@ -984,14 +1179,24 @@ function capa(c,t,f,foto){
   c.fillStyle=t.muted; c.font='600 30px Fredoka, sans-serif'; c.fillText('com o carinho de todos os convidados', PW/2, PH-168);
 }
 function cobrir(c,im,x,y,w,h){ const ar=w/h, iar=im.width/im.height; let sx=0,sy=0,sw=im.width,sh=im.height; if(iar>ar){ sw=im.height*ar; sx=(im.width-sw)/2; } else { sh=im.width/ar; sy=(im.height-sh)/2; } c.drawImage(im,sx,sy,sw,sh,x,y,w,h); }
-async function temaPdf(f){ const t={...temaDe(f)}; await fontesProntas(t); if(t.fundo) t._fundo=await carregarImg(t.fundo,1800); if(t.enfeite) t._enf=await carregarImg(t.enfeite,900); return t; }
+async function temaPdf(f){ const t={...temaDe(f)}; await fontesProntas(t); if(t.fundo) t._fundo=await carregarImg(t.fundo,1800); t._enfs=[]; for(const p of (t.enfeites||(t.enfeite?[t.enfeite]:[]))){ const im=await carregarImg(p,900); if(im) t._enfs.push(im); } t._enf=t._enfs[0]||null; return t; }
 async function pdfAlbum(f, posts, prog){
   const t=await temaPdf(f);
   const {jsPDF}=window.jspdf; const doc=new jsPDF({orientation:'p',unit:'mm',format:'a4',compress:true}); let n=0;
-  const add=cv=>{ if(n) doc.addPage(); doc.addImage(cv.toDataURL('image/jpeg',.86),'JPEG',0,0,210,297,undefined,'FAST'); n++; };
+  const add=cv=>{ if(f.plano==='teste'){ const c=cv.getContext('2d'); c.save(); c.translate(PW/2,PH/2); c.rotate(-.55); c.textAlign='center'; c.fillStyle='rgba(200,30,30,.14)'; c.font='800 170px Fredoka, sans-serif'; c.fillText('MODO TESTE',0,0); c.font='700 46px Fredoka, sans-serif'; c.fillText('ative a festa para tirar esta marca',0,80); c.restore(); }
+    if(n) doc.addPage(); doc.addImage(cv.toDataURL('image/jpeg',.86),'JPEG',0,0,210,297,undefined,'FAST'); n++; };
   const fotos=posts.filter(p=>p.tipo==='foto'), textos=posts.filter(p=>p.tipo==='texto'), grav=posts.filter(p=>p.tipo==='audio'||p.tipo==='video');
-  prog('Montando a capa…'); const fotoCapa = fotos.length ? await carregarImg(fotos[0].caminho) : null;
+  prog('Montando a capa…'); const hist=t.fotos||[];
+  const fotoCapa = hist.length ? await carregarImg(hist[hist.length-1]) : fotos.length ? await carregarImg(fotos[0].caminho) : null;
   { const [cv,c]=pg(); capa(c,t,f,fotoCapa); add(cv); }
+  // a história do homenageado: até 6 fotos por página
+  const hf=[]; for(let i=0;i<hist.length;i++){ prog(`Abrindo a história… ${i+1}/${hist.length}`); const im=await carregarImg(hist[i]); if(im) hf.push(im); }
+  for(let i=0;i<hf.length;i+=6){
+    const [cv,c]=pg(); papel(c,t,f,n+1); let top=150; if(i===0) top=tituloSecao(c,t,`A história de ${f.homenageado||'nós'}`,'os momentos que trouxeram a gente até aqui',230)+10;
+    const g=hf.slice(i,i+6), cols=g.length===1?1:2, rows=Math.ceil(g.length/cols), avail=PH-130-top, cw=(PW-140)/cols, ch=avail/rows;
+    g.forEach((im,j)=>{ const cx=70+cw*(j%cols)+cw/2, cy=top+ch*Math.floor(j/cols)+ch/2, maxW=cw-80, maxH=ch-140, ar=im.width/im.height; let pw=maxW, ph=pw/ar; if(ph>maxH){ ph=maxH; pw=ph*ar; } polaroid(c,im,cx,cy,pw,ph,((i+j)*37%7)-3,'','',t); });
+    add(cv);
+  }
   // recados escritos: 4 por página
   for(let i=0;i<textos.length;i+=4){
     prog(`Escrevendo os recados… ${Math.min(i+4,textos.length)}/${textos.length}`);
@@ -1106,11 +1311,11 @@ async function telaMestre(){
   telaLogin('Área do organizador','Mural da Festa', async pin=>{ const ok=await rpc('fe_mestre_login',{p_pin:pin}); if(!ok) return false; MPIN=pin; store.sset('mf_mestre',pin); painelMestre(); return true; });
 }
 function painelMestre(){
-  $('app').innerHTML=`<div class="wrap"><div class="top"><h1>🎉 <em>Mural da Festa</em> · organizador</h1><div class="row"><button class="btn" id="mNova">＋ Nova festa</button><button class="btn ghost sm" id="mSenha">Trocar senha mestra</button><button class="btn ghost sm" id="mSair">Sair</button></div></div>
+  $('app').innerHTML=`<div class="wrap"><div class="top"><h1>🎉 <em>Mural da Festa</em> · organizador</h1><div class="row"><button class="btn" id="mNova">＋ Nova festa</button><button class="btn alt sm" id="mCod">🎟️ Códigos de ativação</button><button class="btn ghost sm" id="mSenha">Trocar senha mestra</button><button class="btn ghost sm" id="mSair">Sair</button></div></div>
    <div class="card" style="padding:14px 16px;margin-bottom:14px"><div class="row" style="justify-content:space-between"><b>Espaço usado</b><span class="muted" id="mUso"></span></div><div class="bar" style="margin-top:8px"><i id="mBar" style="width:0%"></i></div><p class="muted" style="font-size:13px;margin:6px 0 0">Plano gratuito do Supabase: 1 GB para todas as festas (inclui o Halloween).</p></div>
    <div id="mList"><div class="empty"><span class="spin"></span></div></div></div>`;
   $('mSair').onclick=()=>{ store.sset('mf_mestre',null); location.reload(); };
-  $('mNova').onclick=novaFesta; $('mSenha').onclick=trocarMestra;
+  $('mNova').onclick=novaFesta; $('mSenha').onclick=trocarMestra; $('mCod').onclick=codigosMestre;
   listarFestas();
 }
 async function listarFestas(){
@@ -1120,10 +1325,11 @@ async function listarFestas(){
   $('mList').innerHTML=FESTAS.map((f,i)=>{ const t=temaDe(f); return `<div class="card fest" style="margin-bottom:10px;border-left:8px solid ${t.accent}">
     <div><h3>${CATS[f.categoria]?.e||'🎉'} ${esc(f.homenageado||f.titulo)} <span class="pill" style="background:${f.ativo?'#d3f9d8':'#ffe3e3'};color:${f.ativo?'#2b8a3e':'#c92a2a'}">${f.ativo?'ativa':'encerrada'}</span></h3>
       <div class="meta"><span>${esc(f.titulo)}</span>${f.data?`<span>📅 ${new Date(f.data+'T12:00:00').toLocaleDateString('pt-BR')}</span>`:''}<span>${t.e} ${t.n}</span>${f.cliente?`<span>👤 ${esc(f.cliente)}${f.contato?' · '+esc(f.contato):''}</span>`:''}${f.expira_em?`<span>⏳ até ${new Date(f.expira_em+'T12:00:00').toLocaleDateString('pt-BR')}</span>`:''}</div>
-      <div class="stats"><span class="pill">💌 ${f.total} homenagens</span>${f.pendentes?`<span class="pill" style="background:#fff3bf">⏳ ${f.pendentes} aguardando</span>`:''}<span class="pill">💾 ${(+f.mb).toFixed(1)} MB</span>${f.tem_custom?`<span class="pill" style="background:${f.custom_bloqueado?'#ffe3e3':f.custom_ativo?'#e7f5ff':'#f1f3f5'}">🖼️ tema próprio ${f.custom_bloqueado?'desligado por você':f.custom_ativo?'ligado':'desligado'}${f.aceite?` · declarado por ${esc(f.aceite.responsavel)} em ${new Date(f.aceite.criado_em).toLocaleDateString('pt-BR')}`:''}</span>`:''}</div></div>
-    <div class="acts3"><a class="btn sm" href="${linkFesta(f.slug,'admin')}" target="_blank" rel="noopener">🔐 Anfitrião</a><a class="btn ghost sm" href="${linkFesta(f.slug,'telao')}" target="_blank" rel="noopener">📺 Telão</a><a class="btn ghost sm" href="${linkFesta(f.slug)}" target="_blank" rel="noopener">👀 Ver</a><button class="btn ghost sm" data-i="${i}" data-a="msg">📋 Mensagem</button><button class="btn ghost sm" data-i="${i}" data-a="cfg">⚙️ Ajustes</button>${f.tem_custom?`<button class="btn ${f.custom_bloqueado?'ok':'bad'} sm" data-i="${i}" data-a="bloq">${f.custom_bloqueado?'✓ Liberar tema próprio':'🚫 Desligar tema próprio'}</button>`:''}</div></div>`; }).join('');
+      <div class="stats">${f.plano==='teste'?'<span class="pill" style="background:#fff3bf">🧪 teste</span>':''}${f.origem==='cliente'?'<span class="pill">🙋 criada pelo cliente</span>':''}<span class="pill">💌 ${f.total} homenagens</span>${f.pendentes?`<span class="pill" style="background:#fff3bf">⏳ ${f.pendentes} aguardando</span>`:''}<span class="pill">💾 ${(+f.mb).toFixed(1)} MB</span>${f.tem_custom?`<span class="pill" style="background:${f.custom_bloqueado?'#ffe3e3':f.custom_ativo?'#e7f5ff':'#f1f3f5'}">🖼️ tema próprio ${f.custom_bloqueado?'desligado por você':f.custom_ativo?'ligado':'desligado'}${f.aceite?` · declarado por ${esc(f.aceite.responsavel)} em ${new Date(f.aceite.criado_em).toLocaleDateString('pt-BR')}`:''}</span>`:''}</div></div>
+    <div class="acts3"><a class="btn sm" href="${linkFesta(f.slug,'admin')}" target="_blank" rel="noopener">🔐 Anfitrião</a><a class="btn ghost sm" href="${linkFesta(f.slug,'telao')}" target="_blank" rel="noopener">📺 Telão</a><a class="btn ghost sm" href="${linkFesta(f.slug)}" target="_blank" rel="noopener">👀 Ver</a><button class="btn ghost sm" data-i="${i}" data-a="msg">📋 Mensagem</button><button class="btn ghost sm" data-i="${i}" data-a="cfg">⚙️ Ajustes</button>${f.plano==='teste'?`<button class="btn ok sm" data-i="${i}" data-a="lib">✓ Liberar (cortesia)</button>`:''}${f.tem_custom?`<button class="btn ${f.custom_bloqueado?'ok':'bad'} sm" data-i="${i}" data-a="bloq">${f.custom_bloqueado?'✓ Liberar tema próprio':'🚫 Desligar tema próprio'}</button>`:''}</div></div>`; }).join('');
   $('mList').querySelectorAll('[data-a]').forEach(b=>b.onclick=async()=>{ const f=FESTAS[+b.dataset.i]; const a=b.dataset.a;
     if(a==='msg') return copiar(msgCliente(f),'Mensagem para o cliente copiada!');
+    if(a==='lib'){ try{ await rpc('fe_mestre_liberar',{p_pin:MPIN,p_id:f.id}); toast('Festa liberada sem limite.'); listarFestas(); }catch(e){ toast(ERR(e)); } return; }
     if(a==='bloq'){ try{ await rpc('fe_mestre_tema',{p_pin:MPIN,p_id:f.id,p_bloquear:!f.custom_bloqueado}); toast(f.custom_bloqueado?'Tema próprio liberado.':'Tema próprio desligado. A festa voltou ao tema pronto.'); listarFestas(); }catch(e){ toast(ERR(e)); } return; }
     ajustesFesta(f); });
 }
@@ -1142,6 +1348,41 @@ function novaFesta(){
     $('nfCriar').disabled=true; $('nfM').className='msg'; $('nfM').innerHTML='<span class="spin"></span>';
     try{ const f=await rpc('fe_criar_festa',{p_pin:MPIN, d}); festaCriada(f, senha); }catch(e){ $('nfM').className='msg err'; $('nfM').textContent=ERR(e)+' '+(e.message||''); $('nfCriar').disabled=false; }
   };
+}
+function telaCriar(){
+  aplicarTema('confete'); document.title='Criar minha festa · Mural da Festa';
+  const f0={categoria:'aniversario',tema:'confete',moderacao:true};
+  $('app').innerHTML=`<div class="wrap"><div class="top"><h1>✨ Crie o mural da sua festa</h1><a class="btn ghost sm" href="${BASE}">← Início</a></div>
+    <p class="muted" style="margin:-4px 0 14px">Leva 2 minutos. Escolha o tipo de festa e o tema, preencha os dados e pronto: você recebe o link, o QR Code e o convite na hora. Depois, monta o telão com imagens, fotos e música.</p>
+    ${formFesta(f0,{auto:true})}
+    <div class="row" style="justify-content:flex-end;margin-top:12px"><span class="msg" id="nfM"></span><button class="btn" id="nfCriar" style="font-size:18px">🎉 Criar minha festa</button></div></div>`;
+  const ler=ligarFormFesta(f0, k=>aplicarTema(k));
+  const erro=t=>{ $('nfM').className='msg err'; $('nfM').textContent=t; };
+  $('nfCriar').onclick=async()=>{
+    const d=ler(); if(!d.homenageado) return erro('Preencha o nome do homenageado.');
+    const senha=$('ffSenha').value.trim(); if(senha.length<4) return erro('A senha precisa de pelo menos 4 dígitos.'); if(senha!==$('ffSenha2').value.trim()) return erro('As duas senhas não estão iguais.');
+    const cli=$('ffCli').value.trim(), cont=$('ffCont').value.trim(); if(cli.length<3) return erro('Escreva seu nome.'); if(cont.length<6) return erro('Informe seu WhatsApp ou e-mail.');
+    if(!$('ffAceite').checked) return erro('Para criar, aceite os Termos de uso.');
+    Object.assign(d,{senha_anfitriao:senha, cliente:cli, contato:cont, codigo:$('ffCod').value.trim(), aceite:true});
+    $('nfCriar').disabled=true; $('nfM').className='msg'; $('nfM').innerHTML='<span class="spin"></span> Criando…';
+    try{ const f=await rpc('fe_auto_criar',{d, p_aparelho:deviceId()}); store.sset('mf_pin_'+f.slug, senha); store.set('mf_novo_'+f.slug,'1'); telaCriada(f, senha, !!d.codigo); }
+    catch(e){ erro(ERR(e)); $('nfCriar').disabled=false; }
+  };
+}
+function telaCriada(f, senha, tentouCodigo){
+  aplicarTema(temaDe(f)); history.replaceState(null,'',BASE+'?criar');
+  const okCod=f.plano==='completo';
+  $('app').innerHTML=`<div class="wrap" style="max-width:720px"><div class="card" style="padding:24px;text-align:center"><div style="font-size:64px">${tema(f.tema).e}</div><h1 style="margin:4px 0">Sua festa está criada!</h1>
+    <p class="muted">${esc(f.titulo)}</p>
+    ${okCod?`<p class="aviso" style="background:#d3f9d8;color:#1b5e20">✅ Ativada: homenagens sem limite.</p>`:`<p class="aviso">${tentouCodigo?'⚠️ O código não funcionou, então a festa começou em modo teste. Você pode ativar depois, na sua área.':'🧪 Modo teste: até 10 homenagens. Ative quando quiser, na sua área.'}</p>`}
+    <div class="qrbig" id="fcQr"></div>
+    <div style="text-align:left;margin-top:16px;display:flex;flex-direction:column;gap:10px">
+     ${[['📲 Link dos convidados',linkFesta(f.slug)],['📺 Telão',linkFesta(f.slug,'telao')],['🔐 Sua área de anfitrião',linkFesta(f.slug,'admin')]].map(([n,u])=>`<div><div style="font-weight:600;font-size:14px;margin-bottom:4px">${n}</div><div class="linkbox"><code>${esc(u)}</code><button class="btn sm" data-copy="${esc(u)}">Copiar</button></div></div>`).join('')}</div>
+    <p class="aviso" style="margin-top:14px;text-align:left">📌 Guarde estes links e a sua senha. Toque em <b>Copiar tudo</b> e mande para o seu próprio WhatsApp.</p>
+    <div class="row" style="justify-content:center;margin-top:12px"><button class="btn alt" id="fcMsg">📋 Copiar tudo</button><a class="btn" href="${linkFesta(f.slug,'admin')}">Montar o telão e o convite →</a></div></div></div>`;
+  qrInto($('fcQr'), linkFesta(f.slug), 200);
+  document.querySelectorAll('[data-copy]').forEach(b=>b.onclick=()=>copiar(b.dataset.copy));
+  $('fcMsg').onclick=()=>copiar(msgCliente(f, senha),'Copiado! Cole no seu WhatsApp para guardar.');
 }
 function festaCriada(f, senha){
   aplicarTema(temaDe(f));
@@ -1169,6 +1410,21 @@ function ajustesFesta(f){
     const d={ativo:$('ajAtivo').checked, cliente:$('ajCli').value.trim(), contato:$('ajCont').value.trim(), expira_em:$('ajExp').value}; if(s) d.nova_senha=s;
     try{ await rpc('fe_mestre_editar',{p_pin:MPIN,p_id:f.id,d}); fecharFolha(); toast(s?`Salvo! Nova senha do anfitrião: ${s}`:'Salvo!', 4000); listarFestas(); }catch(e){ msgE(ERR(e),'err'); } };
 }
+async function codigosMestre(){
+  abrirFolha(`<h3>🎟️ Códigos de ativação</h3><p class="muted" style="margin-top:0">Cada código ativa uma festa, uma única vez. Gere um lote e cadastre na plataforma de venda (Kiwify, Hotmart…) para o cliente receber o código sozinho depois de pagar.</p>
+    <div class="grid2"><label class="f">Quantos códigos<input class="in" id="cgN" type="number" min="1" max="200" value="20"></label><label class="f">Nome do lote (opcional)<input class="in" id="cgL" maxlength="40" placeholder="Ex.: Kiwify novembro"></label></div>
+    <div class="row" style="margin-top:10px"><button class="btn" id="cgGerar">Gerar</button><button class="btn ghost sm" id="cgCopiar">📋 Copiar os livres</button><button class="btn ghost sm" id="cgCsv">⬇️ Planilha (CSV)</button></div>
+    <div class="msg" id="eMsg"></div><div id="cgList" style="max-height:42vh;overflow:auto;margin-top:8px"><span class="spin"></span></div><div class="foot"><button class="btn ghost" id="eCancel">Fechar</button></div>`);
+  $('eCancel').onclick=fecharFolha; let L=[];
+  const carregar=async()=>{ try{ L=await rpc('fe_mestre_codigos',{p_pin:MPIN}); }catch(e){ msgE(ERR(e),'err'); return; }
+    const livres=L.filter(x=>!x.usado_em).length;
+    $('cgList').innerHTML = L.length ? `<p style="margin:0 0 6px;font-weight:600">${livres} livres · ${L.length-livres} usados</p>` + L.map(x=>`<div class="linkbox" style="margin-bottom:6px;${x.usado_em?'opacity:.55':''}"><code>${esc(x.codigo)}${x.lote?` · ${esc(x.lote)}`:''}${x.usado_em?` · usado por ${esc(x.festa||'festa excluída')} em ${new Date(x.usado_em).toLocaleDateString('pt-BR')}`:''}</code>${x.usado_em?'':`<button class="btn sm" data-copy="${esc(x.codigo)}">Copiar</button>`}</div>`).join('') : '<p class="muted">Nenhum código ainda.</p>';
+    $('cgList').querySelectorAll('[data-copy]').forEach(b=>b.onclick=()=>copiar(b.dataset.copy)); };
+  $('cgGerar').onclick=async()=>{ const n=+$('cgN').value; if(!(n>=1&&n<=200)){ msgE('Escolha de 1 a 200.','err'); return; } try{ const novos=await rpc('fe_mestre_gerar_codigos',{p_pin:MPIN,p_qtd:n,p_lote:$('cgL').value.trim()}); msgE(`${novos.length} códigos gerados!`,'ok'); carregar(); }catch(e){ msgE(ERR(e),'err'); } };
+  $('cgCopiar').onclick=()=>{ const l=L.filter(x=>!x.usado_em).map(x=>x.codigo); if(!l.length){ msgE('Não há códigos livres.','err'); return; } copiar(l.join('\n'), `${l.length} códigos copiados (um por linha).`); };
+  $('cgCsv').onclick=()=>{ const rows=[['codigo','lote','criado_em','usado_em','festa'],...L.map(x=>[x.codigo,x.lote||'',x.criado_em||'',x.usado_em||'',x.festa||''])]; const csv=rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(';')).join('\n'); const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob(['﻿'+csv],{type:'text/csv'})); a.download='codigos-mural-da-festa.csv'; a.click(); };
+  carregar();
+}
 function trocarMestra(){
   abrirFolha(`<h3>🔑 Trocar senha mestra</h3><p class="muted" style="margin-top:0">A senha mestra abre o painel do organizador e a área de qualquer festa.</p>
    <label class="f">Nova senha (6 ou mais caracteres)<input class="in" id="tmN" type="password" autocomplete="new-password"></label><label class="f" style="margin-top:10px">Repita a nova senha<input class="in" id="tmR" type="password" autocomplete="new-password"></label>
@@ -1182,6 +1438,7 @@ function trocarMestra(){
 // TERMOS DE USO E PRIVACIDADE
 // =====================================================================
 const CONTATO = '';   // e-mail ou WhatsApp para pedidos de remoção e privacidade
+const COMPRA_URL = '';   // link da página de venda da ativação (Kiwify, Hotmart, Mercado Pago…)
 function telaTermos(){
   aplicarTema('confete'); document.title='Termos de uso e Privacidade · Mural da Festa';
   const canal = CONTATO ? `pelo contato <b>${esc(CONTATO)}</b>` : 'falando com o anfitrião da festa ou com o organizador que contratou o Mural da Festa';
@@ -1193,21 +1450,24 @@ function telaTermos(){
   <ul><li><b>Contratante / anfitrião:</b> quem contrata o mural de uma festa e recebe a senha de administração dela. É responsável pela festa, pela moderação e pelo tema escolhido.</li>
   <li><b>Convidado:</b> quem acessa o link ou o QR Code da festa e envia homenagens.</li>
   <li><b>Mural da Festa:</b> fornece a ferramenta e o armazenamento.</li></ul>
-  <h2>3. Conteúdo enviado pelos convidados</h2>
+  <h2>3. Criação da festa, modo teste e ativação</h2>
+  <p>O contratante cria a festa sozinho, nesta página, e define a senha de anfitrião. Sem ativação, a festa funciona em <b>modo teste</b>: até 10 homenagens, com a marca “teste” no telão e no álbum, e fica disponível até 7 dias depois da data da festa. A ativação é feita com um código de uso único, adquirido pelo canal de venda do Mural da Festa. A festa ativada recebe homenagens sem limite e fica disponível até 60 dias depois da data da festa. A guarda da senha é responsabilidade do contratante.</p>
+  <h2>4. Conteúdo enviado pelos convidados</h2>
   <p>Quem envia uma foto, áudio, vídeo ou recado é responsável por ele. Ao enviar, o convidado declara que as pessoas que aparecem concordam com o envio e que, no caso de crianças e adolescentes, tem a autorização dos pais ou responsáveis. É proibido enviar conteúdo ofensivo, discriminatório, sexual, violento, ilegal ou que viole direitos de terceiros. O anfitrião pode não aprovar ou ocultar qualquer homenagem, e o Mural da Festa pode remover conteúdo que viole estes termos.</p>
-  <h2>4. Tema próprio, personagens e direitos autorais</h2>
-  <p>O anfitrião pode enviar imagens próprias para decorar a festa (fundo, personagem, enfeite). <b>O Mural da Festa não fornece personagens, marcas ou artes de terceiros.</b> Ao enviar um tema próprio, o anfitrião declara ter autorização para usar todos os elementos enviados e assume <b>integral e exclusiva responsabilidade</b> por eles, inclusive por direitos autorais, marcas e direitos de imagem, isentando o Mural da Festa. A declaração fica registrada com o nome do responsável, a festa, a data e a hora.</p>
+  <h2>5. Tema próprio, fotos, músicas e direitos autorais</h2>
+  <p>O anfitrião pode enviar imagens próprias para decorar a festa (fundo, personagens, enfeites), fotos do homenageado e músicas para tocar no telão. <b>O Mural da Festa não fornece personagens, marcas ou artes de terceiros.</b> Ao enviar um tema próprio, o anfitrião declara ter autorização para usar todos os elementos enviados e assume <b>integral e exclusiva responsabilidade</b> por eles, inclusive por direitos autorais, marcas e direitos de imagem, isentando o Mural da Festa. A declaração fica registrada com o nome do responsável, a festa, a data e a hora.</p>
+  <p><b>Músicas:</b> as trilhas prontas são criadas pelo próprio Mural da Festa. Músicas enviadas pelo anfitrião são de sua inteira responsabilidade, inclusive os direitos de execução pública no local do evento (por exemplo, junto ao ECAD), quando exigidos.</p>
   <p>Se alguém (por exemplo, um titular de direitos) se sentir prejudicado por um tema ou conteúdo, pode pedir a remoção ${canal}. Ao receber um pedido fundamentado, o tema próprio pode ser desligado e o conteúdo removido, sem prejuízo da responsabilidade de quem o enviou.</p>
-  <h2>5. Privacidade (LGPD)</h2>
-  <ul><li><b>Dados tratados:</b> nome ou apelido informado (opcional), fotos, áudios, vídeos e recados enviados, data e hora do envio e um identificador técnico do aparelho, usado só para evitar envios repetidos. Do anfitrião, o nome do responsável pela declaração do tema.</li>
+  <h2>6. Privacidade (LGPD)</h2>
+  <ul><li><b>Dados tratados:</b> nome ou apelido informado (opcional), fotos, áudios, vídeos e recados enviados, data e hora do envio e um identificador técnico do aparelho, usado só para evitar envios repetidos. Do contratante, o nome, o contato informado na criação da festa e o nome do responsável pela declaração do tema.</li>
   <li><b>Para quê:</b> exibir as homenagens no telão e no mural da festa, montar o álbum de recordações e permitir que o anfitrião baixe os arquivos.</li>
   <li><b>Base legal:</b> consentimento de quem envia e execução do serviço contratado pelo anfitrião. Para imagens e vozes de crianças e adolescentes, o tratamento é feito no seu melhor interesse e depende do consentimento dos pais ou responsáveis (art. 14 da LGPD).</li>
   <li><b>Quem vê:</b> as homenagens aprovadas ficam visíveis para quem tem o link da festa. Os arquivos ficam guardados em provedor de nuvem contratado e são acessíveis pelo endereço de cada arquivo. Não vendemos nem compartilhamos dados com terceiros para publicidade.</li>
   <li><b>Por quanto tempo:</b> enquanto a festa estiver ativa e por até 90 dias depois da data de validade combinada com o contratante, ou menos, se ele pedir a exclusão antes. Depois disso, os dados podem ser apagados definitivamente.</li>
   <li><b>Seus direitos:</b> você pode pedir acesso, correção ou exclusão do que enviou, ou retirar o consentimento, ${canal}.</li></ul>
-  <h2>6. Limitações</h2>
+  <h2>7. Limitações</h2>
   <p>O serviço depende de internet e de provedores de nuvem e pode ter instabilidades. Recomendamos que o anfitrião baixe o álbum e os arquivos logo após a festa. O Mural da Festa não se responsabiliza por conteúdo enviado por usuários nem por temas enviados pelo anfitrião.</p>
-  <h2>7. Mudanças nestes termos</h2>
+  <h2>8. Mudanças nestes termos</h2>
   <p>Estes termos podem ser atualizados. A versão em vigor é sempre a publicada nesta página. Aplica-se a legislação brasileira.</p>
   </div><p class="center" style="margin-top:16px"><a class="btn ghost" href="${BASE}">Voltar</a></p></div>`;
 }
@@ -1221,7 +1481,9 @@ function telaInicio(){
    <section class="card hero"><span class="deco" style="left:5%;top:12%">🎈</span><span class="deco" style="right:6%;top:16%;animation-delay:-1.4s">🎂</span><span class="deco" style="right:14%;bottom:10%;animation-delay:-2.2s">💍</span>
      <span class="chip">📸 ✍️ 🎤 🎥</span><div class="who" style="font-size:clamp(46px,10vw,92px)">Mural da Festa</div>
      <p class="tit" style="max-width:640px;margin:6px auto 0">Os convidados mandam fotos, recados, áudios e vídeos pelo celular. As homenagens aparecem no telão durante a festa e viram um álbum de recordações no final.</p>
-     <form class="row" id="inF" style="justify-content:center;margin-top:20px"><input class="in" id="inC" placeholder="Código da festa (ex.: maria-clara-5068)" style="max-width:320px"><button class="btn">Entrar na festa</button></form></section>
+     <div class="row" style="justify-content:center;margin-top:20px"><a class="btn" href="?criar" style="font-size:19px;padding:14px 26px">✨ Criar o mural da minha festa</a></div>
+     <p class="muted" style="margin:8px 0 0;font-size:14px">Teste grátis, sem cadastro. Ative quando quiser.</p>
+     <form class="row" id="inF" style="justify-content:center;margin-top:18px"><input class="in" id="inC" placeholder="Código da festa (ex.: maria-clara-5068)" style="max-width:320px"><button class="btn">Entrar na festa</button></form></section>
    <h2 class="sec">Como funciona</h2>
    <div class="steps">
      <div class="card step"><div class="e">📲</div><h3>1. Convidado aponta a câmera</h3><p class="muted">QR Code na mesa ou link no grupo. Sem baixar aplicativo e sem cadastro.</p></div>
@@ -1231,7 +1493,15 @@ function telaInicio(){
    </div>
    <h2 class="sec">Para todo tipo de festa</h2>
    <div class="cats">${Object.values(CATS).map(c=>`<div class="cat" style="cursor:default"><span class="e">${c.e}</span>${c.n}</div>`).join('')}</div>
-   <p class="center" style="margin-top:30px"><a class="btn ghost" href="?mestre">🔐 Área do organizador</a></p>
+   <h2 class="sec">Com a cara da sua festa</h2>
+   <div class="steps">
+     <div class="card step"><div class="e">🎨</div><h3>Tema e personagens</h3><p class="muted">16 temas prontos ou a arte do seu convite, com até 3 personagens.</p></div>
+     <div class="card step"><div class="e">📖</div><h3>A história do homenageado</h3><p class="muted">De 8 a 12 fotos, do bebê até hoje, no telão e no álbum.</p></div>
+     <div class="card step"><div class="e">🎵</div><h3>Música no telão</h3><p class="muted">Trilhas prontas ou as suas músicas, que abaixam sozinhas quando entra um vídeo.</p></div>
+     <div class="card step"><div class="e">💌</div><h3>Convite com QR Code</h3><p class="muted">Para o WhatsApp ou para imprimir. O convidado já chega sabendo.</p></div>
+   </div>
+   <p class="center" style="margin-top:26px"><a class="btn" href="?criar" style="font-size:18px">✨ Criar minha festa agora</a></p>
+   <p class="center" style="margin-top:30px"><a class="btn ghost sm" href="?mestre">🔐 Área do organizador</a></p>
    <p class="rod"><a href="?termos">Termos de uso e Privacidade</a></p></div>`;
   $('inF').onsubmit=e=>{ e.preventDefault(); const v=$('inC').value.trim().toLowerCase().replace(/.*[?&]f=/,'').replace(/[^a-z0-9-]/g,''); if(v) location.href=linkFesta(v); };
 }
@@ -1245,6 +1515,7 @@ function telaInicio(){
     else if(MODE==='admin') await telaAdmin();
     else if(MODE==='mestre') await telaMestre();
     else if(MODE==='termos') telaTermos();
+    else if(MODE==='criar') telaCriar();
     else telaInicio();
   }catch(e){ console.error(e); $('app').innerHTML='<div class="wrap center" style="padding-top:20vh"><h2>Ops!</h2><p>Não consegui carregar agora. Confira a internet e recarregue.</p></div>'; }
 })();

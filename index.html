@@ -486,7 +486,20 @@ async function postsAprovados(festaId){
 const ERR = e => { const m=(e&&e.message)||''; if(/Calma/.test(m)) return 'Calma! Espere uns segundinhos para mandar outra.'; if(/Limite do teste/.test(m)) return 'Esta festa está em modo teste e já recebeu as 10 homenagens do teste. O anfitrião precisa ativar a festa para receber mais.'; if(/Código inválido/.test(m)) return 'Código inválido ou já usado. Confira as letras e os números.'; if(/Muitas festas/.test(m)) return m; if(/Informe|Aceite/.test(m)) return m+'.'; if(/Senha/.test(m)) return 'Senha incorreta.'; if(/row-level|policy/i.test(m)) return 'Esta festa não está aceitando homenagens agora.'; if(/size|large|exceed/i.test(m)) return 'Arquivo grande demais. Tente um menor.'; if(/mime|type/i.test(m)) return 'Tipo de arquivo não aceito.'; return 'Não deu certo agora. Confira a internet e tente de novo.'; };
 
 // ---------- imagens ----------
+// Fotos HEIC/HEIF (padrão de vários Samsung e iPhone) não abrem no navegador: convertemos para JPG
+let _heic=null;
+function carregarHeic(){ return _heic || (_heic=new Promise((res,rej)=>{ const sc=document.createElement('script'); sc.src='https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js'; sc.onload=()=>window.heic2any?res(window.heic2any):rej(new Error('heic')); sc.onerror=()=>{ _heic=null; rej(new Error('heic')); }; document.head.appendChild(sc); })); }
+const ehHeic=f=>/hei[cf]/i.test(f.type||'')||/\.(heic|heif)$/i.test(f.name||'');
+async function paraJpeg(file){ const h=await carregarHeic(); let out=await h({blob:file,toType:'image/jpeg',quality:.9}); if(Array.isArray(out)) out=out[0]; return new File([out], String(file.name||'foto').replace(/\.[^.]+$/,'')+'.jpg', {type:'image/jpeg'}); }
+async function abreNoNavegador(file){ try{ const b=await createImageBitmap(file); if(b.close) b.close(); return true; }catch(e){ return false; } }
+async function prepararImagem(file){
+  if(!file || !(file instanceof Blob)) return file;
+  if(ehHeic(file)) return await paraJpeg(file);
+  if(await abreNoNavegador(file)) return file;
+  try{ return await paraJpeg(file); }catch(e){ return file; }
+}
 async function encolher(file, max=1600, q=.82){
+  file = await prepararImagem(file).catch(()=>file);
   let bmp; try{ bmp=await createImageBitmap(file,{imageOrientation:'from-image'}); }catch(e){ bmp=await new Promise((res,rej)=>{ const i=new Image(); i.onload=()=>res(i); i.onerror=rej; i.src=URL.createObjectURL(file); }); }
   const k=Math.min(1, max/Math.max(bmp.width,bmp.height)); const cv=document.createElement('canvas'); cv.width=Math.round(bmp.width*k); cv.height=Math.round(bmp.height*k);
   cv.getContext('2d').drawImage(bmp,0,0,cv.width,cv.height); return await new Promise(r=>cv.toBlob(r,'image/jpeg',q));
@@ -600,7 +613,9 @@ function folhaFoto(){
    <label class="f" style="margin-top:12px">Legenda (opcional)<input class="in" id="pL" maxlength="80" placeholder="Ex.: A tia mais animada da pista!"></label>
    ${rodapeEnvio('Enviar fotos')}<p class="nota">Ao enviar, você declara que as pessoas que aparecem concordam (no caso de crianças, os pais ou responsáveis) e aceita os <a href="${BASE}?termos" target="_blank" rel="noopener">Termos de uso</a>.</p>`);
   let files=[];
-  $('pF').onchange=e=>{ files=[...e.target.files].filter(f=>/^image\//.test(f.type)).slice(0,20); $('pT').innerHTML=files.map(f=>`<img src="${URL.createObjectURL(f)}" alt="">`).join(''); msgE(files.length?`${files.length} foto(s) prontas para enviar.`:''); };
+  $('pF').onchange=async e=>{ const fs=[...e.target.files].filter(f=>/^image\//.test(f.type)||ehHeic(f)).slice(0,20); e.target.value=''; files=[]; $('pT').innerHTML=''; msgE(fs.length?'<span class="spin"></span> Preparando as fotos…':'');
+    for(const f of fs){ let f2=f; try{ f2=await prepararImagem(f); }catch(_){} files.push(f2); $('pT').insertAdjacentHTML('beforeend',`<img src="${URL.createObjectURL(f2)}" alt="">`); }
+    msgE(files.length?`${files.length} foto(s) prontas para enviar.`:''); };
   ligarRodape(async()=>{
     if(!files.length){ msgE('Escolha pelo menos uma foto.','err'); return; }
     const btn=$('eSend'); btn.disabled=true; const leg=$('pL').value.trim().slice(0,80)||null;
@@ -1030,7 +1045,8 @@ async function vMeuTema(){
   // 1 · visual
   const rVis=()=>{ $('kVis').querySelectorAll('.opt').forEach(b=>b.setAttribute('aria-pressed', String(b.dataset.v==='1')===String(K.visual))); $('kVisBox').style.display=K.visual?'flex':'none'; const el=$('mtPvF'); el.innerHTML = K.fundo ? `<img src="${src(K.fundo)}" alt="">` : 'sem imagem'; rDecl(); preview(); };
   $('kVis').onclick=e=>{ const b=e.target.closest('.opt'); if(!b) return; K.visual=b.dataset.v==='1'; rVis(); };
-  $('mtF').onchange=async e=>{ const file=e.target.files[0]; e.target.value=''; if(!file) return; if(file.size>12*1048576) return erro('Imagem acima de 12 MB. Escolha uma menor.');
+  $('mtF').onchange=async e=>{ let file=e.target.files[0]; e.target.value=''; if(!file) return; if(file.size>25*1048576) return erro('Imagem acima de 25 MB. Escolha uma menor.');
+    $('mtPvF').innerHTML='<span class="spin"></span>'; try{ file=await prepararImagem(file); }catch(_){} if(!(await abreNoNavegador(file))){ $('mtPvF').textContent='sem imagem'; return erro('Essa imagem não abriu. Escolha outra (JPG ou PNG).'); }
     K.fundo={file, url:URL.createObjectURL(file)}; try{ const p=await paletaDe(file); $('mtA').value=p.accent; $('mtB').value=p.accent2; $('mtC').value=p.bg; }catch(_){} rVis(); };
   $('mtFx').onclick=()=>{ K.fundo=null; rVis(); };
   ['mtA','mtB','mtC','mtFont'].forEach(id=>$(id).addEventListener('input',preview));
@@ -1041,9 +1057,12 @@ async function vMeuTema(){
       $(box).innerHTML = lista.map((x,i)=>`<div class="thumb${png?' png':''}"><img src="${src(x)}" alt=""><button class="x" type="button" data-i="${i}" aria-label="Tirar">✕</button>${!png?`<span class="n1">${i+1}</span>`:''}</div>`).join('')
         + (n<max ? `<label class="thumb add"><div><span>＋</span>${rotulo}</div><input type="file" accept="${png?'image/png,image/webp,image/*':'image/*'}" multiple></label>` : '');
       $(box).querySelectorAll('.x').forEach(b=>b.onclick=()=>{ lista.splice(+b.dataset.i,1); r(); });
-      const inp=$(box).querySelector('input'); if(inp) inp.onchange=e=>{ const fs=[...e.target.files]; e.target.value=''; let sobra=max-lista.length, grandes=0;
-        for(const file of fs){ if(sobra<=0) break; if(file.size>15*1048576){ grandes++; continue; } lista.push({file, url:URL.createObjectURL(file)}); sobra--; }
-        if(fs.length>max-n+grandes) toast(`Cabem no máximo ${max}.`); if(grandes) toast('Algumas imagens passam de 15 MB e ficaram de fora.'); r(); };
+      const inp=$(box).querySelector('input'); if(inp) inp.onchange=async e=>{ const fs=[...e.target.files]; e.target.value=''; let sobra=max-lista.length, grandes=0, ruins=0;
+        const add=$(box).querySelector('.thumb.add'); if(add) add.innerHTML='<div><span class="spin"></span><br>preparando…</div>';
+        for(const file of fs){ if(sobra<=0) break; if(file.size>25*1048576){ grandes++; continue; }
+          let f2=file; try{ f2=await prepararImagem(file); }catch(_){} if(!(await abreNoNavegador(f2))){ ruins++; continue; }
+          lista.push({file:f2, url:URL.createObjectURL(f2)}); sobra--; }
+        if(fs.length>max-n+grandes+ruins) toast(`Cabem no máximo ${max}.`); if(grandes) toast('Algumas imagens passam de 25 MB e ficaram de fora.'); if(ruins) toast(`${ruins} foto${ruins>1?'s não abriram':' não abriu'} (pode estar só na nuvem). Escolha outra.`,4500); r(); };
       cont(n); rDecl(); preview(); };
     r(); return r;
   }
@@ -1108,7 +1127,7 @@ async function vMeuTema(){
       M.className='msg err'; M.textContent=t; b.disabled=false; }
   };
 }
-async function encolherPng(file, max){ const bmp=await createImageBitmap(file); const k=Math.min(1,max/Math.max(bmp.width,bmp.height)); const cv=document.createElement('canvas'); cv.width=Math.round(bmp.width*k); cv.height=Math.round(bmp.height*k); cv.getContext('2d').drawImage(bmp,0,0,cv.width,cv.height); return await new Promise(r=>cv.toBlob(r,'image/png')); }
+async function encolherPng(file, max){ file=await prepararImagem(file).catch(()=>file); const bmp=await createImageBitmap(file); const k=Math.min(1,max/Math.max(bmp.width,bmp.height)); const cv=document.createElement('canvas'); cv.width=Math.round(bmp.width*k); cv.height=Math.round(bmp.height*k); cv.getContext('2d').drawImage(bmp,0,0,cv.width,cv.height); return await new Promise(r=>cv.toBlob(r,'image/png')); }
 function textoConvite(f, senha){
   return `${CATS[f.categoria]?.e||'🎉'} *${f.titulo}*\n\nDeixe sua homenagem para ${f.homenageado||'o homenageado'}: foto, recado, áudio ou vídeo! Vai aparecer no telão da festa 💛\n\n👉 ${linkFesta(f.slug)}`;
 }

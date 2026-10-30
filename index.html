@@ -312,9 +312,9 @@ h2.sec{font-weight:700;font-size:22px;margin:28px 0 12px;display:flex;align-item
 .hist figure:nth-child(odd){transform:rotate(-1.5deg)} .hist figure:nth-child(even){transform:rotate(1.5deg)}
 .hist img{height:190px;width:auto;max-width:72vw;display:block;object-fit:cover;border-radius:2px}
 .tv-bar .qr{position:relative;z-index:3}
-.demo{position:fixed;left:0;top:0;z-index:2;pointer-events:none;background:rgba(201,42,42,.82);color:#fff;font:900 clamp(24px,4vw,68px)/1.05 Fredoka,sans-serif;text-align:center;padding:1.4vh 2.4vw;border-radius:2vh;border:.4vh solid rgba(255,255,255,.85);box-shadow:0 1vh 3vh rgba(0,0,0,.3);letter-spacing:.04em;will-change:transform}
-.demo small{display:block;font-weight:700;font-size:.42em;letter-spacing:0;opacity:.95}
-.demo-faixa{position:fixed;left:0;right:0;top:0;z-index:10;background:#c92a2a;color:#fff;text-align:center;font:800 clamp(13px,1.8vw,30px)/1.25 Fredoka,sans-serif;padding:.9vh 2vw;box-shadow:0 .5vh 2vh rgba(0,0,0,.3)}
+.demo{position:fixed;left:0;top:0;z-index:2;pointer-events:none;background:rgba(20,16,24,.55);color:#fff;font:700 clamp(12px,1.25vw,20px)/1.2 Figtree,Fredoka,sans-serif;text-align:center;padding:.7vh 1.2vw;border-radius:99px;backdrop-filter:blur(4px);box-shadow:0 .6vh 2vh rgba(0,0,0,.18);will-change:transform;opacity:.85}
+.demo small{font-weight:500;opacity:.85}
+.demo-faixa{position:fixed;left:50%;transform:translateX(-50%);top:8px;z-index:10;width:max-content;max-width:calc(100% - 32px);background:color-mix(in srgb,var(--surface) 88%, transparent);color:var(--muted);border:1px solid var(--line);border-radius:99px;text-align:center;font:600 12.5px/1.3 Figtree,sans-serif;padding:5px 12px;backdrop-filter:blur(6px)}
 .planos{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:10px;padding-top:12px}
 .plano{position:relative;border:3px solid var(--line);border-radius:20px;padding:16px;background:var(--surface);color:var(--ink);display:flex;flex-direction:column;gap:8px}
 .plano.dest{border-color:var(--accent);box-shadow:0 8px 26px color-mix(in srgb,var(--accent) 22%, transparent)}
@@ -681,6 +681,31 @@ h2.sec .muted{font-family:var(--body)}
 .sl-correio .pa{font-family:var(--display);color:var(--accent);font-size:clamp(36px,6vw,96px);line-height:1;margin:1.5vh 0 3vh}
 .sl-correio .q{margin:0 auto}
 .tvreac{margin-left:.6em;font-size:.9em}
+
+#ajudaBtn{position:fixed;left:14px;bottom:14px;z-index:25;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:9px 14px;font:inherit;font-weight:700;font-size:14px;box-shadow:0 8px 24px -12px rgba(0,0,0,.35);cursor:pointer}
+#ajudaBtn.mini{padding:8px 11px}
+body.tem-ajuda{padding-bottom:64px}
+.aj-l details{border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:8px;background:var(--surface)}
+.aj-l summary{font-weight:700;cursor:pointer;list-style:none} .aj-l summary::-webkit-details-marker{display:none}
+.aj-l summary::before{content:'＋ ';color:var(--accent)} .aj-l details[open] summary::before{content:'－ '}
+.aj-l p{margin:8px 0 0;color:var(--ink);font-size:15px;line-height:1.5}
+.aj-l .aqui{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.05em;margin:12px 0 6px}
+.cod-rec{font:800 26px/1.2 ui-monospace,Menlo,monospace;letter-spacing:.08em;background:#fff;color:#111;border:2px dashed var(--accent);border-radius:14px;padding:12px;text-align:center;margin:10px 0}
+.tt-l{display:flex;flex-direction:column;gap:8px;text-align:left;margin:14px 0}
+.tt-l div{display:flex;gap:10px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 12px}
+.tt-l b{display:block} .tt-l small{color:var(--muted)} .tt-l .ic{font-size:22px;line-height:1;flex:none}
+
+.ev-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.ev-c{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.ev-c .h{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.ev-c .h b{font-size:16.5px}
+.ev-c p{margin:0;color:var(--muted);font-size:14px}
+.chip{font-size:12px;font-weight:700;border-radius:99px;padding:3px 10px;white-space:nowrap}
+.chip.on{background:#d3f9d8;color:#1b5e20} .chip.off{background:var(--bg);color:var(--muted);border:1px solid var(--line)}
+.ev-c .row{gap:6px}
+.ev-passos{counter-reset:p;list-style:none;padding:0;margin:8px 0 0;display:flex;flex-direction:column;gap:6px}
+.ev-passos li{counter-increment:p;display:flex;gap:10px;align-items:baseline}
+.ev-passos li::before{content:counter(p);font-weight:800;color:var(--on);background:var(--accent);border-radius:50%;width:24px;height:24px;display:inline-grid;place-items:center;font-size:13px;flex:none}
 </style>
 </head>
 <body>
@@ -739,7 +764,7 @@ const CATS = {
   outra:{n:'Outra festa', e:'🎉', tema:'confete'}
 };
 const TEMAS = {
-  executivo:{n:'Executivo',e:'💼',cats:['corporativo','formatura','outra'],bg:'#f4f6fa',bg2:'#e2e8f2',surface:'#ffffff',ink:'#16213a',muted:'#5d6b82',accent:'#1f4fd1',accent2:'#19b39a',on:'#ffffff',font:"'Fraunces'",pat:'brilho',pal:['#1f4fd1','#19b39a','#9db4e8'],deco:['💼','📊','✨'],paper:'#f8fafc'},
+  executivo:{n:'Executivo',e:'💼',cats:['corporativo','formatura','outra'],bg:'#f4f6fa',bg2:'#e2e8f2',surface:'#ffffff',ink:'#16213a',muted:'#5d6b82',accent:'#1f4fd1',accent2:'#19b39a',on:'#ffffff',font:"'Fraunces'",pat:'nenhum',pal:['#1f4fd1','#19b39a','#9db4e8'],deco:['💼','📊','✨'],paper:'#f8fafc'},
   baloes:{n:'Balões Coloridos',e:'🎈',cats:['infantil','aniversario','menino','menina'],bg:'#fff7e8',bg2:'#ffe3c2',surface:'#ffffff',ink:'#2b2d42',muted:'#6b6f86',accent:'#ff5a5f',accent2:'#2ec4b6',on:'#ffffff',font:"'Luckiest Guy'",pat:'baloes',pal:['#ff5a5f','#2ec4b6','#ffbe0b','#8338ec','#3a86ff'],deco:['🎈','🎉','🎁'],paper:'#fffaf0'},
   circo:{n:'Circo Mágico',e:'🎪',cats:['infantil','menino','menina'],bg:'#fff3e6',bg2:'#ffd6d6',surface:'#ffffff',ink:'#3d1d1d',muted:'#7a5555',accent:'#d62828',accent2:'#f4a261',on:'#ffffff',font:"'Luckiest Guy'",pat:'confete',pal:['#d62828','#f4a261','#2a9d8f','#e9c46a'],deco:['🎪','🤹','🍿'],paper:'#fff8ef'},
   espaco:{n:'Viagem ao Espaço',e:'🚀',cats:['menino','infantil','aniversario'],bg:'#0b1026',bg2:'#1f2560',surface:'#161c45',ink:'#eef2ff',muted:'#a8b2e0',accent:'#ffb703',accent2:'#4cc9f0',on:'#1b1300',font:"'Bungee'",pat:'estrelas',pal:['#ffffff','#ffe8a3','#a5e9ff'],deco:['🚀','🪐','⭐'],paper:'#f2f4ff',dark:1},
@@ -872,7 +897,7 @@ const fx = (()=>{
   }
   addEventListener('resize', ()=>{ if(t){ size(); draw(); } });
   return {
-    start(th){ t=th; cancelAnimationFrame(raf); size(); const n = th.pat==='estrelas' ? 46 : th.pat==='brilho' ? 20 : 14; parts=Array.from({length:n},(_,i)=>mk(i)); draw(); if(!reduce) raf=requestAnimationFrame(step); },
+    start(th){ t=th; cancelAnimationFrame(raf); size(); const n = th.pat==='nenhum' ? 0 : th.pat==='estrelas' ? 46 : th.pat==='brilho' ? 20 : 14; parts=Array.from({length:n},(_,i)=>mk(i)); draw(); if(!reduce) raf=requestAnimationFrame(step); },
     stop(){ cancelAnimationFrame(raf); c.clearRect(0,0,W,H); }
   };
 })();
@@ -948,14 +973,14 @@ async function telaConvidado(){
   const MESA = parseInt(store.get('mf_mesa_'+f.slug)||'0',10) || 0;
   const retrato = (t.fotos||[]).length ? t.fotos[t.fotos.length-1] : null;
   const quando = [f.data?`<b>${esc(dataBonita(f))}</b>${f.hora?`, às ${esc(f.hora)}`:''}`:'', f.local?esc(f.local):''].filter(Boolean).join('<br>');
-  $('app').innerHTML = `${f.plano==='teste'?'<div class="demo-faixa" style="position:sticky">Versão de teste do Mural da Festa</div>':''}
+  $('app').innerHTML = `${f.plano==='teste'?'<div class="demo-faixa">🎈 Modo grátis do Mural da Festa</div>':''}
   <div class="wrap convite">
     <header class="capa">
       ${t.enfeite?`<img class="enfc l" src="${midia(t.enfeites[0])}" alt="">${t.enfeites[1]?`<img class="enfc r" src="${midia(t.enfeites[1])}" alt="">`:''}`:''}
       ${retrato?`<div class="arco"><img src="${midia(retrato)}" alt="${esc(f.homenageado||'')}"></div>`:''}
       <p class="lead">${CATS[f.categoria]?.e||"🎉"} ${esc(subtitulo(f))}</p>
       <h1 class="who">${esc(f.homenageado||f.titulo)}</h1>
-      ${f.homenageado?`<p class="tit">${esc(f.titulo)}</p>`:''}
+      ${f.homenageado && f.homenageado.trim().toLowerCase()!==String(f.titulo||"").trim().toLowerCase()?`<p class="tit">${esc(f.titulo)}</p>`:''}
       ${quando?`<p class="quando">${quando}</p>`:''}
       ${f.mensagem?`<p class="msgf">${esc(f.mensagem)}</p>`:''}
       ${MESA&&f.mesas?`<span class="mesa-chip">🍽️ Mesa ${MESA}</span>`:''}
@@ -969,8 +994,8 @@ async function telaConvidado(){
     ${f.ativo && ((f.data && f.data > new Date().toLocaleDateString('sv')) || f.portaria) ? `<section class="card rsvp" id="rsvp"></section>` : ''}
     ${f.ativo ? `
     <section class="deixe">
-      <h2 class="sec" style="justify-content:center">💌 Deixe sua homenagem</h2>
-      <p class="sub">Ela passa no telão durante a festa e fica guardada no álbum de recordações.</p>
+      <h2 class="sec" style="justify-content:center">${CORP(f)?'💬 Deixe sua mensagem':'💌 Deixe sua homenagem'}</h2>
+      <p class="sub">${CORP(f)?'Foto, recado, áudio ou vídeo. Depois de aprovada, ela pode aparecer no telão do evento.':'Ela passa no telão durante a festa e fica guardada no álbum de recordações.'}</p>
       <div class="acts">
         <button class="act" data-k="foto"><span class="ic">${ICO.foto}</span>Foto<small>da festa ou de vocês</small></button>
         <button class="act" data-k="texto"><span class="ic">${ICO.texto}</span>Recado<small>umas palavras de carinho</small></button>
@@ -1473,13 +1498,13 @@ async function telaTelao(){
    <div class="tv">
      <div class="tv-top"><div class="t">${esc(nome)}</div><div class="n" id="tvN"></div></div>
      <div class="stage" id="stage"></div>
-     ${f.plano==='teste'?'<div class="demo" id="tvDemo">🧪 MODO TESTE<small>ative a festa para tirar este aviso</small></div>':''}
-     <div class="tv-bar"><div class="qr" id="tvQr"></div><div><b>Deixe sua homenagem!</b><span>Aponte a câmera do celular para o código · foto, recado, áudio ou vídeo</span></div></div>
+     ${f.plano==='teste'?'<div class="demo" id="tvDemo">🎈 Modo grátis <small>· faça o upgrade para mais diversão</small></div>':''}
+     <div class="tv-bar"><div class="qr" id="tvQr"></div><div><b>${CORP(f)?'Participe!':'Deixe sua homenagem!'}</b><span>${CORP(f)?'Aponte a câmera do celular para o código · mensagens, perguntas e mais':'Aponte a câmera do celular para o código · foto, recado, áudio ou vídeo'}</span></div></div>
    </div>
    <div class="tv-start" id="tvStart"><div>${t.enfeite?`<img class="enf-big" src="${midia(t.enfeite)}" alt="">`:`<div style="font-size:64px">${t.deco[0]}</div>`}<div class="who">${esc(nome)}</div><p class="muted" style="font-size:20px;font-weight:600">${esc(subtitulo(f))}</p>
-     <button class="btn" id="tvGo" style="font-size:22px;padding:16px 30px">▶ Iniciar telão</button><p class="muted" style="font-size:14px;margin-top:14px">Dica: conecte o notebook na TV. Teclas: → próxima · ← anterior · espaço pausa · F tela cheia${t.musica&&t.musica.tipo&&t.musica.tipo!=='nenhuma'?' · M música':''}</p></div></div>
+     <div class="row" style="justify-content:center"><button class="btn" id="tvGo" style="font-size:22px;padding:16px 30px">▶ Iniciar telão</button><button class="btn ghost" id="tvTeste">🧪 Testar o telão antes</button><button class="btn ghost" id="tvAj">❓ Ajuda</button></div><p class="muted" style="font-size:14px;margin-top:14px">Dica: conecte o notebook na TV. Teclas: → próxima · ← anterior · espaço pausa · F tela cheia${t.musica&&t.musica.tipo&&t.musica.tipo!=='nenhuma'?' · M música':''}</p></div></div>
    <div class="tv-hint" id="tvHint"></div>`;
-  if($('tvDemo')){ const d=$('tvDemo'); let x=innerWidth*.3, y=innerHeight*.3, vx=1.6, vy=1.2;
+  if($('tvDemo')){ const d=$('tvDemo'); let x=innerWidth*.3, y=innerHeight*.3, vx=.6, vy=.45;
     const passo=()=>{ const w=d.offsetWidth, h=d.offsetHeight, W=innerWidth, H=innerHeight; x+=vx; y+=vy; if(x<0){x=0;vx=Math.abs(vx);} if(x>W-w){x=W-w;vx=-Math.abs(vx);} if(y<0){y=0;vy=Math.abs(vy);} if(y>H-h){y=H-h;vy=-Math.abs(vy);} d.style.transform=`translate(${x}px,${y}px) rotate(-6deg)`; requestAnimationFrame(passo); }; requestAnimationFrame(passo); }
   qrInto($('tvQr'), url, 300);
   const medir=()=>{ const h=$('stage')?$('stage').clientHeight:0; if(h) document.documentElement.style.setProperty('--sh', h+'px'); const bb=document.querySelector('.tv-bar'); if(bb) document.documentElement.style.setProperty('--bh', bb.offsetHeight+'px'); }; medir(); addEventListener('resize', medir); setTimeout(medir,500);
@@ -1563,25 +1588,27 @@ async function telaTelao(){
     let dur=8000;
     if(p.tipo==='hist'){ el.classList.add('sl-hist'); el.innerHTML=`<div class="pol" style="--r:${giro()}"><img src="${midia(p.caminho)}" alt=""></div><div class="cap">📖 A história de ${esc(nome)}</div>`; dur=6500; }
     else if(p.tipo==='col'){ el.classList.add('sl-col'); el.innerHTML=p.fotos.map((c,i)=>`<div class="pol c${i+1}" style="--r:${[-9,4,10][i]}deg;animation-delay:${i*.45}s"><img src="${midia(c)}" alt=""></div>`).join('')+`<div class="cap">📖 A história de ${esc(nome)}</div>`; dur=8500; }
-    else if(p.tipo==='intro'){ el.className='sl sl-intro e-zoom'; el.innerHTML=`<div class="hey">✨ Bem-vindos à festa ✨</div><div class="nm">${[...nome].map((ch,i)=>`<span style="animation-delay:${(i*.08).toFixed(2)}s">${ch===' '?'&nbsp;':esc(ch)}</span>`).join('')}</div><div class="sub">${esc(subtitulo(f))}</div><div class="cta">📸 ✍️ 🎤 🎥 Mande sua homenagem pelo QR Code aqui embaixo!</div>`; dur=7500; confete(60); chars.festa(); }
+    else if(p.tipo==='intro'){ el.className='sl sl-intro e-zoom'; el.innerHTML=`<div class="hey">${CORP(f)?'Bem-vindos':'✨ Bem-vindos à festa ✨'}</div><div class="nm">${(()=>{ let i=0; return nome.split(' ').map(w=>`<span class="w" style="display:inline-block;white-space:nowrap">${[...w].map(ch=>`<span style="animation-delay:${(i++*.08).toFixed(2)}s">${esc(ch)}</span>`).join('')}</span>`).join(' '); })()}</div><div class="sub">${esc(subtitulo(f))}</div><div class="cta">${CORP(f)?'📲 Participe pelo QR Code aqui embaixo':'📸 ✍️ 🎤 🎥 Mande sua homenagem pelo QR Code aqui embaixo!'}</div>`; dur=7500; if(!CORP(f)){ confete(60); chars.festa(); } }
     else if(p.tipo==='qr'){ el.className='sl tv-empty e-zoom'; el.innerHTML=`<div class="qr" id="tvQrBig"></div><h2>${tv.list.length?'Deixe a sua homenagem também!':'Mande a primeira homenagem!'}</h2><p>Aponte a câmera do celular para o código</p>`; dur=7000; }
     else if(p.tipo==='foto'){ el.classList.add('sl-foto'); el.innerHTML=`<img class="ph" style="--r:${giro()}" src="${midia(p.caminho)}" alt="">${(p.texto||by||p.curtidas)?`<div class="cap">${esc(p.texto||'')}${p.curtidas?`<span class="tvlike">♥ ${p.curtidas}</span>`:''}${Object.entries(p.reacoes||{}).map(([e,n])=>`<span class="tvreac">${e} ${n}</span>`).join('')}${by?`<small>📸 ${by}</small>`:''}</div>`:''}`; dur=8000; }
     else if(p.tipo==='correio'){ el.classList.add('sl-texto','sl-correio'); const L=(p.texto||'').length; const fs=L<60?6:L<140?4.6:3.6; el.innerHTML=`<div><div class="env">💌 Correio elegante</div><div class="pa">Para: ${esc(p.para)}</div><div class="q${t.fundo?' card-on':''}" style="font-size:${fs}vw">${esc(p.texto)}</div><div class="by">${p.de?'— '+esc(p.de):'🤫 De: alguém especial'}</div></div>`; dur=Math.min(16000, 8000+L*40); }
     else if(p.tipo==='texto'){ el.classList.add('sl-texto'); const L=(p.texto||'').length; const fs = L<40?9:L<90?7:L<180?5.4:L<320?4.2:3.4; el.innerHTML=`<div class="q${t.fundo?' card-on':''}" style="font-size:${fs}vw">${esc(p.texto)}</div>${by||p.curtidas?`<div class="by">${by?'— '+by:''}${p.curtidas?`<span class="tvlike">♥ ${p.curtidas}</span>`:''}</div>`:''}`; dur=Math.min(18000, 7000+L*45); }
     else if(p.tipo==='audio'){ el.classList.add('sl-audio'); el.innerHTML=`<div class="mic">🎤</div><div class="eq">${'<i></i>'.repeat(12)}</div><div class="cap">Recado de ${by||'um convidado'}</div><audio src="${(cacheM.get(p.id)||{}).url||midia(p.caminho)}" preload="auto"></audio>`; dur=null; }
     else if(p.tipo==='video'){ el.classList.add('sl-video'); el.innerHTML=`<video src="${(cacheM.get(p.id)||{}).url||midia(p.caminho)}" playsinline preload="auto" ${p.thumb?`poster="${midia(p.thumb)}"`:''}></video>${by?`<div class="cap"><small>🎥 Recado de ${by}</small></div>`:''}`; dur=null; }
-    if(p._novo){ el.insertAdjacentHTML('afterbegin','<div class="novo">✨ Nova homenagem! ✨</div>'); confete(); chars.festa(); }
+    if(p._novo){ el.insertAdjacentHTML('afterbegin',`<div class="novo">${CORP(f)?'✨ Nova mensagem':'✨ Nova homenagem! ✨'}</div>`); if(!CORP(f)){ confete(); chars.festa(); } }
     st.appendChild(el); tv.cur=p;
     if(p.tipo==='qr') qrInto($('tvQrBig'), url, 600);
     const m=el.querySelector('audio,video'); if(mus) mus.duck(!!m);
     if(m){ m.onended=()=>proxima(); m.onerror=()=>{ tv.timer=setTimeout(proxima,1500); }; m.play().catch(()=>{ tv.timer=setTimeout(proxima,3000); }); tv.timer=setTimeout(proxima, ((p.duracao||60)+6)*1000); }
     else tv.timer=setTimeout(proxima, dur);
   }
+  $('tvTeste').onclick=()=>testarTelao(f, url); $('tvAj').onclick=abrirAjuda;
+  if(Q.has('teste')) setTimeout(()=>testarTelao(f, url), 400);
   $('tvGo').onclick=async()=>{
     $('tvStart').hidden=true; tv.started=true; if(mus) mus.start();
     try{ await document.documentElement.requestFullscreen(); }catch(e){}
     try{ if(navigator.wakeLock) await navigator.wakeLock.request('screen'); }catch(e){}
-    await puxar(); baixador(); chars.start(); mostrar(extra('intro'));
+    await puxar(); baixador(); if(!CORP(f)) chars.start(); mostrar(extra('intro'));
   };
   document.addEventListener('keydown', e=>{
     if(!tv.started) return;
@@ -1867,6 +1894,7 @@ function painelPedidos(pin){
 // ANFITRIÃO
 // =====================================================================
 let PIN=null, ADM={posts:[], aba:'pendente'};
+const CORP = f => !!f && f.categoria==='corporativo';
 // ---------- planos e pagamento (Mercado Pago) ----------
 const FN_PAG = `${SUPABASE_URL}/functions/v1/mural-pagamento`;
 const ICONE_PLANO = {festinha:'🏠', festa:'🎉', grande:'🎓', completo:'⭐', teste:'🧪'};
@@ -1879,7 +1907,7 @@ function htmlPlanos(lista, {atual, botao, destaque='festa', gratis}={}){
   const precoAtual = (lista.find(p=>p.id===(atual==='completo'?'festa':atual))||{}).preco || 0;
   const cardGratis = gratis ? `<div class="plano gratis"><span class="tag">comece por aqui</span><div class="e">🧪</div><h4>Teste grátis</h4><p class="d">Para mexer à vontade antes de decidir</p>
       <div class="p">R$ 0 <small>sem cartão</small></div>
-      <ul><li>até <b>10</b> homenagens</li><li>áudio e vídeo de até <b>30 s</b></li><li><b>todos os recursos</b> para testar</li><li>aviso “teste” no telão e no álbum</li><li>vira plano pago na hora, <b>sem perder nada</b></li></ul>
+      <ul><li>até <b>10</b> homenagens</li><li>áudio e vídeo de até <b>30 s</b></li><li><b>todos os recursos</b> para testar</li><li>selo discreto “modo grátis” no telão</li><li>vira plano pago na hora, <b>sem perder nada</b></li></ul>
       <a class="btn ghost" href="${gratis[1]}">${gratis[0]}</a></div>` : '';
   return `<div class="planos">${cardGratis}${lista.map(p=>{ const dif=Math.max(0,p.preco-precoAtual), pode=p.preco>precoAtual;
     return `<div class="plano${p.id===destaque?' dest':''}">${p.id===destaque?`<span class="tag">${destaque==='festa'?'mais escolhido':'indicado para você'}</span>`:''}<div class="e">${ICONE_PLANO[p.id]||'🎈'}</div><h4>${esc(p.nome)}</h4><p class="d">${esc(p.descricao||'')}</p>
@@ -1935,33 +1963,72 @@ async function telaAdmin(){
   if(salvo && await rpc('fe_admin_login',{p_slug:SLUG,p_pin:salvo}).catch(()=>false)){ PIN=salvo; return painelAdmin(); }
   telaLogin(`Área do anfitrião`, `${esc(FESTA.homenageado||FESTA.titulo)}`, async pin=>{
     const ok=await rpc('fe_admin_login',{p_slug:SLUG,p_pin:pin}); if(!ok) return false; PIN=pin; store.set('mf_pin_'+SLUG,pin); painelAdmin(); return true;
-  });
+  }, esqueciSenha);
 }
-function telaLogin(titulo, sub, entrar){
+async function testarTelao(f, url){
+  abrirFolha(`<h3>🧪 Teste do telão</h3><p class="muted" style="margin-top:0">Faça no mesmo notebook e na mesma internet que vai usar na festa, de preferência no próprio salão.</p><div class="tt-l" id="ttL"><div><span class="ic"><span class="spin"></span></span><span>Testando…</span></div></div><div id="ttX"></div><div class="foot"><button class="btn ghost" id="eCancel">Fechar</button><button class="btn" id="ttGo">▶ Iniciar o telão</button></div>`);
+  $('eCancel').onclick=fecharFolha; $('ttGo').onclick=()=>{ fecharFolha(); const b=$('tvGo'); if(b) b.click(); };
+  const R=[]; const add=(ok,t,d)=>{ R.push({ok,t,d}); $('ttL').innerHTML=R.map(r=>`<div><span class="ic">${r.ok===true?'✅':r.ok===false?'⚠️':'ℹ️'}</span><span><b>${r.t}</b><small>${r.d||''}</small></span></div>`).join(''); };
+  const ua=navigator.userAgent; const chrome=/Chrome|CriOS|Edg/.test(ua) && !/OPR|SamsungBrowser/.test(ua);
+  add(chrome,'Navegador', chrome?'Chrome ou Edge: ótimo.':'Use o Google Chrome: ele toca áudio e vídeo com menos travamentos.');
+  try{ const t0=performance.now(); for(let i=0;i<3;i++) await rpc('fe_tv_estado',{p_festa:f.id}); const ms=Math.round((performance.now()-t0)/3); add(ms<600, `Conexão com o servidor: ${ms} ms`, ms<600?'Resposta rápida.':'Resposta lenta. Prefira cabo de rede ou fique perto do roteador.'); }
+  catch(e){ add(false,'Conexão com o servidor','Não consegui falar com o servidor. Confira a internet antes de começar.'); }
+  try{ const t0=performance.now(); const r=await fetch(BASE+'index.html?teste='+Date.now(),{cache:'no-store'}); const b=await r.blob(); const s=(performance.now()-t0)/1000; const mbps=b.size*8/s/1e6;
+    add(mbps>=5, `Velocidade: ${mbps.toFixed(1)} Mbps`, mbps>=5?'Boa para vídeos no telão.':mbps>=2?'Dá para usar, mas abra o telão 30 minutos antes para baixar os vídeos com calma.':'Fraca. Use o celular como roteador (4G/5G) ou um cabo de rede.'); }catch(e){ add(false,'Velocidade','Não consegui medir. Confira a internet.'); }
+  add(window.screen.width>=1280, `Tela: ${window.screen.width} × ${window.screen.height}`, window.screen.width>=1280?'Resolução boa. Na festa, aperte F para tela cheia.':'Tela pequena. Ligue o notebook na TV pelo cabo HDMI e escolha “duplicar” ou “só a TV”.');
+  try{ if(navigator.getBattery){ const bt=await navigator.getBattery(); add(bt.charging, bt.charging?'Notebook na tomada':'Notebook na bateria', bt.charging?'Ótimo: o telão vai ficar ligado a festa toda.':`Bateria em ${Math.round(bt.level*100)}%. Ligue na tomada antes da festa.`); } }catch(e){}
+  add(!!navigator.wakeLock, 'Tela sempre acesa', navigator.wakeLock?'O telão impede o notebook de apagar a tela.':'Este navegador não segura a tela acesa: desative a proteção de tela e o modo de suspensão do notebook.');
+  $('ttX').innerHTML=`<div class="tt-l"><div><span class="ic">🔊</span><span><b>Som</b><small>Toque o som de teste e confira se saiu na TV ou na caixa de som.</small><span class="row" style="margin-top:6px"><button class="btn sm" id="ttSom">▶ Tocar som</button><button class="btn ok sm" id="ttSim">Ouvi ✓</button><button class="btn ghost sm" id="ttNao">Não ouvi</button></span></span></div>
+    <div><span class="ic">📲</span><span><b>Celular dos convidados</b><small>Aponte a câmera do seu celular para este QR. Se abrir a página da festa, está tudo certo.</small><span style="display:block;width:150px;margin-top:6px;background:#fff;padding:8px;border-radius:10px" id="ttQr"></span></span></div></div>`;
+  qrInto($('ttQr'), url, 200);
+  $('ttSom').onclick=()=>{ try{ const ac=new (window.AudioContext||window.webkitAudioContext)(); [523,659,784].forEach((fq,i)=>{ const o=ac.createOscillator(), g=ac.createGain(); o.frequency.value=fq; const t=ac.currentTime+i*.28; g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(.4,t+.03); g.gain.exponentialRampToValueAtTime(.0001,t+.25); o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t+.3); }); }catch(e){} };
+  $('ttSim').onclick=()=>{ $('ttSim').closest('div').querySelector('.ic').textContent='✅'; toast('Som ok 🎶'); };
+  $('ttNao').onclick=()=>{ $('ttNao').closest('div').querySelector('.ic').textContent='⚠️'; $('ttNao').closest('span').insertAdjacentHTML('afterend','<small style="display:block;margin-top:6px">Confira: volume do notebook e da TV; no Windows, clique no ícone de som e escolha a TV (HDMI) como saída; se usar caixa de som, ligue o cabo na saída de fone.</small>'); };
+}
+function esqueciSenha(){
+  abrirFolha(`<h3>🔑 Criar uma senha nova</h3><p class="muted" style="margin-top:0">Use o <b>código de recuperação</b> que apareceu quando a festa foi criada (ele também está na mensagem que você copiou para o seu WhatsApp).</p>
+    <label class="f">Código de recuperação<input class="in" id="rcC" maxlength="20" autocapitalize="characters" autocomplete="off" placeholder="XXXX-XXXX-XXXX" style="font-family:ui-monospace,monospace;letter-spacing:.06em"></label>
+    <label class="f" style="margin-top:10px">Senha nova<input class="in" id="rcN" type="password" autocomplete="new-password"></label>
+    <label class="f" style="margin-top:10px">Repita a senha nova<input class="in" id="rcR" type="password" autocomplete="new-password"></label>
+    <div class="msg" id="eMsg"></div><p class="muted" style="font-size:13px;margin:8px 0 0">Não tem o código? Toque em <b>❓ Ajuda</b> → <b>Fale com a gente</b>, categoria “Senha e acesso”.</p>
+    <div class="foot"><button class="btn ghost" id="eCancel">Cancelar</button><button class="btn" id="eSend">Criar senha nova</button></div>`);
+  $('eCancel').onclick=fecharFolha;
+  $('eSend').onclick=async()=>{ const c=$('rcC').value.trim(), n=$('rcN').value.trim(); if(c.replace(/[^A-Za-z0-9]/g,'').length<12){ msgE('Digite o código completo (12 letras e números).','err'); return; } if(n.length<4){ msgE('A senha nova precisa de 4 caracteres ou mais.','err'); return; } if(n!==$('rcR').value.trim()){ msgE('As duas senhas não estão iguais.','err'); return; }
+    $('eSend').disabled=true;
+    try{ const r=await rpc('fe_recuperar_senha',{p_slug:SLUG,p_codigo:c,p_nova:n}); if(!r.ok){ msgE(r.erro||'Código incorreto.','err'); $('eSend').disabled=false; return; }
+      PIN=n; store.set('mf_pin_'+SLUG,n);
+      abrirFolha(`<h3>✅ Senha nova criada!</h3><p style="margin-top:0">O código antigo deixou de valer. Este é o seu <b>novo código de recuperação</b>; guarde-o:</p><div class="cod-rec">${esc(r.codigo_novo)}</div>
+        <div class="foot"><button class="btn ghost" id="rcCp">📋 Copiar código</button><button class="btn" id="rcOk">Entrar na festa</button></div>`);
+      $('rcCp').onclick=()=>copiar(`Código de recuperação do Mural da Festa (${FESTA.homenageado||FESTA.titulo}): ${r.codigo_novo}`,'Código copiado! Guarde no seu WhatsApp.');
+      $('rcOk').onclick=()=>{ fecharFolha(); painelAdmin(); }; }
+    catch(e){ msgE(/tentativas|código|Código|senha/.test(e.message||'')?e.message:ERR(e),'err'); $('eSend').disabled=false; } };
+}
+function telaLogin(titulo, sub, entrar, esqueci){
   $('app').innerHTML=`<div class="wrap" style="max-width:440px;padding-top:12vh"><form class="card" id="lg" style="padding:24px" autocomplete="off">
     <div style="font-size:48px">🔐</div><h1 style="margin:6px 0 2px;font-size:26px">${titulo}</h1><p class="muted" style="margin:0 0 16px">${sub}</p>
     <label class="f">Senha<input class="in" id="lgP" type="password" autocomplete="current-password" autocapitalize="off" autocorrect="off" spellcheck="false" required></label>
-    <div class="msg" id="lgM"></div><button class="btn" style="width:100%;margin-top:8px">Entrar</button></form></div>`;
-  setTimeout(()=>$('lgP').focus(),50);
+    <div class="msg" id="lgM"></div><button class="btn" style="width:100%;margin-top:8px">Entrar</button>${esqueci?'<p style="text-align:center;margin:14px 0 0"><button type="button" class="molbtn" id="lgEsq">Esqueci a senha</button></p>':''}</form></div>`;
+  setTimeout(()=>$('lgP').focus(),50); if(esqueci) $('lgEsq').onclick=esqueci;
   $('lg').onsubmit=async e=>{ e.preventDefault(); const p=$('lgP').value.trim(); if(!p) return; $('lgM').className='msg'; $('lgM').innerHTML='<span class="spin"></span>';
     try{ const ok=await entrar(p); if(ok===false){ $('lgM').className='msg err'; $('lgM').textContent='Senha incorreta.'; } }catch(err){ $('lgM').className='msg err'; $('lgM').textContent=ERR(err); } };
 }
 function painelAdmin(){
   const f=FESTA;
   $('app').innerHTML=`<div class="wrap">
-   <div class="top"><h1>Anfitrião · <em>${esc(f.homenageado||f.titulo)}</em></h1><div class="row"><a class="btn ghost sm" href="${linkFesta(f.slug)}" target="_blank" rel="noopener">👀 Ver como convidado</a><a class="btn sm" href="${linkFesta(f.slug,'telao')}" target="_blank" rel="noopener">📺 Abrir telão</a><button class="btn ghost sm" id="sair">Sair</button></div></div>
-   ${f.plano==='teste'?`<div class="teste-bar"><div><b>🧪 Festa em modo teste</b><br><span style="font-size:14px">Funciona de verdade, com até 10 homenagens e o aviso “teste” no telão e no álbum. Escolha um plano para liberar tudo.</span></div><div class="row"><button class="btn sm" id="btPlano">💳 Escolher plano e liberar</button><button class="btn ghost sm" id="btAtivar">🔓 Tenho um código</button></div></div>`
+   <div class="top"><h1>${CORP(f)?'Organizador':'Anfitrião'} · <em>${esc(f.homenageado||f.titulo)}</em></h1><div class="row"><a class="btn ghost sm" href="${linkFesta(f.slug)}" target="_blank" rel="noopener">👀 Ver como convidado</a><a class="btn ghost sm" href="${linkFesta(f.slug,'telao')}&teste" target="_blank" rel="noopener">🧪 Testar telão</a><a class="btn sm" href="${linkFesta(f.slug,'telao')}" target="_blank" rel="noopener">📺 Abrir telão</a><button class="btn ghost sm" id="sair">Sair</button></div></div>
+   ${f.plano==='teste'?`<div class="teste-bar"><div><b>🎈 Modo grátis</b><br><span style="font-size:14px">Faça o upgrade para mais diversão: mais homenagens, áudios e vídeos maiores, todos os arquivos e sem o selo no telão.</span></div><div class="row"><button class="btn sm" id="btPlano">⬆️ Fazer upgrade</button><button class="btn ghost sm" id="btAtivar">🔓 Tenho um código</button></div></div>`
      :`<div class="plano-bar"><div><b>${ICONE_PLANO[f.plano]||'⭐'} Plano ${esc(NOME_PLANO[f.plano]||f.plano)}</b> · até ${f.max_posts} homenagens · áudio e vídeo de até ${segTxt(f.max_seg)}${f.expira_em?` · no ar até ${new Date(f.expira_em+'T12:00:00').toLocaleDateString('pt-BR')}`:''}</div>${f.plano!=='grande'?'<button class="btn ghost sm" id="btPlano">⬆️ Mudar de plano</button>':''}</div>`}
-   ${store.get('mf_novo_'+f.slug)?`<div class="card passos" id="passos"><div class="row" style="justify-content:space-between"><b style="font-size:18px">🎉 Sua festa está criada! Próximos passos:</b><button class="btn ghost sm" id="psOk">Entendi</button></div><ol>
+   ${store.get('mf_novo_'+f.slug)&&!CORP(f)?`<div class="card passos" id="passos"><div class="row" style="justify-content:space-between"><b style="font-size:18px">🎉 Sua festa está criada! Próximos passos:</b><button class="btn ghost sm" id="psOk">Entendi</button></div><ol>
      <li><button class="link" data-ir="meutema">Faça o seu tema</button>: imagem de fundo, personagens, 8 a 12 fotos do homenageado e a música do telão.</li>
      <li><button class="link" data-ir="compartilhar">Mande o convite com QR Code</button> no grupo da família e imprima os cartões de mesa.</li>
      <li>No dia, abra o <b>📺 telão</b> no notebook ligado na TV. Na aba <b>💌 Homenagens</b> você aprova o que aparece.</li>
      <li>Depois da festa, baixe o álbum em <button class="link" data-ir="recordacoes">📖 Recordações</button>.</li></ol></div>`:''}
-   ${!f.custom?`<div class="card seucta" id="seuCta"><div><h2>🎨 Faça o seu tema</h2><p>Imagem de fundo, personagens, 8 a 12 fotos de ${esc(f.homenageado||'quem a gente ama')} e música no telão. Leva 5 minutos.</p></div><button class="btn" id="seuGo" style="font-size:18px;padding:14px 24px">Começar agora →</button></div>`:''}
+   ${!f.custom&&!CORP(f)?`<div class="card seucta" id="seuCta"><div><h2>🎨 Faça o seu tema</h2><p>Imagem de fundo, personagens, 8 a 12 fotos de ${esc(f.homenageado||'quem a gente ama')} e música no telão. Leva 5 minutos.</p></div><button class="btn" id="seuGo" style="font-size:18px;padding:14px 24px">Começar agora →</button></div>`:''}
    <div class="tabs" id="abasTop">
-     <button data-v="meutema" aria-pressed="false">🎨 Faça o seu tema</button>
-     <button data-v="moderar" aria-pressed="false">💌 Homenagens <span class="n" id="nPend" hidden></span></button>
-     <button data-v="festa" aria-pressed="false">📝 Dados da festa</button>
+     ${CORP(f)?'<button data-v="evento" aria-pressed="false">🧭 Painel do evento</button>':''}
+     <button data-v="meutema" aria-pressed="false">${CORP(f)?'🎨 Visual do evento':'🎨 Faça o seu tema'}</button>
+     <button data-v="moderar" aria-pressed="false">${CORP(f)?'💬 Mensagens':'💌 Homenagens'} <span class="n" id="nPend" hidden></span></button>
+     <button data-v="festa" aria-pressed="false">${CORP(f)?'📝 Dados do evento':'📝 Dados da festa'}</button>
      <button data-v="compartilhar" aria-pressed="false">📲 Convite e links</button>
      <button data-v="cardapio" aria-pressed="false">🍽️ Cardápio e pedidos</button>
      <button data-v="apresentacao" aria-pressed="false">🎤 Apresentação</button>
@@ -1973,7 +2040,7 @@ function painelAdmin(){
    <div id="vw"></div></div>`;
   $('sair').onclick=()=>{ store.sset('mf_pin_'+SLUG,null); store.set('mf_pin_'+SLUG,null); location.reload(); };
   const abas=$('abasTop');
-  abas.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; abas.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed', x===b)); if(b.dataset.v==='meutema' && $('seuCta')) $('seuCta').remove(); ({moderar:vModerar, festa:vFesta, meutema:vMeuTema, compartilhar:vCompartilhar, recordacoes:vRecordacoes, cardapio:vCardapio, apresentacao:vApresentacao, sorteio:vSorteio, quiz:vQuiz, interacoes:vInteracoes})[b.dataset.v](); };
+  abas.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; abas.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed', x===b)); if(b.dataset.v==='meutema' && $('seuCta')) $('seuCta').remove(); ({moderar:vModerar, festa:vFesta, meutema:vMeuTema, compartilhar:vCompartilhar, recordacoes:vRecordacoes, cardapio:vCardapio, apresentacao:vApresentacao, sorteio:vSorteio, quiz:vQuiz, interacoes:vInteracoes, evento:vEvento})[b.dataset.v](); };
   const ir=v=>{ const b=abas.querySelector(`[data-v="${v}"]`); if(b) b.click(); };
   document.querySelectorAll('[data-ir]').forEach(b=>b.onclick=()=>ir(b.dataset.ir));
   if($('psOk')) $('psOk').onclick=()=>{ store.set('mf_novo_'+f.slug,null); $('passos').remove(); };
@@ -1983,8 +2050,8 @@ function painelAdmin(){
   if(pidQ && /^[0-9a-f-]{36}$/.test(pidQ)) setTimeout(()=>conferirPagamento(pidQ),300);
   else if(pidS && /^[0-9a-f-]{36}$/.test(pidS) && f.plano==='teste') fetch(FN_PAG,{method:'POST',headers:{'Content-Type':'application/json',apikey:SUPABASE_KEY},body:JSON.stringify({acao:'conferir',pagamento:pidS})}).then(r=>r.json()).then(async j=>{ if(j.status==='approved'){ FESTA=await carregarFesta(SLUG); store.set('mf_pag_'+f.slug,null); toast('Pagamento confirmado! Festa liberada 🎉',4000); painelAdmin(); } }).catch(()=>{});
   if($('seuGo')) $('seuGo').onclick=()=>{ ir('meutema'); $('vw').scrollIntoView({behavior:'smooth'}); };
-  const abaIni = Q.get('aba') || (!f.custom ? 'meutema' : 'moderar');
-  ir(['meutema','moderar','festa','compartilhar','recordacoes','cardapio','apresentacao','sorteio','quiz','interacoes'].includes(abaIni) ? abaIni : 'moderar'); if(ADM.view!=='moderar') carregarAdmPosts();
+  const abaIni = Q.get('aba') || (CORP(f) ? 'evento' : !f.custom ? 'meutema' : 'moderar');
+  ir(['meutema','moderar','festa','compartilhar','recordacoes','cardapio','apresentacao','sorteio','quiz','interacoes','evento'].includes(abaIni) ? abaIni : 'moderar'); if(ADM.view!=='moderar') carregarAdmPosts();
   setInterval(()=>{ if(!document.hidden && ADM.view==='moderar') carregarAdmPosts(); }, 12000);
 }
 function ativarFesta(){
@@ -2064,7 +2131,7 @@ function formFesta(f, {mestre, auto}={}){
      <label class="f">Crie a senha do anfitrião<input class="in" id="ffSenha" maxlength="20" type="password" autocomplete="new-password" placeholder="4 letras ou números, ou mais"></label>
      <label class="f">Repita a senha<input class="in" id="ffSenha2" maxlength="20" type="password" autocomplete="new-password"></label>
      <label class="f">Código de ativação <span class="muted" style="font-weight:500">(se já comprou)</span><input class="in" id="ffCod" maxlength="24" placeholder="FESTA-XXXX-XXXX" style="text-transform:uppercase" autocomplete="off"></label></div>
-     <p class="muted" style="font-size:14px;margin:10px 0 0">Sem código, a festa começa em <b>modo teste</b>: funciona de verdade, com até 10 homenagens e a marca “teste”. Você ativa depois, na sua área.</p>
+     <p class="muted" style="font-size:14px;margin:10px 0 0">Sem código, a festa começa no <b>modo grátis</b>: funciona de verdade, com até 10 homenagens e um selo discreto no telão. Você ativa depois, na sua área.</p>
      <label class="row" style="margin-top:12px;font-weight:600;gap:8px;align-items:flex-start"><input type="checkbox" id="ffAceite" style="width:22px;height:22px;flex:none"> Li e aceito os <a href="${BASE}?termos" target="_blank" rel="noopener">Termos de uso e Privacidade</a></label></div>`
    :`<div class="card" style="padding:18px;margin-top:12px"><h3 style="margin:0 0 10px">Senha do anfitrião</h3><label class="f">Nova senha (deixe vazio para manter)<input class="in" id="ffSenha" maxlength="20" type="password" autocomplete="new-password"></label></div>`}`;
 }
@@ -2098,6 +2165,9 @@ function vFesta(){
   const ler=ligarFormFesta(f, k=>aplicarTema(FESTA.custom ? temaDe(FESTA) : k), ()=>document.querySelector('#abasTop [data-v="meutema"]').click(), !!(FESTA.custom && FESTA.custom.visual!==false));
   $('vw').insertAdjacentHTML('afterbegin', `<div class="aviso" style="margin-bottom:12px;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:color-mix(in srgb,var(--accent) 12%, var(--surface));color:var(--ink)"><span>🎨 Quer usar <b>sua imagem de fundo, personagens, fotos do homenageado e música</b>?</span><button class="btn sm" id="irKit">Faça o seu tema</button></div>`);
   $('irKit').onclick=()=>document.querySelector('#abasTop [data-v="meutema"]').click();
+  $('vw').insertAdjacentHTML('beforeend', `<div class="card" style="padding:18px;margin-top:14px" id="recBox"><h3 style="margin:0 0 4px">🔑 Código de recuperação</h3><p class="muted" style="margin:0 0 10px">Serve para criar uma senha nova se você esquecer a atual, sem precisar falar com ninguém. <span id="recSt"></span></p><button class="btn ghost sm" id="recGerar">Gerar novo código</button><div id="recOut"></div></div>`);
+  rpc('fe_admin_tem_recuperacao',{p_slug:SLUG,p_pin:PIN}).then(t=>{ $('recSt').textContent=t?'✅ Esta festa já tem um código (gerar outro invalida o anterior).':'⚠️ Esta festa ainda não tem código: gere agora e guarde.'; }).catch(()=>{});
+  $('recGerar').onclick=async()=>{ try{ const c=await rpc('fe_admin_recuperacao_gerar',{p_slug:SLUG,p_pin:PIN}); $('recOut').innerHTML=`<div class="cod-rec">${esc(c)}</div><button class="btn sm" id="recCp">📋 Copiar e guardar no WhatsApp</button>`; $('recSt').textContent='✅ Código novo gerado. O anterior não vale mais.'; $('recCp').onclick=()=>copiar(`Código de recuperação do Mural da Festa (${FESTA.homenageado||FESTA.titulo}): ${c}\nÁrea do anfitrião: ${linkFesta(SLUG,'admin')}`,'Copiado! Cole no seu WhatsApp.'); }catch(e){ toast(ERR(e)); } };
   if(FESTA.custom && FESTA.custom.visual!==false) $('ffTemas').insertAdjacentHTML('beforebegin','<p class="aviso" style="margin:10px 0 0">Você está usando o seu próprio tema (aba 🎨 Faça o seu tema). Um tema pronto escolhido aqui só aparece se lá você escolher “usar o tema pronto”.</p>');
   $('ffSalvar').onclick=async()=>{ const d=ler(); const s=$('ffSenha').value.trim(); if(s && s.length<4){ $('ffM').className='msg err'; $('ffM').textContent='A senha precisa de pelo menos 4 letras ou números.'; return; } if(s) d.nova_senha=s;
     try{ FESTA=await rpc('fe_admin_editar',{p_slug:SLUG,p_pin:PIN,d}); if(s){ PIN=s; store.set('mf_pin_'+SLUG,s); } aplicarTema(temaDe(FESTA)); $('ffM').className='msg ok'; $('ffM').textContent='Salvo! ✨'; }catch(e){ $('ffM').className='msg err'; $('ffM').textContent=ERR(e); } };
@@ -2117,6 +2187,7 @@ const MAX_FOTOS=12, IDEAL_FOTOS=8, MAX_ENF=3, MAX_FAIXAS=3, MAX_MB_MUSICA=15;
 function tipoAudio(file){ const ext=(file.name.split('.').pop()||'').toLowerCase(); const map={mp3:'audio/mpeg',m4a:'audio/mp4',aac:'audio/aac',wav:'audio/wav',ogg:'audio/ogg',webm:'audio/webm'}; const ok=['audio/webm','audio/mp4','audio/mpeg','audio/mp3','audio/ogg','audio/aac','audio/x-m4a','audio/m4a','audio/wav','audio/x-wav']; const ct=ok.includes(file.type)?file.type:(map[ext]||'audio/mpeg'); const e2=map[ext]?ext:(ct==='audio/mp4'?'m4a':ct==='audio/wav'?'wav':ct==='audio/ogg'?'ogg':'mp3'); return [e2, ct]; }
 async function vMeuTema(){
   ADM.view='meutema'; $('vw').innerHTML='<div class="empty"><span class="spin"></span></div>';
+  setTimeout(()=>{ if(CORP(FESTA) && ADM.view==='meutema' && $('vw') && !$('corpNota')) $('vw').insertAdjacentHTML('afterbegin','<p class="aviso" id="corpNota" style="margin-bottom:12px">💼 Em evento de empresa, use a <b>logo ou a arte do evento</b> como imagem de fundo e uma música ambiente. Personagens e fotos são opcionais: pode deixar em branco.</p>'); }, 900);
   let info; try{ info=await rpc('fe_admin_tema_get',{p_slug:SLUG,p_pin:PIN}); }catch(e){ $('vw').innerHTML=`<div class="empty">${ERR(e)}</div>`; return; }
   const base=tema(FESTA.tema), tc=info.tema_custom||{}, mu=tc.musica||{};
   const c=Object.assign({accent:base.accent, accent2:base.accent2, bg:base.dark?mix(base.accent,'#ffffff',.9):base.bg, font:base.font}, tc);
@@ -2254,6 +2325,7 @@ async function vMeuTema(){
 }
 async function encolherPng(file, max){ file=await prepararImagem(file).catch(()=>file); const bmp=await createImageBitmap(file); const k=Math.min(1,max/Math.max(bmp.width,bmp.height)); const cv=document.createElement('canvas'); cv.width=Math.round(bmp.width*k); cv.height=Math.round(bmp.height*k); cv.getContext('2d').drawImage(bmp,0,0,cv.width,cv.height); return await new Promise(r=>cv.toBlob(r,'image/png')); }
 function textoConvite(f, senha){
+  if(CORP(f)) return `💼 *${f.titulo}*\n\n${f.data&&f.data>=new Date().toISOString().slice(0,10)?'Confirme sua presença pelo link 👇. No dia, é por ele que você participa: perguntas, mensagens, cardápio e muito mais.':'Participe pelo link 👇: perguntas, mensagens, cardápio e muito mais.'}\n\n👉 ${linkFesta(f.slug)}`;
   return `${CATS[f.categoria]?.e||'🎉'} *${f.titulo}*\n\n${f.data&&f.data>=new Date().toISOString().slice(0,10)?`Confirme sua presença pelo link 👇 e, no dia, deixe sua homenagem para ${f.homenageado||'o homenageado'}: foto, recado, áudio ou vídeo. Vai aparecer no telão da festa 💛`:`Deixe sua homenagem para ${f.homenageado||'o homenageado'}: foto, recado, áudio ou vídeo! Vai aparecer no telão da festa 💛`}\n\n👉 ${linkFesta(f.slug)}`;
 }
 function vCompartilhar(){
@@ -2477,6 +2549,45 @@ async function vInteracoes(){
   $('itF').querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{ filtro=b.dataset.f; $('itF').querySelectorAll('[data-f]').forEach(x=>x.setAttribute('aria-pressed',x===b)); pintar(); });
   await carregar(); const it=setInterval(()=>{ if(ADM.view!=='interacoes') return clearInterval(it); if(!document.hidden && !document.querySelector('#itL audio:not([paused])')) carregar(); }, 6000);
 }
+async function vEvento(){
+  ADM.view='evento'; let f=FESTA; $('vw').innerHTML='<div class="empty"><span class="spin"></span></div>';
+  try{ FESTA=f=await carregarFesta(SLUG)||f; }catch(e){}
+  let eq=false, nq=0; try{ eq=await rpc('fe_admin_tem_equipe',{p_slug:SLUG,p_pin:PIN}); }catch(e){} try{ nq=((await rpc('fe_admin_quiz_get',{p_slug:SLUG,p_pin:PIN}))||[]).length; }catch(e){}
+  const L={conv:linkFesta(f.slug), tv:linkFesta(f.slug,'telao'), ped:linkFesta(f.slug,'pedidos'), port:linkFesta(f.slug,'portaria'), valet:linkFesta(f.slug,'valet')};
+  const ir=v=>{ const b=document.querySelector(`#abasTop [data-v="${v}"]`); if(b){ b.click(); b.scrollIntoView({block:'nearest',inline:'center'}); window.scrollTo({top:$('abasTop').offsetTop-10,behavior:'smooth'}); } };
+  const chip=(on,t1,t0)=>`<span class="chip ${on?'on':'off'}">${on?t1:t0}</span>`;
+  const card=(ic,tit,st,desc,aba,extra)=>`<div class="ev-c"><div class="h"><b>${ic} ${tit}</b>${st}</div><p>${desc}</p><div class="row">${aba?`<button class="btn sm" data-ir="${aba}">Configurar →</button>`:''}${extra||''}</div></div>`;
+  const cp=(u,t)=>`<button class="btn ghost sm" data-copy="${esc(u)}">${t||'Copiar link'}</button>`;
+  const nSl=(f.slides||[]).length;
+  $('vw').innerHTML=`<div class="card" style="padding:18px"><h3 style="margin:0 0 4px">🧭 Painel do evento</h3><p class="muted" style="margin:0">Tudo do seu evento numa tela. Cada item é opcional: ligue só o que for usar. A senha da equipe vale para cozinha, recepção e manobristas.</p>
+      <ol class="ev-passos"><li>Configure o que vai usar nos cartões abaixo.</li><li>Crie a senha da equipe e mande o link de cada função.</li><li>Mande o convite (confirmação de presença e ingresso).</li><li>Imprima os QR das mesas e teste o telão antes do evento.</li></ol></div>
+    <div class="card" style="padding:16px;margin-top:12px"><div class="row" style="justify-content:space-between"><b>🔑 Senha da equipe</b>${chip(eq,'criada','falta criar')}</div>
+      ${eq?'<p class="muted" style="margin:6px 0 0;font-size:14px">Mande para a equipe junto com o link da função de cada um.</p>':'<div class="row" style="margin-top:8px"><input class="in" id="evPin" maxlength="20" placeholder="4 ou mais caracteres" style="flex:1;min-width:160px" autocomplete="off"><button class="btn sm" id="evPinOk">Criar senha</button></div>'}
+      <div class="row" style="margin-top:10px"><button class="btn alt sm" id="evCopiar">📋 Copiar os links de toda a equipe</button></div></div>
+    <h3 style="margin:18px 0 8px">Antes do evento</h3><div class="ev-grid">
+      ${card('📲','Convite e confirmação',chip(true,'ativo',''),'Convite para WhatsApp e PDF. O convidado confirma presença pelo link e você vê a lista.','compartilhar',cp(L.conv,'Copiar link dos convidados'))}
+      ${card('🚪','Credenciamento',chip(f.portaria,'ligado','desligado'),'Ingresso com QR e selfie; a recepção confere na entrada e você vê quem chegou.','compartilhar',f.portaria?cp(L.port,'Link da recepção'):'')}
+      ${card('🍽️','Cardápio',chip(f.tem_cardapio,'cadastrado','vazio'),'Os convidados escolhem o prato antes; você passa o total de cada item ao buffet.','cardapio')}
+      ${card('🎤','Apresentação',chip(nSl>0,nSl+' slides','sem slides'),'Envie o PDF da apresentação e passe os slides pelo celular, no telão.','apresentacao')}
+    </div>
+    <h3 style="margin:18px 0 8px">No dia</h3><div class="ev-grid">
+      ${card('🍹','Pedidos na mesa e cozinha',chip(f.pedidos_ativos,(f.mesas||0)+' mesas · recebendo','desligado'),'QR em cada mesa; o pedido chega no celular da cozinha e dos garçons com o número da mesa. Item acabou? A equipe pausa.','cardapio',f.pedidos_ativos||f.mesas?cp(L.ped,'Link da cozinha/garçons'):'')}
+      ${card('🚗','Manobrista',chip(f.valet,'ligado','desligado'),'O manobrista registra o carro pelo QR do convidado; na saída, o convidado pede o carro pelo celular.','compartilhar',f.valet?cp(L.valet,'Link do manobrista'):'')}
+      ${card('📺','Telão',chip(true,'pronto',''),'Abra no notebook ligado na TV. Teste antes: internet, som e tela.','',`<a class="btn sm" href="${L.tv}&teste" target="_blank" rel="noopener">🧪 Testar</a>${cp(L.tv,'Link do telão')}`)}
+      ${card('🙋','Perguntas para o palco',chip(f.perguntas_ativas,'abertas','fechadas'),'A plateia pergunta por escrito, gravando ou pedindo o microfone; você aprova e mostra no telão.','interacoes',`<button class="btn ghost sm" id="evPerg">${f.perguntas_ativas?'Fechar perguntas':'Abrir perguntas'}</button>`)}
+      ${card('💬','Mural de mensagens',chip(true,'ativo',''),'Fotos e recados dos participantes, aprovados por você antes de ir ao telão.','moderar')}
+      ${card('🧠','Quiz',chip(nq>0,nq+' perguntas','sem perguntas'),'Perguntas no telão, respostas pelo celular e ranking. Bom para integração.','quiz')}
+      ${card('🎲','Sorteio de brindes',chip(true,'disponível',''),'Escreva o brinde e o telão sorteia entre quem entrou pelo celular.','sorteio')}
+      ${card('💌','Correio elegante',chip(f.correio_ativo!==false,'aberto','fechado'),'Recados entre participantes, com aprovação. Em evento de empresa, costuma ficar fechado.','interacoes',`<button class="btn ghost sm" id="evCor">${f.correio_ativo!==false?'Fechar correio':'Abrir correio'}</button>`)}
+    </div>
+    <h3 style="margin:18px 0 8px">Depois</h3><div class="ev-grid">${card('📖','Álbum e arquivos',chip(true,'disponível',''),'Baixe o álbum em PDF, a lista de presença e todos os arquivos do evento.','recordacoes')}</div>`;
+  document.querySelectorAll('#vw [data-ir]').forEach(b=>b.onclick=()=>ir(b.dataset.ir));
+  document.querySelectorAll('#vw [data-copy]').forEach(b=>b.onclick=()=>copiar(b.dataset.copy,'Link copiado!'));
+  const cfg=async(c,p)=>{ try{ await rpc('fe_admin_interacoes_config',{p_slug:SLUG,p_pin:PIN,p_correio:c,p_perguntas:p}); toast('Pronto!'); vEvento(); }catch(e){ toast(ERR(e)); } };
+  $('evPerg').onclick=()=>cfg(null,!f.perguntas_ativas); $('evCor').onclick=()=>cfg(!(f.correio_ativo!==false),null);
+  if($('evPinOk')) $('evPinOk').onclick=async()=>{ const p=$('evPin').value.trim(); if(p.length<4){ toast('A senha precisa de 4 ou mais caracteres.'); return; } try{ await rpc('fe_admin_senha_equipe',{p_slug:SLUG,p_pin:PIN,p_pin_equipe:p}); toast('Senha da equipe criada! 🔑'); vEvento(); }catch(e){ toast(ERR(e)); } };
+  $('evCopiar').onclick=()=>copiar(`🧭 *${f.titulo}* · links da equipe\n\n📺 Telão (notebook na TV):\n${L.tv}\n\n🍹 Cozinha e garçons (pedidos das mesas):\n${L.ped}\n\n🚪 Recepção (credenciamento):\n${L.port}\n\n🚗 Manobristas:\n${L.valet}\n\nTodos entram com a senha da equipe.${!f.pedidos_ativos||!f.portaria||!f.valet?'\n(Os links de funções desligadas só funcionam depois que o organizador ligar cada uma.)':''}`,'Links da equipe copiados! Cole no grupo da equipe.');
+}
 const SORTEIO_SUG=['🎁 Um presente surpresa','💃 Uma dança com o homenageado','🎤 Discurso improvisado de 1 minuto','📸 Foto oficial com o homenageado','🍾 Um brinde especial','🎶 Cantar um trecho no microfone','🍰 O primeiro pedaço do bolo','🕺 Puxar a próxima dança'];
 async function vSorteio(){
   ADM.view='sorteio'; const f=FESTA; let info={}, lista={participantes:[],ganhadores:[]};
@@ -2665,10 +2776,9 @@ async function pdfAlbum(f, posts, prog){
   return {blob:doc.output('blob'), paginas:n};
 }
 function marcaTeste(c, W, H){
-  const u=W/1240; c.save(); c.translate(W/2,H*.5); c.rotate(-.35); c.textAlign='center'; c.textBaseline='middle';
-  const w=900*u, h=230*u; rr(c,-w/2,-h/2,w,h,40*u); c.fillStyle='rgba(201,42,42,.72)'; c.fill(); c.lineWidth=10*u; c.strokeStyle='rgba(255,255,255,.85)'; c.stroke();
-  c.fillStyle='#fff'; c.font=`900 ${Math.round(120*u)}px Fredoka, sans-serif`; c.fillText('MODO TESTE',0,-18*u);
-  c.font=`700 ${Math.round(38*u)}px Fredoka, sans-serif`; c.fillText('ative a festa para tirar este aviso',0,70*u); c.restore();
+  const u=W/1240; c.save(); c.font=`700 ${Math.round(26*u)}px Figtree, Fredoka, sans-serif`; const txt='🎈 Modo grátis · Mural da Festa'; const w=c.measureText(txt).width+44*u, h=50*u;
+  const x=W-w-40*u, y=H-h-40*u; rr(c,x,y,w,h,h/2); c.fillStyle='rgba(20,16,24,.55)'; c.fill();
+  c.fillStyle='#fff'; c.textAlign='center'; c.textBaseline='middle'; c.fillText(txt, x+w/2, y+h/2+1*u); c.restore();
 }
 async function conviteCanvas(f, W, H){
   const t=await temaPdf(f); const cv=document.createElement('canvas'); cv.width=W; cv.height=H; const c=cv.getContext('2d'); const u=W/1080;
@@ -2736,6 +2846,8 @@ function painelMestre(){
    <div id="mList"><div class="empty"><span class="spin"></span></div></div></div>`;
   $('mSair').onclick=()=>{ store.sset('mf_mestre',null); location.reload(); };
   $('mNova').onclick=novaFesta; $('mSenha').onclick=trocarMestra; $('mCod').onclick=codigosMestre; $('mPag').onclick=planosMestre;
+  $('mList').insertAdjacentHTML('beforebegin','<div class="row" style="margin-bottom:12px"><button class="btn alt sm" id="mSup">📨 Chamados <b id="mSupN"></b></button></div>'); $('mSup').onclick=chamadosMestre;
+  rpc('fe_mestre_suporte',{p_pin:MPIN}).then(l=>{ const n=l.filter(x=>x.status==='aberto').length; $('mSupN').textContent=n?`(${n})`:''; }).catch(()=>{});
   listarFestas();
 }
 async function listarFestas(){
@@ -2745,7 +2857,7 @@ async function listarFestas(){
   $('mList').innerHTML=FESTAS.map((f,i)=>{ const t=temaDe(f); return `<div class="card fest" style="margin-bottom:10px;border-left:8px solid ${t.accent}">
     <div><h3>${CATS[f.categoria]?.e||'🎉'} ${esc(f.homenageado||f.titulo)} <span class="pill" style="background:${f.ativo?'#d3f9d8':'#ffe3e3'};color:${f.ativo?'#2b8a3e':'#c92a2a'}">${f.ativo?'ativa':'encerrada'}</span></h3>
       <div class="meta"><span>${esc(f.titulo)}</span>${f.data?`<span>📅 ${new Date(f.data+'T12:00:00').toLocaleDateString('pt-BR')}</span>`:''}<span>${t.e} ${t.n}</span>${f.cliente?`<span>👤 ${esc(f.cliente)}${f.contato?' · '+esc(f.contato):''}</span>`:''}${f.expira_em?`<span>⏳ até ${new Date(f.expira_em+'T12:00:00').toLocaleDateString('pt-BR')}</span>`:''}</div>
-      <div class="stats">${f.plano==='teste'?'<span class="pill" style="background:#fff3bf">🧪 teste</span>':`<span class="pill" style="background:#d3f9d8">${ICONE_PLANO[f.plano]||'⭐'} ${esc(NOME_PLANO[f.plano]||f.plano)}</span>`}${f.origem==='cliente'?'<span class="pill">🙋 criada pelo cliente</span>':''}<span class="pill">💌 ${f.total} homenagens</span>${f.pendentes?`<span class="pill" style="background:#fff3bf">⏳ ${f.pendentes} aguardando</span>`:''}<span class="pill">💾 ${(+f.mb).toFixed(1)} MB</span>${f.tem_custom?`<span class="pill" style="background:${f.custom_bloqueado?'#ffe3e3':f.custom_ativo?'#e7f5ff':'#f1f3f5'}">🖼️ tema próprio ${f.custom_bloqueado?'desligado por você':f.custom_ativo?'ligado':'desligado'}${f.aceite?` · declarado por ${esc(f.aceite.responsavel)} em ${new Date(f.aceite.criado_em).toLocaleDateString('pt-BR')}`:''}</span>`:''}</div></div>
+      <div class="stats">${f.plano==='teste'?'<span class="pill" style="background:#fff3bf">🎈 grátis</span>':`<span class="pill" style="background:#d3f9d8">${ICONE_PLANO[f.plano]||'⭐'} ${esc(NOME_PLANO[f.plano]||f.plano)}</span>`}${f.origem==='cliente'?'<span class="pill">🙋 criada pelo cliente</span>':''}<span class="pill">💌 ${f.total} homenagens</span>${f.pendentes?`<span class="pill" style="background:#fff3bf">⏳ ${f.pendentes} aguardando</span>`:''}<span class="pill">💾 ${(+f.mb).toFixed(1)} MB</span>${f.tem_custom?`<span class="pill" style="background:${f.custom_bloqueado?'#ffe3e3':f.custom_ativo?'#e7f5ff':'#f1f3f5'}">🖼️ tema próprio ${f.custom_bloqueado?'desligado por você':f.custom_ativo?'ligado':'desligado'}${f.aceite?` · declarado por ${esc(f.aceite.responsavel)} em ${new Date(f.aceite.criado_em).toLocaleDateString('pt-BR')}`:''}</span>`:''}</div></div>
     <div class="acts3"><a class="btn sm" href="${linkFesta(f.slug,'admin')}" target="_blank" rel="noopener">🔐 Anfitrião</a><a class="btn ghost sm" href="${linkFesta(f.slug,'telao')}" target="_blank" rel="noopener">📺 Telão</a><a class="btn ghost sm" href="${linkFesta(f.slug)}" target="_blank" rel="noopener">👀 Ver</a><button class="btn ghost sm" data-i="${i}" data-a="msg">📋 Mensagem</button><button class="btn ghost sm" data-i="${i}" data-a="cfg">⚙️ Ajustes</button>${f.plano==='teste'?`<button class="btn ok sm" data-i="${i}" data-a="lib">✓ Liberar (cortesia)</button>`:''}${f.tem_custom?`<button class="btn ${f.custom_bloqueado?'ok':'bad'} sm" data-i="${i}" data-a="bloq">${f.custom_bloqueado?'✓ Liberar tema próprio':'🚫 Desligar tema próprio'}</button>`:''}</div></div>`; }).join('');
   $('mList').querySelectorAll('[data-a]').forEach(b=>b.onclick=async()=>{ const f=FESTAS[+b.dataset.i]; const a=b.dataset.a;
     if(a==='msg') return copiar(msgCliente(f),'Mensagem para o cliente copiada!');
@@ -2754,8 +2866,9 @@ async function listarFestas(){
     if(a==='bloq'){ try{ await rpc('fe_mestre_tema',{p_pin:MPIN,p_id:f.id,p_bloquear:!f.custom_bloqueado}); toast(f.custom_bloqueado?'Tema próprio liberado.':'Tema próprio desligado. A festa voltou ao tema pronto.'); listarFestas(); }catch(e){ toast(ERR(e)); } return; }
     ajustesFesta(f); });
 }
-function msgCliente(f, senha){
-  return `🎉 *Mural da Festa · ${f.titulo}*\n\nO mural está pronto!\n\n📲 *Link para os convidados:*\n${linkFesta(f.slug)}\n\n📺 *Telão* (abra no notebook ligado na TV):\n${linkFesta(f.slug,'telao')}\n\n🔐 *Área do anfitrião* (aprovar homenagens, trocar o tema e baixar o álbum):\n${linkFesta(f.slug,'admin')}${senha?`\nSenha: *${senha}*`:''}\n\nNo fim da festa, baixe o álbum de recordações na área do anfitrião 💛`;
+function msgCliente(f, senha, cod){
+  if(CORP(f)) return `💼 *Mural da Festa · ${f.titulo}*\n\nO evento está criado!\n\n🧭 *Área do organizador* (monte tudo pelo Painel do evento: cardápio, cozinha, credenciamento, manobrista, apresentação, perguntas, quiz e sorteio):\n${linkFesta(f.slug,'admin')}${senha?`\nSenha: *${senha}*`:''}${cod?`\nCódigo de recuperação: *${cod}*`:''}\n\n📲 *Link dos participantes:*\n${linkFesta(f.slug)}\n\n📺 *Telão* (notebook ligado na TV):\n${linkFesta(f.slug,'telao')}\n\nOs links da equipe (cozinha, recepção e manobristas) ficam no Painel do evento, no botão “Copiar os links de toda a equipe”.`;
+  return `🎉 *Mural da Festa · ${f.titulo}*\n\nO mural está pronto!\n\n📲 *Link para os convidados:*\n${linkFesta(f.slug)}\n\n📺 *Telão* (abra no notebook ligado na TV):\n${linkFesta(f.slug,'telao')}\n\n🔐 *Área do anfitrião* (aprovar homenagens, trocar o tema e baixar o álbum):\n${linkFesta(f.slug,'admin')}${senha?`\nSenha: *${senha}*`:''}${cod?`\nCódigo de recuperação (se esquecer a senha): *${cod}*`:''}\n\nNo fim da festa, baixe o álbum de recordações na área do anfitrião 💛`;
 }
 function novaFesta(){
   $('app').innerHTML=`<div class="wrap"><div class="top"><h1>＋ Nova festa</h1><button class="btn ghost sm" id="nfVoltar">← Voltar</button></div>${formFesta({categoria:'aniversario',tema:'confete',moderacao:true},{mestre:true})}
@@ -2796,15 +2909,18 @@ async function telaCriada(f, senha, tentouCodigo, seu){
   const okCod=f.plano!=='teste'; const lista = okCod ? [] : await carregarPlanos().catch(()=>[]);
   $('app').innerHTML=`<div class="wrap" style="max-width:720px"><div class="card" style="padding:24px;text-align:center"><div style="font-size:64px">${tema(f.tema).e}</div><h1 style="margin:4px 0">Sua festa está criada!</h1>
     <p class="muted">${esc(f.titulo)}</p>
-    ${okCod?`<p class="aviso" style="background:#d3f9d8;color:#1b5e20">✅ Liberada no plano ${esc(NOME_PLANO[f.plano]||f.plano)}.</p>`:`<p class="aviso">${tentouCodigo?'⚠️ O código não funcionou, então a festa começou em modo teste.':'🧪 A festa já funciona em modo teste (até 10 homenagens). Para liberar tudo, escolha o plano:'}</p>${lista.length?htmlPlanos(lista,{atual:'teste',botao:true}):''}<div class="msg" id="fcPM"></div>`}
+    ${okCod?`<p class="aviso" style="background:#d3f9d8;color:#1b5e20">✅ Liberada no plano ${esc(NOME_PLANO[f.plano]||f.plano)}.</p>`:`<p class="aviso">${tentouCodigo?'⚠️ O código não funcionou, então a festa começou no modo grátis.':'🎈 A festa já funciona no modo grátis (até 10 homenagens). Faça o upgrade para mais diversão:'}</p>${lista.length?htmlPlanos(lista,{atual:'teste',botao:true}):''}<div class="msg" id="fcPM"></div>`}
     <div class="qrbig" id="fcQr"></div>
     <div style="text-align:left;margin-top:16px;display:flex;flex-direction:column;gap:10px">
      ${[['📲 Link dos convidados',linkFesta(f.slug)],['📺 Telão',linkFesta(f.slug,'telao')],['🔐 Sua área de anfitrião',linkFesta(f.slug,'admin')]].map(([n,u])=>`<div><div style="font-weight:600;font-size:14px;margin-bottom:4px">${n}</div><div class="linkbox"><code>${esc(u)}</code><button class="btn sm" data-copy="${esc(u)}">Copiar</button></div></div>`).join('')}</div>
-    <p class="aviso" style="margin-top:14px;text-align:left">📌 Guarde estes links e a sua senha. Toque em <b>Copiar tudo</b> e mande para o seu próprio WhatsApp.</p>
+    <div id="fcRec"></div>
+    <p class="aviso" style="margin-top:14px;text-align:left">📌 Guarde estes links, a sua senha e o código de recuperação. Toque em <b>Copiar tudo</b> e mande para o seu próprio WhatsApp.</p>
     <div class="row" style="justify-content:center;margin-top:12px"><button class="btn alt" id="fcMsg">📋 Copiar tudo</button><a class="btn" href="${linkFesta(f.slug,'admin')}&aba=meutema" style="font-size:18px">🎨 ${seu?'Fazer o meu tema agora':'Montar o telão e o convite'} →</a></div></div></div>`;
   qrInto($('fcQr'), linkFesta(f.slug), 200);
   document.querySelectorAll('[data-copy]').forEach(b=>b.onclick=()=>copiar(b.dataset.copy));
-  $('fcMsg').onclick=()=>copiar(msgCliente(f, senha),'Copiado! Cole no seu WhatsApp para guardar.');
+  if(CORP(f)) rpc('fe_admin_interacoes_config',{p_slug:f.slug,p_pin:senha,p_correio:false,p_perguntas:true}).catch(()=>{});
+  let codRec=''; try{ codRec=await rpc('fe_admin_recuperacao_gerar',{p_slug:f.slug,p_pin:senha}); $('fcRec').innerHTML=`<div style="text-align:left;margin-top:14px"><div style="font-weight:600;font-size:14px">🔑 Código de recuperação (se esquecer a senha)</div><div class="cod-rec">${esc(codRec)}</div></div>`; }catch(e){}
+  $('fcMsg').onclick=()=>copiar(msgCliente(f, senha, codRec),'Copiado! Cole no seu WhatsApp para guardar.');
   document.querySelectorAll('[data-plano]').forEach(b=>b.onclick=()=>{ b.disabled=true; pagarPlano(b.dataset.plano, f.slug, senha, t=>{ $('fcPM').className='msg'+(/Abrindo/.test(t)?'':' err'); $('fcPM').textContent=t; }); setTimeout(()=>b.disabled=false,6000); });
 }
 function festaCriada(f, senha){
@@ -2846,6 +2962,16 @@ async function planosMestre(){
   $('eSend').onclick=async()=>{ const d=[...document.querySelectorAll('#pmL [data-id]')].map(c=>{ const o={id:c.dataset.id}; c.querySelectorAll('[data-k]').forEach(i=>o[i.dataset.k]=+i.value); return o; });
     try{ await rpc('fe_mestre_planos',{p_pin:MPIN,p_planos:d}); PLANOS=null; msgE('Preços salvos! ✨','ok'); }catch(e){ msgE(ERR(e)+' '+(e.message||''),'err'); } };
 }
+async function chamadosMestre(){
+  abrirFolha(`<h3>📨 Chamados</h3><p class="muted" style="margin-top:0">Mensagens do “Fale com a gente”. Responda por e-mail e marque como respondido.</p><div id="chL" style="max-height:60vh;overflow:auto"><span class="spin"></span></div><div class="foot"><button class="btn ghost" id="eCancel">Fechar</button></div>`);
+  $('eCancel').onclick=fecharFolha;
+  const carregar=async()=>{ let l=[]; try{ l=await rpc('fe_mestre_suporte',{p_pin:MPIN}); }catch(e){ $('chL').textContent=ERR(e); return; }
+    $('chL').innerHTML=l.length?l.map(x=>{ const c=x.contexto||{}; const assunto=`Mural da Festa · protocolo ${x.id}`; const corpo=`Olá!\n\nSobre a sua mensagem:\n> ${x.mensagem}\n\n`;
+      return `<div class="mod-it" style="flex-direction:column;${x.status==='respondido'?'opacity:.55':''}"><div class="tx"><b>#${x.id} · ${esc(x.categoria)}</b> <small>${new Date(x.criado_em).toLocaleString('pt-BR')} · ${esc(x.email)}${x.slug?` · festa ${esc(x.slug)}${c.festa&&c.festa.plano?` (${esc(c.festa.plano)})`:''}`:''}${c.tela?` · tela ${esc(c.tela)}`:''}</small>${esc(x.mensagem)}</div>
+        <div class="bt"><a class="btn sm" href="mailto:${encodeURIComponent(x.email)}?subject=${encodeURIComponent(assunto)}&body=${encodeURIComponent(corpo)}">✉️ Responder</a>${x.status==='aberto'?`<button class="btn ok sm" data-ok="${x.id}">✓ Respondido</button>`:`<button class="btn ghost sm" data-ab="${x.id}">Reabrir</button>`}${x.slug?`<a class="btn ghost sm" href="${linkFesta(x.slug,'admin')}" target="_blank" rel="noopener">Abrir festa</a>`:''}</div></div>`; }).join(''):'<div class="empty">Nenhum chamado. 🙌</div>';
+    $('chL').querySelectorAll('[data-ok],[data-ab]').forEach(b=>b.onclick=async()=>{ try{ await rpc('fe_mestre_suporte_status',{p_pin:MPIN,p_id:+(b.dataset.ok||b.dataset.ab),p_status:b.dataset.ok?'respondido':'aberto'}); carregar(); }catch(e){ toast(ERR(e)); } }); };
+  carregar();
+}
 async function codigosMestre(){
   abrirFolha(`<h3>🎟️ Códigos de ativação</h3><p class="muted" style="margin-top:0">Cada código ativa uma festa, uma única vez. Gere um lote e cadastre na plataforma de venda (Kiwify, Hotmart…) para o cliente receber o código sozinho depois de pagar.</p>
     <div class="grid2"><label class="f">Quantos códigos<input class="in" id="cgN" type="number" min="1" max="200" value="20"></label><label class="f">Nome do lote (opcional)<input class="in" id="cgL" maxlength="40" placeholder="Ex.: Buffet Alegria"></label><label class="f">Plano que o código libera<select class="in" id="cgP"><option value="festinha">🏠 Festinha</option><option value="festa" selected>🎉 Festa</option><option value="grande">🎓 Grande Evento</option></select></label></div>
@@ -2877,7 +3003,7 @@ const CONTATO = '';   // e-mail ou WhatsApp para pedidos de remoção e privacid
 const COMPRA_URL = '';   // link da página de venda da ativação (Kiwify, Hotmart, Mercado Pago…)
 function telaTermos(){
   aplicarTema(TEMA_MARCA); document.title='Termos de uso e Privacidade · Mural da Festa';
-  const canal = CONTATO ? `pelo contato <b>${esc(CONTATO)}</b>` : 'falando com o anfitrião da festa ou com o organizador que contratou o Mural da Festa';
+  const canal = CONTATO ? `pelo contato <b>${esc(CONTATO)}</b>` : 'pelo próprio app, no botão <b>❓ Ajuda → Fale com a gente</b>';
   $('app').innerHTML=`<div class="wrap legal"><div class="card" style="padding:24px 22px">
   <h1 style="margin:0">Termos de uso e Política de Privacidade</h1><p class="muted">Mural da Festa · versão de 29/10/2026</p>
   <h2>1. O que é o Mural da Festa</h2>
@@ -2887,7 +3013,7 @@ function telaTermos(){
   <li><b>Convidado:</b> quem acessa o link ou o QR Code da festa e envia homenagens.</li>
   <li><b>Mural da Festa:</b> fornece a ferramenta e o armazenamento.</li></ul>
   <h2>3. Criação da festa, modo teste e ativação</h2>
-  <p>O contratante cria a festa sozinho, nesta página, e define a senha de anfitrião. Sem pagamento, a festa funciona em <b>modo teste</b>: até 10 homenagens, com aviso de teste no telão, no álbum e no convite, e fica disponível até 7 dias depois da data da festa.</p>
+  <p>O contratante cria a festa sozinho, nesta página, e define a senha de anfitrião. Sem pagamento, a festa funciona no <b>modo grátis</b> (também chamado de modo teste): até 10 homenagens, com um selo discreto de modo grátis no telão, no álbum e no convite, e fica disponível até 7 dias depois da data da festa.</p>
   <p>A festa é liberada ao contratar um dos planos (Festinha, Festa ou Grande Evento), pagos uma única vez pelo Mercado Pago, ou com um código de ativação. Cada plano tem um limite de homenagens, um tempo máximo para áudios e vídeos e um prazo: a festa fica no ar até alguns dias depois da data da festa, conforme o plano escolhido. Depois desse prazo, a festa deixa de receber homenagens e os arquivos podem ser apagados — por isso, baixe o álbum e os arquivos antes. É possível mudar para um plano maior pagando a diferença. O contratante pode desistir em até 7 dias da compra, com reembolso integral, desde que a festa ainda não tenha acontecido. A guarda da senha é responsabilidade do contratante.</p>
   <h2>4. Conteúdo enviado pelos convidados</h2>
   <p>Quem envia uma foto, áudio, vídeo ou recado é responsável por ele. Ao enviar, o convidado declara que as pessoas que aparecem concordam com o envio e que, no caso de crianças e adolescentes, tem a autorização dos pais ou responsáveis. É proibido enviar conteúdo ofensivo, discriminatório, sexual, violento, ilegal ou que viole direitos de terceiros. O anfitrião pode não aprovar ou ocultar qualquer homenagem, e o Mural da Festa pode remover conteúdo que viole estes termos.</p>
@@ -2895,6 +3021,7 @@ function telaTermos(){
   <p>O anfitrião pode enviar imagens próprias para decorar a festa (fundo, personagens, enfeites), fotos do homenageado e músicas para tocar no telão. <b>O Mural da Festa não fornece personagens, marcas ou artes de terceiros.</b> Ao enviar um tema próprio, o anfitrião declara ter autorização para usar todos os elementos enviados e assume <b>integral e exclusiva responsabilidade</b> por eles, inclusive por direitos autorais, marcas e direitos de imagem, isentando o Mural da Festa. A declaração fica registrada com o nome do responsável, a festa, a data e a hora.</p>
   <p><b>Portaria e selfie (opcional):</b> se o anfitrião ligar a portaria, quem confirma presença pode tirar uma selfie e recebe um ingresso com QR Code. A selfie serve só para a equipe do anfitrião conferir a entrada, é vista apenas pelo anfitrião e pela equipe dele e é apagada junto com os arquivos da festa.</p>
   <p><b>Cardápio e pedidos na mesa (opcional):</b> quando o anfitrião usa o cardápio, guardamos o nome, a escolha e a observação de cada convidado, e nos pedidos o número da mesa e os itens pedidos. Só o anfitrião e a equipe dele veem esses dados, que são apagados junto com os arquivos da festa.</p>
+  <p><b>Atendimento:</b> o atendimento é feito pelo próprio app, no botão <b>❓ Ajuda</b>, que traz as respostas mais comuns e o formulário <b>Fale com a gente</b>. A resposta chega por e-mail em até 24 horas úteis. Não há atendimento por telefone ou WhatsApp. Esqueceu a senha de anfitrião? Use o código de recuperação entregue na criação da festa.</p>
   <p><b>Comentários, correio elegante e perguntas (opcionais):</b> o que o convidado escreve ou grava nesses espaços só aparece depois que o anfitrião aprova. No correio e nas perguntas, o convidado pode não se identificar; mesmo assim, o anfitrião pode recusar qualquer mensagem. Tudo é apagado junto com os arquivos da festa.</p>
   <p><b>Manobrista (opcional):</b> quando o anfitrião oferece manobrista, a equipe registra a placa, o modelo, o local onde o carro ficou e, se quiser, fotos do carro na chegada. Esses dados servem só para devolver o carro, são vistos pelo convidado dono do ticket, pelo anfitrião e pela equipe, e são apagados junto com os arquivos da festa. A guarda do veículo é responsabilidade do serviço de manobristas contratado pelo anfitrião; o Mural da Festa só organiza os registros.</p>
   <p><b>Músicas:</b> as trilhas prontas são criadas pelo próprio Mural da Festa. Músicas enviadas pelo anfitrião são de sua inteira responsabilidade, inclusive os direitos de execução pública no local do evento (por exemplo, junto ao ECAD), quando exigidos.</p>
@@ -3004,6 +3131,62 @@ function telaInicio(perfil){
 }
 
 // =====================================================================
+const AJUDA=[
+ ['admin','Esqueci a senha do anfitrião','Na tela de senha, toque em <b>Esqueci a senha</b> e use o <b>código de recuperação</b> (ele apareceu quando a festa foi criada e está na mensagem que você copiou). Sem o código, use <b>Fale com a gente</b> aqui embaixo, categoria “Senha e acesso”.'],
+ ['admin','Onde vejo ou troco o código de recuperação?','Na aba <b>📝 Dados da festa</b>, no fim da página, em <b>🔑 Código de recuperação</b>. Gerar um novo invalida o anterior.'],
+ ['telao admin','Como ligo o telão na TV?','Ligue o notebook na TV pelo cabo HDMI, abra o link do telão no Google Chrome, toque em <b>▶ Iniciar telão</b> e aperte <b>F</b> para tela cheia. Antes da festa, use <b>🧪 Testar o telão</b>.'],
+ ['telao admin','O telão travou ou parou','Aperte <b>F5</b> no notebook: ele volta sozinho, com tudo o que já foi enviado. Se continuar, confira a internet do notebook.'],
+ ['telao admin','Caiu a internet do salão','Use o celular como roteador (Configurações → Roteador/Hotspot) e conecte o notebook nele. O telão continua de onde parou.'],
+ ['telao admin','Os vídeos engasgam no telão','Abra o telão 30 minutos antes, para ele baixar os vídeos com calma. Prefira cabo de rede ou o roteador do salão perto do notebook, e use o Chrome.'],
+ ['telao admin','A música não toca','O navegador só libera o som depois de um clique: toque em <b>▶ Iniciar telão</b>. A tecla <b>M</b> liga e desliga a música. Confira o volume do notebook e da TV.'],
+ ['admin convidado','A homenagem não apareceu no telão','Se a festa usa aprovação, ela espera na aba <b>💌 Homenagens</b> até o anfitrião aprovar. No modo grátis, o limite é de 10 homenagens.'],
+ ['admin','Como tiro o selo “modo grátis”?','Toque em <b>⬆️ Fazer upgrade</b> na faixa amarela do topo da área do anfitrião. Depois do pagamento, a festa é liberada sozinha.'],
+ ['admin','Paguei e a festa continua no modo grátis','No Pix, a confirmação pode levar alguns minutos. Volte à área do anfitrião e toque em <b>Já paguei</b> se aparecer. Se passar de 30 minutos, use <b>Fale com a gente</b>, categoria “Pagamento”.'],
+ ['admin','Como subo de plano?','No topo da área do anfitrião, toque em <b>⬆️ Mudar de plano</b>. Você paga só a diferença.'],
+ ['admin','Como baixo o álbum e os arquivos?','Na aba <b>📖 Álbum</b>: álbum em PDF e um arquivo com todas as fotos, áudios e vídeos. Baixe antes do fim do prazo do seu plano.'],
+ ['admin','Até quando a festa fica no ar?','O prazo aparece no topo da área do anfitrião. Depois dele, os arquivos são apagados automaticamente; baixe o álbum antes.'],
+ ['admin','Como apago uma homenagem?','Na aba <b>💌 Homenagens</b>, toque em <b>Recusar</b> na homenagem. Ela sai do telão e do mural na hora.'],
+ ['admin portaria pedidos valet','Como funciona a senha da equipe?','A mesma senha vale para portaria, garçons e manobristas. Ela é criada na aba <b>📲 Convite e links</b> (portaria/manobrista) ou em <b>🍽️ Cardápio e pedidos</b>. Mande o link de cada função com essa senha.'],
+ ['pedidos admin','O garçom não recebe os pedidos','Confira: <b>Receber pedidos na mesa agora</b> ligado na aba de cardápio, o link de pedidos aberto no celular do garçom e o som do celular ligado.'],
+ ['pedidos admin','Acabou um item do cardápio','No painel do garçom, toque em <b>⏸️ Acabou algo?</b> e no item (ou na seção inteira). O convidado vê “acabou por agora”.'],
+ ['valet admin','Como funciona o manobrista?','O convidado mostra o QR do ticket; o manobrista lê, informa placa e vaga. Na saída, o convidado toca em <b>Pedir meu carro</b> e acompanha até a porta.'],
+ ['admin convidado','Correio, comentários ou perguntas não aparecem','Tudo isso passa por aprovação na aba <b>💬 Interações</b>. Depois de aprovado, aparece no mural e no telão.'],
+ ['admin convidado','O quiz não mostra a pergunta no celular','Cada pergunta tem uma contagem de 4 segundos antes de aparecer. Se demorar mais, confira a internet do celular e recarregue a página.'],
+ ['convidado','Como mando a minha homenagem?','Na página da festa, toque em Foto, Recado, Áudio ou Vídeo, escreva seu nome e envie. Não precisa baixar nada.'],
+ ['convidado','O áudio ou o vídeo não grava','Quando o celular perguntar, toque em <b>Permitir</b> o microfone e a câmera. Se já negou, abra as configurações do navegador e libere para este site.'],
+ ['portaria','O leitor de QR não abre a câmera','Libere a câmera para este site quando o celular perguntar. Se não funcionar, use a busca pelo nome do convidado.'],
+ ['inicio criar admin','Posso pedir reembolso?','Pedidos de reembolso são feitos por <b>Fale com a gente</b>, categoria “Pagamento”, em até 7 dias após o pagamento, conforme os Termos de uso.']
+];
+function contextoAjuda(){ const m=MODE; return m==='admin'?['admin', 'admin:'+((typeof ADM!=='undefined'&&ADM.view)||'')]:[m]; }
+function abrirAjuda(){
+  const ctx=contextoAjuda()[0]; const rel=AJUDA.filter(a=>a[0].split(' ').includes(ctx)), out=AJUDA.filter(a=>!a[0].split(' ').includes(ctx));
+  const item=a=>`<details><summary>${a[1]}</summary><p>${a[2]}</p></details>`;
+  abrirFolha(`<h3>❓ Ajuda</h3><input class="in" id="ajB" placeholder="🔎 Digite sua dúvida (ex.: senha, telão, pagamento)" style="margin-bottom:10px"><div class="aj-l" id="ajL">${rel.length?'<div class="aqui">Para esta tela</div>'+rel.map(item).join(''):''}<div class="aqui">Outras dúvidas</div>${out.map(item).join('')}</div>
+    <div class="card" style="padding:14px;margin-top:10px;text-align:center"><b>Não achou a resposta?</b><p class="muted" style="margin:4px 0 10px;font-size:14px">Mande pelo app. A resposta chega no seu e-mail em até 24 horas úteis.</p><button class="btn" id="ajFale">📨 Fale com a gente</button></div>
+    <div class="foot"><button class="btn ghost" id="eCancel">Fechar</button></div>`);
+  $('eCancel').onclick=fecharFolha; $('ajFale').onclick=faleConosco;
+  const norm=t=>t.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
+  $('ajB').oninput=e=>{ const q=norm(e.target.value.trim()); if(!q){ $('ajL').innerHTML=(rel.length?'<div class="aqui">Para esta tela</div>'+rel.map(item).join(''):'')+'<div class="aqui">Outras dúvidas</div>'+out.map(item).join(''); return; }
+    const ws=q.split(/\s+/); const l=AJUDA.filter(a=>{ const t=norm(a[1]+' '+a[2].replace(/<[^>]+>/g,'')); return ws.every(w=>t.includes(w)); });
+    $('ajL').innerHTML=l.length?l.map(a=>`<details open><summary>${a[1]}</summary><p>${a[2]}</p></details>`).join(''):'<p class="muted">Não achei nada com essas palavras. Tente outras ou use <b>Fale com a gente</b>.</p>'; };
+}
+function faleConosco(){
+  abrirFolha(`<h3>📨 Fale com a gente</h3><p class="muted" style="margin-top:0">Conte o que aconteceu. Já mandamos junto, automaticamente, qual é a festa e a tela em que você está.</p>
+    <label class="f">Assunto<select class="in" id="fcC"><option>Pagamento</option><option>Telão</option><option>Senha e acesso</option><option>Convidados e homenagens</option><option>Equipe, pedidos e portaria</option><option>Sugestão</option><option>Outro</option></select></label>
+    <label class="f" style="margin-top:10px">Seu e-mail (a resposta vai para ele)<input class="in" id="fcE" type="email" autocomplete="email" value="${esc(store.get('mf_email')||'')}"></label>
+    <label class="f" style="margin-top:10px">Mensagem<textarea class="in" id="fcT" rows="4" maxlength="1500" placeholder="Ex.: paguei o plano Festa por Pix às 14h e a festa continua em teste."></textarea></label>
+    <div class="msg" id="eMsg"></div><div class="foot"><button class="btn ghost" id="eCancel">Voltar</button><button class="btn" id="eSend">Enviar</button></div>`);
+  $('eCancel').onclick=abrirAjuda;
+  $('eSend').onclick=async()=>{ const em=$('fcE').value.trim(), t=$('fcT').value.trim(); if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){ msgE('Informe um e-mail válido.','err'); return; } if(t.length<5){ msgE('Conte o que aconteceu.','err'); return; }
+    $('eSend').disabled=true; const ctx={modo:MODE, tela:contextoAjuda()[1]||MODE, festa:(typeof FESTA!=='undefined'&&FESTA)?{slug:FESTA.slug,plano:FESTA.plano,titulo:FESTA.titulo}:null, navegador:navigator.userAgent.slice(0,160), tamanho:innerWidth+'x'+innerHeight, hora:new Date().toString()};
+    try{ const r=await rpc('fe_suporte_enviar',{p_slug:SLUG||'',p_aparelho:deviceId(),p_email:em,p_categoria:$('fcC').value,p_mensagem:t,p_contexto:ctx}); store.set('mf_email',em);
+      abrirFolha(`<h3>✅ Recebemos!</h3><p>Protocolo <b>nº ${r.protocolo}</b>. A resposta chega em <b>${esc(em)}</b> em até 24 horas úteis. Confira também a caixa de spam.</p><div class="foot"><button class="btn" id="eCancel">Fechar</button></div>`); $('eCancel').onclick=fecharFolha; }
+    catch(e){ msgE(/e-mail|mensagens|Conte|minutos/.test(e.message||'')?e.message:ERR(e),'err'); $('eSend').disabled=false; } };
+}
+function montarAjuda(){
+  if(MODE==='telao' || $('ajudaBtn')) return;
+  const b=document.createElement('button'); b.id='ajudaBtn'; b.type='button'; b.textContent=MODE==='convidado'?'❓':'❓ Ajuda'; if(MODE==='convidado') b.classList.add('mini'); b.setAttribute('aria-label','Ajuda'); b.onclick=abrirAjuda; document.body.appendChild(b); document.body.classList.add('tem-ajuda');
+}
 (async function iniciar(){
   if(!sb){ $('app').innerHTML='<div class="wrap center" style="padding-top:20vh"><h2>Sem conexão</h2><p>Recarregue a página.</p></div>'; return; }
   try{
@@ -3017,6 +3200,7 @@ function telaInicio(perfil){
     else if(MODE==='termos') telaTermos();
     else if(MODE==='criar') telaCriar();
     else telaInicio();
+    montarAjuda();
   }catch(e){ console.error(e); $('app').innerHTML='<div class="wrap center" style="padding-top:20vh"><h2>Ops!</h2><p>Não consegui carregar agora. Confira a internet e recarregue.</p></div>'; }
 })();
 </script>

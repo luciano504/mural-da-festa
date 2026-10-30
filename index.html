@@ -441,7 +441,7 @@ h2.sec .muted{font-family:var(--body)}
 .landing h2.sec{margin-top:72px}
 .plano{border-width:1px;border-radius:22px;padding:22px 20px;gap:10px}
 .plano.dest{border-width:1.5px}
-.plano .e{display:none}
+.plano .e{font-size:28px}
 .plano h4{font-family:var(--serif);font-weight:450;font-size:24px}
 .plano .p{font-family:var(--serif);font-weight:400;font-size:34px;letter-spacing:-.01em}
 .plano ul{list-style:none;padding:0;gap:6px;margin-top:4px}
@@ -723,7 +723,7 @@ async function telaConvidado(){
     <header class="capa">
       ${t.enfeite?`<img class="enfc l" src="${midia(t.enfeites[0])}" alt="">${t.enfeites[1]?`<img class="enfc r" src="${midia(t.enfeites[1])}" alt="">`:''}`:''}
       ${retrato?`<div class="arco"><img src="${midia(retrato)}" alt="${esc(f.homenageado||'')}"></div>`:''}
-      <p class="lead">${esc(subtitulo(f))}</p>
+      <p class="lead">${CATS[f.categoria]?.e||"🎉"} ${esc(subtitulo(f))}</p>
       <h1 class="who">${esc(f.homenageado||f.titulo)}</h1>
       ${f.homenageado?`<p class="tit">${esc(f.titulo)}</p>`:''}
       ${quando?`<p class="quando">${quando}</p>`:''}
@@ -732,7 +732,7 @@ async function telaConvidado(){
     </header>
     ${f.ativo ? `
     <section class="deixe">
-      <h2 class="sec" style="justify-content:center">Deixe sua homenagem</h2>
+      <h2 class="sec" style="justify-content:center">💌 Deixe sua homenagem</h2>
       <p class="sub">Ela passa no telão durante a festa e fica guardada no álbum de recordações.</p>
       <div class="acts">
         <button class="act" data-k="foto"><span class="ic">${ICO.foto}</span>Foto<small>da festa ou de vocês</small></button>
@@ -741,11 +741,11 @@ async function telaConvidado(){
         <button class="act" data-k="video"><span class="ic">${ICO.video}</span>Vídeo<small>um recado olhando nos olhos</small></button>
       </div>
       <div class="namebar"><input class="in" id="nome" maxlength="40" placeholder="Seu nome, para assinar" aria-label="Seu nome" value="${esc(store.get('mf_nome')||'')}"></div>
-      ${f.moderacao?`<p class="nota">As homenagens aparecem no telão depois que o anfitrião aprova.</p>`:''}
+      ${f.moderacao?`<p class="nota">As homenagens aparecem no telão depois que o anfitrião aprova 💛</p>`:''}
     </section>
     ` : `<div class="closed">As homenagens desta festa foram encerradas. Obrigado por fazer parte.</div>`}
-    ${(t.fotos||[]).length ? `<h2 class="sec">A história de ${esc(f.homenageado||'quem a gente ama')}</h2><div class="hist">${t.fotos.map(p=>`<figure><img loading="lazy" src="${midia(p)}" alt=""></figure>`).join('')}</div>` : ''}
-    <h2 class="sec">Mural <span class="muted" id="muralN" style="font-size:16px;font-weight:500"></span></h2>
+    ${(t.fotos||[]).length ? `<h2 class="sec">📖 A história de ${esc(f.homenageado||'quem a gente ama')}</h2><div class="hist">${t.fotos.map(p=>`<figure><img loading="lazy" src="${midia(p)}" alt=""></figure>`).join('')}</div>` : ''}
+    <h2 class="sec">🖼️ Mural <span class="muted" id="muralN" style="font-size:16px;font-weight:500"></span></h2>
     <div class="mural" id="mural"></div>
     <p class="rod">Ao enviar uma homenagem, você concorda com os <a href="${BASE}?termos" target="_blank" rel="noopener">Termos de uso e Privacidade</a>.</p>
   </div>`;
@@ -759,7 +759,7 @@ async function atualizarMural(){
   const key=POSTS.map(p=>p.id).join(','); if(key===muralKey) return; muralKey=key;
   $('muralN').textContent = POSTS.length ? `(${POSTS.length})` : '';
   const m=$('mural'); const list=[...POSTS].reverse();
-  m.innerHTML = list.length ? list.map(cardPost).join('') : `<div class="empty">Ainda não chegou nenhuma homenagem. A primeira pode ser a sua.</div>`;
+  m.innerHTML = list.length ? list.map(cardPost).join('') : `<div class="empty">Ainda não chegou nenhuma homenagem. A primeira pode ser a sua ✨</div>`;
 }
 function cardPost(p){
   const by = p.autor ? `<div class="by">— ${esc(p.autor)}</div>` : '';
@@ -986,12 +986,45 @@ async function telaTelao(){
   async function puxar(){
     try{ const l=await postsAprovados(f.id); tv.list=l; for(const p of l){ if(!tv.known.has(p.id)){ tv.known.add(p.id); if(tv.started) tv.queue.push(p); } } $('tvN').textContent = l.length ? `${l.length} homenage${l.length>1?'ns':'m'} 💛` : ''; }catch(e){}
   }
+  // ---- pré-download: áudio e vídeo só entram no telão depois de baixados por inteiro ----
+  const midiaPesada = p => p && (p.tipo==='video' || p.tipo==='audio');
+  const cacheM = new Map();            // id -> {url} | {erro:true} | {baixando:true}
+  const pronto = p => !midiaPesada(p) || !!(cacheM.get(p.id)||{}).url;
+  let baixandoAgora=false;
+  async function baixarUm(p){
+    cacheM.set(p.id,{baixando:true});
+    try{
+      const r = await fetch(midia(p.caminho), {cache:'force-cache'}); if(!r.ok) throw new Error('http '+r.status);
+      const b = await r.blob(); cacheM.set(p.id,{url:URL.createObjectURL(b), t:Date.now()});
+      if(p.thumb){ const im=new Image(); im.src=midia(p.thumb); }
+    }catch(e){ const n=((cacheM.get(p.id)||{}).tent||0)+1; cacheM.set(p.id, n<3?{tent:n}:{erro:true}); }
+    // guarda no máximo 30 mídias na memória; solta as mais antigas
+    const ok=[...cacheM.entries()].filter(([,v])=>v.url).sort((a,b)=>a[1].t-b[1].t);
+    while(ok.length>30){ const [id,v]=ok.shift(); if(tv.cur && tv.cur.id===id) continue; URL.revokeObjectURL(v.url); cacheM.delete(id); }
+  }
+  async function baixador(){
+    if(baixandoAgora) return;
+    const ordem=[...tv.queue, ...tv.list.slice(tv.loop % Math.max(1,tv.list.length)), ...tv.list];
+    for(const p of ordem){ if(p.tipo==='foto'){ if(!p._pre){ p._pre=1; const im=new Image(); im.src=midia(p.caminho); } } }
+    const alvo = ordem.find(p=>midiaPesada(p) && !cacheM.has(p.id)) || ordem.find(p=>midiaPesada(p) && (cacheM.get(p.id)||{}).tent);
+    const falta = tv.list.filter(p=>midiaPesada(p) && !pronto(p) && !(cacheM.get(p.id)||{}).erro).length;
+    $('tvHint').dataset.prep = falta ? `preparando ${falta} ${falta>1?'gravações':'gravação'}…` : '';
+    if(!$('tvHint').dataset.fix) $('tvHint').textContent = $('tvHint').dataset.prep;
+    if(!alvo) return;
+    baixandoAgora=true; try{ await baixarUm(alvo); } finally{ baixandoAgora=false; }
+    setTimeout(baixador, 50);
+  }
+  setInterval(baixador, 2000);
   function proxima(back){
     clearTimeout(tv.timer); if(tv.paused) return;
     let p=null;
     if(back && tv.hist.length>1){ tv.hist.pop(); p=tv.hist.pop(); }
-    else if(tv.queue.length){ p={...tv.queue.shift(), _novo:true}; }
-    else if(tv.list.length){ if(tv.since>=3){ tv.since=0; return mostrar(extra(PADRAO_MIX[tv.pm++ % PADRAO_MIX.length])); } p=tv.list[tv.loop % tv.list.length]; tv.loop++; }
+    else if(tv.queue.some(pronto)){ const i=tv.queue.findIndex(pronto); p={...tv.queue.splice(i,1)[0], _novo:true}; }
+    else if(tv.list.length){
+      if(tv.since>=3){ tv.since=0; return mostrar(extra(PADRAO_MIX[tv.pm++ % PADRAO_MIX.length])); }
+      for(let k=0;k<tv.list.length;k++){ const c=tv.list[tv.loop % tv.list.length]; tv.loop++; if(pronto(c) && !tv.queue.find(q=>q.id===c.id)){ p=c; break; } }
+      if(!p) return mostrar(extra(PADRAO_VAZIO[tv.pv++ % PADRAO_VAZIO.length]));
+    }
     else return mostrar(extra(PADRAO_VAZIO[tv.pv++ % PADRAO_VAZIO.length]));
     if(!p || !tv.list.find(x=>x.id===p.id)) return proxima();
     tv.since++; tv.hist.push(p); if(tv.hist.length>50) tv.hist.shift();
@@ -1009,8 +1042,8 @@ async function telaTelao(){
     else if(p.tipo==='qr'){ el.className='sl tv-empty e-zoom'; el.innerHTML=`<div class="qr" id="tvQrBig"></div><h2>${tv.list.length?'Deixe a sua homenagem também!':'Mande a primeira homenagem!'}</h2><p>Aponte a câmera do celular para o código</p>`; dur=7000; }
     else if(p.tipo==='foto'){ el.classList.add('sl-foto'); el.innerHTML=`<img class="ph" style="--r:${giro()}" src="${midia(p.caminho)}" alt="">${(p.texto||by)?`<div class="cap">${esc(p.texto||'')}${by?`<small>📸 ${by}</small>`:''}</div>`:''}`; dur=8000; }
     else if(p.tipo==='texto'){ el.classList.add('sl-texto'); const L=(p.texto||'').length; const fs = L<40?9:L<90?7:L<180?5.4:L<320?4.2:3.4; el.innerHTML=`<div class="q${t.fundo?' card-on':''}" style="font-size:${fs}vw">${esc(p.texto)}</div>${by?`<div class="by">— ${by}</div>`:''}`; dur=Math.min(18000, 7000+L*45); }
-    else if(p.tipo==='audio'){ el.classList.add('sl-audio'); el.innerHTML=`<div class="mic">🎤</div><div class="eq">${'<i></i>'.repeat(12)}</div><div class="cap">Recado de ${by||'um convidado'}</div><audio src="${midia(p.caminho)}" preload="auto"></audio>`; dur=null; }
-    else if(p.tipo==='video'){ el.classList.add('sl-video'); el.innerHTML=`<video src="${midia(p.caminho)}" playsinline preload="auto" ${p.thumb?`poster="${midia(p.thumb)}"`:''}></video>${by?`<div class="cap"><small>🎥 Recado de ${by}</small></div>`:''}`; dur=null; }
+    else if(p.tipo==='audio'){ el.classList.add('sl-audio'); el.innerHTML=`<div class="mic">🎤</div><div class="eq">${'<i></i>'.repeat(12)}</div><div class="cap">Recado de ${by||'um convidado'}</div><audio src="${(cacheM.get(p.id)||{}).url||midia(p.caminho)}" preload="auto"></audio>`; dur=null; }
+    else if(p.tipo==='video'){ el.classList.add('sl-video'); el.innerHTML=`<video src="${(cacheM.get(p.id)||{}).url||midia(p.caminho)}" playsinline preload="auto" ${p.thumb?`poster="${midia(p.thumb)}"`:''}></video>${by?`<div class="cap"><small>🎥 Recado de ${by}</small></div>`:''}`; dur=null; }
     if(p._novo){ el.insertAdjacentHTML('afterbegin','<div class="novo">✨ Nova homenagem! ✨</div>'); confete(); chars.festa(); }
     st.appendChild(el); tv.cur=p;
     if(p.tipo==='qr') qrInto($('tvQrBig'), url, 600);
@@ -1022,13 +1055,13 @@ async function telaTelao(){
     $('tvStart').hidden=true; tv.started=true; if(mus) mus.start();
     try{ await document.documentElement.requestFullscreen(); }catch(e){}
     try{ if(navigator.wakeLock) await navigator.wakeLock.request('screen'); }catch(e){}
-    await puxar(); chars.start(); mostrar(extra('intro'));
+    await puxar(); baixador(); chars.start(); mostrar(extra('intro'));
   };
   document.addEventListener('keydown', e=>{
     if(!tv.started) return;
     if(e.key==='ArrowRight') proxima();
     else if(e.key==='ArrowLeft') proxima(true);
-    else if(e.key===' '){ e.preventDefault(); tv.paused=!tv.paused; const m=$('stage').querySelector('.sl:last-child audio,.sl:last-child video'); if(tv.paused){ clearTimeout(tv.timer); m&&m.pause(); $('tvHint').textContent='⏸ pausado (espaço para continuar)'; } else { $('tvHint').textContent=''; m ? m.play().catch(()=>{}) : proxima(); } }
+    else if(e.key===' '){ e.preventDefault(); tv.paused=!tv.paused; const m=$('stage').querySelector('.sl:last-child audio,.sl:last-child video'); if(tv.paused){ clearTimeout(tv.timer); m&&m.pause(); $('tvHint').dataset.fix=1; $('tvHint').textContent='⏸ pausado (espaço para continuar)'; } else { $('tvHint').dataset.fix=''; $('tvHint').textContent=$('tvHint').dataset.prep||''; m ? m.play().catch(()=>{}) : proxima(); } }
     else if(e.key.toLowerCase()==='m' && mus){ const mudo=mus.mute(); $('tvHint').textContent = mudo ? '🔇 música desligada (M para ligar)' : ''; }
     else if(e.key.toLowerCase()==='f'){ document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen().catch(()=>{}); }
   });
@@ -1127,11 +1160,11 @@ function painelAdmin(){
      <li>Depois da festa, baixe o álbum em <button class="link" data-ir="recordacoes">📖 Recordações</button>.</li></ol></div>`:''}
    ${!f.custom?`<div class="card seucta" id="seuCta"><div><h2>🎨 Faça o seu tema</h2><p>Imagem de fundo, personagens, 8 a 12 fotos de ${esc(f.homenageado||'quem a gente ama')} e música no telão. Leva 5 minutos.</p></div><button class="btn" id="seuGo" style="font-size:18px;padding:14px 24px">Começar agora →</button></div>`:''}
    <div class="tabs" id="abasTop">
-     <button data-v="meutema" aria-pressed="false">Faça o seu tema</button>
-     <button data-v="moderar" aria-pressed="false">Homenagens <span class="n" id="nPend" hidden></span></button>
-     <button data-v="festa" aria-pressed="false">Dados da festa</button>
-     <button data-v="compartilhar" aria-pressed="false">Convite e links</button>
-     <button data-v="recordacoes" aria-pressed="false">Álbum</button>
+     <button data-v="meutema" aria-pressed="false">🎨 Faça o seu tema</button>
+     <button data-v="moderar" aria-pressed="false">💌 Homenagens <span class="n" id="nPend" hidden></span></button>
+     <button data-v="festa" aria-pressed="false">📝 Dados da festa</button>
+     <button data-v="compartilhar" aria-pressed="false">📲 Convite e links</button>
+     <button data-v="recordacoes" aria-pressed="false">📖 Álbum</button>
    </div>
    <div id="vw"></div></div>`;
   $('sair').onclick=()=>{ store.sset('mf_pin_'+SLUG,null); store.set('mf_pin_'+SLUG,null); location.reload(); };
@@ -1840,7 +1873,7 @@ function telaInicio(){
   $('app').innerHTML=`<div class="wrap landing">
    <section class="lhero">
      <div class="ltxt">
-       <p class="lmarca">Mural da Festa</p>
+       <p class="lmarca">💌 Mural da Festa</p>
        <h1>As palavras de quem você ama, guardadas para sempre.</h1>
        <p class="lsub">Na festa, os convidados mandam fotos, recados, áudios e vídeos pelo celular. Tudo passa no telão e, no fim, vira um álbum de recordações.</p>
        <div class="row"><a class="btn big" href="?criar">Criar o mural da minha festa</a><a class="btn ghost" href="#como">Como funciona</a></div>
@@ -1853,26 +1886,26 @@ function telaInicio(){
      </div>
    </section>
    <section id="como">
-     <h2 class="sec">Como funciona</h2>
+     <h2 class="sec">Como funciona ✨</h2>
      <ol class="passos4">
-       <li><b>O convidado aponta a câmera</b><span>Para o QR Code da mesa ou o link do grupo. Não precisa baixar nada.</span></li>
-       <li><b>Deixa a homenagem</b><span>Uma foto, um recado escrito, um áudio ou um vídeo.</span></li>
-       <li><b>Você aprova</b><span>Nada aparece no telão sem passar por quem organiza.</span></li>
-       <li><b>Telão e álbum</b><span>As homenagens passam ao vivo e viram um álbum em PDF.</span></li>
+       <li><b>📲 O convidado aponta a câmera</b><span>Para o QR Code da mesa ou o link do grupo. Não precisa baixar nada.</span></li>
+       <li><b>💌 Deixa a homenagem</b><span>Uma foto, um recado escrito, um áudio ou um vídeo.</span></li>
+       <li><b>✅ Você aprova</b><span>Nada aparece no telão sem passar por quem organiza.</span></li>
+       <li><b>📺 Telão e álbum</b><span>As homenagens passam ao vivo e viram um álbum em PDF.</span></li>
      </ol>
    </section>
    <section>
-     <h2 class="sec">Do jeito da sua festa</h2>
+     <h2 class="sec">Do jeito da sua festa 🎈</h2>
      <div class="feat">
-       <div><b>Tema e personagens</b><p>Escolha um dos temas prontos ou use a arte do seu convite.</p></div>
-       <div><b>A história do homenageado</b><p>De 8 a 12 fotos, do bebê até hoje, no telão e no álbum.</p></div>
-       <div><b>Música no telão</b><p>Uma trilha suave, que se cala sozinha quando entra um vídeo.</p></div>
-       <div><b>Convite com QR Code</b><p>Para o WhatsApp ou para imprimir. O convidado já chega sabendo.</p></div>
+       <div><b>🎨 Tema e personagens</b><p>Escolha um dos temas prontos ou use a arte do seu convite.</p></div>
+       <div><b>📖 A história do homenageado</b><p>De 8 a 12 fotos, do bebê até hoje, no telão e no álbum.</p></div>
+       <div><b>🎵 Música no telão</b><p>Uma trilha suave, que se cala sozinha quando entra um vídeo.</p></div>
+       <div><b>💌 Convite com QR Code</b><p>Para o WhatsApp ou para imprimir. O convidado já chega sabendo.</p></div>
      </div>
-     <p class="lcats">${Object.values(CATS).map(c=>`<span>${c.n}</span>`).join('')}</p>
+     <p class="lcats">${Object.values(CATS).map(c=>`<span>${c.e} ${c.n}</span>`).join('')}</p>
    </section>
    <section>
-     <h2 class="sec">Planos</h2>
+     <h2 class="sec">Planos 🎁</h2>
      <p class="muted" style="margin:-4px 0 0">Pagamento único por festa, no Pix ou no cartão em até 3x. A festa é liberada na hora.</p>
      <div id="inPlanos"><div class="empty"><span class="spin"></span></div></div>
      <p class="center" style="margin-top:28px"><a class="btn big" href="?criar">Criar o mural da minha festa</a></p>

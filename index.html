@@ -9,14 +9,15 @@
 <meta property="og:description" content="Deixe sua homenagem: foto, recado, áudio ou vídeo!">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%89%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Caveat:wght@500;700&family=Cinzel:wght@600;700&family=Fredoka:wght@400;500;600;700&family=Great+Vibes&family=Luckiest+Guy&family=Pacifico&family=Playfair+Display:wght@600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Caveat:wght@500;700&family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..600,50;1,9..144,300..500,50&family=Figtree:wght@400;500;600;700&family=Cinzel:wght@600;700&family=Fredoka:wght@400;500;600;700&family=Great+Vibes&family=Luckiest+Guy&family=Pacifico&family=Playfair+Display:wght@600;700&display=swap">
 <style>
 /* Layout: cada festa veste o próprio tema (tokens trocados por JS); página do convidado = capa + 4 botões + mural; telão = palco em tela cheia; anfitrião e mestre = painéis em abas */
 :root{
   --bg:#fffdf7; --bg2:#f3e8ff; --surface:#ffffff; --ink:#2a1745; --muted:#6d5c86;
   --accent:#7b2cbf; --accent2:#ff9f1c; --on:#ffffff; --line:rgba(42,23,69,.12);
   --display:'Luckiest Guy', 'Fredoka', system-ui, sans-serif;
-  --body:'Fredoka', ui-rounded, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --body:'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --serif:'Fraunces', Georgia, serif;
   --hand:'Caveat', 'Fredoka', cursive;
   --ok:#2f9e44; --bad:#e03131; --warn:#f08c00;
   color-scheme: light;
@@ -339,6 +340,121 @@ h2.sec{font-weight:700;font-size:22px;margin:28px 0 12px;display:flex;align-item
 .nota a,.rod a{color:var(--accent)}
 .rod{text-align:center;margin-top:30px;font-size:13px;color:var(--muted)}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* =================== acabamento: lembrança, não panfleto =================== */
+body{font-size:16.5px;line-height:1.55;letter-spacing:.003em;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--serif);font-weight:450;letter-spacing:-.01em;font-variation-settings:"SOFT" 50}
+h2.sec{font-family:var(--serif);font-weight:420;font-size:clamp(24px,4vw,30px);margin:44px 0 14px;gap:12px}
+h2.sec .muted{font-family:var(--body)}
+.card{border-radius:24px;box-shadow:0 1px 2px rgba(30,20,40,.04),0 12px 32px -18px rgba(30,20,40,.18)}
+.btn{font-weight:600;letter-spacing:.01em;padding:12px 20px;box-shadow:0 6px 16px -8px color-mix(in srgb,var(--accent) 70%, transparent)}
+.btn.ghost{border-width:1px;box-shadow:none;background:color-mix(in srgb,var(--surface) 70%, transparent)}
+.btn.alt{box-shadow:none}
+.btn.sm{padding:8px 14px}
+.in, textarea.in, select.in{border-width:1px;border-radius:12px;background:var(--surface);transition:border-color .15s, box-shadow .15s}
+.in:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 14%, transparent)}
+.chip{font-weight:600;background:transparent;border:1px solid color-mix(in srgb,var(--accent) 35%, transparent)}
+.ic svg{width:1em;height:1em;display:block}
+.tabs{gap:4px;padding:4px;background:color-mix(in srgb,var(--surface) 75%, transparent);border:1px solid var(--line);border-radius:999px;width:fit-content;max-width:100%;overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none}
+.tabs button{border:0;background:transparent;white-space:nowrap;padding:9px 16px;font-weight:600;color:var(--muted)}
+.tabs button[aria-pressed="true"]{background:var(--accent);color:var(--on);box-shadow:0 4px 12px -6px var(--accent)}
+.sheet{border-radius:28px;padding:24px}
+.sheet h3{font-size:26px}
+
+/* ---- página do convidado: um convite, não um site ---- */
+.convite{max-width:760px}
+.capa{position:relative;text-align:center;padding:36px 8px 8px}
+.arco{width:min(220px,56vw);aspect-ratio:4/5;margin:0 auto 22px;border-radius:999px 999px 26px 26px;overflow:hidden;padding:7px;background:var(--surface);
+  box-shadow:0 18px 40px -22px rgba(30,20,40,.45), 0 0 0 1px var(--line);animation:arcoIn 1.1s cubic-bezier(.2,.8,.2,1) both}
+.arco img{width:100%;height:100%;object-fit:cover;border-radius:999px 999px 20px 20px;display:block}
+@keyframes arcoIn{from{opacity:0;transform:translateY(14px) scale(.98)}}
+.capa .enfc{position:absolute;pointer-events:none;filter:drop-shadow(0 8px 14px rgba(0,0,0,.18));animation:bob 6s ease-in-out infinite}
+.capa .enfc.l{left:-2%;top:18%;width:min(22%,150px)} .capa .enfc.r{right:-2%;top:30%;width:min(20%,130px);animation-delay:-3s}
+.capa .enfc.sticker{background:#fff;padding:5px;border-radius:14px;transform:rotate(-5deg)}
+.capa .enfc.r.sticker{transform:rotate(6deg)}
+.capa .lead{font-family:var(--serif);font-style:italic;font-weight:350;color:var(--muted);font-size:clamp(17px,2.6vw,21px);margin:0}
+.capa .who{font-family:var(--display);color:var(--accent);font-size:clamp(52px,13vw,112px);line-height:.98;margin:6px 0 10px;text-wrap:balance;word-break:break-word}
+.capa .tit{font-family:var(--serif);font-weight:400;font-size:clamp(18px,3vw,22px);margin:0 0 4px;text-wrap:balance}
+.capa .quando{color:var(--muted);font-size:16px;margin:12px 0 0;line-height:1.5}
+.capa .quando b{color:var(--ink);font-weight:600}
+.capa .msgf{font-family:var(--hand);font-size:clamp(24px,4.4vw,30px);line-height:1.2;max-width:560px;margin:22px auto 0;color:var(--ink)}
+.capa .fio{width:56px;height:1px;background:var(--accent);opacity:.5;margin:26px auto 0}
+.deixe{text-align:center}
+.deixe .sub{color:var(--muted);margin:-6px auto 18px;max-width:460px}
+.acts{gap:10px;margin-top:0}
+.act{border:1px solid var(--line);border-radius:20px;padding:20px 10px 16px;font-weight:600;font-size:16px;box-shadow:none;background:var(--surface);color:var(--ink);gap:10px}
+.act .ic{font-size:30px;color:var(--accent)}
+.act small{display:block;font-weight:500;font-size:12.5px;color:var(--muted);margin-top:-4px}
+.act:nth-child(1){background:var(--accent);color:var(--on)} .act:nth-child(1) .ic,.act:nth-child(1) small{color:var(--on)} .act:nth-child(1) small{opacity:.85}
+.act:nth-child(4){background:var(--surface);color:var(--ink)}
+.act:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--accent) 40%, var(--line))}
+.namebar{margin-top:18px}
+.namebar .in{max-width:300px;text-align:center}
+.nota{font-size:14px;color:var(--muted);margin:10px 0 0}
+.hist{padding:10px 6px 20px;gap:16px}
+.hist figure{border-radius:4px;padding:8px 8px 30px;box-shadow:0 14px 30px -18px rgba(30,20,40,.5)}
+.post{border-radius:16px;box-shadow:0 10px 26px -20px rgba(30,20,40,.45)}
+.post.t{background:color-mix(in srgb,var(--surface) 88%, var(--accent2) 12%);border-color:transparent;border-radius:6px 16px 16px 16px}
+.post.t blockquote{font-size:30px}
+.post .by{font-weight:500}
+.empty{border:1px dashed var(--line);font-size:15px}
+.rod{color:var(--muted);font-size:13px;text-align:center;margin-top:40px}
+
+/* ---- página inicial ---- */
+.landing{max-width:1080px}
+.lhero{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;min-height:min(78vh,680px);padding:40px 0 20px}
+@media (max-width:820px){.lhero{grid-template-columns:1fr;gap:28px;min-height:0;padding-top:24px}}
+.lmarca{font-family:var(--serif);font-style:italic;font-size:19px;color:var(--accent);margin:0 0 18px}
+.lhero h1{font-family:var(--serif);font-weight:380;font-size:clamp(40px,6.4vw,72px);line-height:1.03;letter-spacing:-.025em;margin:0 0 20px;text-wrap:balance;font-variation-settings:"SOFT" 100,"opsz" 144}
+.lsub{font-size:clamp(17px,2vw,19px);color:var(--muted);max-width:30em;margin:0 0 26px;line-height:1.6}
+.btn.big{font-size:17px;padding:15px 26px}
+.lhero .nota{margin-top:14px}
+.lcena{position:relative;height:440px}
+@media (max-width:820px){.lcena{height:380px;max-width:420px;width:100%;margin:0 auto}}
+.lpol{position:absolute;left:4%;top:0;width:62%;background:#fff;padding:10px 10px 42px;border-radius:4px;transform:rotate(-4deg);box-shadow:0 24px 50px -26px rgba(43,34,48,.55);animation:cena 1.2s cubic-bezier(.2,.8,.2,1) both}
+.lfoto{aspect-ratio:4/5;border-radius:2px;background:radial-gradient(60% 50% at 40% 38%,#f6d6c8 0 30%,transparent 31%),radial-gradient(90% 70% at 50% 100%,#b9839d 0 45%,transparent 46%),linear-gradient(160deg,#f3d5cf,#d8b6cf 60%,#a98aa8)}
+.lpol span{position:absolute;left:0;right:0;bottom:10px;text-align:center;font-family:var(--hand);font-size:24px;color:#4a3d4e}
+.lnota{position:absolute;right:0;top:34%;width:58%;background:#fdf3ee;border-radius:4px 18px 18px 18px;padding:20px 20px 16px;font-family:var(--hand);font-size:27px;line-height:1.12;color:#3a2e3e;transform:rotate(2.5deg);box-shadow:0 20px 40px -24px rgba(43,34,48,.5);animation:cena 1.2s .25s cubic-bezier(.2,.8,.2,1) both}
+.lnota b{display:block;font-family:var(--body);font-weight:600;font-size:13px;color:var(--accent);margin-top:10px}
+.laudio{position:absolute;left:14%;bottom:0;width:66%;display:flex;align-items:center;gap:12px;background:#fff;border-radius:999px;padding:10px 18px 10px 10px;box-shadow:0 18px 36px -22px rgba(43,34,48,.5);animation:cena 1.2s .5s cubic-bezier(.2,.8,.2,1) both;flex-wrap:wrap}
+.laudio .play{width:38px;height:38px;border-radius:50%;background:var(--accent);flex:none;position:relative}
+.laudio .play::after{content:"";position:absolute;left:15px;top:12px;border-left:11px solid #fff;border-top:7px solid transparent;border-bottom:7px solid transparent}
+.laudio .ond{flex:1;display:flex;align-items:center;gap:2px;height:30px}
+.laudio .ond i{flex:1;background:color-mix(in srgb,var(--accent) 55%, #fff);border-radius:2px}
+.laudio small{position:absolute;right:20px;bottom:-22px;color:var(--muted);font-size:12.5px}
+@keyframes cena{from{opacity:0;transform:translateY(18px) rotate(0)}}
+@media (prefers-reduced-motion:reduce){.lpol,.lnota,.laudio,.arco{animation:none}}
+.passos4{list-style:none;counter-reset:p;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:28px}
+@media (max-width:820px){.passos4{grid-template-columns:1fr 1fr}} @media (max-width:480px){.passos4{grid-template-columns:1fr}}
+.passos4 li{counter-increment:p;border-top:1px solid var(--line);padding-top:16px}
+.passos4 li::before{content:counter(p);font-family:var(--serif);font-size:34px;color:var(--accent);display:block;line-height:1;margin-bottom:10px}
+.passos4 b{display:block;font-size:17px;margin-bottom:4px}
+.passos4 span{color:var(--muted);font-size:15px}
+.feat{display:grid;grid-template-columns:repeat(2,1fr);gap:22px 40px}
+@media (max-width:640px){.feat{grid-template-columns:1fr}}
+.feat b{font-family:var(--serif);font-weight:450;font-size:21px}
+.feat p{margin:4px 0 0;color:var(--muted)}
+.lcats{display:flex;flex-wrap:wrap;gap:8px;margin:28px 0 0}
+.lcats span{border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:14px;color:var(--muted);background:var(--surface)}
+.lrod{margin-top:64px;padding-top:24px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;color:var(--muted);font-size:14px}
+.lrod a{color:var(--muted)}
+.landing h2.sec{margin-top:72px}
+.plano{border-width:1px;border-radius:22px;padding:22px 20px;gap:10px}
+.plano.dest{border-width:1.5px}
+.plano .e{display:none}
+.plano h4{font-family:var(--serif);font-weight:450;font-size:24px}
+.plano .p{font-family:var(--serif);font-weight:400;font-size:34px;letter-spacing:-.01em}
+.plano ul{list-style:none;padding:0;gap:6px;margin-top:4px}
+.plano li{padding-left:18px;position:relative;color:var(--ink)}
+.plano li::before{content:"";position:absolute;left:2px;top:.6em;width:6px;height:6px;border-radius:50%;background:var(--accent2)}
+.plano .tag{font-weight:600;letter-spacing:.01em}
+.cat,.tema,.opt,.thumb,.faixa{border-width:1px !important}
+.upbox,.thumb.add,.drop{border-width:1.5px !important}
+.top h1{font-family:var(--serif);font-weight:420}
+.top h1 em{font-style:italic;color:var(--accent)}
+.cat[aria-pressed="true"]{box-shadow:0 0 0 2px var(--accent) inset}
+.teste-bar,.plano-bar,.aviso{border-radius:16px;font-weight:500}
+.teste-bar b,.plano-bar b{font-weight:650}
 </style>
 </head>
 <body>
@@ -505,7 +621,7 @@ const fx = (()=>{
   function draw(){
     c.clearRect(0,0,W,H);
     for(const p of parts){
-      c.save(); c.translate(p.x,p.y); c.globalAlpha = t.dark ? .85 : .55;
+      c.save(); c.translate(p.x,p.y); c.globalAlpha = t.dark ? .6 : .32;
       switch(t.pat){
         case 'confete': c.rotate(p.r); c.fillStyle=p.c; c.fillRect(-p.s/2,-p.s/5,p.s,p.s/2.4); break;
         case 'baloes': { const s=p.s*1.8; c.fillStyle=p.c; c.beginPath(); c.ellipse(0,0,s*.42,s*.52,0,0,6.28); c.fill(); c.strokeStyle=p.c; c.lineWidth=1; c.beginPath(); c.moveTo(0,s*.52); c.quadraticCurveTo(6,s*.9,0,s*1.3); c.stroke(); c.globalAlpha*=.6; c.fillStyle='#fff'; c.beginPath(); c.ellipse(-s*.14,-s*.2,s*.08,s*.14,-.5,0,6.28); c.fill(); break; }
@@ -528,10 +644,19 @@ const fx = (()=>{
   }
   addEventListener('resize', ()=>{ if(t){ size(); draw(); } });
   return {
-    start(th){ t=th; cancelAnimationFrame(raf); size(); const n = th.pat==='estrelas' ? 90 : th.pat==='brilho' ? 40 : 34; parts=Array.from({length:n},(_,i)=>mk(i)); draw(); if(!reduce) raf=requestAnimationFrame(step); },
+    start(th){ t=th; cancelAnimationFrame(raf); size(); const n = th.pat==='estrelas' ? 46 : th.pat==='brilho' ? 20 : 14; parts=Array.from({length:n},(_,i)=>mk(i)); draw(); if(!reduce) raf=requestAnimationFrame(step); },
     stop(){ cancelAnimationFrame(raf); c.clearRect(0,0,W,H); }
   };
 })();
+
+// ---------- ícones (linha fina) ----------
+const SVG = d => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+const ICO = {
+  foto: SVG('<path d="M4 8.5A2.5 2.5 0 0 1 6.5 6h1.7l1.3-2h5l1.3 2h1.7A2.5 2.5 0 0 1 20 8.5v8A2.5 2.5 0 0 1 17.5 19h-11A2.5 2.5 0 0 1 4 16.5z"/><circle cx="12" cy="12.5" r="3.4"/>'),
+  texto: SVG('<path d="M5 19.5h4L19.3 9.2a2 2 0 0 0 0-2.8l-1.7-1.7a2 2 0 0 0-2.8 0L4.5 15v4.5"/><path d="M13.5 6.5l4 4"/>'),
+  audio: SVG('<rect x="9" y="3.5" width="6" height="11" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v2.5"/>'),
+  video: SVG('<rect x="3.5" y="6.5" width="12" height="11" rx="2.5"/><path d="M15.5 10.5l5-3v9l-5-3"/>')
+};
 
 // ---------- QR ----------
 function qrCanvas(text, size=512){
@@ -591,34 +716,41 @@ async function telaConvidado(){
   FESTA = await carregarFesta(SLUG).catch(()=>null);
   if(!FESTA){ return telaNaoAchou(); }
   const t=temaDe(FESTA), f=FESTA; aplicarTema(t); document.title = FESTA.homenageado ? `${FESTA.homenageado} · Mural da Festa` : FESTA.titulo;
-  $('app').innerHTML = `${f.plano==='teste'?'<div class="demo-faixa" style="position:sticky">🧪 VERSÃO DE TESTE · Mural da Festa</div>':''}
-  <div class="wrap">
-    <section class="card hero${t.enfeite?' tem-enf':''}">
-      ${t.enfeite ? `<img class="enf e1" src="${midia(t.enfeites[0])}" alt=""><img class="enf e2" src="${midia(t.enfeites[1]||t.enfeites[0])}" alt="">` : `<span class="deco" style="left:4%;top:10%">${t.deco[0]}</span><span class="deco" style="right:5%;top:14%;animation-delay:-1.5s">${t.deco[1]}</span><span class="deco" style="right:12%;bottom:8%;animation-delay:-2.5s;font-size:34px">${t.deco[2]}</span>`}
-      <span class="chip">${CATS[f.categoria]?.e||'🎉'} ${esc(CATS[f.categoria]?.n||'Festa')}</span>
-      <div class="who">${esc(f.homenageado||f.titulo)}</div>
+  const retrato = (t.fotos||[]).length ? t.fotos[t.fotos.length-1] : null;
+  const quando = [f.data?`<b>${esc(dataBonita(f))}</b>${f.hora?`, às ${esc(f.hora)}`:''}`:'', f.local?esc(f.local):''].filter(Boolean).join('<br>');
+  $('app').innerHTML = `${f.plano==='teste'?'<div class="demo-faixa" style="position:sticky">Versão de teste do Mural da Festa</div>':''}
+  <div class="wrap convite">
+    <header class="capa">
+      ${t.enfeite?`<img class="enfc l" src="${midia(t.enfeites[0])}" alt="">${t.enfeites[1]?`<img class="enfc r" src="${midia(t.enfeites[1])}" alt="">`:''}`:''}
+      ${retrato?`<div class="arco"><img src="${midia(retrato)}" alt="${esc(f.homenageado||'')}"></div>`:''}
+      <p class="lead">${esc(subtitulo(f))}</p>
+      <h1 class="who">${esc(f.homenageado||f.titulo)}</h1>
       ${f.homenageado?`<p class="tit">${esc(f.titulo)}</p>`:''}
-      <div class="sub">${esc(subtitulo(f))}</div>
-      <div class="meta">${f.data?`<span>📅 ${esc(dataBonita(f))}</span>`:''}${f.hora?`<span>⏰ ${esc(f.hora)}</span>`:''}${f.local?`<span>📍 ${esc(f.local)}</span>`:''}</div>
+      ${quando?`<p class="quando">${quando}</p>`:''}
       ${f.mensagem?`<p class="msgf">${esc(f.mensagem)}</p>`:''}
-    </section>
-    ${(t.fotos||[]).length ? `<h2 class="sec">📖 A história de ${esc(f.homenageado||'quem a gente ama')}</h2><div class="hist">${t.fotos.map(p=>`<figure><img loading="lazy" src="${midia(p)}" alt=""></figure>`).join('')}</div>` : ''}
+      <div class="fio"></div>
+    </header>
     ${f.ativo ? `
-    <h2 class="sec">💌 Deixe sua homenagem</h2>
-    <div class="acts">
-      <button class="act" data-k="foto"><span class="ic">📸</span>Foto</button>
-      <button class="act" data-k="texto"><span class="ic">✍️</span>Recado</button>
-      <button class="act" data-k="audio"><span class="ic">🎤</span>Áudio</button>
-      <button class="act" data-k="video"><span class="ic">🎥</span>Vídeo</button>
-    </div>
-    <div class="namebar"><label for="nome" class="muted" style="font-weight:600">Seu nome:</label><input class="in" id="nome" maxlength="40" placeholder="Ex.: Tia Ana" value="${esc(store.get('mf_nome')||'')}"></div>
-    ${f.moderacao?`<p class="center muted" style="font-size:14px;margin:8px 0 0">As homenagens aparecem no telão depois que o anfitrião aprovar 💛</p>`:''}
-    ` : `<div class="closed">Esta festa já encerrou as homenagens. Obrigado por participar! 💛</div>`}
-    <h2 class="sec">🖼️ Mural <span class="muted" id="muralN" style="font-size:16px;font-weight:600"></span></h2>
+    <section class="deixe">
+      <h2 class="sec" style="justify-content:center">Deixe sua homenagem</h2>
+      <p class="sub">Ela passa no telão durante a festa e fica guardada no álbum de recordações.</p>
+      <div class="acts">
+        <button class="act" data-k="foto"><span class="ic">${ICO.foto}</span>Foto<small>da festa ou de vocês</small></button>
+        <button class="act" data-k="texto"><span class="ic">${ICO.texto}</span>Recado<small>umas palavras de carinho</small></button>
+        <button class="act" data-k="audio"><span class="ic">${ICO.audio}</span>Áudio<small>a sua voz, gravada aqui</small></button>
+        <button class="act" data-k="video"><span class="ic">${ICO.video}</span>Vídeo<small>um recado olhando nos olhos</small></button>
+      </div>
+      <div class="namebar"><input class="in" id="nome" maxlength="40" placeholder="Seu nome, para assinar" aria-label="Seu nome" value="${esc(store.get('mf_nome')||'')}"></div>
+      ${f.moderacao?`<p class="nota">As homenagens aparecem no telão depois que o anfitrião aprova.</p>`:''}
+    </section>
+    ` : `<div class="closed">As homenagens desta festa foram encerradas. Obrigado por fazer parte.</div>`}
+    ${(t.fotos||[]).length ? `<h2 class="sec">A história de ${esc(f.homenageado||'quem a gente ama')}</h2><div class="hist">${t.fotos.map(p=>`<figure><img loading="lazy" src="${midia(p)}" alt=""></figure>`).join('')}</div>` : ''}
+    <h2 class="sec">Mural <span class="muted" id="muralN" style="font-size:16px;font-weight:500"></span></h2>
     <div class="mural" id="mural"></div>
     <p class="rod">Ao enviar uma homenagem, você concorda com os <a href="${BASE}?termos" target="_blank" rel="noopener">Termos de uso e Privacidade</a>.</p>
   </div>`;
   document.querySelectorAll('.act').forEach(b=>b.onclick=()=>abrirEnvio(b.dataset.k));
+  document.querySelectorAll('.capa .enfc').forEach(im=>{ const t2=new Image(); t2.crossOrigin='anonymous'; t2.onload=()=>{ try{ const c=document.createElement('canvas'); c.width=c.height=16; const x=c.getContext('2d'); x.drawImage(t2,0,0,16,16); const d=x.getImageData(0,0,16,16).data; if(![0,15,240,255].some(k=>d[k*4+3]<200)) im.classList.add('sticker'); }catch(e){ im.classList.add('sticker'); } }; t2.src=im.src; });
   const nome=$('nome'); if(nome) nome.addEventListener('change',()=>store.set('mf_nome',nome.value.trim().slice(0,40)));
   await atualizarMural(); setInterval(()=>{ if(!document.hidden) atualizarMural(); }, 20000);
 }
@@ -627,7 +759,7 @@ async function atualizarMural(){
   const key=POSTS.map(p=>p.id).join(','); if(key===muralKey) return; muralKey=key;
   $('muralN').textContent = POSTS.length ? `(${POSTS.length})` : '';
   const m=$('mural'); const list=[...POSTS].reverse();
-  m.innerHTML = list.length ? list.map(cardPost).join('') : `<div class="empty">Ainda não tem nada aqui. Seja o primeiro a deixar uma homenagem! 🎉</div>`;
+  m.innerHTML = list.length ? list.map(cardPost).join('') : `<div class="empty">Ainda não chegou nenhuma homenagem. A primeira pode ser a sua.</div>`;
 }
 function cardPost(p){
   const by = p.autor ? `<div class="by">— ${esc(p.autor)}</div>` : '';
@@ -638,7 +770,7 @@ function cardPost(p){
   return '';
 }
 function telaNaoAchou(){
-  aplicarTema('confete');
+  aplicarTema(TEMA_MARCA);
   $('app').innerHTML = `<div class="wrap center" style="padding-top:12vh"><div style="font-size:72px">🔎</div><h1>Festa não encontrada</h1><p class="muted">Confira se o link está completo, do jeito que o anfitrião mandou.</p><a class="btn" href="${BASE}">Ir para o início</a></div>`;
 }
 
@@ -995,11 +1127,11 @@ function painelAdmin(){
      <li>Depois da festa, baixe o álbum em <button class="link" data-ir="recordacoes">📖 Recordações</button>.</li></ol></div>`:''}
    ${!f.custom?`<div class="card seucta" id="seuCta"><div><h2>🎨 Faça o seu tema</h2><p>Imagem de fundo, personagens, 8 a 12 fotos de ${esc(f.homenageado||'quem a gente ama')} e música no telão. Leva 5 minutos.</p></div><button class="btn" id="seuGo" style="font-size:18px;padding:14px 24px">Começar agora →</button></div>`:''}
    <div class="tabs" id="abasTop">
-     <button data-v="meutema" aria-pressed="false">🎨 Faça o seu tema</button>
-     <button data-v="moderar" aria-pressed="false">💌 Homenagens <span class="n" id="nPend" hidden></span></button>
-     <button data-v="festa" aria-pressed="false">📝 Dados da festa</button>
-     <button data-v="compartilhar" aria-pressed="false">📲 Compartilhar</button>
-     <button data-v="recordacoes" aria-pressed="false">📖 Recordações</button>
+     <button data-v="meutema" aria-pressed="false">Faça o seu tema</button>
+     <button data-v="moderar" aria-pressed="false">Homenagens <span class="n" id="nPend" hidden></span></button>
+     <button data-v="festa" aria-pressed="false">Dados da festa</button>
+     <button data-v="compartilhar" aria-pressed="false">Convite e links</button>
+     <button data-v="recordacoes" aria-pressed="false">Álbum</button>
    </div>
    <div id="vw"></div></div>`;
   $('sair').onclick=()=>{ store.sset('mf_pin_'+SLUG,null); store.set('mf_pin_'+SLUG,null); location.reload(); };
@@ -1514,7 +1646,7 @@ async function pdfCartoes(f){
 // =====================================================================
 let MPIN=null, FESTAS=[];
 async function telaMestre(){
-  aplicarTema('confete'); document.title='Organizador · Mural da Festa';
+  aplicarTema(TEMA_MARCA); document.title='Organizador · Mural da Festa';
   const salvo=store.sget('mf_mestre');
   if(salvo && await rpc('fe_mestre_login',{p_pin:salvo}).catch(()=>false)){ MPIN=salvo; return painelMestre(); }
   telaLogin('Área do organizador','Mural da Festa', async pin=>{ const ok=await rpc('fe_mestre_login',{p_pin:pin}); if(!ok) return false; MPIN=pin; store.sset('mf_mestre',pin); painelMestre(); return true; });
@@ -1549,7 +1681,7 @@ function msgCliente(f, senha){
 function novaFesta(){
   $('app').innerHTML=`<div class="wrap"><div class="top"><h1>＋ Nova festa</h1><button class="btn ghost sm" id="nfVoltar">← Voltar</button></div>${formFesta({categoria:'aniversario',tema:'confete',moderacao:true},{mestre:true})}
     <div class="row" style="justify-content:flex-end;margin-top:12px"><span class="msg" id="nfM"></span><button class="btn" id="nfCriar">🎉 Criar festa</button></div></div>`;
-  $('nfVoltar').onclick=()=>{ aplicarTema('confete'); painelMestre(); };
+  $('nfVoltar').onclick=()=>{ aplicarTema(TEMA_MARCA); painelMestre(); };
   const ler=ligarFormFesta({categoria:'aniversario',tema:'confete'}, k=>aplicarTema(k));
   $('nfCriar').onclick=async()=>{
     const d=ler(); if(!d.homenageado && !$('ffTit').value.trim()){ $('nfM').className='msg err'; $('nfM').textContent='Preencha o nome do homenageado.'; return; }
@@ -1560,7 +1692,7 @@ function novaFesta(){
   };
 }
 function telaCriar(){
-  aplicarTema('confete'); document.title='Criar minha festa · Mural da Festa';
+  aplicarTema(TEMA_MARCA); document.title='Criar minha festa · Mural da Festa';
   const f0={categoria:'aniversario',tema:'confete',moderacao:true};
   $('app').innerHTML=`<div class="wrap"><div class="top"><h1>✨ Crie o mural da sua festa</h1><a class="btn ghost sm" href="${BASE}">← Início</a></div>
     <p class="muted" style="margin:-4px 0 14px">Leva 2 minutos. Escolha o tipo de festa e o tema, preencha os dados e pronto: você recebe o link, o QR Code e o convite na hora. Depois, monta o telão com imagens, fotos e música.</p>
@@ -1607,7 +1739,7 @@ function festaCriada(f, senha){
   qrInto($('fcQr'), linkFesta(f.slug), 200);
   document.querySelectorAll('[data-copy]').forEach(b=>b.onclick=()=>copiar(b.dataset.copy));
   $('fcMsg').onclick=()=>copiar(msgCliente(f, senha),'Mensagem copiada! Agora é só colar no WhatsApp do cliente.');
-  $('fcVoltar').onclick=()=>{ aplicarTema('confete'); painelMestre(); };
+  $('fcVoltar').onclick=()=>{ aplicarTema(TEMA_MARCA); painelMestre(); };
 }
 function ajustesFesta(f){
   abrirFolha(`<h3>⚙️ ${esc(f.homenageado||f.titulo)}</h3>
@@ -1665,7 +1797,7 @@ function trocarMestra(){
 const CONTATO = '';   // e-mail ou WhatsApp para pedidos de remoção e privacidade
 const COMPRA_URL = '';   // link da página de venda da ativação (Kiwify, Hotmart, Mercado Pago…)
 function telaTermos(){
-  aplicarTema('confete'); document.title='Termos de uso e Privacidade · Mural da Festa';
+  aplicarTema(TEMA_MARCA); document.title='Termos de uso e Privacidade · Mural da Festa';
   const canal = CONTATO ? `pelo contato <b>${esc(CONTATO)}</b>` : 'falando com o anfitrião da festa ou com o organizador que contratou o Mural da Festa';
   $('app').innerHTML=`<div class="wrap legal"><div class="card" style="padding:24px 22px">
   <h1 style="margin:0">Termos de uso e Política de Privacidade</h1><p class="muted">Mural da Festa · versão de 29/10/2026</p>
@@ -1701,37 +1833,54 @@ function telaTermos(){
 // =====================================================================
 // INÍCIO (página de apresentação)
 // =====================================================================
+const TEMA_MARCA = {n:'Mural da Festa', e:'💌', cats:[], bg:'#f6f1f4', bg2:'#efe3ea', surface:'#ffffff', ink:'#2b2230', muted:'#776b7c', accent:'#963c5f', accent2:'#e9b8a3', on:'#ffffff', font:"'Fraunces'", pat:'brilho', pal:['#e9b8a3','#cfa9c9','#f3d9cf'], deco:['💌','✨','🎈'], paper:'#fbf8fa'};
 function telaInicio(){
-  aplicarTema('confete');
+  aplicarTema(TEMA_MARCA);
+  const ondas = Array.from({length:28},(_,i)=>`<i style="height:${Math.round(18+Math.abs(Math.sin(i*1.7))*62)}%"></i>`).join('');
   $('app').innerHTML=`<div class="wrap landing">
-   <section class="card hero"><span class="deco" style="left:5%;top:12%">🎈</span><span class="deco" style="right:6%;top:16%;animation-delay:-1.4s">🎂</span><span class="deco" style="right:14%;bottom:10%;animation-delay:-2.2s">💍</span>
-     <span class="chip">📸 ✍️ 🎤 🎥</span><div class="who" style="font-size:clamp(46px,10vw,92px)">Mural da Festa</div>
-     <p class="tit" style="max-width:640px;margin:6px auto 0">Os convidados mandam fotos, recados, áudios e vídeos pelo celular. As homenagens aparecem no telão durante a festa e viram um álbum de recordações no final.</p>
-     <div class="row" style="justify-content:center;margin-top:20px"><a class="btn" href="?criar" style="font-size:19px;padding:14px 26px">✨ Criar o mural da minha festa</a></div>
-     <p class="muted" style="margin:8px 0 0;font-size:14px">Teste grátis, sem cadastro. Ative quando quiser.</p>
-     <form class="row" id="inF" style="justify-content:center;margin-top:18px"><input class="in" id="inC" placeholder="Código da festa (ex.: maria-clara-5068)" style="max-width:320px"><button class="btn">Entrar na festa</button></form></section>
-   <h2 class="sec">Como funciona</h2>
-   <div class="steps">
-     <div class="card step"><div class="e">📲</div><h3>1. Convidado aponta a câmera</h3><p class="muted">QR Code na mesa ou link no grupo. Sem baixar aplicativo e sem cadastro.</p></div>
-     <div class="card step"><div class="e">💌</div><h3>2. Manda a homenagem</h3><p class="muted">Foto, recado escrito, áudio ou vídeo de até 1 minuto.</p></div>
-     <div class="card step"><div class="e">✅</div><h3>3. Anfitrião aprova</h3><p class="muted">Nada aparece no telão sem passar pelo filtro de quem organiza.</p></div>
-     <div class="card step"><div class="e">📺</div><h3>4. Telão e álbum</h3><p class="muted">Tudo passa no telão durante a festa. No fim, o álbum em PDF e todos os arquivos.</p></div>
-   </div>
-   <h2 class="sec">Para todo tipo de festa</h2>
-   <div class="cats">${Object.values(CATS).map(c=>`<div class="cat" style="cursor:default"><span class="e">${c.e}</span>${c.n}</div>`).join('')}</div>
-   <h2 class="sec">Com a cara da sua festa</h2>
-   <div class="steps">
-     <div class="card step"><div class="e">🎨</div><h3>Tema e personagens</h3><p class="muted">16 temas prontos ou a arte do seu convite, com até 3 personagens.</p></div>
-     <div class="card step"><div class="e">📖</div><h3>A história do homenageado</h3><p class="muted">De 8 a 12 fotos, do bebê até hoje, no telão e no álbum.</p></div>
-     <div class="card step"><div class="e">🎵</div><h3>Música no telão</h3><p class="muted">Trilhas prontas ou as suas músicas, que abaixam sozinhas quando entra um vídeo.</p></div>
-     <div class="card step"><div class="e">💌</div><h3>Convite com QR Code</h3><p class="muted">Para o WhatsApp ou para imprimir. O convidado já chega sabendo.</p></div>
-   </div>
-   <h2 class="sec">Planos</h2>
-   <p class="muted" style="margin:-6px 0 0">Crie e teste de graça. Pague só quando gostar: Pix ou cartão em até 3x, liberação na hora.</p>
-   <div id="inPlanos"><div class="empty"><span class="spin"></span></div></div>
-   <p class="center" style="margin-top:26px"><a class="btn" href="?criar" style="font-size:18px">✨ Criar minha festa agora</a></p>
-   <p class="center" style="margin-top:30px"><a class="btn ghost sm" href="?mestre">🔐 Área do organizador</a></p>
-   <p class="rod"><a href="?termos">Termos de uso e Privacidade</a></p></div>`;
+   <section class="lhero">
+     <div class="ltxt">
+       <p class="lmarca">Mural da Festa</p>
+       <h1>As palavras de quem você ama, guardadas para sempre.</h1>
+       <p class="lsub">Na festa, os convidados mandam fotos, recados, áudios e vídeos pelo celular. Tudo passa no telão e, no fim, vira um álbum de recordações.</p>
+       <div class="row"><a class="btn big" href="?criar">Criar o mural da minha festa</a><a class="btn ghost" href="#como">Como funciona</a></div>
+       <p class="nota">Crie e teste de graça, sem cadastro.</p>
+     </div>
+     <div class="lcena" aria-hidden="true">
+       <div class="lpol"><div class="lfoto"></div><span>a primeira valsa</span></div>
+       <div class="lnota">Que você nunca perca esse brilho no olhar. Te amamos!<b>Vovó Lúcia</b></div>
+       <div class="laudio"><span class="play"></span><span class="ond">${ondas}</span><small>Tio Beto · 0:42</small></div>
+     </div>
+   </section>
+   <section id="como">
+     <h2 class="sec">Como funciona</h2>
+     <ol class="passos4">
+       <li><b>O convidado aponta a câmera</b><span>Para o QR Code da mesa ou o link do grupo. Não precisa baixar nada.</span></li>
+       <li><b>Deixa a homenagem</b><span>Uma foto, um recado escrito, um áudio ou um vídeo.</span></li>
+       <li><b>Você aprova</b><span>Nada aparece no telão sem passar por quem organiza.</span></li>
+       <li><b>Telão e álbum</b><span>As homenagens passam ao vivo e viram um álbum em PDF.</span></li>
+     </ol>
+   </section>
+   <section>
+     <h2 class="sec">Do jeito da sua festa</h2>
+     <div class="feat">
+       <div><b>Tema e personagens</b><p>Escolha um dos temas prontos ou use a arte do seu convite.</p></div>
+       <div><b>A história do homenageado</b><p>De 8 a 12 fotos, do bebê até hoje, no telão e no álbum.</p></div>
+       <div><b>Música no telão</b><p>Uma trilha suave, que se cala sozinha quando entra um vídeo.</p></div>
+       <div><b>Convite com QR Code</b><p>Para o WhatsApp ou para imprimir. O convidado já chega sabendo.</p></div>
+     </div>
+     <p class="lcats">${Object.values(CATS).map(c=>`<span>${c.n}</span>`).join('')}</p>
+   </section>
+   <section>
+     <h2 class="sec">Planos</h2>
+     <p class="muted" style="margin:-4px 0 0">Pagamento único por festa, no Pix ou no cartão em até 3x. A festa é liberada na hora.</p>
+     <div id="inPlanos"><div class="empty"><span class="spin"></span></div></div>
+     <p class="center" style="margin-top:28px"><a class="btn big" href="?criar">Criar o mural da minha festa</a></p>
+   </section>
+   <footer class="lrod">
+     <form class="row" id="inF"><input class="in" id="inC" placeholder="Código da festa" aria-label="Código da festa" style="max-width:240px"><button class="btn ghost sm">Entrar na festa</button></form>
+     <p><a href="?termos">Termos de uso e Privacidade</a> <span aria-hidden="true">·</span> <a href="?mestre">Área do organizador</a></p>
+   </footer></div>`;
   carregarPlanos().then(l=>{ $('inPlanos').innerHTML = l.length ? htmlPlanos(l) : ''; }).catch(()=>{ $('inPlanos').innerHTML=''; });
   $('inF').onsubmit=e=>{ e.preventDefault(); const v=$('inC').value.trim().toLowerCase().replace(/.*[?&]f=/,'').replace(/[^a-z0-9-]/g,''); if(v) location.href=linkFesta(v); };
 }

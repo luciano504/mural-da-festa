@@ -505,6 +505,42 @@ h2.sec .muted{font-family:var(--body)}
 .scan video{width:100%;height:100%;object-fit:cover;display:block}
 .scan::after{content:"";position:absolute;inset:18%;border:3px solid rgba(255,255,255,.85);border-radius:22px;box-shadow:0 0 0 999px rgba(0,0,0,.35)}
 @media (max-width:480px){.port-top{grid-template-columns:1fr}.port-top .btn{width:100%}}
+
+.card-ed{display:grid;grid-template-columns:1fr 1.4fr 1.6fr auto;gap:6px;align-items:center;margin-bottom:6px}
+@media (max-width:640px){.card-ed{grid-template-columns:1fr 1fr auto}.card-ed .ds{grid-column:1/-1;order:5}}
+.card-ed .x{border:1px solid var(--line);background:var(--surface);border-radius:10px;width:36px;height:36px;cursor:pointer}
+.cdp-sec{margin-top:6px}
+.cdp-sec h4{margin:14px 0 6px;font-family:var(--serif);font-weight:450;font-size:19px}
+.cdp-item{display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid var(--line);padding:10px 2px}
+.cdp-item b{display:block} .cdp-item small{color:var(--muted)}
+.cdp-q{display:flex;align-items:center;gap:8px;flex:none}
+.cdp-q button{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--bg);font-size:18px;cursor:pointer;line-height:1}
+.cdp-q b{min-width:22px;text-align:center;font-variant-numeric:tabular-nums}
+.mesa-chip{display:inline-flex;gap:6px;align-items:center;background:var(--accent);color:var(--on);border-radius:999px;padding:6px 14px;font-weight:700;margin-top:14px}
+.meus-ped div{display:flex;justify-content:space-between;gap:10px;font-size:14px;border-bottom:1px solid var(--line);padding:6px 0}
+.ped-board{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;align-items:start}
+@media (max-width:820px){.ped-board{grid-template-columns:1fr}}
+.ped-col h3{margin:0 0 8px;font-size:18px}
+.ped{border:1px solid var(--line);border-radius:18px;background:var(--surface);padding:12px 14px;margin-bottom:10px;box-shadow:0 8px 20px -16px rgba(0,0,0,.4)}
+.ped.ped-novo{border:2px solid var(--accent);animation:pedNovo 1.2s ease 2}
+@keyframes pedNovo{50%{transform:scale(1.02)}}
+.ped .m{font-family:var(--serif);font-size:30px;line-height:1;color:var(--accent)}
+.ped ul{margin:8px 0;padding-left:18px}
+.ped .t{color:var(--muted);font-size:13px}
+.ped .row .btn{flex:1}
+.apr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-top:10px}
+.apr-grid button{border:2px solid transparent;border-radius:12px;padding:0;overflow:hidden;cursor:pointer;background:#000;aspect-ratio:16/9;position:relative}
+.apr-grid button img{width:100%;height:100%;object-fit:contain;display:block}
+.apr-grid button[aria-pressed=true]{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 30%, transparent)}
+.apr-grid button span{position:absolute;left:6px;bottom:6px;background:rgba(0,0,0,.6);color:#fff;font-size:11px;font-weight:700;border-radius:6px;padding:1px 6px}
+.ctrl{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+@media (min-width:640px){.ctrl{grid-template-columns:repeat(5,1fr)}}
+.ctrl .btn{padding:14px 10px}
+.tv-apr{position:fixed;inset:0;z-index:30;background:#000;display:grid;place-items:center}
+.tv-apr img{max-width:100vw;max-height:100vh;object-fit:contain;animation:fadein .4s ease both}
+.tv-pausa{position:fixed;inset:0;z-index:30;display:grid;place-items:center;text-align:center;background:color-mix(in srgb,var(--bg) 92%, transparent)}
+.tv-pausa .who{font-family:var(--display);color:var(--accent);font-size:clamp(48px,9vw,140px);line-height:1}
+.tv-pausa p{font-family:var(--serif);font-style:italic;font-size:clamp(20px,3vw,40px);color:var(--muted);margin:14px 0 0}
 </style>
 </head>
 <body>
@@ -530,7 +566,7 @@ const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const Q = new URLSearchParams(location.search);
 const SLUG = (Q.get('f') || '').trim().toLowerCase();
-const MODE = Q.has('termos') ? 'termos' : Q.has('criar') ? 'criar' : Q.has('mestre') ? 'mestre' : SLUG ? (Q.has('telao') ? 'telao' : Q.has('portaria') ? 'portaria' : Q.has('admin') ? 'admin' : 'convidado') : 'inicio';
+const MODE = Q.has('termos') ? 'termos' : Q.has('criar') ? 'criar' : Q.has('mestre') ? 'mestre' : SLUG ? (Q.has('telao') ? 'telao' : Q.has('portaria') ? 'portaria' : Q.has('pedidos') ? 'pedidos' : Q.has('admin') ? 'admin' : 'convidado') : 'inicio';
 const BASE = location.origin + location.pathname.replace(/index\.html$/, '');
 const linkFesta = (slug, extra) => BASE + '?f=' + slug + (extra ? '&' + extra : '');
 const midia = p => !p ? '' : /^(blob:|data:|https?:)/.test(p) ? p : `${SUPABASE_URL}/storage/v1/object/public/fe-midia/${p.split('/').map(encodeURIComponent).join('/')}`;
@@ -559,9 +595,11 @@ const CATS = {
   casamento:{n:'Casamento', e:'💒', tema:'rosegold'},
   cha_bebe:{n:'Chá de Bebê', e:'🍼', tema:'nuvens'},
   formatura:{n:'Formatura', e:'🎓', tema:'formatura'},
+  corporativo:{n:'Evento corporativo', e:'💼', tema:'executivo'},
   outra:{n:'Outra festa', e:'🎉', tema:'confete'}
 };
 const TEMAS = {
+  executivo:{n:'Executivo',e:'💼',cats:['corporativo','formatura','outra'],bg:'#f4f6fa',bg2:'#e2e8f2',surface:'#ffffff',ink:'#16213a',muted:'#5d6b82',accent:'#1f4fd1',accent2:'#19b39a',on:'#ffffff',font:"'Fraunces'",pat:'brilho',pal:['#1f4fd1','#19b39a','#9db4e8'],deco:['💼','📊','✨'],paper:'#f8fafc'},
   baloes:{n:'Balões Coloridos',e:'🎈',cats:['infantil','aniversario','menino','menina'],bg:'#fff7e8',bg2:'#ffe3c2',surface:'#ffffff',ink:'#2b2d42',muted:'#6b6f86',accent:'#ff5a5f',accent2:'#2ec4b6',on:'#ffffff',font:"'Luckiest Guy'",pat:'baloes',pal:['#ff5a5f','#2ec4b6','#ffbe0b','#8338ec','#3a86ff'],deco:['🎈','🎉','🎁'],paper:'#fffaf0'},
   circo:{n:'Circo Mágico',e:'🎪',cats:['infantil','menino','menina'],bg:'#fff3e6',bg2:'#ffd6d6',surface:'#ffffff',ink:'#3d1d1d',muted:'#7a5555',accent:'#d62828',accent2:'#f4a261',on:'#ffffff',font:"'Luckiest Guy'",pat:'confete',pal:['#d62828','#f4a261','#2a9d8f','#e9c46a'],deco:['🎪','🤹','🍿'],paper:'#fff8ef'},
   espaco:{n:'Viagem ao Espaço',e:'🚀',cats:['menino','infantil','aniversario'],bg:'#0b1026',bg2:'#1f2560',surface:'#161c45',ink:'#eef2ff',muted:'#a8b2e0',accent:'#ffb703',accent2:'#4cc9f0',on:'#1b1300',font:"'Bungee'",pat:'estrelas',pal:['#ffffff','#ffe8a3','#a5e9ff'],deco:['🚀','🪐','⭐'],paper:'#f2f4ff',dark:1},
@@ -766,6 +804,8 @@ async function telaConvidado(){
   FESTA = await carregarFesta(SLUG).catch(()=>null);
   if(!FESTA){ return telaNaoAchou(); }
   const t=temaDe(FESTA), f=FESTA; aplicarTema(t); document.title = FESTA.homenageado ? `${FESTA.homenageado} · Mural da Festa` : FESTA.titulo;
+  const mesaQ = parseInt(Q.get('mesa')||'',10); if(mesaQ>0 && mesaQ<=300) store.set('mf_mesa_'+f.slug, String(mesaQ));
+  const MESA = parseInt(store.get('mf_mesa_'+f.slug)||'0',10) || 0;
   const retrato = (t.fotos||[]).length ? t.fotos[t.fotos.length-1] : null;
   const quando = [f.data?`<b>${esc(dataBonita(f))}</b>${f.hora?`, às ${esc(f.hora)}`:''}`:'', f.local?esc(f.local):''].filter(Boolean).join('<br>');
   $('app').innerHTML = `${f.plano==='teste'?'<div class="demo-faixa" style="position:sticky">Versão de teste do Mural da Festa</div>':''}
@@ -778,8 +818,10 @@ async function telaConvidado(){
       ${f.homenageado?`<p class="tit">${esc(f.titulo)}</p>`:''}
       ${quando?`<p class="quando">${quando}</p>`:''}
       ${f.mensagem?`<p class="msgf">${esc(f.mensagem)}</p>`:''}
+      ${MESA&&f.mesas?`<span class="mesa-chip">🍽️ Mesa ${MESA}</span>`:''}
       <div class="fio"></div>
     </header>
+    ${f.ativo && f.tem_cardapio && MESA ? '<section class="card rsvp" id="cdp"></section>' : ''}
     ${f.ativo && ((f.data && f.data > new Date().toLocaleDateString('sv')) || f.portaria) ? `<section class="card rsvp" id="rsvp"></section>` : ''}
     ${f.ativo ? `
     <section class="deixe">
@@ -795,6 +837,7 @@ async function telaConvidado(){
       ${f.moderacao?`<p class="nota">As homenagens aparecem no telão depois que o anfitrião aprova 💛</p>`:''}
     </section>
     ` : `<div class="closed">As homenagens desta festa foram encerradas. Obrigado por fazer parte.</div>`}
+    ${f.ativo && f.tem_cardapio && !MESA ? '<section class="card rsvp" id="cdp"></section>' : ''}
     ${(t.fotos||[]).length ? `<h2 class="sec">📖 A história de ${esc(f.homenageado||'quem a gente ama')}</h2><div class="hist">${t.fotos.map(p=>`<figure><img loading="lazy" src="${midia(p)}" alt=""></figure>`).join('')}</div>` : ''}
     <h2 class="sec">🖼️ Mural <span class="muted" id="muralN" style="font-size:16px;font-weight:500"></span></h2>
     <div class="mural" id="mural"></div>
@@ -804,7 +847,7 @@ async function telaConvidado(){
   document.querySelectorAll('.capa .enfc').forEach(im=>{ const t2=new Image(); t2.crossOrigin='anonymous'; t2.onload=()=>{ try{ const c=document.createElement('canvas'); c.width=c.height=16; const x=c.getContext('2d'); x.drawImage(t2,0,0,16,16); const d=x.getImageData(0,0,16,16).data; if(![0,15,240,255].some(k=>d[k*4+3]<200)) im.classList.add('sticker'); }catch(e){ im.classList.add('sticker'); } }; t2.src=im.src; });
   const nome=$('nome'); if(nome) nome.addEventListener('change',()=>store.set('mf_nome',nome.value.trim().slice(0,40)));
   $('mural').addEventListener('click', e=>{ const l=e.target.closest('[data-like]'); if(l) return curtir(l); const m=e.target.closest('[data-mol]'); if(m){ const p=POSTS.find(x=>x.id===+m.dataset.mol); if(p) abrirMoldura(midia(p.caminho), p.autor); } });
-  ligarPresenca();
+  ligarPresenca(); ligarCardapio(MESA);
   await atualizarMural(); setInterval(()=>{ if(!document.hidden) atualizarMural(); }, 20000);
 }
 async function atualizarMural(){
@@ -874,6 +917,45 @@ async function ligarPresenca(){
         baixar(await new Promise(r=>cv.toBlob(r,'image/png')), `Ingresso_${f.slug}.png`); }; }
     };
   atual ? mostrar(atual) : form(null);
+}
+async function ligarCardapio(MESA){
+  const box=$('cdp'); if(!box) return; const f=FESTA;
+  let itens=[]; try{ const {data}=await sb.from('fe_cardapio').select('id,tipo,secao,nome,descricao,ordem').eq('festa_id',f.id).order('ordem'); itens=data||[]; }catch(e){ return; }
+  const esc_=itens.filter(i=>i.tipo==='escolha'), ped=itens.filter(i=>i.tipo==='pedido');
+  if(!esc_.length && !(ped.length && f.pedidos_ativos)){ box.remove(); return; }
+  const porSecao = l => l.reduce((m,i)=>{ (m[i.secao]=m[i.secao]||[]).push(i); return m; },{});
+  const linha = (i,q,pref) => `<div class="cdp-item"><div><b>${esc(i.nome)}</b>${i.descricao?`<small>${esc(i.descricao)}</small>`:''}</div><div class="cdp-q"><button type="button" data-${pref}="${i.id}" data-d="-1" aria-label="Menos">−</button><b id="${pref}${i.id}">${q||0}</b><button type="button" data-${pref}="${i.id}" data-d="1" aria-label="Mais">+</button></div></div>`;
+  let minha=null; try{ minha=await rpc('fe_minha_escolha',{p_festa:f.id,p_aparelho:deviceId()}); }catch(e){}
+  const qe={...(minha&&minha.itens||{})}, qp={};
+  let mesa=MESA||0;
+  const render=()=>{
+    box.innerHTML=`<h2 class="sec">🍽️ Cardápio</h2>
+      ${esc_.length?`<p class="sub">${minha?'✅ Sua escolha está salva. Pode alterar até o dia da festa.':'Escolha o que você vai querer comer. O buffet prepara com base nas escolhas.'}</p>
+        <div style="text-align:left">${Object.entries(porSecao(esc_)).map(([sec,l])=>`<div class="cdp-sec"><h4>${esc(sec)}</h4>${l.map(i=>linha(i,qe[i.id],'e')).join('')}</div>`).join('')}
+        <input class="in" id="cdN" maxlength="60" placeholder="Seu nome (ou da família)" value="${esc((minha&&minha.nome)||store.get('mf_nome')||'')}" style="margin-top:12px">
+        <input class="in" id="cdO" maxlength="200" placeholder="Alguma restrição? (ex.: sem glúten)" value="${esc((minha&&minha.obs)||'')}" style="margin-top:8px"></div>
+        <button class="btn" id="cdSalvar" style="margin-top:12px">${minha?'Atualizar minha escolha':'Salvar minha escolha'}</button><div class="msg" id="cdM"></div>`:''}
+      ${ped.length && f.pedidos_ativos ? `<div style="text-align:left;margin-top:${esc_.length?'26px':'0'}"><h3 style="margin:0 0 4px">🍹 Pedir na mesa</h3><p class="muted" style="margin:0 0 6px;font-size:14px">O garçom leva até você.</p>
+        ${mesa?`<p style="margin:0 0 6px"><b>Mesa ${mesa}</b> <button class="molbtn" id="cdTroca" type="button">trocar</button></p>`:`<label class="f">Qual é a sua mesa?<select class="in" id="cdMesa"><option value="">Escolha a mesa</option>${Array.from({length:f.mesas||0},(_,k)=>`<option value="${k+1}">Mesa ${k+1}</option>`).join('')}</select></label>`}
+        ${Object.entries(porSecao(ped)).map(([sec,l])=>`<div class="cdp-sec"><h4>${esc(sec)}</h4>${l.map(i=>linha(i,qp[i.id],'p')).join('')}</div>`).join('')}
+        <input class="in" id="cdPO" maxlength="200" placeholder="Observação (ex.: sem gelo)" style="margin-top:10px">
+        <button class="btn" id="cdPedir" style="margin-top:10px;width:100%">🍹 Fazer pedido</button><div class="msg" id="cdPM"></div><div class="meus-ped" id="cdMeus"></div></div>` : ''}`;
+    box.querySelectorAll('[data-e]').forEach(b=>b.onclick=()=>{ const id=b.dataset.e; qe[id]=Math.max(0,Math.min(20,(qe[id]||0)+(+b.dataset.d))); $('e'+id).textContent=qe[id]; });
+    box.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{ const id=b.dataset.p; qp[id]=Math.max(0,Math.min(10,(qp[id]||0)+(+b.dataset.d))); $('p'+id).textContent=qp[id]; });
+    if($('cdSalvar')) $('cdSalvar').onclick=async()=>{ const nome=$('cdN').value.trim(); const it={}; Object.entries(qe).forEach(([k,v])=>{ if(v>0) it[k]=v; });
+      if(nome.length<2){ $('cdM').className='msg err'; $('cdM').textContent='Escreva seu nome.'; return; } if(!Object.keys(it).length){ $('cdM').className='msg err'; $('cdM').textContent='Escolha pelo menos um item.'; return; }
+      try{ await rpc('fe_escolher',{p_festa:f.id,p_aparelho:deviceId(),p_nome:nome,p_itens:it,p_obs:$('cdO').value.trim()}); store.set('mf_nome',nome); minha={nome,itens:it,obs:$('cdO').value.trim()}; render(); toast('Escolha salva! 🍽️'); }catch(e){ $('cdM').className='msg err'; $('cdM').textContent=ERR(e); } };
+    if($('cdTroca')) $('cdTroca').onclick=()=>{ mesa=0; render(); };
+    if($('cdMesa')) $('cdMesa').onchange=e=>{ mesa=+e.target.value||0; if(mesa) store.set('mf_mesa_'+f.slug,String(mesa)); };
+    if($('cdPedir')) $('cdPedir').onclick=async()=>{ const it={}; Object.entries(qp).forEach(([k,v])=>{ if(v>0) it[k]=v; }); const M=$('cdPM');
+      if(!mesa){ M.className='msg err'; M.textContent='Escolha a sua mesa.'; return; } if(!Object.keys(it).length){ M.className='msg err'; M.textContent='Escolha pelo menos um item.'; return; }
+      $('cdPedir').disabled=true; try{ await rpc('fe_pedir',{p_festa:f.id,p_aparelho:deviceId(),p_mesa:mesa,p_nome:nomeAtual()||store.get('mf_nome')||'',p_itens:it,p_obs:$('cdPO').value.trim()}); Object.keys(qp).forEach(k=>qp[k]=0); render(); toast('Pedido enviado! O garçom já vai levar 🍹',3500); meus(); }
+      catch(e){ M.className='msg err'; M.textContent=/Calma|Aguarde|abertos|Mesa/.test(e.message||'')?e.message:ERR(e); $('cdPedir').disabled=false; } };
+    meus();
+  };
+  const ST={novo:'⏳ recebido',preparando:'👨‍🍳 preparando',entregue:'✅ entregue',cancelado:'✕ cancelado'};
+  const meus=async()=>{ const el=$('cdMeus'); if(!el) return; try{ const l=await rpc('fe_meus_pedidos',{p_festa:f.id,p_aparelho:deviceId()}); el.innerHTML = l.length ? `<p style="margin:14px 0 4px;font-weight:600">Seus pedidos</p>`+l.map(p=>`<div><span>Mesa ${p.mesa} · ${p.itens.map(i=>`${i.qtd}× ${esc(i.nome)}`).join(', ')}</span><span>${ST[p.status]||p.status}</span></div>`).join('') : ''; }catch(e){} };
+  render(); setInterval(()=>{ if(!document.hidden) meus(); }, 15000);
 }
 function telaNaoAchou(){
   aplicarTema(TEMA_MARCA);
@@ -1201,6 +1283,24 @@ async function telaTelao(){
     else if(e.key.toLowerCase()==='f'){ document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen().catch(()=>{}); }
   });
   await puxar(); setInterval(puxar, 10000);
+  // controle remoto: apresentação, pausa e mural
+  let tvCtl={modo:'mural', slide:0, em:null}, slidesCache=[];
+  const camada=document.createElement('div'); camada.hidden=true; document.body.appendChild(camada);
+  const aplicarCtl=e=>{
+    const modo=(e&&e.modo)||'mural', sl=(e&&e.slides)||[];
+    if(sl.join()!==slidesCache.join()){ slidesCache=sl; sl.forEach(p=>{ const im=new Image(); im.src=midia(p); }); }
+    if(modo==='apresentacao' && sl.length){ camada.className='tv-apr'; camada.hidden=false; const src=midia(sl[Math.min(e.slide||0,sl.length-1)]); const img=camada.querySelector('img'); if(!img || img.dataset.src!==src) camada.innerHTML=`<img data-src="${src}" src="${src}" alt="">`; }
+    else if(modo==='pausa'){ camada.className='tv-pausa'; camada.hidden=false; if(!camada.querySelector('.who')) camada.innerHTML=`<div><div class="who">${esc(nome)}</div><p>Já voltamos 💛</p></div>`; }
+    else { camada.hidden=true; camada.innerHTML=''; }
+    const parar = modo!=='mural' && (modo==='pausa' || sl.length);
+    if(parar && !tv.ctlPausa){ tv.ctlPausa=true; tv.paused=true; clearTimeout(tv.timer); $('stage').querySelectorAll('audio,video').forEach(m=>{ try{ m.pause(); }catch(_){} }); if(mus) mus.duck(true); }
+    if(!parar && tv.ctlPausa){ tv.ctlPausa=false; tv.paused=false; if(mus) mus.duck(false); if(tv.started) proxima(); }
+    tvCtl={modo, slide:e&&e.slide||0, em:e&&e.em};
+  };
+  const lerCtl=async()=>{ try{ const e=await rpc('fe_tv_estado',{p_festa:f.id}); if(!e) return; if(e.em!==tvCtl.em || e.modo!==tvCtl.modo) aplicarCtl(e); }catch(_){} };
+  setInterval(lerCtl, 2000); lerCtl();
+  document.addEventListener('keydown', e=>{ if(tvCtl.modo!=='apresentacao' || !slidesCache.length) return;
+    if(e.key==='ArrowRight' || e.key==='ArrowLeft'){ e.stopImmediatePropagation(); const n=Math.max(0,Math.min(slidesCache.length-1,tvCtl.slide+(e.key==='ArrowRight'?1:-1))); aplicarCtl({modo:'apresentacao',slide:n,em:tvCtl.em,slides:slidesCache}); } }, true);
 }
 
 // =====================================================================
@@ -1268,6 +1368,36 @@ function painelPortaria(pin){
     ler();
   };
   carregar(); setInterval(()=>{ if(!document.hidden && $('ov').hidden) carregar(); }, 15000);
+}
+
+// =====================================================================
+// PEDIDOS (painel dos garçons / copa)
+// =====================================================================
+async function telaPedidos(){
+  FESTA = await carregarFesta(SLUG).catch(()=>null); if(!FESTA) return telaNaoAchou();
+  aplicarTema(temaDe(FESTA)); document.title='Pedidos · '+(FESTA.homenageado||FESTA.titulo);
+  const salvo=store.get('mf_eq_'+SLUG);
+  if(salvo && await rpc('fe_equipe_login',{p_slug:SLUG,p_pin:salvo}).catch(()=>false)) return painelPedidos(salvo);
+  telaLogin('🧑‍🍳 Pedidos das mesas', esc(FESTA.homenageado||FESTA.titulo), async pin=>{ const ok=await rpc('fe_equipe_login',{p_slug:SLUG,p_pin:pin}); if(!ok) return false; store.set('mf_eq_'+SLUG,pin); painelPedidos(pin); return true; });
+}
+function painelPedidos(pin){
+  const f=FESTA; let L=[], vistos=null;
+  $('app').innerHTML=`<div class="wrap"><div class="top"><h1>🧑‍🍳 Pedidos · <em>${esc(f.homenageado||f.titulo)}</em></h1><div class="row"><button class="btn ghost sm" id="pdSom">🔔 Som ligado</button><button class="btn ghost sm" id="pdSair">Sair</button></div></div>
+    ${f.pedidos_ativos?'':'<p class="aviso">Os pedidos na mesa estão desligados. O anfitrião liga em 🍽️ Cardápio e pedidos.</p>'}
+    <div class="ped-board"><div class="ped-col"><h3>🆕 Novos <span class="muted" id="cN"></span></h3><div id="colN"></div></div><div class="ped-col"><h3>👨‍🍳 Preparando <span class="muted" id="cP"></span></h3><div id="colP"></div></div><div class="ped-col"><h3>✅ Entregues <span class="muted" style="font-size:13px">(últimos 30 min)</span></h3><div id="colE"></div></div></div></div>`;
+  let som=true; $('pdSom').onclick=()=>{ som=!som; $('pdSom').textContent=som?'🔔 Som ligado':'🔕 Som desligado'; };
+  $('pdSair').onclick=()=>{ store.set('mf_eq_'+SLUG,null); location.reload(); };
+  const bip=()=>{ if(!som) return; try{ const ac=new (window.AudioContext||window.webkitAudioContext)(); [0,.18].forEach(d=>{ const o=ac.createOscillator(), g=ac.createGain(); o.frequency.value=880; g.gain.setValueAtTime(.0001,ac.currentTime+d); g.gain.exponentialRampToValueAtTime(.3,ac.currentTime+d+.02); g.gain.exponentialRampToValueAtTime(.0001,ac.currentTime+d+.15); o.connect(g); g.connect(ac.destination); o.start(ac.currentTime+d); o.stop(ac.currentTime+d+.2); }); }catch(e){} if(navigator.vibrate) navigator.vibrate([150,80,150]); };
+  const ha=d=>{ const m=Math.round((Date.now()-new Date(d))/60000); return m<1?'agora':`há ${m} min`; };
+  const card=p=>`<div class="ped${p.status==='novo'?' ped-novo':''}"><div class="row" style="justify-content:space-between;align-items:baseline"><span class="m">Mesa ${p.mesa}</span><span class="t">${ha(p.criado_em)}</span></div>
+      <ul>${p.itens.map(i=>`<li><b>${i.qtd}×</b> ${esc(i.nome)}</li>`).join('')}</ul>${p.obs?`<p style="margin:0 0 8px">📝 ${esc(p.obs)}</p>`:''}${p.nome?`<p class="t" style="margin:0 0 8px">${esc(p.nome)}</p>`:''}
+      <div class="row">${p.status==='novo'?`<button class="btn sm" data-s="preparando" data-id="${p.id}">👨‍🍳 Preparar</button>`:''}${p.status!=='entregue'?`<button class="btn ok sm" data-s="entregue" data-id="${p.id}">✅ Entregue</button>`:''}${p.status==='novo'?`<button class="btn ghost sm" data-s="cancelado" data-id="${p.id}" style="flex:0">✕</button>`:''}${p.status==='entregue'?`<button class="btn ghost sm" data-s="preparando" data-id="${p.id}">↩ Desfazer</button>`:''}</div></div>`;
+  const render=()=>{ const by=s=>L.filter(p=>p.status===s); $('colN').innerHTML=by('novo').map(card).join('')||'<div class="empty">Nenhum pedido novo.</div>'; $('colP').innerHTML=by('preparando').map(card).join('')||'<div class="empty">—</div>'; $('colE').innerHTML=by('entregue').reverse().map(card).join('')||'<div class="empty">—</div>';
+    $('cN').textContent=by('novo').length?`(${by('novo').length})`:''; $('cP').textContent=by('preparando').length?`(${by('preparando').length})`:''; document.title=(by('novo').length?`(${by('novo').length}) `:'')+'Pedidos · '+(f.homenageado||f.titulo);
+    document.querySelectorAll('[data-s]').forEach(b=>b.onclick=async()=>{ b.disabled=true; try{ await rpc('fe_equipe_status',{p_slug:SLUG,p_pin:pin,p_id:+b.dataset.id,p_status:b.dataset.s}); await carregar(); }catch(e){ toast(ERR(e)); b.disabled=false; } }); };
+  const carregar=async()=>{ try{ L=await rpc('fe_equipe_pedidos',{p_slug:SLUG,p_pin:pin}); const ids=new Set(L.map(p=>p.id)); if(vistos && L.some(p=>p.status==='novo' && !vistos.has(p.id))) bip(); vistos=ids; render(); }catch(e){ $('colN').innerHTML=`<div class="empty">${ERR(e)}</div>`; } };
+  carregar(); setInterval(carregar, 5000);
+  try{ if(navigator.wakeLock) navigator.wakeLock.request('screen').catch(()=>{}); }catch(e){}
 }
 
 // =====================================================================
@@ -1366,12 +1496,14 @@ function painelAdmin(){
      <button data-v="moderar" aria-pressed="false">💌 Homenagens <span class="n" id="nPend" hidden></span></button>
      <button data-v="festa" aria-pressed="false">📝 Dados da festa</button>
      <button data-v="compartilhar" aria-pressed="false">📲 Convite e links</button>
+     <button data-v="cardapio" aria-pressed="false">🍽️ Cardápio e pedidos</button>
+     <button data-v="apresentacao" aria-pressed="false">🎤 Apresentação</button>
      <button data-v="recordacoes" aria-pressed="false">📖 Álbum</button>
    </div>
    <div id="vw"></div></div>`;
   $('sair').onclick=()=>{ store.sset('mf_pin_'+SLUG,null); store.set('mf_pin_'+SLUG,null); location.reload(); };
   const abas=$('abasTop');
-  abas.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; abas.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed', x===b)); if(b.dataset.v==='meutema' && $('seuCta')) $('seuCta').remove(); ({moderar:vModerar, festa:vFesta, meutema:vMeuTema, compartilhar:vCompartilhar, recordacoes:vRecordacoes})[b.dataset.v](); };
+  abas.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; abas.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed', x===b)); if(b.dataset.v==='meutema' && $('seuCta')) $('seuCta').remove(); ({moderar:vModerar, festa:vFesta, meutema:vMeuTema, compartilhar:vCompartilhar, recordacoes:vRecordacoes, cardapio:vCardapio, apresentacao:vApresentacao})[b.dataset.v](); };
   const ir=v=>{ const b=abas.querySelector(`[data-v="${v}"]`); if(b) b.click(); };
   document.querySelectorAll('[data-ir]').forEach(b=>b.onclick=()=>ir(b.dataset.ir));
   if($('psOk')) $('psOk').onclick=()=>{ store.set('mf_novo_'+f.slug,null); $('passos').remove(); };
@@ -1382,7 +1514,7 @@ function painelAdmin(){
   else if(pidS && /^[0-9a-f-]{36}$/.test(pidS) && f.plano==='teste') fetch(FN_PAG,{method:'POST',headers:{'Content-Type':'application/json',apikey:SUPABASE_KEY},body:JSON.stringify({acao:'conferir',pagamento:pidS})}).then(r=>r.json()).then(async j=>{ if(j.status==='approved'){ FESTA=await carregarFesta(SLUG); store.set('mf_pag_'+f.slug,null); toast('Pagamento confirmado! Festa liberada 🎉',4000); painelAdmin(); } }).catch(()=>{});
   if($('seuGo')) $('seuGo').onclick=()=>{ ir('meutema'); $('vw').scrollIntoView({behavior:'smooth'}); };
   const abaIni = Q.get('aba') || (!f.custom ? 'meutema' : 'moderar');
-  ir(['meutema','moderar','festa','compartilhar','recordacoes'].includes(abaIni) ? abaIni : 'moderar'); if(ADM.view!=='moderar') carregarAdmPosts();
+  ir(['meutema','moderar','festa','compartilhar','recordacoes','cardapio','apresentacao'].includes(abaIni) ? abaIni : 'moderar'); if(ADM.view!=='moderar') carregarAdmPosts();
   setInterval(()=>{ if(!document.hidden && ADM.view==='moderar') carregarAdmPosts(); }, 12000);
 }
 function ativarFesta(){
@@ -1468,8 +1600,8 @@ function formFesta(f, {mestre, auto}={}){
 }
 function ligarFormFesta(f, onTema, onSeu, seuIni){
   let cat=f.categoria||'aniversario', tem=f.tema||CATS[cat].tema, seu=!!seuIni;
-  const ajustarIdade=()=>{ const L=$('ffIdadeL'); const lab={bodas:'Anos de casados',quinze:null,casamento:null,cha_bebe:null,formatura:null,outra:null}[cat]; const show = !(cat in {quinze:1,casamento:1,cha_bebe:1,formatura:1,outra:1}); L.hidden=!show; L.firstChild.textContent = lab || 'Idade que vai fazer';
-    const ph={menina:'Ex.: Maria Clara',menino:'Ex.: Pedro Henrique',infantil:'Ex.: Theo',quinze:'Ex.: Isabela',bodas:'Ex.: Ana & José',casamento:'Ex.: Júlia & Rafael',cha_bebe:'Ex.: Bebê Helena',formatura:'Ex.: Turma de Medicina 2026',aniversario:'Ex.: Dona Lúcia',outra:'Ex.: Família Silva'}[cat]; $('ffHom').placeholder=ph; };
+  const ajustarIdade=()=>{ const L=$('ffIdadeL'); const lab={bodas:'Anos de casados',quinze:null,casamento:null,cha_bebe:null,formatura:null,outra:null}[cat]; const show = !(cat in {quinze:1,casamento:1,cha_bebe:1,formatura:1,corporativo:1,outra:1}); L.hidden=!show; L.firstChild.textContent = lab || 'Idade que vai fazer';
+    const ph={menina:'Ex.: Maria Clara',menino:'Ex.: Pedro Henrique',infantil:'Ex.: Theo',quinze:'Ex.: Isabela',bodas:'Ex.: Ana & José',casamento:'Ex.: Júlia & Rafael',cha_bebe:'Ex.: Bebê Helena',formatura:'Ex.: Turma de Medicina 2026',corporativo:'Ex.: Convenção de Vendas 2026',aniversario:'Ex.: Dona Lúcia',outra:'Ex.: Família Silva'}[cat]; $('ffHom').placeholder=ph; };
   const pintar=()=>{ const todos=$('ffTodos').checked; const ks=Object.keys(TEMAS).filter(k=>todos||TEMAS[k].cats.includes(cat)||k===tem);
     $('ffTemas').innerHTML=(onSeu?`<button type="button" class="tema seu" data-seu="1" aria-pressed="${seu}"><span class="rec" style="background:var(--accent);color:var(--on)">recomendado</span><span class="e">🎨</span><span class="nm">Faça o seu tema</span><small>Sua imagem de fundo, os personagens da festa, as fotos do homenageado e a música do telão</small></button>`:'')+ks.map(k=>{ const t=TEMAS[k]; return `<button type="button" class="tema" data-k="${k}" aria-pressed="${!seu&&k===tem}" style="background:linear-gradient(135deg,${t.bg} 0%,${t.bg2} 100%);color:${t.ink}">${CATS[cat].tema===k?'<span class="rec">sugerido</span>':''}<span class="e">${t.e}</span><span class="nm" style="font-family:${t.font},Fredoka,sans-serif;font-weight:400;font-size:${/Great|Pacifico/.test(t.font)?'20px':'15px'}">${t.n}</span><span class="dots"><i style="background:${t.accent}"></i><i style="background:${t.accent2}"></i><i style="background:${t.surface}"></i></span></button>`; }).join('');
     $('ffTemas').querySelectorAll('.tema').forEach(b=>b.onclick=()=>{ if(b.dataset.seu){ seu=true; pintar(); onSeu(); return; } seu=false; tem=b.dataset.k; pintar(); onTema&&onTema(tem); }); };
@@ -1487,6 +1619,7 @@ function sugerirTitulo(cat, hom, idade){
     case 'cha_bebe': return n?`Chá de Bebê · ${n}`:'Chá de Bebê';
     case 'formatura': return n?`Formatura · ${n}`:'Formatura';
     case 'outra': return n||'Nossa Festa';
+    case 'corporativo': return n||'Nosso evento';
     default: return n?`Aniversário de ${n}`:'Festa de Aniversário'; }
 }
 function vFesta(){
@@ -1690,6 +1823,99 @@ function vCompartilhar(){
   document.querySelectorAll('[data-copy]').forEach(b=>b.onclick=()=>copiar(b.dataset.copy,'Link copiado!'));
   $('shCopy').onclick=()=>copiar($('shTxt').value,'Mensagem copiada!');
   $('shCartoes').onclick=async()=>{ const b=$('shCartoes'); b.disabled=true; try{ baixar(await pdfCartoes(f), `Cartoes_${f.slug}.pdf`); }catch(e){ toast('Não consegui gerar o PDF.'); } b.disabled=false; };
+}
+async function pdfMesas(f){
+  const t=await temaPdf(f); const {jsPDF}=window.jspdf; const doc=new jsPDF({orientation:'p',unit:'mm',format:'a4'}); const n=f.mesas||0;
+  for(let p=0;p<Math.ceil(n/4);p++){ if(p) doc.addPage(); const [cv,c]=pg(); c.fillStyle='#fff'; c.fillRect(0,0,PW,PH); const w=PW/2, h=PH/2;
+    for(let i=0;i<4;i++){ const m=p*4+i+1; if(m>n) break; const x=(i%2)*w, y=Math.floor(i/2)*h;
+      const g=c.createLinearGradient(x,y,x+w,y+h); g.addColorStop(0,t.bg); g.addColorStop(1,t.bg2); c.fillStyle=g; c.fillRect(x+14,y+14,w-28,h-28);
+      c.textAlign='center'; c.fillStyle=t.muted; c.font='600 26px Figtree, Fredoka, sans-serif'; c.fillText(f.homenageado||f.titulo, x+w/2, y+80);
+      c.fillStyle=t.accent; c.font=`400 120px ${fonte(t)}`; c.fillText(`Mesa ${m}`, x+w/2, y+210);
+      rr(c,x+w/2-160,y+250,320,320,22); c.fillStyle='#fff'; c.fill(); c.drawImage(qrCanvas(linkFesta(f.slug)+'&mesa='+m,600),x+w/2-140,y+270,280,280);
+      c.fillStyle=t.ink; c.font='700 30px Figtree, Fredoka, sans-serif'; c.fillText('Aponte a câmera 📲', x+w/2, y+630);
+      c.font='500 24px Figtree, Fredoka, sans-serif'; c.fillStyle=t.muted; c.fillText('🍹 pedidos · 🍽️ cardápio · 💌 homenagens', x+w/2, y+672); }
+    c.setLineDash([14,12]); c.strokeStyle='#bbb'; c.lineWidth=2; c.beginPath(); c.moveTo(PW/2,0); c.lineTo(PW/2,PH); c.moveTo(0,PH/2); c.lineTo(PW,PH/2); c.stroke();
+    doc.addImage(cv.toDataURL('image/jpeg',.9),'JPEG',0,0,210,297); }
+  return doc.output('blob');
+}
+async function vCardapio(){
+  ADM.view='cardapio'; const f=FESTA; $('vw').innerHTML='<div class="empty"><span class="spin"></span></div>';
+  let itens=[], escolhas=[], temEq=false;
+  try{ const {data}=await sb.from('fe_cardapio').select('id,tipo,secao,nome,descricao,ordem').eq('festa_id',f.id).order('ordem'); itens=data||[]; }catch(e){}
+  try{ escolhas=await rpc('fe_admin_escolhas',{p_slug:SLUG,p_pin:PIN}); temEq=await rpc('fe_admin_tem_equipe',{p_slug:SLUG,p_pin:PIN}); }catch(e){}
+  const L={escolha:itens.filter(i=>i.tipo==='escolha').map(i=>({...i})), pedido:itens.filter(i=>i.tipo==='pedido').map(i=>({...i}))};
+  const lin=(tp,i,k)=>`<div class="card-ed"><input class="in" data-t="${tp}" data-k="${k}" data-f="secao" maxlength="40" placeholder="${tp==='escolha'?'Ex.: Prato principal':'Ex.: Bebidas'}" value="${esc(i.secao||'')}"><input class="in" data-t="${tp}" data-k="${k}" data-f="nome" maxlength="80" placeholder="${tp==='escolha'?'Ex.: Filé ao molho madeira':'Ex.: Refrigerante'}" value="${esc(i.nome||'')}"><input class="in ds" data-t="${tp}" data-k="${k}" data-f="descricao" maxlength="200" placeholder="Descrição (opcional)" value="${esc(i.descricao||'')}"><button class="x" type="button" data-rm="${tp}" data-k="${k}" aria-label="Tirar">✕</button></div>`;
+  const tot={}; escolhas.forEach(e=>Object.entries(e.itens||{}).forEach(([k,v])=>tot[k]=(tot[k]||0)+(+v)));
+  $('vw').innerHTML=`<div class="card" style="padding:18px"><h3 style="margin:0 0 4px">🍽️ Cardápio <span class="muted" style="font-size:14px;font-weight:500">(opcional)</span></h3>
+      <p class="muted" style="margin:0 0 14px">Cadastre o cardápio que o buffet enviou. Deixe em branco se não quiser usar.</p>
+      <b>1 · Escolha antecipada</b><p class="muted" style="margin:2px 0 8px;font-size:14px">O convidado escolhe o prato pelo link, antes da festa. Você vê o total de cada item para passar ao buffet.</p>
+      <div id="edE">${L.escolha.map((i,k)=>lin('escolha',i,k)).join('')}</div><button class="btn ghost sm" id="addE">＋ Item para escolher</button>
+      <div style="height:18px"></div><b>2 · Pedidos na mesa</b><p class="muted" style="margin:2px 0 8px;font-size:14px">Durante a festa, o convidado pede pelo QR da mesa (bebidas, por exemplo) e o garçom recebe no celular.</p>
+      <div id="edP">${L.pedido.map((i,k)=>lin('pedido',i,k)).join('')}</div><button class="btn ghost sm" id="addP">＋ Item para pedir</button>
+      <div class="grid2" style="margin-top:16px"><label class="f">Quantas mesas a festa tem?<input class="in" id="cdMesas" type="number" min="0" max="300" value="${f.mesas||0}"></label>
+        <label class="row" style="gap:8px;font-weight:600;align-self:end"><input type="checkbox" id="cdAtivo" ${f.pedidos_ativos?'checked':''} style="width:22px;height:22px"> Receber pedidos na mesa agora</label></div>
+      <div class="row" style="justify-content:flex-end;margin-top:12px"><span class="msg" id="cdM"></span><button class="btn" id="cdSalvar">Salvar cardápio</button></div></div>
+    <div class="grid2" style="margin-top:12px">
+      <div class="card" style="padding:18px"><h3 style="margin:0 0 8px">🖨️ QR Code das mesas</h3><p class="muted" style="margin:0 0 12px;font-size:14px">Um cartão por mesa, com o número. Pelo QR, o convidado pede, vê o cardápio e deixa homenagens, e o garçom sabe onde entregar.</p>
+        <button class="btn" id="cdPdf" ${f.mesas?'':'disabled'}>🖨️ Imprimir cartões das mesas (PDF)</button><div class="msg" id="cdPdfM"></div></div>
+      <div class="card" style="padding:18px"><h3 style="margin:0 0 8px">🧑‍🍳 Equipe de garçons</h3><p class="muted" style="margin:0 0 10px;font-size:14px">Os pedidos chegam no celular da equipe, com o número da mesa.</p>
+        ${temEq?'':'<label class="f">Crie a senha da equipe<input class="in" id="eqPin" maxlength="20" autocomplete="off" placeholder="4 ou mais caracteres"></label><button class="btn ghost sm" id="eqSalvar" style="margin-top:8px">Salvar senha</button>'}
+        <div style="margin-top:10px"><div class="linkbox"><code>${esc(linkFesta(f.slug,'pedidos'))}</code><button class="btn sm" data-copy="${esc(linkFesta(f.slug,'pedidos'))}">Copiar</button></div><p class="muted" style="font-size:13px;margin:6px 0 0">${temEq?'Mande este link para a equipe junto com a senha da equipe (a mesma da portaria).':'Depois de criar a senha, mande este link para a equipe.'}</p></div></div></div>
+    <div class="card" style="padding:18px;margin-top:12px"><div class="row" style="justify-content:space-between"><h3 style="margin:0">📋 Escolhas dos convidados</h3><button class="btn ghost sm" id="cdCopy">📋 Copiar para o buffet</button></div>
+      ${escolhas.length?`<div class="pres-tot" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">${L.escolha.filter(i=>i.id).map(i=>`<div><b>${tot[i.id]||0}</b>${esc(i.nome)}</div>`).join('')}</div>
+        <div class="pres-lista">${escolhas.map(e=>`<div><span>${esc(e.nome)}${e.obs?`<br><small class="muted">“${esc(e.obs)}”</small>`:''}</span><span class="muted">${Object.entries(e.itens).map(([k,v])=>`${v}× ${esc((itens.find(i=>i.id==k)||{}).nome||'?')}`).join(', ')}</span></div>`).join('')}</div>`
+      :'<p class="muted" style="margin:8px 0 0">Ninguém escolheu ainda.</p>'}</div>`;
+  const ler=()=>{ ['escolha','pedido'].forEach(tp=>document.querySelectorAll(`[data-t="${tp}"]`).forEach(inp=>{ L[tp][+inp.dataset.k][inp.dataset.f]=inp.value; })); };
+  const redesenhar=()=>{ $('edE').innerHTML=L.escolha.map((i,k)=>lin('escolha',i,k)).join(''); $('edP').innerHTML=L.pedido.map((i,k)=>lin('pedido',i,k)).join(''); ligar(); };
+  const ligar=()=>document.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{ ler(); L[b.dataset.rm].splice(+b.dataset.k,1); redesenhar(); });
+  ligar();
+  $('addE').onclick=()=>{ ler(); const u=L.escolha[L.escolha.length-1]; L.escolha.push({secao:u?u.secao:'Prato principal'}); redesenhar(); };
+  $('addP').onclick=()=>{ ler(); const u=L.pedido[L.pedido.length-1]; L.pedido.push({secao:u?u.secao:'Bebidas'}); redesenhar(); };
+  $('cdSalvar').onclick=async()=>{ ler(); const lista=[...L.escolha.map(i=>({...i,tipo:'escolha'})), ...L.pedido.map(i=>({...i,tipo:'pedido'}))].filter(i=>(i.nome||'').trim()).map(i=>({id:i.id||'',tipo:i.tipo,secao:(i.secao||'').trim()||(i.tipo==='escolha'?'Prato principal':'Bebidas'),nome:i.nome.trim(),descricao:(i.descricao||'').trim()}));
+    try{ await rpc('fe_admin_cardapio',{p_slug:SLUG,p_pin:PIN,p_itens:lista,p_mesas:Math.max(0,Math.min(300,+$('cdMesas').value||0)),p_pedidos:$('cdAtivo').checked}); FESTA=await carregarFesta(SLUG); toast('Cardápio salvo! 🍽️'); vCardapio(); }catch(e){ $('cdM').className='msg err'; $('cdM').textContent=ERR(e); } };
+  $('cdPdf').onclick=async()=>{ const b=$('cdPdf'); b.disabled=true; $('cdPdfM').className='msg'; $('cdPdfM').innerHTML='<span class="spin"></span>'; try{ baixar(await pdfMesas(FESTA), `Mesas_${FESTA.slug}.pdf`); $('cdPdfM').className='msg ok'; $('cdPdfM').textContent='PDF pronto: 4 mesas por folha, é só cortar.'; }catch(e){ $('cdPdfM').className='msg err'; $('cdPdfM').textContent=ERR(e); } b.disabled=false; };
+  if($('eqSalvar')) $('eqSalvar').onclick=async()=>{ try{ await rpc('fe_admin_senha_equipe',{p_slug:SLUG,p_pin:PIN,p_pin_equipe:$('eqPin').value.trim()}); toast('Senha da equipe criada!'); vCardapio(); }catch(e){ toast(/4 caracteres/.test(e.message||'')?'A senha precisa de 4 ou mais caracteres.':ERR(e)); } };
+  document.querySelectorAll('#vw [data-copy]').forEach(b=>b.onclick=()=>copiar(b.dataset.copy));
+  $('cdCopy').onclick=()=>copiar(`Escolhas · ${f.homenageado||f.titulo}\n\n`+L.escolha.filter(i=>i.id).map(i=>`${tot[i.id]||0}× ${i.nome}`).join('\n')+'\n\n'+escolhas.map(e=>`${e.nome}: ${Object.entries(e.itens).map(([k,v])=>`${v}× ${(itens.find(i=>i.id==k)||{}).nome||'?'}`).join(', ')}${e.obs?` (${e.obs})`:''}`).join('\n'),'Lista copiada!');
+}
+
+// ---------- apresentação no telão ----------
+let _pdfjs=null;
+function carregarPdfJs(){ return _pdfjs || (_pdfjs=new Promise((res,rej)=>{ const sc=document.createElement('script'); sc.src='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js'; sc.onload=()=>{ window.pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'; res(window.pdfjsLib); }; sc.onerror=()=>{ _pdfjs=null; rej(new Error('pdfjs')); }; document.head.appendChild(sc); })); }
+async function vApresentacao(){
+  ADM.view='apresentacao'; const f=FESTA; let est={}; try{ est=await rpc('fe_tv_estado',{p_festa:f.id})||{}; }catch(e){}
+  const slides=est.slides||[];
+  $('vw').innerHTML=`<div class="card" style="padding:18px"><h3 style="margin:0 0 4px">🎤 Apresentação no telão <span class="muted" style="font-size:14px;font-weight:500">(opcional)</span></h3>
+      <p class="muted" style="margin:0 0 12px">Envie os slides (PDF exportado do PowerPoint, ou imagens). Durante o evento, controle o telão por aqui: mostrar a apresentação, passar os slides, pausar e voltar ao mural.</p>
+      <div class="row"><label class="btn" style="position:relative">📄 Enviar PDF ou imagens<input type="file" id="apF" accept="application/pdf,image/*" multiple style="position:absolute;inset:0;opacity:0;cursor:pointer"></label>${slides.length?'<button class="btn ghost sm" id="apLimpa">Tirar apresentação</button>':''}<span class="msg" id="apM"></span></div></div>
+    <div class="card" style="padding:18px;margin-top:12px"><div class="row" style="justify-content:space-between"><h3 style="margin:0">📺 Controle do telão</h3><span class="muted" id="apEst"></span></div>
+      <div class="ctrl" style="margin-top:12px">
+        <button class="btn" data-m="apresentacao" ${slides.length?'':'disabled'}>▶ Mostrar slides</button>
+        <button class="btn ghost" data-nav="-1" ${slides.length?'':'disabled'}>◀ Anterior</button>
+        <button class="btn ghost" data-nav="1" ${slides.length?'':'disabled'}>Próximo ▶</button>
+        <button class="btn alt" data-m="pausa">⏸ Pausar telão</button>
+        <button class="btn ok" data-m="mural">💌 Voltar ao mural</button></div>
+      ${slides.length?`<div class="apr-grid" id="apG">${slides.map((p,i)=>`<button data-i="${i}" aria-pressed="false"><img src="${midia(p)}" alt="Slide ${i+1}" loading="lazy"><span>${i+1}</span></button>`).join('')}</div>`:'<p class="muted" style="margin:12px 0 0">Sem slides ainda. Mesmo sem apresentação, dá para pausar o telão (por exemplo, durante um discurso).</p>'}</div>`;
+  const mostrarEst=e=>{ est=e||est; const nomes={mural:'💌 mostrando o mural',apresentacao:`🎤 slide ${(est.slide||0)+1} de ${slides.length}`,pausa:'⏸ telão pausado'}; $('apEst').textContent=nomes[est.modo]||''; document.querySelectorAll('#apG [data-i]').forEach(b=>b.setAttribute('aria-pressed', est.modo==='apresentacao' && +b.dataset.i===est.slide)); };
+  mostrarEst(est);
+  const mandar=async(modo, slide)=>{ try{ mostrarEst(await rpc('fe_admin_tv',{p_slug:SLUG,p_pin:PIN,p_modo:modo,p_slide:slide})); }catch(e){ toast(ERR(e)); } };
+  document.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>mandar(b.dataset.m, est.slide||0));
+  document.querySelectorAll('[data-nav]').forEach(b=>b.onclick=()=>mandar('apresentacao', Math.max(0,Math.min(slides.length-1,(est.slide||0)+(+b.dataset.nav)))));
+  document.querySelectorAll('#apG [data-i]').forEach(b=>b.onclick=()=>mandar('apresentacao', +b.dataset.i));
+  if($('apLimpa')) $('apLimpa').onclick=async()=>{ try{ await rpc('fe_admin_slides',{p_slug:SLUG,p_pin:PIN,p_slides:[]}); toast('Apresentação retirada.'); vApresentacao(); }catch(e){ toast(ERR(e)); } };
+  $('apF').onchange=async e=>{ const fs=[...e.target.files]; e.target.value=''; if(!fs.length) return; const M=$('apM'); const caminhos=[];
+    try{
+      for(const file of fs){
+        if(/pdf/.test(file.type) || /\.pdf$/i.test(file.name)){
+          M.className='msg'; M.innerHTML='<span class="spin"></span> Abrindo o PDF…'; const pdfjs=await carregarPdfJs(); const pdf=await pdfjs.getDocument({data:await file.arrayBuffer()}).promise;
+          if(pdf.numPages>80) throw new Error('Máximo de 80 slides');
+          for(let i=1;i<=pdf.numPages;i++){ M.innerHTML=`<span class="spin"></span> Preparando slide ${i} de ${pdf.numPages}…`; const pgx=await pdf.getPage(i); const vp0=pgx.getViewport({scale:1}); const vp=pgx.getViewport({scale:1920/vp0.width});
+            const cv=document.createElement('canvas'); cv.width=Math.round(vp.width); cv.height=Math.round(vp.height); await pgx.render({canvasContext:cv.getContext('2d'),viewport:vp}).promise;
+            const bl=await new Promise(r=>cv.toBlob(r,'image/jpeg',.88)); caminhos.push(await subir(bl,'apresentacao/slide','jpg','image/jpeg')); }
+        } else { M.className='msg'; M.innerHTML=`<span class="spin"></span> Enviando imagem ${caminhos.length+1}…`; const bl=await encolher(file,1920,.88); caminhos.push(await subir(bl,'apresentacao/slide','jpg','image/jpeg')); }
+      }
+      M.innerHTML='<span class="spin"></span> Salvando…'; await rpc('fe_admin_slides',{p_slug:SLUG,p_pin:PIN,p_slides:caminhos}); toast(`${caminhos.length} slide${caminhos.length>1?'s':''} pronto${caminhos.length>1?'s':''}! 🎤`); vApresentacao();
+    }catch(err){ M.className='msg err'; M.textContent=/80 slides/.test(err.message||'')?'Máximo de 80 slides.':'Não consegui preparar os slides. '+ERR(err); } };
 }
 function vRecordacoes(){
   ADM.view='recordacoes';
@@ -2145,6 +2371,7 @@ function telaInicio(){
     if(MODE==='convidado') await telaConvidado();
     else if(MODE==='telao') await telaTelao();
     else if(MODE==='portaria') await telaPortaria();
+    else if(MODE==='pedidos') await telaPedidos();
     else if(MODE==='admin') await telaAdmin();
     else if(MODE==='mestre') await telaMestre();
     else if(MODE==='termos') telaTermos();

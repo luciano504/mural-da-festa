@@ -541,6 +541,23 @@ h2.sec .muted{font-family:var(--body)}
 .tv-pausa{position:fixed;inset:0;z-index:30;display:grid;place-items:center;text-align:center;background:color-mix(in srgb,var(--bg) 92%, transparent)}
 .tv-pausa .who{font-family:var(--display);color:var(--accent);font-size:clamp(48px,9vw,140px);line-height:1}
 .tv-pausa p{font-family:var(--serif);font-style:italic;font-size:clamp(20px,3vw,40px);color:var(--muted);margin:14px 0 0}
+
+.vl-passos{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:14px 0 6px}
+.vl-passos span{font-size:12px;font-weight:600;color:var(--muted);border-top:4px solid var(--line);padding-top:6px}
+.vl-passos span.on{color:var(--ink);border-color:var(--accent)}
+.vl-qr{width:min(260px,70vw);margin:10px auto;background:#fff;padding:12px;border-radius:18px;box-shadow:0 10px 30px -18px rgba(0,0,0,.5)}
+.vl-num{font-family:var(--serif);font-size:44px;line-height:1;color:var(--accent)}
+.vl-placa{display:inline-block;font:800 22px/1 ui-monospace,Menlo,monospace;letter-spacing:.08em;background:#fff;color:#111;border:2px solid #111;border-radius:8px;padding:6px 10px}
+.vl-fotos{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:10px}
+.vl-fotos img{width:74px;height:74px;object-fit:cover;border-radius:10px;border:1px solid var(--line)}
+.vl-pronto{background:#d3f9d8;color:#1b5e20;border-radius:16px;padding:14px;font-weight:800;font-size:20px;animation:pedNovo 1.2s ease 3}
+.vl-card{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:1px solid var(--line);border-radius:16px;background:var(--surface);padding:10px 12px;margin-bottom:8px;cursor:pointer;font:inherit;color:inherit}
+.vl-card .vl-num{font-size:30px;min-width:52px;text-align:center}
+.vl-card .vl-placa{font-size:15px;padding:3px 6px}
+.vl-card .st{margin-left:auto;font-size:13px;font-weight:700;color:var(--muted);text-align:right}
+.vl-ped{border:2px solid var(--accent);border-radius:18px;background:var(--surface);padding:12px 14px;margin-bottom:10px}
+.vl-ped.solicitado{animation:pedNovo 1.2s ease 2}
+.vl-prev{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px} .vl-prev img{width:64px;height:64px;object-fit:cover;border-radius:8px}
 </style>
 </head>
 <body>
@@ -566,7 +583,7 @@ const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const Q = new URLSearchParams(location.search);
 const SLUG = (Q.get('f') || '').trim().toLowerCase();
-const MODE = Q.has('termos') ? 'termos' : Q.has('criar') ? 'criar' : Q.has('mestre') ? 'mestre' : SLUG ? (Q.has('telao') ? 'telao' : Q.has('portaria') ? 'portaria' : Q.has('pedidos') ? 'pedidos' : Q.has('admin') ? 'admin' : 'convidado') : 'inicio';
+const MODE = Q.has('termos') ? 'termos' : Q.has('criar') ? 'criar' : Q.has('mestre') ? 'mestre' : SLUG ? (Q.has('telao') ? 'telao' : Q.has('portaria') ? 'portaria' : Q.has('pedidos') ? 'pedidos' : Q.has('valet') ? 'valet' : Q.has('admin') ? 'admin' : 'convidado') : 'inicio';
 const BASE = location.origin + location.pathname.replace(/index\.html$/, '');
 const linkFesta = (slug, extra) => BASE + '?f=' + slug + (extra ? '&' + extra : '');
 const midia = p => !p ? '' : /^(blob:|data:|https?:)/.test(p) ? p : `${SUPABASE_URL}/storage/v1/object/public/fe-midia/${p.split('/').map(encodeURIComponent).join('/')}`;
@@ -821,6 +838,7 @@ async function telaConvidado(){
       ${MESA&&f.mesas?`<span class="mesa-chip">🍽️ Mesa ${MESA}</span>`:''}
       <div class="fio"></div>
     </header>
+    ${f.ativo && f.valet ? '<section class="card rsvp" id="vlt"></section>' : ''}
     ${f.ativo && f.tem_cardapio && MESA ? '<section class="card rsvp" id="cdp"></section>' : ''}
     ${f.ativo && ((f.data && f.data > new Date().toLocaleDateString('sv')) || f.portaria) ? `<section class="card rsvp" id="rsvp"></section>` : ''}
     ${f.ativo ? `
@@ -847,7 +865,7 @@ async function telaConvidado(){
   document.querySelectorAll('.capa .enfc').forEach(im=>{ const t2=new Image(); t2.crossOrigin='anonymous'; t2.onload=()=>{ try{ const c=document.createElement('canvas'); c.width=c.height=16; const x=c.getContext('2d'); x.drawImage(t2,0,0,16,16); const d=x.getImageData(0,0,16,16).data; if(![0,15,240,255].some(k=>d[k*4+3]<200)) im.classList.add('sticker'); }catch(e){ im.classList.add('sticker'); } }; t2.src=im.src; });
   const nome=$('nome'); if(nome) nome.addEventListener('change',()=>store.set('mf_nome',nome.value.trim().slice(0,40)));
   $('mural').addEventListener('click', e=>{ const l=e.target.closest('[data-like]'); if(l) return curtir(l); const m=e.target.closest('[data-mol]'); if(m){ const p=POSTS.find(x=>x.id===+m.dataset.mol); if(p) abrirMoldura(midia(p.caminho), p.autor); } });
-  ligarPresenca(); ligarCardapio(MESA);
+  ligarPresenca(); ligarCardapio(MESA); ligarValet();
   await atualizarMural(); setInterval(()=>{ if(!document.hidden) atualizarMural(); }, 20000);
 }
 async function atualizarMural(){
@@ -956,6 +974,37 @@ async function ligarCardapio(MESA){
   const ST={novo:'⏳ recebido',preparando:'👨‍🍳 preparando',entregue:'✅ entregue',cancelado:'✕ cancelado'};
   const meus=async()=>{ const el=$('cdMeus'); if(!el) return; try{ const l=await rpc('fe_meus_pedidos',{p_festa:f.id,p_aparelho:deviceId()}); el.innerHTML = l.length ? `<p style="margin:14px 0 4px;font-weight:600">Seus pedidos</p>`+l.map(p=>`<div><span>Mesa ${p.mesa} · ${p.itens.map(i=>`${i.qtd}× ${esc(i.nome)}`).join(', ')}</span><span>${ST[p.status]||p.status}</span></div>`).join('') : ''; }catch(e){} };
   render(); setInterval(()=>{ if(!document.hidden) meus(); }, 15000);
+}
+const VL_ETAPAS=[['estacionado','Estacionado'],['solicitado','Pedido'],['buscando','Buscando'],['pronto','Na porta']];
+async function ligarValet(){
+  const box=$('vlt'); if(!box) return; const f=FESTA; let t=null, ultimo=null, timer=null;
+  try{ t=await rpc('fe_meu_valet',{p_festa:f.id,p_aparelho:deviceId()}); }catch(e){}
+  const passos=st=>{ const i=VL_ETAPAS.findIndex(x=>x[0]===st); return `<div class="vl-passos">${VL_ETAPAS.map((x,k)=>`<span class="${k<=i?'on':''}">${x[1]}</span>`).join('')}</div>`; };
+  const dados=()=>`<p style="margin:8px 0 0"><span class="vl-placa">${esc(t.placa||'')}</span></p>${t.modelo?`<p class="muted" style="margin:6px 0 0">${esc(t.modelo)}</p>`:''}${t.vaga?`<p style="margin:6px 0 0">📍 ${esc(t.vaga)}</p>`:''}
+    ${(t.fotos||[]).length?`<p class="muted" style="margin:10px 0 0;font-size:13px">Fotos registradas na chegada${t.obs?` · “${esc(t.obs)}”`:''}</p><div class="vl-fotos">${t.fotos.map(p=>`<a href="${midia(p)}" target="_blank" rel="noopener"><img src="${midia(p)}" alt="Foto do carro" loading="lazy"></a>`).join('')}</div>`:(t.obs?`<p class="muted" style="font-size:13px">“${esc(t.obs)}”</p>`:'')}`;
+  const render=()=>{
+    if(!t){ box.innerHTML=`<h2 class="sec">🚗 Manobrista</h2><p class="sub">Vai deixar o carro com o manobrista? Gere o seu ticket e mostre o QR na chegada.</p>
+      <button class="btn" id="vlGerar">🎫 Gerar meu ticket</button><p style="margin:14px 0 0"><button class="molbtn" id="vlTenho" type="button">Já deixei o carro e tenho o número do ticket</button></p><div class="msg" id="vlM"></div>`;
+      $('vlGerar').onclick=async()=>{ try{ t=await rpc('fe_valet_ticket',{p_festa:f.id,p_aparelho:deviceId(),p_nome:nomeAtual()||store.get('mf_nome')||''}); render(); }catch(e){ $('vlM').className='msg err'; $('vlM').textContent=ERR(e); } };
+      $('vlTenho').onclick=vincular; return; }
+    const st=t.status;
+    if(st==='aguardando'){ box.innerHTML=`<h2 class="sec">🎫 Seu ticket do manobrista</h2><p class="sub">Mostre este QR ao manobrista quando chegar.</p><div class="vl-qr" id="vlQr"></div><p class="muted" style="margin:4px 0 0">Ticket nº <b>${t.numero}</b></p>`; qrInto($('vlQr'),'MFV:'+t.token,320); }
+    else if(st==='estacionado'){ box.innerHTML=`<h2 class="sec">🚗 Seu carro está estacionado</h2>${passos(st)}<div class="vl-num">nº ${t.numero}</div>${dados()}<button class="btn big" id="vlPedir" style="margin-top:16px;width:100%">🚗 Pedir meu carro</button><div class="msg" id="vlM"></div>`;
+      $('vlPedir').onclick=async()=>{ $('vlPedir').disabled=true; try{ t=await rpc('fe_valet_pedir',{p_festa:f.id,p_aparelho:deviceId()}); render(); toast('Pedido enviado! O manobrista já vai buscar 🚗',3500); }catch(e){ $('vlM').className='msg err'; $('vlM').textContent=ERR(e); $('vlPedir').disabled=false; } }; }
+    else if(st==='solicitado' || st==='buscando'){ box.innerHTML=`<h2 class="sec">${st==='solicitado'?'⏳ Pedido recebido':'🏃 O manobrista está buscando'}</h2>${passos(st)}<p class="sub" style="margin-top:8px">${st==='solicitado'?'Já avisamos o manobrista. Pode ir se despedindo 💛':'Seu carro já está a caminho. Te avisamos aqui quando estiver na porta.'}</p><div class="vl-num">nº ${t.numero}</div>${dados()}`; }
+    else if(st==='pronto'){ box.innerHTML=`<h2 class="sec">🎉 Seu carro está na porta!</h2>${passos(st)}<div class="vl-pronto">🚗 Pode ir até a saída</div><div class="vl-num" style="margin-top:12px">nº ${t.numero}</div>${dados()}`; }
+    else { box.innerHTML=`<h2 class="sec">💛 Boa volta para casa!</h2><p class="sub">Carro entregue. Obrigado por vir.</p>`; }
+    if(ultimo && ultimo!==st && st==='pronto' && navigator.vibrate) navigator.vibrate([200,100,200,100,400]);
+    ultimo=st; agendar();
+  };
+  const vincular=()=>{ abrirFolha(`<h3>🎫 Tenho o número do ticket</h3><p class="muted" style="margin-top:0">O manobrista te informou o número. Confirme com o final da placa.</p>
+      <div class="grid2"><label class="f">Número do ticket<input class="in" id="vnN" inputmode="numeric" maxlength="5"></label><label class="f">3 últimos da placa<input class="in" id="vnP" maxlength="4" autocapitalize="characters" placeholder="Ex.: D23"></label></div>
+      <div class="msg" id="eMsg"></div><div class="foot"><button class="btn ghost" id="eCancel">Cancelar</button><button class="btn" id="eSend">Ligar ao meu celular</button></div>`);
+    $('eCancel').onclick=fecharFolha;
+    $('eSend').onclick=async()=>{ try{ t=await rpc('fe_valet_vincular',{p_festa:f.id,p_aparelho:deviceId(),p_numero:+$('vnN').value||0,p_final:$('vnP').value}); fecharFolha(); render(); toast('Ticket ligado ao seu celular 🚗'); }catch(e){ msgE(ERR(e),'err'); } }; };
+  const agendar=()=>{ clearTimeout(timer); if(!t || t.status==='entregue') return; const ms=['solicitado','buscando','aguardando'].includes(t.status)?6000:20000;
+    timer=setTimeout(async()=>{ if(!document.hidden){ try{ const n=await rpc('fe_meu_valet',{p_festa:f.id,p_aparelho:deviceId()}); if(n && (n.status!==t.status || n.vaga!==t.vaga || (n.fotos||[]).length!==(t.fotos||[]).length)){ t=n; render(); return; } }catch(e){} } agendar(); }, ms); };
+  render();
 }
 function telaNaoAchou(){
   aplicarTema(TEMA_MARCA);
@@ -1368,6 +1417,100 @@ function painelPortaria(pin){
     ler();
   };
   carregar(); setInterval(()=>{ if(!document.hidden && $('ov').hidden) carregar(); }, 15000);
+}
+
+// =====================================================================
+// MANOBRISTA (valet)
+// =====================================================================
+async function telaValet(){
+  FESTA = await carregarFesta(SLUG).catch(()=>null); if(!FESTA) return telaNaoAchou();
+  aplicarTema(temaDe(FESTA)); document.title='Manobrista · '+(FESTA.homenageado||FESTA.titulo);
+  if(!FESTA.valet){ $('app').innerHTML=`<div class="wrap center" style="padding-top:14vh"><div style="font-size:56px">🚗</div><h1>Manobrista desligado</h1><p class="muted">O anfitrião liga o manobrista na área dele, em 📲 Convite e links.</p></div>`; return; }
+  const salvo=store.get('mf_vl_'+SLUG);
+  if(salvo && await rpc('fe_valet_login',{p_slug:SLUG,p_pin:salvo}).catch(()=>false)) return painelValet(salvo);
+  telaLogin('🚗 Manobrista', esc(FESTA.homenageado||FESTA.titulo), async pin=>{ const ok=await rpc('fe_valet_login',{p_slug:SLUG,p_pin:pin}); if(!ok) return false; store.set('mf_vl_'+SLUG,pin); painelValet(pin); return true; });
+}
+function painelValet(pin){
+  const f=FESTA; let L=[], busca='', vistos=null, som=true;
+  $('app').innerHTML=`<div class="wrap" style="max-width:680px">
+    <div class="top"><h1>🚗 Manobrista · <em>${esc(f.homenageado||f.titulo)}</em></h1><div class="row"><button class="btn ghost sm" id="vSom">🔔 Som ligado</button><button class="btn ghost sm" id="vSair">Sair</button></div></div>
+    <div class="row" style="margin-bottom:14px"><button class="btn big" id="vScan" style="flex:1">📷 Ler QR do convidado</button><button class="btn ghost" id="vSem">➕ Sem QR</button></div>
+    <h3 style="margin:6px 0 8px">🔔 Pedidos de saída <span class="muted" id="vCP"></span></h3><div id="vPed"></div>
+    <div class="card" style="padding:16px;margin-top:14px"><div class="row" style="justify-content:space-between"><h3 style="margin:0">🅿️ Estacionados <span class="muted" id="vCE"></span></h3></div>
+      <input class="in" id="vBusca" placeholder="🔎 Placa, nome ou número" style="margin:10px 0"><div id="vLista"><div class="empty"><span class="spin"></span></div></div></div></div>`;
+  $('vSair').onclick=()=>{ store.set('mf_vl_'+SLUG,null); location.reload(); };
+  $('vSom').onclick=()=>{ som=!som; $('vSom').textContent=som?'🔔 Som ligado':'🔕 Som desligado'; };
+  const bip=()=>{ if(!som) return; try{ const ac=new (window.AudioContext||window.webkitAudioContext)(); [0,.2,.4].forEach(d=>{ const o=ac.createOscillator(), g=ac.createGain(); o.frequency.value=988; g.gain.setValueAtTime(.0001,ac.currentTime+d); g.gain.exponentialRampToValueAtTime(.3,ac.currentTime+d+.02); g.gain.exponentialRampToValueAtTime(.0001,ac.currentTime+d+.15); o.connect(g); g.connect(ac.destination); o.start(ac.currentTime+d); o.stop(ac.currentTime+d+.2); }); }catch(e){} if(navigator.vibrate) navigator.vibrate([200,80,200]); };
+  const ST={estacionado:'🅿️ estacionado',solicitado:'🔔 pediu o carro',buscando:'🏃 buscando',pronto:'🚗 na porta',entregue:'✅ entregue'};
+  const ha=d=>{ const m=Math.round((Date.now()-new Date(d))/60000); return m<1?'agora':`há ${m} min`; };
+  const norm=x=>(x||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9 ]/g,'');
+  const render=()=>{
+    const ped=L.filter(x=>['solicitado','buscando','pronto'].includes(x.status)).sort((a,b)=>new Date(a.solicitado_em||a.atualizado_em)-new Date(b.solicitado_em||b.atualizado_em));
+    $('vCP').textContent=ped.length?`(${ped.length})`:''; document.title=(ped.filter(x=>x.status==='solicitado').length?`(${ped.filter(x=>x.status==='solicitado').length}) `:'')+'Manobrista · '+(f.homenageado||f.titulo);
+    $('vPed').innerHTML = ped.length ? ped.map(x=>`<div class="vl-ped ${x.status}"><div class="row" style="justify-content:space-between;align-items:baseline"><span class="vl-num">nº ${x.numero}</span><span class="muted" style="font-size:13px">${ST[x.status]} · ${ha(x.solicitado_em||x.atualizado_em)}</span></div>
+        <p style="margin:6px 0"><span class="vl-placa">${esc(x.placa||'')}</span> ${x.modelo?`<span class="muted">${esc(x.modelo)}</span>`:''}</p>${x.vaga?`<p style="margin:0 0 8px;font-weight:700">📍 ${esc(x.vaga)}</p>`:''}${x.nome?`<p class="muted" style="margin:0 0 8px;font-size:13px">${esc(x.nome)}</p>`:''}
+        <div class="row">${x.status==='solicitado'?`<button class="btn" data-s="buscando" data-id="${x.id}" style="flex:1">🏃 Vou buscar</button>`:''}${x.status==='buscando'?`<button class="btn" data-s="pronto" data-id="${x.id}" style="flex:1">🚗 Está na porta</button>`:''}${x.status==='pronto'?`<button class="btn ok" data-s="entregue" data-id="${x.id}" style="flex:1">✅ Entregue</button>`:''}<button class="btn ghost sm" data-ver="${x.id}">Ver</button></div></div>`).join('')
+      : '<div class="empty">Nenhum pedido agora.</div>';
+    const q=norm(busca), est=L.filter(x=>x.status==='estacionado');
+    $('vCE').textContent=`(${est.length})`;
+    const lst=L.filter(x=>x.status!=='aguardando').filter(x=>!q || norm(x.placa).includes(q.replace(/ /g,'')) || norm(x.nome).includes(q) || String(x.numero)===q).filter(x=>q || x.status==='estacionado');
+    $('vLista').innerHTML = lst.length ? lst.map(x=>`<button class="vl-card" data-ver="${x.id}"><span class="vl-num">${x.numero}</span><span><span class="vl-placa">${esc(x.placa||'')}</span><br><small class="muted">${esc([x.modelo,x.nome].filter(Boolean).join(' · '))}</small></span><span class="st">${x.vaga?'📍 '+esc(x.vaga)+'<br>':''}${ST[x.status]||''}</span></button>`).join('') : `<div class="empty">${q?'Nada encontrado.':'Nenhum carro estacionado ainda.'}</div>`;
+    document.querySelectorAll('[data-s]').forEach(b=>b.onclick=async()=>{ b.disabled=true; try{ await rpc('fe_valet_status',{p_slug:SLUG,p_pin:pin,p_id:+b.dataset.id,p_status:b.dataset.s}); await carregar(); }catch(e){ toast(ERR(e)); b.disabled=false; } });
+    document.querySelectorAll('[data-ver]').forEach(b=>b.onclick=()=>ver(L.find(x=>x.id===+b.dataset.ver)));
+  };
+  const carregar=async()=>{ try{ L=await rpc('fe_valet_lista',{p_slug:SLUG,p_pin:pin}); const novos=L.filter(x=>x.status==='solicitado').map(x=>x.id); if(vistos && novos.some(id=>!vistos.has(id))) bip(); vistos=new Set(novos); render(); }catch(e){ $('vLista').innerHTML=`<div class="empty">${ERR(e)}</div>`; } };
+  $('vBusca').oninput=e=>{ busca=e.target.value.trim(); render(); };
+  const ver=x=>{ if(!x) return;
+    abrirFolha(`<div class="center"><div class="vl-num">nº ${x.numero}</div><p style="margin:8px 0"><span class="vl-placa">${esc(x.placa||'')}</span></p>${x.modelo?`<p class="muted" style="margin:0">${esc(x.modelo)}</p>`:''}${x.nome?`<p style="margin:6px 0 0">${esc(x.nome)}</p>`:''}${x.vaga?`<p style="margin:6px 0 0;font-weight:700">📍 ${esc(x.vaga)}</p>`:''}<p class="muted" style="font-size:13px">${ST[x.status]||x.status}${x.estacionado_em?` · chegou às ${new Date(x.estacionado_em).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}`:''}</p>
+      ${(x.fotos||[]).length?`<div class="vl-fotos">${x.fotos.map(p=>`<a href="${midia(p)}" target="_blank" rel="noopener"><img src="${midia(p)}" alt="" loading="lazy"></a>`).join('')}</div>`:''}${x.obs?`<p class="muted">“${esc(x.obs)}”</p>`:''}</div>
+      <div class="msg" id="eMsg"></div><div class="foot" style="flex-wrap:wrap"><button class="btn ghost" id="eCancel">Fechar</button><button class="btn ghost" id="vEd">✏️ Editar</button>${x.status==='estacionado'?`<button class="btn" id="vPede">🔔 Convidado pediu no balcão</button>`:''}${x.status==='entregue'?`<button class="btn ghost" id="vVolta">↩ Voltou a estacionar</button>`:''}</div>`);
+    $('eCancel').onclick=fecharFolha; $('vEd').onclick=()=>registrar(x.token, x);
+    if($('vPede')) $('vPede').onclick=async()=>{ try{ await rpc('fe_valet_status',{p_slug:SLUG,p_pin:pin,p_id:x.id,p_status:'buscando'}); fecharFolha(); carregar(); }catch(e){ msgE(ERR(e),'err'); } };
+    if($('vVolta')) $('vVolta').onclick=async()=>{ try{ await rpc('fe_valet_status',{p_slug:SLUG,p_pin:pin,p_id:x.id,p_status:'estacionado'}); fecharFolha(); carregar(); }catch(e){ msgE(ERR(e),'err'); } };
+  };
+  const registrar=(token, x)=>{ x=x||{}; let fotos=[...(x.fotos||[])];
+    abrirFolha(`<h3>${token?(x.placa?'✏️ Editar carro':'🎫 Ticket do convidado'):'➕ Carro sem QR'}</h3>${x.numero?`<p class="muted" style="margin-top:0">Ticket nº <b>${x.numero}</b>${x.nome?` · ${esc(x.nome)}`:''}</p>`:''}
+      <div class="grid2"><label class="f">Placa *<input class="in" id="rgP" maxlength="8" autocapitalize="characters" autocomplete="off" value="${esc(x.placa||'')}" placeholder="ABC1D23" style="font:800 20px ui-monospace,monospace;letter-spacing:.06em;text-transform:uppercase"></label>
+        <label class="f">Onde estacionou *<input class="in" id="rgV" maxlength="60" value="${esc(x.vaga||'')}" placeholder="Ex.: Vaga 12, rua lateral"></label>
+        <label class="f">Modelo e cor<input class="in" id="rgM" maxlength="60" value="${esc(x.modelo||'')}" placeholder="Ex.: Onix prata"></label>
+        <label class="f">Nome do convidado<input class="in" id="rgN" maxlength="60" value="${esc(x.nome||'')}"></label></div>
+      <label class="f" style="margin-top:8px">Avarias (opcional)<input class="in" id="rgO" maxlength="200" value="${esc(x.obs||'')}" placeholder="Ex.: risco na porta traseira"></label>
+      <div style="margin-top:10px"><label class="btn alt sm" style="position:relative">📸 Fotos do carro (opcional, até 6)<input type="file" id="rgF" accept="image/*" capture="environment" multiple style="position:absolute;inset:0;opacity:0;cursor:pointer"></label><div class="vl-prev" id="rgPv"></div></div>
+      <div class="msg" id="eMsg"></div><div class="foot"><button class="btn ghost" id="eCancel">Cancelar</button><button class="btn ok" id="eSend">✅ Estacionado</button></div>`);
+    const prev=()=>{ $('rgPv').innerHTML=fotos.map((p,i)=>`<img src="${typeof p==='string'?midia(p):URL.createObjectURL(p)}" alt="" data-i="${i}" title="Tocar para tirar">`).join(''); $('rgPv').querySelectorAll('img').forEach(im=>im.onclick=()=>{ fotos.splice(+im.dataset.i,1); prev(); }); };
+    prev(); $('eCancel').onclick=fecharFolha;
+    $('rgF').onchange=e=>{ fotos=fotos.concat([...e.target.files]).slice(0,6); e.target.value=''; prev(); };
+    $('eSend').onclick=async()=>{ const placa=$('rgP').value.toUpperCase().replace(/[^A-Z0-9]/g,''), vaga=$('rgV').value.trim();
+      if(placa.length<5){ msgE('Digite a placa.','err'); return; } if(!vaga){ msgE('Informe onde o carro ficou.','err'); return; }
+      $('eSend').disabled=true;
+      try{ const caminhos=[]; let i=0; for(const p of fotos){ i++; if(typeof p==='string'){ caminhos.push(p); continue; } msgE(`<span class="spin"></span> Enviando foto ${i} de ${fotos.length}…`); caminhos.push(await subir(await encolher(p,1280,.8),'valet/foto','jpg','image/jpeg')); }
+        const r=await rpc('fe_valet_registrar',{p_slug:SLUG,p_pin:pin,p_token:token||'',p_nome:$('rgN').value.trim(),p_placa:placa,p_modelo:$('rgM').value.trim(),p_vaga:vaga,p_fotos:caminhos,p_obs:$('rgO').value.trim()});
+        if(!token){ abrirFolha(`<div class="center"><p class="muted" style="margin:0">Informe ao convidado</p><div class="vl-num" style="font-size:72px">nº ${r.numero}</div><p><span class="vl-placa">${esc(r.placa)}</span></p><p class="muted">Na saída, ele pede o carro pelo link da festa, em “Já deixei o carro e tenho o número do ticket”, ou direto com você.</p></div><div class="foot" style="justify-content:center"><button class="btn" id="eCancel">Pronto</button></div>`); $('eCancel').onclick=fecharFolha; }
+        else { fecharFolha(); toast(`✅ nº ${r.numero} · ${r.placa} estacionado`,3000); }
+        carregar(); }
+      catch(e){ msgE(ERR(e),'err'); $('eSend').disabled=false; } };
+  };
+  $('vSem').onclick=()=>registrar('', {});
+  $('vScan').onclick=async()=>{
+    abrirFolha(`<h3>📷 Aponte para o QR do convidado</h3><div class="scan"><video id="scV" playsinline muted></video></div><div class="msg" id="eMsg"></div><div class="foot"><button class="btn ghost" id="eCancel">Fechar</button></div>`);
+    let stream=null, vivo=true; const parar=()=>{ vivo=false; if(stream) stream.getTracks().forEach(t=>t.stop()); };
+    $('eCancel').onclick=()=>{ parar(); fecharFolha(); };
+    try{ stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false}); }catch(e){ msgE('Não consegui abrir a câmera. Libere a câmera para este site ou use “Sem QR”.','err'); return; }
+    const v=$('scV'); v.srcObject=stream; await v.play().catch(()=>{});
+    let det=null; try{ if('BarcodeDetector' in window){ const fm=await BarcodeDetector.getSupportedFormats(); if(fm.includes('qr_code')) det=new BarcodeDetector({formats:['qr_code']}); } }catch(e){}
+    let jsQR=null; if(!det){ try{ jsQR=await carregarJsQR(); }catch(e){ msgE('Leitor indisponível. Use “Sem QR”.','err'); return; } }
+    const cv=document.createElement('canvas'), cx=cv.getContext('2d',{willReadFrequently:true});
+    const ler=async()=>{ if(!vivo || !$('scV')) return; let txt=null;
+      try{ if(det){ const r=await det.detect(v); if(r[0]) txt=r[0].rawValue; } else if(v.videoWidth){ const k=Math.min(1,640/v.videoWidth); cv.width=v.videoWidth*k; cv.height=v.videoHeight*k; cx.drawImage(v,0,0,cv.width,cv.height); const r=jsQR(cx.getImageData(0,0,cv.width,cv.height).data,cv.width,cv.height); if(r) txt=r.data; } }catch(e){}
+      if(txt){ const m=/^MFV:([0-9a-f]{18})$/.exec(txt.trim()); if(!m){ msgE('Esse QR não é um ticket do manobrista.','err'); setTimeout(ler,1200); return; }
+        parar(); if(navigator.vibrate) navigator.vibrate(120); await carregar(); const x=L.find(y=>y.token===m[1]);
+        if(x && x.status!=='aguardando' && x.status!=='entregue') return ver(x);
+        return registrar(m[1], x||{}); }
+      requestAnimationFrame(()=>setTimeout(ler,120)); };
+    ler();
+  };
+  carregar(); setInterval(()=>{ if(!document.hidden && $('ov').hidden) carregar(); }, 5000);
+  try{ if(navigator.wakeLock) navigator.wakeLock.request('screen').catch(()=>{}); }catch(e){}
 }
 
 // =====================================================================
@@ -1807,6 +1950,17 @@ function vCompartilhar(){
   $('ptSalvar').onclick=async()=>{ const pin=$('ptPin').value.trim(); if($('ptOn').checked && !f.portaria && pin.length<4){ $('ptM').className='msg err'; $('ptM').textContent='Crie a senha da equipe (4 ou mais).'; return; }
     try{ FESTA=await rpc('fe_admin_portaria',{p_slug:SLUG,p_pin:PIN,p_ativa:$('ptOn').checked,p_selfie:$('ptSf').checked,p_pin_equipe:pin}); toast($('ptOn').checked?'Portaria ligada! Mande o link para a equipe 🚪':'Portaria desligada.',4000); vCompartilhar(); }catch(e){ $('ptM').className='msg err'; $('ptM').textContent=/4 caracteres/.test(e.message||'')?'A senha da equipe precisa de 4 ou mais.':ERR(e); } };
   document.querySelectorAll('#portBox [data-copy]').forEach(b=>b.onclick=()=>copiar(b.dataset.copy));
+  $('presBox').insertAdjacentHTML('beforebegin', `<div class="card" style="padding:18px;margin-top:12px" id="valBox"><h3 style="margin:0 0 4px">🚗 Manobrista <span class="muted" style="font-size:14px;font-weight:500">(opcional)</span></h3>
+    <p class="muted" style="margin:0 0 12px">O convidado mostra o QR no celular, o manobrista registra a placa, fotos e a vaga. Na saída, o convidado pede o carro pelo link e acompanha até ele chegar na porta.</p>
+    <label class="row" style="font-weight:600;gap:8px"><input type="checkbox" id="vlOn" ${f.valet?'checked':''} style="width:22px;height:22px"> Oferecer manobrista</label>
+    <div class="grid2" style="margin-top:12px"><label class="f">Senha da equipe<input class="in" id="vlPin" maxlength="20" autocomplete="off" placeholder="deixe vazio para manter a atual"></label></div>
+    <div class="row" style="justify-content:flex-end;margin-top:10px"><span class="msg" id="vlM"></span><button class="btn" id="vlSalvar">Salvar manobrista</button></div>
+    ${f.valet?`<div style="margin-top:10px"><div style="font-weight:600;font-size:14px;margin-bottom:4px">🚗 Link do manobrista (mande para a equipe, com a senha da equipe)</div><div class="linkbox"><code>${esc(linkFesta(f.slug,'valet'))}</code><button class="btn sm" data-copy="${esc(linkFesta(f.slug,'valet'))}">Copiar</button></div><div id="vlL" style="margin-top:12px"></div></div>`:''}</div>`);
+  document.querySelectorAll('#valBox [data-copy]').forEach(b=>b.onclick=()=>copiar(b.dataset.copy));
+  $('vlSalvar').onclick=async()=>{ try{ FESTA=await rpc('fe_admin_valet',{p_slug:SLUG,p_pin:PIN,p_ativo:$('vlOn').checked,p_pin_equipe:$('vlPin').value.trim()}); toast($('vlOn').checked?'Manobrista ligado! Mande o link para a equipe 🚗':'Manobrista desligado.',4000); vCompartilhar(); }
+    catch(e){ $('vlM').className='msg err'; $('vlM').textContent=/senha da equipe/i.test(e.message||'')?'Crie a senha da equipe (4 ou mais caracteres).':ERR(e); } };
+  if(f.valet) (async()=>{ try{ const V=await rpc('fe_admin_valet_lista',{p_slug:SLUG,p_pin:PIN}); const c=s=>V.filter(x=>x.status===s).length;
+    $('vlL').innerHTML=`<div class="pres-tot"><div><b>${V.length}</b>carros recebidos</div><div><b>${c('estacionado')}</b>estacionados</div><div><b>${c('entregue')}</b>entregues</div></div>`; }catch(e){} })();
   (async()=>{ let L2=[]; try{ L2=await rpc('fe_admin_presencas',{p_slug:SLUG,p_pin:PIN}); }catch(e){ $('presL').textContent=ERR(e); return; }
     const vao=L2.filter(x=>x.vai), ad=vao.reduce((a,x)=>a+x.adultos,0), cr=vao.reduce((a,x)=>a+x.criancas,0);
     $('presL').innerHTML = L2.length ? `<div class="pres-tot"><div><b>${ad+cr}</b>pessoas vão</div><div><b>${ad}</b>adultos · <b style="display:inline;font-size:inherit">${cr}</b> crianças</div><div><b>${L2.length-vao.length}</b>não vão</div></div>
@@ -2294,6 +2448,7 @@ function telaTermos(){
   <p>O anfitrião pode enviar imagens próprias para decorar a festa (fundo, personagens, enfeites), fotos do homenageado e músicas para tocar no telão. <b>O Mural da Festa não fornece personagens, marcas ou artes de terceiros.</b> Ao enviar um tema próprio, o anfitrião declara ter autorização para usar todos os elementos enviados e assume <b>integral e exclusiva responsabilidade</b> por eles, inclusive por direitos autorais, marcas e direitos de imagem, isentando o Mural da Festa. A declaração fica registrada com o nome do responsável, a festa, a data e a hora.</p>
   <p><b>Portaria e selfie (opcional):</b> se o anfitrião ligar a portaria, quem confirma presença pode tirar uma selfie e recebe um ingresso com QR Code. A selfie serve só para a equipe do anfitrião conferir a entrada, é vista apenas pelo anfitrião e pela equipe dele e é apagada junto com os arquivos da festa.</p>
   <p><b>Cardápio e pedidos na mesa (opcional):</b> quando o anfitrião usa o cardápio, guardamos o nome, a escolha e a observação de cada convidado, e nos pedidos o número da mesa e os itens pedidos. Só o anfitrião e a equipe dele veem esses dados, que são apagados junto com os arquivos da festa.</p>
+  <p><b>Manobrista (opcional):</b> quando o anfitrião oferece manobrista, a equipe registra a placa, o modelo, o local onde o carro ficou e, se quiser, fotos do carro na chegada. Esses dados servem só para devolver o carro, são vistos pelo convidado dono do ticket, pelo anfitrião e pela equipe, e são apagados junto com os arquivos da festa. A guarda do veículo é responsabilidade do serviço de manobristas contratado pelo anfitrião; o Mural da Festa só organiza os registros.</p>
   <p><b>Músicas:</b> as trilhas prontas são criadas pelo próprio Mural da Festa. Músicas enviadas pelo anfitrião são de sua inteira responsabilidade, inclusive os direitos de execução pública no local do evento (por exemplo, junto ao ECAD), quando exigidos.</p>
   <p>Se alguém (por exemplo, um titular de direitos) se sentir prejudicado por um tema ou conteúdo, pode pedir a remoção ${canal}. Ao receber um pedido fundamentado, o tema próprio pode ser desligado e o conteúdo removido, sem prejuízo da responsabilidade de quem o enviou.</p>
   <h2>6. Privacidade (LGPD)</h2>
@@ -2360,6 +2515,7 @@ function telaInicio(){
        <div><b>🍽️ Cardápio do buffet</b><p>O convidado escolhe o prato antes da festa. Você recebe o total de cada item para o buffet.</p></div>
        <div><b>🍹 Pedidos na mesa</b><p>Cada mesa tem seu QR. O convidado pede a bebida e o garçom recebe no celular, com o número da mesa.</p></div>
        <div><b>🎤 Apresentação no telão</b><p>Envie os slides em PDF e controle pelo celular: passar, pausar e voltar às homenagens.</p></div>
+       <div><b>🚗 Manobrista</b><p>O manobrista registra placa, fotos e vaga pelo QR. Na saída, o convidado pede o carro e acompanha até a porta.</p></div>
        <div><b>❤️ Curtidas e moldura</b><p>Os convidados curtem as homenagens e postam a foto com a moldura da festa.</p></div>
      </div>
    </section>
@@ -2385,6 +2541,7 @@ function telaInicio(){
     else if(MODE==='telao') await telaTelao();
     else if(MODE==='portaria') await telaPortaria();
     else if(MODE==='pedidos') await telaPedidos();
+    else if(MODE==='valet') await telaValet();
     else if(MODE==='admin') await telaAdmin();
     else if(MODE==='mestre') await telaMestre();
     else if(MODE==='termos') telaTermos();

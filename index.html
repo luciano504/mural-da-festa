@@ -1565,17 +1565,21 @@ async function telaTelao(){
     setTimeout(baixador, 50);
   }
   setInterval(baixador, 2000);
+  // QR grande no telão só de vez em quando (o QR pequeno fica sempre no rodapé):
+  // com mensagens no mural, no máximo a cada 10 min; mural vazio, a cada 2 min
+  function padrao(arr,k){ for(let n=0;n<arr.length;n++){ const t=arr[tv[k]++ % arr.length]; if(t!=='qr') return t;
+      const gap=tv.list.length?600000:120000; if(Date.now()-(tv.qrEm||0)>=gap){ tv.qrEm=Date.now(); return t; } } return 'intro'; }
   function proxima(back){
     clearTimeout(tv.timer); if(tv.paused) return;
     let p=null;
     if(back && tv.hist.length>1){ tv.hist.pop(); p=tv.hist.pop(); }
     else if(tv.queue.some(pronto)){ const i=tv.queue.findIndex(pronto); p={...tv.queue.splice(i,1)[0], _novo:true}; }
     else if(tv.list.length){
-      if(tv.since>=3){ tv.since=0; return mostrar(extra(PADRAO_MIX[tv.pm++ % PADRAO_MIX.length])); }
+      if(tv.since>=3){ tv.since=0; return mostrar(extra(padrao(PADRAO_MIX,'pm'))); }
       for(let k=0;k<tv.list.length;k++){ const c=tv.list[tv.loop % tv.list.length]; tv.loop++; if(pronto(c) && !tv.queue.find(q=>q.id===c.id)){ p=c; break; } }
-      if(!p) return mostrar(extra(PADRAO_VAZIO[tv.pv++ % PADRAO_VAZIO.length]));
+      if(!p) return mostrar(extra(padrao(PADRAO_VAZIO,'pv')));
     }
-    else return mostrar(extra(PADRAO_VAZIO[tv.pv++ % PADRAO_VAZIO.length]));
+    else return mostrar(extra(padrao(PADRAO_VAZIO,'pv')));
     if(!p || !tv.list.find(x=>x.id===p.id)) return proxima();
     tv.since++; tv.hist.push(p); if(tv.hist.length>50) tv.hist.shift();
     mostrar(p);

@@ -3060,10 +3060,10 @@ const PERFIS={
     feat:[['🎨 Tema e personagens','Escolha um dos temas prontos ou use a arte do seu convite.'],['📖 A história do homenageado','De 8 a 12 fotos, do bebê até hoje, no telão e no álbum.'],['🎵 Música no telão','Uma trilha suave, que se cala sozinha quando entra um vídeo.'],['💌 Convite com QR Code','Para o WhatsApp ou para imprimir. O convidado já chega sabendo.'],['✅ Confirmação de presença','O convidado confirma pelo link e você vê quantos adultos e crianças vão.'],['🎲 Sorteio no telão','Você escolhe o prêmio (um presente, uma dança, um discurso) e o telão sorteia entre quem está na festa.'],['🧠 Quiz ao vivo','Perguntas sobre o homenageado no telão, respostas pelo celular e ranking: quem acerta mais rápido ganha.'],['💌 Correio elegante','Recados para alguém da festa, assinados ou anônimos, no telão depois da sua aprovação.'],['❤️ Curtidas e moldura','Os convidados curtem as homenagens e postam a foto com a moldura da festa.']],
     mais:'Festa grande? Também tem portaria com QR, cardápio do buffet, pedidos na mesa, manobrista e apresentação no telão. Tudo opcional.'},
   buffet:{chip:'🍽️ Buffet ou cerimonialista', marca:'🍽️ Para buffets e cerimonialistas', h1:'Entregue uma festa que o concorrente não entrega.',
-    sub:'Telão de homenagens, cardápio pelo celular, pedidos na mesa, portaria com QR e manobrista. Você indica, o cliente paga direto e você ganha 30% de cada festa.',
+    sub:'Telão de homenagens, cardápio pelo celular, pedidos na mesa, portaria com QR e manobrista. Você indica, o cliente contrata direto e o seu buffet entrega mais.',
     cta:['Testar grátis com uma festa','?criar'], nota:'Teste com a sua equipe hoje mesmo. Sem mensalidade e sem aparelho: cada um usa o próprio celular.', destaque:'festa',
     passosT:'Como funciona a parceria 🤝',
-    passos:[['🔗 Você indica','Mostre o Mural ao cliente na hora de fechar a festa, com o seu link ou código.'],['💳 O cliente contrata','Ele cria a festa e paga direto. Você não cobra nem repassa nada.'],['📱 Sua equipe opera','Garçons, portaria e manobristas usam o celular, cada um com o seu painel.'],['💰 Você recebe','30% de cada festa paga que veio da sua indicação.']],
+    passos:[['🔗 Você indica','Mostre o Mural ao cliente na hora de fechar a festa, com o seu link ou código.'],['💳 O cliente contrata','Ele cria a festa e paga direto. Você não cobra nem repassa nada.'],['📱 Sua equipe opera','Garçons, portaria e manobristas usam o celular, cada um com o seu painel.'],['🤝 Seja parceiro','Buffets e cerimonialistas parceiros têm condições especiais. Peça a proposta.']],
     featT:'O que a sua equipe ganha na festa 🧑‍🍳',
     feat:[['🍹 Pedidos na mesa','Cada mesa tem seu QR. O convidado pede e o garçom recebe no celular, com o número da mesa.'],['🍽️ Cardápio antecipado','O convidado escolhe o prato antes. Você recebe o total de cada item e compra certo.'],['🚪 Portaria sem penetras','Selfie e ingresso com QR. A recepção confere o rosto e conta quem entrou.'],['🚗 Manobrista','Placa, fotos e vaga registradas pelo QR. Na saída, o convidado pede o carro pelo celular.'],['📺 Telão de homenagens','O momento que todo mundo filma e posta, marcando o seu espaço.'],['📖 Álbum para o cliente','Depois da festa, o cliente recebe tudo em PDF e guarda o seu nome junto.']],
     comissao:true},
@@ -3118,7 +3118,7 @@ function telaInicio(perfil){
      <div class="feat">${P.feat.map(([t,d])=>`<div><b>${t}</b><p>${d}</p></div>`).join('')}</div>
      ${k==='festa'?`<p class="lcats">${Object.values(CATS).filter(c=>c.n!=='Evento corporativo').map(c=>`<span>${c.e} ${c.n}</span>`).join('')}</p><p class="lmais">${P.mais}</p>`:''}
    </section>
-   ${P.comissao?`<section><h2 class="sec">Quanto você ganha 💰</h2><p class="muted" style="margin:-4px 0 14px">30% de cada festa indicada por você, sem mensalidade.</p><div id="inCom" class="lcom"></div></section>`:''}
+   ${P.comissao?`<section><h2 class="sec">Seja um parceiro 🤝</h2><p class="muted" style="margin:-4px 0 14px">Buffets e cerimonialistas parceiros têm condições especiais. Peça a proposta e respondemos por e-mail.</p><p><button class="btn" type="button" id="inParc">🤝 Quero ser parceiro</button></p></section>`:''}
    <section>
      <h2 class="sec">${k==='buffet'?'Planos que o seu cliente contrata 🎁':k==='empresa'?'Planos por evento 🎁':'Planos 🎁'}</h2>
      <p class="muted" style="margin:-4px 0 0">Comece grátis e escolha o plano só quando quiser liberar tudo. Pagamento único por ${k==='empresa'?'evento':'festa'}, no Pix ou no cartão em até 3x.</p>
@@ -3131,8 +3131,8 @@ function telaInicio(perfil){
    </footer></div>`;
   document.querySelectorAll('.lperfis [data-para]').forEach(b=>b.onclick=()=>{ const id=b.dataset.para; store.set('mf_para',id); try{ const u=new URL(location.href); if(id==='festa') u.searchParams.delete('para'); else u.searchParams.set('para',id); history.replaceState(null,'',u); }catch(e){} telaInicio(id); window.scrollTo({top:0}); });
   carregarPlanos().then(l=>{ $('inPlanos').innerHTML = l.length ? htmlPlanos(l,{destaque:P.destaque, gratis:P.cta}) : '';
-    if($('inCom')) $('inCom').innerHTML = l.map(p=>`<div><span>${ICONE_PLANO[p.id]||'🎈'} ${esc(p.nome)} <small>${brl(p.preco)}</small></span><b>${brl(Math.round(p.preco*30)/100)}</b></div>`).join('');
   }).catch(()=>{ $('inPlanos').innerHTML=''; });
+  if($('inParc')) $('inParc').onclick=()=>faleConosco('Quero ser parceiro');
   $('inF').onsubmit=e=>{ e.preventDefault(); const v=$('inC').value.trim().toLowerCase().replace(/.*[?&]f=/,'').replace(/[^a-z0-9-]/g,''); if(v) location.href=linkFesta(v); };
 }
 
@@ -3176,13 +3176,14 @@ function abrirAjuda(){
     const ws=q.split(/\s+/); const l=AJUDA.filter(a=>{ const t=norm(a[1]+' '+a[2].replace(/<[^>]+>/g,'')); return ws.every(w=>t.includes(w)); });
     $('ajL').innerHTML=l.length?l.map(a=>`<details open><summary>${a[1]}</summary><p>${a[2]}</p></details>`).join(''):'<p class="muted">Não achei nada com essas palavras. Tente outras ou use <b>Fale com a gente</b>.</p>'; };
 }
-function faleConosco(){
+function faleConosco(assunto){
   abrirFolha(`<h3>📨 Fale com a gente</h3><p class="muted" style="margin-top:0">Conte o que aconteceu. Já mandamos junto, automaticamente, qual é a festa e a tela em que você está.</p>
-    <label class="f">Assunto<select class="in" id="fcC"><option>Pagamento</option><option>Telão</option><option>Senha e acesso</option><option>Convidados e homenagens</option><option>Equipe, pedidos e portaria</option><option>Sugestão</option><option>Outro</option></select></label>
+    <label class="f">Assunto<select class="in" id="fcC"><option>Pagamento</option><option>Telão</option><option>Senha e acesso</option><option>Convidados e homenagens</option><option>Equipe, pedidos e portaria</option><option>Sugestão</option><option>Quero ser parceiro</option><option>Outro</option></select></label>
     <label class="f" style="margin-top:10px">Seu e-mail (a resposta vai para ele)<input class="in" id="fcE" type="email" autocomplete="email" value="${esc(store.get('mf_email')||'')}"></label>
     <label class="f" style="margin-top:10px">Mensagem<textarea class="in" id="fcT" rows="4" maxlength="1500" placeholder="Ex.: paguei o plano Festa por Pix às 14h e a festa continua em teste."></textarea></label>
     <div class="msg" id="eMsg"></div><div class="foot"><button class="btn ghost" id="eCancel">Voltar</button><button class="btn" id="eSend">Enviar</button></div>`);
-  $('eCancel').onclick=abrirAjuda;
+  if(assunto){ $('fcC').value=assunto; if(assunto==='Quero ser parceiro') $('fcT').placeholder='Ex.: Sou do Buffet Alegria, fazemos umas 8 festas por mês no Recife.'; }
+  $('eCancel').onclick=assunto?fecharFolha:abrirAjuda;
   $('eSend').onclick=async()=>{ const em=$('fcE').value.trim(), t=$('fcT').value.trim(); if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){ msgE('Informe um e-mail válido.','err'); return; } if(t.length<5){ msgE('Conte o que aconteceu.','err'); return; }
     $('eSend').disabled=true; const ctx={modo:MODE, tela:contextoAjuda()[1]||MODE, festa:(typeof FESTA!=='undefined'&&FESTA)?{slug:FESTA.slug,plano:FESTA.plano,titulo:FESTA.titulo}:null, navegador:navigator.userAgent.slice(0,160), tamanho:innerWidth+'x'+innerHeight, hora:new Date().toString()};
     try{ const r=await rpc('fe_suporte_enviar',{p_slug:SLUG||'',p_aparelho:deviceId(),p_email:em,p_categoria:$('fcC').value,p_mensagem:t,p_contexto:ctx}); store.set('mf_email',em);

@@ -401,6 +401,15 @@ h2.sec .muted{font-family:var(--body)}
 .rod{color:var(--muted);font-size:13px;text-align:center;margin-top:40px}
 
 /* ---- página inicial ---- */
+.lgratis{display:flex;align-items:center;gap:18px;flex-wrap:wrap;background:var(--surface);border:1.5px dashed var(--accent);border-radius:24px;padding:20px 22px;margin:8px 0 10px}
+.lgratis .lg-e{font-size:40px;line-height:1}
+.lgratis .lg-t{flex:1;min-width:240px;display:flex;flex-direction:column;gap:4px}
+.lgratis .lg-t b{font-family:var(--serif);font-weight:450;font-size:22px}
+.lgratis .lg-t span{color:var(--muted);font-size:15px}
+.plano.gratis{border-style:dashed;background:color-mix(in srgb,var(--surface) 70%, var(--bg))}
+.plano.gratis .tag{background:var(--ink)}
+.plano .p small{white-space:nowrap}
+
 .lperfis{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding-top:18px}
 .lperfis span{color:var(--muted);font-size:14px;margin-right:2px}
 .lperfis button{font:inherit;font-size:14.5px;font-weight:600;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 16px;cursor:pointer;transition:background .2s,color .2s}
@@ -1602,13 +1611,17 @@ let PLANOS=null;
 async function carregarPlanos(){ if(!PLANOS){ const {data}=await sb.from('fe_planos').select('*').order('ordem'); PLANOS=data||[]; } return PLANOS; }
 const brl = v => Number(v).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
 const segTxt = s => s<60 ? `${s} segundos` : s===60 ? '1 minuto' : `${s/60} minutos`;
-function htmlPlanos(lista, {atual, botao, destaque='festa'}={}){
+function htmlPlanos(lista, {atual, botao, destaque='festa', gratis}={}){
   const precoAtual = (lista.find(p=>p.id===(atual==='completo'?'festa':atual))||{}).preco || 0;
-  return `<div class="planos">${lista.map(p=>{ const dif=Math.max(0,p.preco-precoAtual), pode=p.preco>precoAtual;
+  const cardGratis = gratis ? `<div class="plano gratis"><span class="tag">comece por aqui</span><div class="e">🧪</div><h4>Teste grátis</h4><p class="d">Para mexer à vontade antes de decidir</p>
+      <div class="p">R$ 0 <small>sem cartão</small></div>
+      <ul><li>até <b>10</b> homenagens</li><li>áudio e vídeo de até <b>30 s</b></li><li><b>todos os recursos</b> para testar</li><li>aviso “teste” no telão e no álbum</li><li>vira plano pago na hora, <b>sem perder nada</b></li></ul>
+      <a class="btn ghost" href="${gratis[1]}">${gratis[0]}</a></div>` : '';
+  return `<div class="planos">${cardGratis}${lista.map(p=>{ const dif=Math.max(0,p.preco-precoAtual), pode=p.preco>precoAtual;
     return `<div class="plano${p.id===destaque?' dest':''}">${p.id===destaque?`<span class="tag">${destaque==='festa'?'mais escolhido':'indicado para você'}</span>`:''}<div class="e">${ICONE_PLANO[p.id]||'🎈'}</div><h4>${esc(p.nome)}</h4><p class="d">${esc(p.descricao||'')}</p>
       <div class="p">${brl(precoAtual&&pode?dif:p.preco)}${precoAtual&&pode?' <small>(diferença)</small>':' <small>por festa</small>'}</div>
       <ul><li>até <b>${p.max_posts}</b> homenagens</li><li>áudio e vídeo de até <b>${segTxt(p.max_seg)}</b></li><li>telão, mural, tema próprio, fotos e música</li><li>álbum em PDF e todos os arquivos</li><li>no ar até <b>${p.dias_pos} dias</b> depois da festa</li></ul>
-      ${botao ? (pode ? `<button class="btn" data-plano="${p.id}">${atual&&atual!=='teste'?'⬆️ Mudar para este':'💳 Pagar e liberar'}</button>` : `<button class="btn ghost" disabled>${p.id===(atual==='completo'?'festa':atual)?'✓ Seu plano':'—'}</button>`) : ''}</div>`; }).join('')}</div>`;
+      ${gratis ? `<a class="btn" href="${gratis[1]}">Testar grátis primeiro</a>` : ''}${botao ? (pode ? `<button class="btn" data-plano="${p.id}">${atual&&atual!=='teste'?'⬆️ Mudar para este':'💳 Pagar e liberar'}</button>` : `<button class="btn ghost" disabled>${p.id===(atual==='completo'?'festa':atual)?'✓ Seu plano':'—'}</button>`) : ''}</div>`; }).join('')}</div>`;
 }
 async function pagarPlano(plano, slug=SLUG, pin=PIN, msg){
   const M = msg || (t=>toast(t,5000));
@@ -2520,7 +2533,7 @@ const TEMA_MARCA = {n:'Mural da Festa', e:'💌', cats:[], bg:'#f6f1f4', bg2:'#e
 const PERFIS={
   festa:{chip:'🎉 Minha festa', marca:'💌 Mural da Festa', h1:'As palavras de quem você ama, guardadas para sempre.',
     sub:'Na festa, os convidados mandam fotos, recados, áudios e vídeos pelo celular. Tudo passa no telão e, no fim, vira um álbum de recordações.',
-    cta:['Criar o mural da minha festa','?criar'], nota:'Crie e teste de graça, sem cadastro.', destaque:'festa',
+    cta:['Começar grátis','?criar'], nota:'Crie a festa agora e teste tudo de graça. Só paga se gostar.', destaque:'festa',
     passosT:'Como funciona ✨',
     passos:[['📲 O convidado aponta a câmera','Para o QR Code da mesa ou o link do grupo. Não precisa baixar nada.'],['💌 Deixa a homenagem','Uma foto, um recado escrito, um áudio ou um vídeo.'],['✅ Você aprova','Nada aparece no telão sem passar por quem organiza.'],['📺 Telão e álbum','As homenagens passam ao vivo e viram um álbum em PDF.']],
     featT:'Do jeito da sua festa 🎈',
@@ -2528,7 +2541,7 @@ const PERFIS={
     mais:'Festa grande? Também tem portaria com QR, cardápio do buffet, pedidos na mesa, manobrista e apresentação no telão. Tudo opcional.'},
   buffet:{chip:'🍽️ Buffet ou cerimonialista', marca:'🍽️ Para buffets e cerimonialistas', h1:'Entregue uma festa que o concorrente não entrega.',
     sub:'Telão de homenagens, cardápio pelo celular, pedidos na mesa, portaria com QR e manobrista. Você indica, o cliente paga direto e você ganha 30% de cada festa.',
-    cta:['Testar de graça com uma festa','?criar'], nota:'Sem mensalidade e sem aparelho: sua equipe usa o próprio celular.', destaque:'festa',
+    cta:['Testar grátis com uma festa','?criar'], nota:'Teste com a sua equipe hoje mesmo. Sem mensalidade e sem aparelho: cada um usa o próprio celular.', destaque:'festa',
     passosT:'Como funciona a parceria 🤝',
     passos:[['🔗 Você indica','Mostre o Mural ao cliente na hora de fechar a festa, com o seu link ou código.'],['💳 O cliente contrata','Ele cria a festa e paga direto. Você não cobra nem repassa nada.'],['📱 Sua equipe opera','Garçons, portaria e manobristas usam o celular, cada um com o seu painel.'],['💰 Você recebe','30% de cada festa paga que veio da sua indicação.']],
     featT:'O que a sua equipe ganha na festa 🧑‍🍳',
@@ -2536,7 +2549,7 @@ const PERFIS={
     comissao:true},
   empresa:{chip:'💼 Empresa', marca:'💼 Para empresas e eventos corporativos', h1:'Convenção, premiação ou confraternização, organizada pelo celular.',
     sub:'Credenciamento com QR, apresentação no telão controlada pelo celular, cardápio, pedidos na mesa e manobrista. E um mural de mensagens que engaja a equipe.',
-    cta:['Criar o meu evento','?criar&cat=corporativo'], nota:'Teste de graça antes de contratar. Pagamento único por evento, sem mensalidade.', destaque:'grande',
+    cta:['Criar meu evento grátis','?criar&cat=corporativo'], nota:'Teste tudo de graça antes de contratar. Pagamento único por evento, sem mensalidade.', destaque:'grande',
     passosT:'Como funciona no seu evento 📋',
     passos:[['📝 Cadastre','Crie o evento, envie os slides em PDF e o cardápio do buffet.'],['🎟️ Convide','Os convidados confirmam pelo link e recebem o ingresso com QR.'],['🚪 Credencie','Na entrada, a equipe lê o QR pelo celular e você vê quem chegou.'],['🎤 Apresente','Passe os slides e pause o telão pelo celular, sem precisar de técnico.']],
     featT:'Tudo o que o evento precisa 💼',
@@ -2570,6 +2583,12 @@ function telaInicio(perfil){
      </div>
      <div class="lcena" aria-hidden="true">${CENAS[k](ondas)}</div>
    </section>
+   <section class="lgratis">
+     <div class="lg-e">🧪</div>
+     <div class="lg-t"><b>${k==='empresa'?'Monte o seu evento de teste agora, de graça':k==='buffet'?'Faça um teste completo com a sua equipe, de graça':'Crie a sua festa agora e teste de graça'}</b>
+       <span>Tudo funciona de verdade: telão, convite, homenagens${k==='festa'?'':', cardápio, pedidos, portaria e manobrista'}. Até 10 homenagens, sem cartão e sem cadastro. Gostou? Escolhe um plano e libera tudo na hora, sem perder nada do que já fez.</span></div>
+     <a class="btn big" href="${P.cta[1]}">${P.cta[0]}</a>
+   </section>
    <section id="como">
      <h2 class="sec">${P.passosT}</h2>
      <ol class="passos4">${P.passos.map(([t,d])=>`<li><b>${t}</b><span>${d}</span></li>`).join('')}</ol>
@@ -2582,7 +2601,7 @@ function telaInicio(perfil){
    ${P.comissao?`<section><h2 class="sec">Quanto você ganha 💰</h2><p class="muted" style="margin:-4px 0 14px">30% de cada festa indicada por você, sem mensalidade.</p><div id="inCom" class="lcom"></div></section>`:''}
    <section>
      <h2 class="sec">${k==='buffet'?'Planos que o seu cliente contrata 🎁':k==='empresa'?'Planos por evento 🎁':'Planos 🎁'}</h2>
-     <p class="muted" style="margin:-4px 0 0">Pagamento único por ${k==='empresa'?'evento':'festa'}, no Pix ou no cartão em até 3x. Liberado na hora.</p>
+     <p class="muted" style="margin:-4px 0 0">Comece grátis e escolha o plano só quando quiser liberar tudo. Pagamento único por ${k==='empresa'?'evento':'festa'}, no Pix ou no cartão em até 3x.</p>
      <div id="inPlanos"><div class="empty"><span class="spin"></span></div></div>
      <p class="center" style="margin-top:28px"><a class="btn big" href="${P.cta[1]}">${P.cta[0]}</a></p>
    </section>
@@ -2591,7 +2610,7 @@ function telaInicio(perfil){
      <p><a href="?termos">Termos de uso e Privacidade</a> <span aria-hidden="true">·</span> <a href="?mestre">Área do organizador</a></p>
    </footer></div>`;
   document.querySelectorAll('.lperfis [data-para]').forEach(b=>b.onclick=()=>{ const id=b.dataset.para; store.set('mf_para',id); try{ const u=new URL(location.href); if(id==='festa') u.searchParams.delete('para'); else u.searchParams.set('para',id); history.replaceState(null,'',u); }catch(e){} telaInicio(id); window.scrollTo({top:0}); });
-  carregarPlanos().then(l=>{ $('inPlanos').innerHTML = l.length ? htmlPlanos(l,{destaque:P.destaque}) : '';
+  carregarPlanos().then(l=>{ $('inPlanos').innerHTML = l.length ? htmlPlanos(l,{destaque:P.destaque, gratis:P.cta}) : '';
     if($('inCom')) $('inCom').innerHTML = l.map(p=>`<div><span>${ICONE_PLANO[p.id]||'🎈'} ${esc(p.nome)} <small>${brl(p.preco)}</small></span><b>${brl(Math.round(p.preco*30)/100)}</b></div>`).join('');
   }).catch(()=>{ $('inPlanos').innerHTML=''; });
   $('inF').onsubmit=e=>{ e.preventDefault(); const v=$('inC').value.trim().toLowerCase().replace(/.*[?&]f=/,'').replace(/[^a-z0-9-]/g,''); if(v) location.href=linkFesta(v); };

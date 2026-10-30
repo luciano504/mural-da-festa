@@ -401,6 +401,27 @@ h2.sec .muted{font-family:var(--body)}
 .rod{color:var(--muted);font-size:13px;text-align:center;margin-top:40px}
 
 /* ---- página inicial ---- */
+.lperfis{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding-top:18px}
+.lperfis span{color:var(--muted);font-size:14px;margin-right:2px}
+.lperfis button{font:inherit;font-size:14.5px;font-weight:600;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 16px;cursor:pointer;transition:background .2s,color .2s}
+.lperfis button[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:var(--on)}
+.lmais{margin:18px 0 0;color:var(--muted);font-size:15px;border-left:3px solid var(--accent2);padding-left:12px}
+.lcom{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:720px}
+@media (max-width:640px){.lcom{grid-template-columns:1fr}}
+.lcom div{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px 18px;display:flex;flex-direction:column;gap:4px}
+.lcom span{color:var(--muted);font-size:14px} .lcom small{display:block;font-size:13px}
+.lcom b{font-family:var(--serif);font-weight:420;font-size:34px;color:var(--accent)}
+.lmock{font-family:var(--body);font-size:17px;line-height:1.35}
+.lmock .lk{margin:0 0 6px;color:var(--muted)!important;font-size:12.5px!important}
+.lmock .lm{display:block;font-family:var(--serif);font-size:38px;line-height:1;color:var(--accent);margin-bottom:6px}
+.lpill{padding:12px 20px 12px 12px;flex-wrap:nowrap}
+.lpill .ico{width:42px;height:42px;border-radius:50%;background:color-mix(in srgb,var(--accent) 14%, #fff);display:grid;place-items:center;font-size:22px;flex:none}
+.lpill b{font-size:15px} .lpill small2{font-size:13px;color:#2b8a3e;font-weight:600}
+.lslide .lfoto{aspect-ratio:16/10;background:linear-gradient(160deg,#2b2230,#4a3550);position:relative;display:flex;flex-direction:column;justify-content:space-between;padding:12px}
+.lslide .sl-t{font-family:var(--serif);color:#fff;font-size:20px;position:static;text-align:left}
+.lslide .sl-b{display:flex;align-items:flex-end;gap:8px;height:55%;position:static}
+.lslide .sl-b i{flex:1;background:var(--accent2);border-radius:3px 3px 0 0}
+
 .landing{max-width:1080px}
 .lhero{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;min-height:min(78vh,680px);padding:40px 0 20px}
 @media (max-width:820px){.lhero{grid-template-columns:1fr;gap:28px;min-height:0;padding-top:24px}}
@@ -1555,10 +1576,10 @@ let PLANOS=null;
 async function carregarPlanos(){ if(!PLANOS){ const {data}=await sb.from('fe_planos').select('*').order('ordem'); PLANOS=data||[]; } return PLANOS; }
 const brl = v => Number(v).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
 const segTxt = s => s<60 ? `${s} segundos` : s===60 ? '1 minuto' : `${s/60} minutos`;
-function htmlPlanos(lista, {atual, botao}={}){
+function htmlPlanos(lista, {atual, botao, destaque='festa'}={}){
   const precoAtual = (lista.find(p=>p.id===(atual==='completo'?'festa':atual))||{}).preco || 0;
   return `<div class="planos">${lista.map(p=>{ const dif=Math.max(0,p.preco-precoAtual), pode=p.preco>precoAtual;
-    return `<div class="plano${p.id==='festa'?' dest':''}">${p.id==='festa'?'<span class="tag">mais escolhido</span>':''}<div class="e">${ICONE_PLANO[p.id]||'🎈'}</div><h4>${esc(p.nome)}</h4><p class="d">${esc(p.descricao||'')}</p>
+    return `<div class="plano${p.id===destaque?' dest':''}">${p.id===destaque?`<span class="tag">${destaque==='festa'?'mais escolhido':'indicado para você'}</span>`:''}<div class="e">${ICONE_PLANO[p.id]||'🎈'}</div><h4>${esc(p.nome)}</h4><p class="d">${esc(p.descricao||'')}</p>
       <div class="p">${brl(precoAtual&&pode?dif:p.preco)}${precoAtual&&pode?' <small>(diferença)</small>':' <small>por festa</small>'}</div>
       <ul><li>até <b>${p.max_posts}</b> homenagens</li><li>áudio e vídeo de até <b>${segTxt(p.max_seg)}</b></li><li>telão, mural, tema próprio, fotos e música</li><li>álbum em PDF e todos os arquivos</li><li>no ar até <b>${p.dias_pos} dias</b> depois da festa</li></ul>
       ${botao ? (pode ? `<button class="btn" data-plano="${p.id}">${atual&&atual!=='teste'?'⬆️ Mudar para este':'💳 Pagar e liberar'}</button>` : `<button class="btn ghost" disabled>${p.id===(atual==='completo'?'festa':atual)?'✓ Seu plano':'—'}</button>`) : ''}</div>`; }).join('')}</div>`;
@@ -2325,7 +2346,7 @@ function novaFesta(){
 }
 function telaCriar(){
   aplicarTema(TEMA_MARCA); document.title='Criar minha festa · Mural da Festa';
-  const f0={categoria:'aniversario',tema:'confete',moderacao:true};
+  const cq=Q.get('cat'); const f0= cq && CATS[cq] ? {categoria:cq,tema:CATS[cq].tema,moderacao:true} : {categoria:'aniversario',tema:'confete',moderacao:true};
   $('app').innerHTML=`<div class="wrap"><div class="top"><h1>✨ Crie o mural da sua festa</h1><a class="btn ghost sm" href="${BASE}">← Início</a></div>
     <p class="muted" style="margin:-4px 0 14px">Leva 2 minutos. Escolha o tipo de festa e o tema, preencha os dados e pronto: você recebe o link, o QR Code e o convite na hora. Depois, monta o telão com imagens, fotos e música.</p>
     ${formFesta(f0,{auto:true})}
@@ -2469,67 +2490,83 @@ function telaTermos(){
 // INÍCIO (página de apresentação)
 // =====================================================================
 const TEMA_MARCA = {n:'Mural da Festa', e:'💌', cats:[], bg:'#f6f1f4', bg2:'#efe3ea', surface:'#ffffff', ink:'#2b2230', muted:'#776b7c', accent:'#963c5f', accent2:'#e9b8a3', on:'#ffffff', font:"'Fraunces'", pat:'brilho', pal:['#e9b8a3','#cfa9c9','#f3d9cf'], deco:['💌','✨','🎈'], paper:'#fbf8fa'};
-function telaInicio(){
+const PERFIS={
+  festa:{chip:'🎉 Minha festa', marca:'💌 Mural da Festa', h1:'As palavras de quem você ama, guardadas para sempre.',
+    sub:'Na festa, os convidados mandam fotos, recados, áudios e vídeos pelo celular. Tudo passa no telão e, no fim, vira um álbum de recordações.',
+    cta:['Criar o mural da minha festa','?criar'], nota:'Crie e teste de graça, sem cadastro.', destaque:'festa',
+    passosT:'Como funciona ✨',
+    passos:[['📲 O convidado aponta a câmera','Para o QR Code da mesa ou o link do grupo. Não precisa baixar nada.'],['💌 Deixa a homenagem','Uma foto, um recado escrito, um áudio ou um vídeo.'],['✅ Você aprova','Nada aparece no telão sem passar por quem organiza.'],['📺 Telão e álbum','As homenagens passam ao vivo e viram um álbum em PDF.']],
+    featT:'Do jeito da sua festa 🎈',
+    feat:[['🎨 Tema e personagens','Escolha um dos temas prontos ou use a arte do seu convite.'],['📖 A história do homenageado','De 8 a 12 fotos, do bebê até hoje, no telão e no álbum.'],['🎵 Música no telão','Uma trilha suave, que se cala sozinha quando entra um vídeo.'],['💌 Convite com QR Code','Para o WhatsApp ou para imprimir. O convidado já chega sabendo.'],['✅ Confirmação de presença','O convidado confirma pelo link e você vê quantos adultos e crianças vão.'],['❤️ Curtidas e moldura','Os convidados curtem as homenagens e postam a foto com a moldura da festa.']],
+    mais:'Festa grande? Também tem portaria com QR, cardápio do buffet, pedidos na mesa, manobrista e apresentação no telão. Tudo opcional.'},
+  buffet:{chip:'🍽️ Buffet ou cerimonialista', marca:'🍽️ Para buffets e cerimonialistas', h1:'Entregue uma festa que o concorrente não entrega.',
+    sub:'Telão de homenagens, cardápio pelo celular, pedidos na mesa, portaria com QR e manobrista. Você indica, o cliente paga direto e você ganha 30% de cada festa.',
+    cta:['Testar de graça com uma festa','?criar'], nota:'Sem mensalidade e sem aparelho: sua equipe usa o próprio celular.', destaque:'festa',
+    passosT:'Como funciona a parceria 🤝',
+    passos:[['🔗 Você indica','Mostre o Mural ao cliente na hora de fechar a festa, com o seu link ou código.'],['💳 O cliente contrata','Ele cria a festa e paga direto. Você não cobra nem repassa nada.'],['📱 Sua equipe opera','Garçons, portaria e manobristas usam o celular, cada um com o seu painel.'],['💰 Você recebe','30% de cada festa paga que veio da sua indicação.']],
+    featT:'O que a sua equipe ganha na festa 🧑‍🍳',
+    feat:[['🍹 Pedidos na mesa','Cada mesa tem seu QR. O convidado pede e o garçom recebe no celular, com o número da mesa.'],['🍽️ Cardápio antecipado','O convidado escolhe o prato antes. Você recebe o total de cada item e compra certo.'],['🚪 Portaria sem penetras','Selfie e ingresso com QR. A recepção confere o rosto e conta quem entrou.'],['🚗 Manobrista','Placa, fotos e vaga registradas pelo QR. Na saída, o convidado pede o carro pelo celular.'],['📺 Telão de homenagens','O momento que todo mundo filma e posta, marcando o seu espaço.'],['📖 Álbum para o cliente','Depois da festa, o cliente recebe tudo em PDF e guarda o seu nome junto.']],
+    comissao:true},
+  empresa:{chip:'💼 Empresa', marca:'💼 Para empresas e eventos corporativos', h1:'Convenção, premiação ou confraternização, organizada pelo celular.',
+    sub:'Credenciamento com QR, apresentação no telão controlada pelo celular, cardápio, pedidos na mesa e manobrista. E um mural de mensagens que engaja a equipe.',
+    cta:['Criar o meu evento','?criar&cat=corporativo'], nota:'Teste de graça antes de contratar. Pagamento único por evento, sem mensalidade.', destaque:'grande',
+    passosT:'Como funciona no seu evento 📋',
+    passos:[['📝 Cadastre','Crie o evento, envie os slides em PDF e o cardápio do buffet.'],['🎟️ Convide','Os convidados confirmam pelo link e recebem o ingresso com QR.'],['🚪 Credencie','Na entrada, a equipe lê o QR pelo celular e você vê quem chegou.'],['🎤 Apresente','Passe os slides e pause o telão pelo celular, sem precisar de técnico.']],
+    featT:'Tudo o que o evento precisa 💼',
+    feat:[['🎤 Apresentação no telão','Slides em PDF, controlados pelo celular: passar, pausar e voltar ao mural.'],['🚪 Credenciamento com QR','Ingresso no celular, conferência na entrada e contagem em tempo real.'],['✅ Lista de presença','Quem confirmou, quem chegou e quantos são, para copiar e enviar.'],['🍽️ Cardápio e pedidos','Escolha do prato antes do evento e pedidos de bebida na mesa.'],['🚗 Manobrista','Registro do carro com fotos e pedido de saída pelo celular.'],['💬 Mural de mensagens','Fotos e recados da equipe no telão, para homenagens e premiações.']]}
+};
+const CENAS={
+  festa: o=>`<div class="lpol"><div class="lfoto"></div><span>a primeira valsa</span></div>
+       <div class="lnota">Que você nunca perca esse brilho no olhar. Te amamos!<b>Vovó Lúcia</b></div>
+       <div class="laudio"><span class="play"></span><span class="ond">${o}</span><small>Tio Beto · 0:42</small></div>`,
+  buffet: ()=>`<div class="lpol"><div class="lfoto"></div><span>no telão, ao vivo</span></div>
+       <div class="lnota lmock"><b class="lk">🧑‍🍳 Novo pedido</b><span class="lm">Mesa 7</span>2× Refrigerante<br>1× Água com gás<b>📝 sem gelo</b></div>
+       <div class="laudio lpill"><span class="ico">🚗</span><span><b>nº 12 · ABC1D23</b><br><small2>na porta · pode buscar</small2></span></div>`,
+  empresa: ()=>`<div class="lpol lslide"><div class="lfoto"><span class="sl-t">Resultados 2026</span><span class="sl-b"><i style="height:38%"></i><i style="height:56%"></i><i style="height:71%"></i><i style="height:92%"></i></span></div><span>slide 3 de 12</span></div>
+       <div class="lnota lmock"><b class="lk">🚪 Credenciamento</b><span class="lm">312</span>de 340 convidados já chegaram<b>atualizado agora</b></div>
+       <div class="laudio lpill"><span class="ico">🍽️</span><span><b>280 escolhas</b><br><small2>enviadas ao buffet</small2></span></div>`
+};
+function telaInicio(perfil){
   aplicarTema(TEMA_MARCA);
+  let k = perfil || Q.get('para') || store.get('mf_para') || 'festa'; if(!PERFIS[k]) k='festa';
+  const P=PERFIS[k];
   const ondas = Array.from({length:28},(_,i)=>`<i style="height:${Math.round(18+Math.abs(Math.sin(i*1.7))*62)}%"></i>`).join('');
   $('app').innerHTML=`<div class="wrap landing">
+   <nav class="lperfis" aria-label="Para quem é"><span>Para:</span>${Object.entries(PERFIS).map(([id,p])=>`<button type="button" data-para="${id}" aria-pressed="${id===k}">${p.chip}</button>`).join('')}</nav>
    <section class="lhero">
      <div class="ltxt">
-       <p class="lmarca">💌 Mural da Festa</p>
-       <h1>As palavras de quem você ama, guardadas para sempre.</h1>
-       <p class="lsub">Na festa, os convidados mandam fotos, recados, áudios e vídeos pelo celular. Tudo passa no telão e, no fim, vira um álbum de recordações.</p>
-       <div class="row"><a class="btn big" href="?criar">Criar o mural da minha festa</a><a class="btn ghost" href="#como">Como funciona</a></div>
-       <p class="nota">Crie e teste de graça, sem cadastro.</p>
+       <p class="lmarca">${P.marca}</p>
+       <h1>${P.h1}</h1>
+       <p class="lsub">${P.sub}</p>
+       <div class="row"><a class="btn big" href="${P.cta[1]}">${P.cta[0]}</a><a class="btn ghost" href="#como">Como funciona</a></div>
+       <p class="nota">${P.nota}</p>
      </div>
-     <div class="lcena" aria-hidden="true">
-       <div class="lpol"><div class="lfoto"></div><span>a primeira valsa</span></div>
-       <div class="lnota">Que você nunca perca esse brilho no olhar. Te amamos!<b>Vovó Lúcia</b></div>
-       <div class="laudio"><span class="play"></span><span class="ond">${ondas}</span><small>Tio Beto · 0:42</small></div>
-     </div>
+     <div class="lcena" aria-hidden="true">${CENAS[k](ondas)}</div>
    </section>
    <section id="como">
-     <h2 class="sec">Como funciona ✨</h2>
-     <ol class="passos4">
-       <li><b>📲 O convidado aponta a câmera</b><span>Para o QR Code da mesa ou o link do grupo. Não precisa baixar nada.</span></li>
-       <li><b>💌 Deixa a homenagem</b><span>Uma foto, um recado escrito, um áudio ou um vídeo.</span></li>
-       <li><b>✅ Você aprova</b><span>Nada aparece no telão sem passar por quem organiza.</span></li>
-       <li><b>📺 Telão e álbum</b><span>As homenagens passam ao vivo e viram um álbum em PDF.</span></li>
-     </ol>
+     <h2 class="sec">${P.passosT}</h2>
+     <ol class="passos4">${P.passos.map(([t,d])=>`<li><b>${t}</b><span>${d}</span></li>`).join('')}</ol>
    </section>
    <section>
-     <h2 class="sec">Do jeito da sua festa 🎈</h2>
-     <div class="feat">
-       <div><b>🎨 Tema e personagens</b><p>Escolha um dos temas prontos ou use a arte do seu convite.</p></div>
-       <div><b>📖 A história do homenageado</b><p>De 8 a 12 fotos, do bebê até hoje, no telão e no álbum.</p></div>
-       <div><b>🎵 Música no telão</b><p>Uma trilha suave, que se cala sozinha quando entra um vídeo.</p></div>
-       <div><b>💌 Convite com QR Code</b><p>Para o WhatsApp ou para imprimir. O convidado já chega sabendo.</p></div>
-     </div>
-     <p class="lcats">${Object.values(CATS).map(c=>`<span>${c.e} ${c.n}</span>`).join('')}</p>
+     <h2 class="sec">${P.featT}</h2>
+     <div class="feat">${P.feat.map(([t,d])=>`<div><b>${t}</b><p>${d}</p></div>`).join('')}</div>
+     ${k==='festa'?`<p class="lcats">${Object.values(CATS).filter(c=>c.n!=='Evento corporativo').map(c=>`<span>${c.e} ${c.n}</span>`).join('')}</p><p class="lmais">${P.mais}</p>`:''}
    </section>
+   ${P.comissao?`<section><h2 class="sec">Quanto você ganha 💰</h2><p class="muted" style="margin:-4px 0 14px">30% de cada festa indicada por você, sem mensalidade.</p><div id="inCom" class="lcom"></div></section>`:''}
    <section>
-     <h2 class="sec">Para casamentos, formaturas e empresas 💼</h2>
-     <p class="muted" style="margin:-4px 0 18px">Tudo opcional. Ligue só o que fizer sentido para o seu evento.</p>
-     <div class="feat">
-       <div><b>✅ Confirmação de presença</b><p>O convidado confirma pelo link, com adultos e crianças. Você vê a lista e os totais.</p></div>
-       <div><b>🚪 Portaria sem penetras</b><p>Selfie e ingresso com QR Code. A equipe confere na entrada e você sabe quem chegou.</p></div>
-       <div><b>🍽️ Cardápio do buffet</b><p>O convidado escolhe o prato antes da festa. Você recebe o total de cada item para o buffet.</p></div>
-       <div><b>🍹 Pedidos na mesa</b><p>Cada mesa tem seu QR. O convidado pede a bebida e o garçom recebe no celular, com o número da mesa.</p></div>
-       <div><b>🎤 Apresentação no telão</b><p>Envie os slides em PDF e controle pelo celular: passar, pausar e voltar às homenagens.</p></div>
-       <div><b>🚗 Manobrista</b><p>O manobrista registra placa, fotos e vaga pelo QR. Na saída, o convidado pede o carro e acompanha até a porta.</p></div>
-       <div><b>❤️ Curtidas e moldura</b><p>Os convidados curtem as homenagens e postam a foto com a moldura da festa.</p></div>
-     </div>
-   </section>
-   <section>
-     <h2 class="sec">Planos 🎁</h2>
-     <p class="muted" style="margin:-4px 0 0">Pagamento único por festa, no Pix ou no cartão em até 3x. A festa é liberada na hora.</p>
+     <h2 class="sec">${k==='buffet'?'Planos que o seu cliente contrata 🎁':k==='empresa'?'Planos por evento 🎁':'Planos 🎁'}</h2>
+     <p class="muted" style="margin:-4px 0 0">Pagamento único por ${k==='empresa'?'evento':'festa'}, no Pix ou no cartão em até 3x. Liberado na hora.</p>
      <div id="inPlanos"><div class="empty"><span class="spin"></span></div></div>
-     <p class="center" style="margin-top:28px"><a class="btn big" href="?criar">Criar o mural da minha festa</a></p>
+     <p class="center" style="margin-top:28px"><a class="btn big" href="${P.cta[1]}">${P.cta[0]}</a></p>
    </section>
    <footer class="lrod">
      <form class="row" id="inF"><input class="in" id="inC" placeholder="Código da festa" aria-label="Código da festa" style="max-width:240px"><button class="btn ghost sm">Entrar na festa</button></form>
      <p><a href="?termos">Termos de uso e Privacidade</a> <span aria-hidden="true">·</span> <a href="?mestre">Área do organizador</a></p>
    </footer></div>`;
-  carregarPlanos().then(l=>{ $('inPlanos').innerHTML = l.length ? htmlPlanos(l) : ''; }).catch(()=>{ $('inPlanos').innerHTML=''; });
+  document.querySelectorAll('.lperfis [data-para]').forEach(b=>b.onclick=()=>{ const id=b.dataset.para; store.set('mf_para',id); try{ const u=new URL(location.href); if(id==='festa') u.searchParams.delete('para'); else u.searchParams.set('para',id); history.replaceState(null,'',u); }catch(e){} telaInicio(id); window.scrollTo({top:0}); });
+  carregarPlanos().then(l=>{ $('inPlanos').innerHTML = l.length ? htmlPlanos(l,{destaque:P.destaque}) : '';
+    if($('inCom')) $('inCom').innerHTML = l.map(p=>`<div><span>${ICONE_PLANO[p.id]||'🎈'} ${esc(p.nome)} <small>${brl(p.preco)}</small></span><b>${brl(Math.round(p.preco*30)/100)}</b></div>`).join('');
+  }).catch(()=>{ $('inPlanos').innerHTML=''; });
   $('inF').onsubmit=e=>{ e.preventDefault(); const v=$('inC').value.trim().toLowerCase().replace(/.*[?&]f=/,'').replace(/[^a-z0-9-]/g,''); if(v) location.href=linkFesta(v); };
 }
 

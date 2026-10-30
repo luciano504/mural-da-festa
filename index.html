@@ -652,6 +652,35 @@ h2.sec .muted{font-family:var(--body)}
 .tv-qz .qrk li:nth-child(1){background:#ffe066} .tv-qz .qrk li:nth-child(2){background:#e9ecef} .tv-qz .qrk li:nth-child(3){background:#f4c095}
 .tv-qz .qchips{display:flex;flex-wrap:wrap;justify-content:center;gap:1vh;max-width:70vw;margin:3vh auto 0}
 .tv-qz .qchips span{background:var(--surface);border-radius:99px;padding:.8vh 1.6vw;font-size:clamp(14px,1.8vw,26px);font-weight:700}
+
+.reac{display:flex;gap:4px;flex-wrap:wrap}
+.reac button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:3px 8px;font-size:14px;cursor:pointer;line-height:1.3;color:var(--ink)}
+.reac button b{font-size:12px;margin-left:2px;color:var(--muted)}
+.reac button.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%, var(--surface))}
+.combtn{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 12px;font-size:14px;font-weight:600;cursor:pointer;color:var(--muted)}
+.com-l{max-height:46vh;overflow:auto;display:flex;flex-direction:column;gap:8px;margin:6px 0 12px}
+.com-l div{background:var(--bg);border-radius:14px;padding:8px 12px;font-size:15px} .com-l small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.crr-l{display:flex;flex-direction:column;gap:10px;margin-top:16px;text-align:left}
+.crr-c{background:#fff7fb;border:1px dashed color-mix(in srgb,var(--accent) 45%, var(--line));border-radius:16px;padding:12px 14px;color:#3a2e3e}
+.crr-c .pa{font-weight:800;color:var(--accent)} .crr-c .de{font-size:13px;color:#776b7c;margin-top:4px}
+.seg{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:6px 0 12px}
+.seg button{font:inherit;font-weight:600;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 14px;cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--accent);color:var(--on);border-color:var(--accent)}
+.prg-st div{display:flex;justify-content:space-between;gap:10px;font-size:14px;border-bottom:1px solid var(--line);padding:6px 0;text-align:left}
+.rec-box{display:flex;align-items:center;gap:10px;justify-content:center;margin:8px 0}
+.rec-dot{width:14px;height:14px;border-radius:50%;background:#e03131;animation:pedNovo 1s infinite}
+.mod-it{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:8px;background:var(--surface)}
+.mod-it .tx{flex:1;min-width:0} .mod-it .tx small{color:var(--muted);display:block}
+.mod-it img{width:52px;height:52px;object-fit:cover;border-radius:8px;flex:none}
+.mod-it .bt{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.tv-prg{position:fixed;inset:0;z-index:30;display:grid;place-items:center;text-align:center;padding:6vh 8vw;background:radial-gradient(120% 90% at 50% 15%,var(--bg2),var(--bg))}
+.tv-prg .k{font-size:clamp(18px,2.6vw,38px);color:var(--muted);font-weight:700}
+.tv-prg .t{font-family:var(--display);font-size:clamp(34px,5.4vw,88px);line-height:1.12;color:var(--ink);margin:3vh 0;max-width:24ch}
+.tv-prg .w{font-size:clamp(20px,2.8vw,42px);color:var(--accent);font-weight:700}
+.sl-correio .env{font-size:clamp(20px,2.6vw,40px);font-weight:700;color:var(--muted)}
+.sl-correio .pa{font-family:var(--display);color:var(--accent);font-size:clamp(36px,6vw,96px);line-height:1;margin:1.5vh 0 3vh}
+.sl-correio .q{margin:0 auto}
+.tvreac{margin-left:.6em;font-size:.9em}
 </style>
 </head>
 <body>
@@ -871,7 +900,7 @@ const sb = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE
 async function rpc(fn, args){ const {data,error}=await sb.rpc(fn,args); if(error) throw error; return data; }
 async function carregarFesta(slug){ return await rpc('fe_festa',{p_slug:slug}); }
 async function postsAprovados(festaId){
-  const {data,error}=await sb.from('fe_posts').select('id,tipo,autor,texto,caminho,thumb,duracao,criado_em,curtidas').eq('festa_id',festaId).order('criado_em',{ascending:true}).limit(1000);
+  const {data,error}=await sb.from('fe_posts').select('id,tipo,autor,texto,caminho,thumb,duracao,criado_em,curtidas,reacoes,comentarios').eq('festa_id',festaId).order('criado_em',{ascending:true}).limit(1000);
   if(error) throw error; return data;
 }
 const ERR = e => { const m=(e&&e.message)||''; if(/Calma/.test(m)) return 'Calma! Espere uns segundinhos para mandar outra.'; if(/Limite do plano/.test(m)) return 'Esta festa chegou ao limite de homenagens do plano contratado. O anfitrião pode mudar para um plano maior.'; if(/Gravação maior/.test(m)) return 'A gravação passou do tempo permitido nesta festa.'; if(/Limite do teste/.test(m)) return 'Esta festa está em modo teste e já recebeu as 10 homenagens do teste. O anfitrião precisa ativar a festa para receber mais.'; if(/Código inválido/.test(m)) return 'Código inválido ou já usado. Confira as letras e os números.'; if(/Muitas festas/.test(m)) return m; if(/Informe|Aceite/.test(m)) return m+'.'; if(/Senha/.test(m)) return 'Senha incorreta.'; if(/row-level|policy/i.test(m)) return 'Esta festa não está aceitando homenagens agora.'; if(/size|large|exceed/i.test(m)) return 'Arquivo grande demais. Tente um menor.'; if(/mime|type/i.test(m)) return 'Tipo de arquivo não aceito.'; return 'Não deu certo agora. Confira a internet e tente de novo.'; };
@@ -932,6 +961,7 @@ async function telaConvidado(){
       ${MESA&&f.mesas?`<span class="mesa-chip">🍽️ Mesa ${MESA}</span>`:''}
       <div class="fio"></div>
     </header>
+    ${f.ativo && f.perguntas_ativas ? '<section class="card rsvp" id="prg"></section>' : ''}
     ${f.ativo ? '<section class="card rsvp" id="qz" hidden></section>' : ''}
     ${f.ativo ? '<section class="card rsvp" id="srt" hidden></section>' : ''}
     ${f.ativo && f.valet ? '<section class="card rsvp" id="vlt"></section>' : ''}
@@ -952,6 +982,7 @@ async function telaConvidado(){
     </section>
     ` : `<div class="closed">As homenagens desta festa foram encerradas. Obrigado por fazer parte.</div>`}
     ${f.ativo && f.tem_cardapio && !MESA ? '<section class="card rsvp" id="cdp"></section>' : ''}
+    ${f.ativo && f.correio_ativo!==false ? '<section class="card rsvp" id="crr"></section>' : ''}
     ${(t.fotos||[]).length ? `<h2 class="sec">📖 A história de ${esc(f.homenageado||'quem a gente ama')}</h2><div class="hist">${t.fotos.map(p=>`<figure><img loading="lazy" src="${midia(p)}" alt=""></figure>`).join('')}</div>` : ''}
     <h2 class="sec">🖼️ Mural <span class="muted" id="muralN" style="font-size:16px;font-weight:500"></span></h2>
     <div class="mural" id="mural"></div>
@@ -960,21 +991,23 @@ async function telaConvidado(){
   document.querySelectorAll('.act').forEach(b=>b.onclick=()=>abrirEnvio(b.dataset.k));
   document.querySelectorAll('.capa .enfc').forEach(im=>{ const t2=new Image(); t2.crossOrigin='anonymous'; t2.onload=()=>{ try{ const c=document.createElement('canvas'); c.width=c.height=16; const x=c.getContext('2d'); x.drawImage(t2,0,0,16,16); const d=x.getImageData(0,0,16,16).data; if(![0,15,240,255].some(k=>d[k*4+3]<200)) im.classList.add('sticker'); }catch(e){ im.classList.add('sticker'); } }; t2.src=im.src; });
   const nome=$('nome'); if(nome) nome.addEventListener('change',()=>store.set('mf_nome',nome.value.trim().slice(0,40)));
-  $('mural').addEventListener('click', e=>{ const l=e.target.closest('[data-like]'); if(l) return curtir(l); const m=e.target.closest('[data-mol]'); if(m){ const p=POSTS.find(x=>x.id===+m.dataset.mol); if(p) abrirMoldura(midia(p.caminho), p.autor); } });
-  ligarPresenca(); ligarCardapio(MESA); ligarValet(); ligarSorteio(); ligarQuiz();
+  $('mural').addEventListener('click', e=>{ const l=e.target.closest('[data-like]'); if(l) return curtir(l); const rc=e.target.closest('[data-reac]'); if(rc) return reagir(rc); const cm=e.target.closest('[data-com]'); if(cm) return abrirComentarios(+cm.dataset.com); const m=e.target.closest('[data-mol]'); if(m){ const p=POSTS.find(x=>x.id===+m.dataset.mol); if(p) abrirMoldura(midia(p.caminho), p.autor); } });
+  ligarPresenca(); ligarCardapio(MESA); ligarValet(); ligarSorteio(); ligarQuiz(); ligarCorreio(); ligarPerguntas(MESA);
   await atualizarMural(); setInterval(()=>{ if(!document.hidden) atualizarMural(); }, 20000);
 }
 async function atualizarMural(){
   try{ POSTS = await postsAprovados(FESTA.id); }catch(e){ return; }
-  const key=POSTS.map(p=>p.id+':'+(p.curtidas||0)).join(','); if(key===muralKey) return; muralKey=key;
+  const key=POSTS.map(p=>p.id+':'+(p.curtidas||0)+':'+JSON.stringify(p.reacoes||{})+':'+(p.comentarios||0)).join(','); if(key===muralKey) return; muralKey=key;
   $('muralN').textContent = POSTS.length ? `(${POSTS.length})` : '';
   const m=$('mural'); const list=[...POSTS].reverse();
   m.innerHTML = list.length ? list.map(cardPost).join('') : `<div class="empty">Ainda não chegou nenhuma homenagem. A primeira pode ser a sua ✨</div>`;
 }
 const curtidasMinhas = () => { try{ return new Set(JSON.parse(store.get('mf_curt_'+(FESTA&&FESTA.id))||'[]')); }catch(e){ return new Set(); } };
+const EMOJIS=['😂','😍','👏','🥹','🔥'];
+const reacoesMinhas = () => { try{ return new Set(JSON.parse(store.get('mf_reac_'+(FESTA&&FESTA.id))||'[]')); }catch(e){ return new Set(); } };
 function acoesPost(p){
-  const on = curtidasMinhas().has(p.id);
-  return `<div class="pacoes"><button class="curtir${on?' on':''}" data-like="${p.id}" aria-pressed="${on}" aria-label="Curtir"><span class="co">${on?'♥':'♡'}</span><b>${p.curtidas||0}</b></button>${p.tipo==='foto'?`<button class="molbtn" data-mol="${p.id}">🖼️ Postar com moldura</button>`:''}</div>`;
+  const on = curtidasMinhas().has(p.id), mr=reacoesMinhas(), rc=p.reacoes||{};
+  return `<div class="pacoes" style="justify-content:flex-start"><div class="reac">${EMOJIS.map(e=>`<button type="button" class="${mr.has(p.id+'|'+e)?'on':''}" data-reac="${p.id}|${e}" aria-label="Reagir ${e}">${e}${rc[e]?`<b>${rc[e]}</b>`:''}</button>`).join('')}</div><button type="button" class="combtn" data-com="${p.id}">💬 ${p.comentarios||''}</button></div><div class="pacoes"><button class="curtir${on?' on':''}" data-like="${p.id}" aria-pressed="${on}" aria-label="Curtir"><span class="co">${on?'♥':'♡'}</span><b>${p.curtidas||0}</b></button>${p.tipo==='foto'?`<button class="molbtn" data-mol="${p.id}">🖼️ Postar com moldura</button>`:''}</div>`;
 }
 function cardPost(p){
   const by = p.autor ? `<div class="by">— ${esc(p.autor)}</div>` : '';
@@ -983,6 +1016,25 @@ function cardPost(p){
   if(p.tipo==='audio') return `<div class="post a"><div class="pb"><div style="font-weight:700">🎤 Recado em áudio · ${fmtDur(p.duracao)}</div><audio controls preload="none" src="${midia(p.caminho)}"></audio>${by}${acoesPost(p)}</div></div>`;
   if(p.tipo==='video') return `<div class="post"><video controls playsinline preload="none" poster="${p.thumb?midia(p.thumb):''}" src="${midia(p.caminho)}"></video><div class="pb"><div style="font-weight:700">🎥 Recado em vídeo · ${fmtDur(p.duracao)}</div>${by}${acoesPost(p)}</div></div>`;
   return '';
+}
+async function reagir(btn){
+  const [id,emo]=btn.dataset.reac.split('|'); const pid=+id, k=pid+'|'+emo, set=reacoesMinhas(), on=!set.has(k);
+  const b=btn.querySelector('b'); const n=Math.max(0,(b?+b.textContent:0)+(on?1:-1)); btn.classList.toggle('on',on); btn.innerHTML=emo+(n?`<b>${n}</b>`:'');
+  on?set.add(k):set.delete(k); store.set('mf_reac_'+FESTA.id, JSON.stringify([...set])); if(navigator.vibrate&&on) navigator.vibrate(20);
+  try{ const r=await rpc('fe_reagir',{p_post:pid,p_aparelho:deviceId(),p_emoji:emo}); const p=POSTS.find(x=>x.id===pid); if(p) p.reacoes=r.reacoes; const m=(r.reacoes||{})[emo]||0; btn.classList.toggle('on',r.meu); btn.innerHTML=emo+(m?`<b>${m}</b>`:'');
+    if(r.meu!==on){ r.meu?set.add(k):set.delete(k); store.set('mf_reac_'+FESTA.id, JSON.stringify([...set])); } }catch(e){}
+}
+async function abrirComentarios(pid){
+  const p=POSTS.find(x=>x.id===pid); abrirFolha(`<h3>💬 Comentários</h3>${p&&p.tipo==='foto'?`<img src="${midia(p.caminho)}" alt="" style="width:100%;max-height:30vh;object-fit:contain;border-radius:12px;background:#000">`:p&&p.texto?`<p class="muted" style="margin:0">“${esc(p.texto.slice(0,140))}”</p>`:''}
+    <div class="com-l" id="comL"><div class="empty" style="background:none"><span class="spin"></span></div></div>
+    <input class="in" id="comA" maxlength="40" placeholder="Seu nome (opcional)" value="${esc(store.get('mf_nome')||'')}"><textarea class="in" id="comT" maxlength="200" rows="2" placeholder="Escreva um comentário" style="margin-top:8px"></textarea>
+    <p class="muted" style="font-size:13px;margin:6px 0 0">Os comentários aparecem depois que o anfitrião aprova 💛</p>
+    <div class="msg" id="eMsg"></div><div class="foot"><button class="btn ghost" id="eCancel">Fechar</button><button class="btn" id="eSend">Comentar</button></div>`);
+  $('eCancel').onclick=fecharFolha;
+  try{ const l=await rpc('fe_comentarios_post',{p_post:pid}); $('comL').innerHTML=l.length?l.map(c=>`<div>${esc(c.texto)}<small>${esc(c.autor||'Convidado')}</small></div>`).join(''):'<p class="muted" style="margin:0">Seja o primeiro a comentar ✨</p>'; }catch(e){ $('comL').innerHTML=''; }
+  $('eSend').onclick=async()=>{ const t=$('comT').value.trim(); if(!t){ msgE('Escreva o comentário.','err'); return; } $('eSend').disabled=true;
+    try{ const a=$('comA').value.trim(); if(a) store.set('mf_nome',a); await rpc('fe_comentar',{p_post:pid,p_aparelho:deviceId(),p_autor:a,p_texto:t}); $('comT').value=''; msgE('Comentário enviado! Aparece depois da aprovação 💛','ok'); }
+    catch(e){ msgE(/Calma|Limite/.test(e.message||'')?e.message:ERR(e),'err'); } $('eSend').disabled=false; };
 }
 async function curtir(btn){
   const id=+btn.dataset.like, set=curtidasMinhas(), on=!set.has(id), b=btn.querySelector('b');
@@ -1104,6 +1156,62 @@ async function ligarValet(){
   const agendar=()=>{ clearTimeout(timer); if(!t || t.status==='entregue') return; const ms=['solicitado','buscando','aguardando'].includes(t.status)?6000:20000;
     timer=setTimeout(async()=>{ if(!document.hidden){ try{ const n=await rpc('fe_meu_valet',{p_festa:f.id,p_aparelho:deviceId()}); if(n && (n.status!==t.status || n.vaga!==t.vaga || (n.fotos||[]).length!==(t.fotos||[]).length)){ t=n; render(); return; } }catch(e){} } agendar(); }, ms); };
   render();
+}
+async function ligarCorreio(){
+  const box=$('crr'); if(!box) return; const f=FESTA; let anon=false;
+  box.innerHTML=`<h2 class="sec">💌 Correio elegante</h2><p class="sub">Mande um recado para alguém da festa. Ele aparece no telão depois que o anfitrião aprovar.</p>
+    <div style="text-align:left;max-width:460px;margin:0 auto"><label class="f">Para quem?<input class="in" id="crP" maxlength="60" placeholder="Ex.: A moça de vestido azul da mesa 5"></label>
+      <label class="f" style="margin-top:10px">Mensagem<textarea class="in" id="crM" maxlength="240" rows="3" placeholder="Escreva com carinho (e bom humor) 😉"></textarea></label>
+      <div class="seg" style="justify-content:flex-start;margin-top:10px"><button type="button" id="crId" aria-pressed="true">✍️ Assinar com meu nome</button><button type="button" id="crAn" aria-pressed="false">🤫 Anônimo</button></div>
+      <input class="in" id="crD" maxlength="40" placeholder="Seu nome" value="${esc(store.get('mf_nome')||'')}"></div>
+    <button class="btn" id="crE" style="margin-top:12px">💌 Enviar correio</button><div class="msg" id="crMsg"></div><div class="crr-l" id="crL"></div>`;
+  const modo=a=>{ anon=a; $('crId').setAttribute('aria-pressed',!a); $('crAn').setAttribute('aria-pressed',a); $('crD').hidden=a; };
+  $('crId').onclick=()=>modo(false); $('crAn').onclick=()=>modo(true);
+  $('crE').onclick=async()=>{ const M=$('crMsg'), para=$('crP').value.trim(), msg=$('crM').value.trim(), de=anon?'':$('crD').value.trim();
+    if(para.length<2){ M.className='msg err'; M.textContent='Escreva para quem é.'; return; } if(msg.length<2){ M.className='msg err'; M.textContent='Escreva a mensagem.'; return; } if(!anon && de.length<2){ M.className='msg err'; M.textContent='Escreva seu nome ou escolha anônimo.'; return; }
+    $('crE').disabled=true; try{ await rpc('fe_correio_enviar',{p_festa:f.id,p_aparelho:deviceId(),p_para:para,p_de:de,p_mensagem:msg}); if(de) store.set('mf_nome',de); $('crP').value=''; $('crM').value=''; M.className='msg ok'; M.textContent='Correio enviado! Aparece no telão depois da aprovação 💌'; }
+    catch(e){ M.className='msg err'; M.textContent=/Calma|Limite|aberto|Escreva/.test(e.message||'')?e.message:ERR(e); } $('crE').disabled=false; };
+  const lista=async()=>{ try{ const l=await rpc('fe_correio_publico',{p_festa:f.id}); $('crL').innerHTML=l.slice(0,12).map(c=>`<div class="crr-c"><div class="pa">💌 Para: ${esc(c.para)}</div><div>${esc(c.mensagem)}</div><div class="de">${c.de?'De: '+esc(c.de):'🤫 De: alguém especial'}</div></div>`).join(''); }catch(e){} };
+  lista(); setInterval(()=>{ if(!document.hidden) lista(); }, 30000);
+}
+function ligarPerguntas(MESA){
+  const box=$('prg'); if(!box) return; const f=FESTA; let tipo='texto', anon=false, gravado=null, rec=null, recTimer=null;
+  box.innerHTML=`<h2 class="sec">🙋 Perguntas para o palco</h2><p class="sub">Mande sua pergunta para quem está falando. Tudo passa pela moderação antes.</p>
+    <div class="seg"><button type="button" data-t="texto" aria-pressed="true">✍️ Escrever</button><button type="button" data-t="audio" aria-pressed="false">🎙️ Gravar</button><button type="button" data-t="microfone" aria-pressed="false">🎤 Pedir o microfone</button></div>
+    <div style="text-align:left;max-width:460px;margin:0 auto">
+      <div id="pgTx"><textarea class="in" id="pgT" maxlength="300" rows="3" placeholder="Sua pergunta"></textarea></div>
+      <div id="pgAu" hidden><div class="rec-box" id="pgRec"><button class="btn alt" type="button" id="pgGrava">⏺ Gravar (até 60 s)</button></div></div>
+      <p id="pgMi" class="muted" hidden style="margin:0 0 6px">Um membro da equipe leva o microfone até você quando for a sua vez.</p>
+      <div class="grid2" style="margin-top:8px"><label class="f">Seu nome<input class="in" id="pgN" maxlength="40" value="${esc(store.get('mf_nome')||'')}"></label><label class="f">Mesa ou lugar<input class="in" id="pgM" maxlength="20" value="${MESA?'Mesa '+MESA:''}" placeholder="Ex.: Mesa 4, fila B"></label></div>
+      <label class="row" style="gap:8px;margin-top:8px;font-weight:600"><input type="checkbox" id="pgAn" style="width:20px;height:20px"> Perguntar sem me identificar</label></div>
+    <button class="btn" id="pgE" style="margin-top:12px">Enviar pergunta</button><div class="msg" id="pgMsg"></div><div class="prg-st" id="pgL"></div>`;
+  const setTipo=t=>{ tipo=t; box.querySelectorAll('[data-t]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.t===t)); $('pgTx').hidden=t!=='texto'; $('pgAu').hidden=t!=='audio'; $('pgMi').hidden=t!=='microfone'; $('pgE').textContent=t==='microfone'?'🎤 Pedir o microfone':'Enviar pergunta'; };
+  box.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>setTipo(b.dataset.t));
+  $('pgAn').onchange=e=>{ anon=e.target.checked; $('pgN').disabled=anon; };
+  const parar=()=>{ if(rec && rec.state!=='inactive') rec.stop(); clearInterval(recTimer); };
+  async function grava(){
+    if(rec && rec.state==='recording'){ parar(); return; }
+    const mime=escolherMime('audio'); if(mime===null){ $('pgMsg').className='msg err'; $('pgMsg').textContent='Este celular não grava áudio aqui. Escreva a pergunta.'; return; }
+    let st; try{ st=await navigator.mediaDevices.getUserMedia({audio:true}); }catch(e){ $('pgMsg').className='msg err'; $('pgMsg').textContent='Libere o microfone para gravar.'; return; }
+    const ch=[]; rec=new MediaRecorder(st, mime?{mimeType:mime}:undefined); rec.ondataavailable=e=>{ if(e.data.size) ch.push(e.data); };
+    rec.onstop=()=>{ st.getTracks().forEach(t=>t.stop()); const ty=(rec.mimeType||'audio/webm').split(';')[0]; gravado=new Blob(ch,{type:ty}); const u=URL.createObjectURL(gravado);
+      $('pgRec').innerHTML=`<audio controls src="${u}"></audio><button class="btn ghost sm" type="button" id="pgDe">Gravar de novo</button>`; $('pgDe').onclick=()=>{ gravado=null; $('pgRec').innerHTML='<button class="btn alt" type="button" id="pgGrava">⏺ Gravar (até 60 s)</button>'; $('pgGrava').onclick=grava; }; };
+    rec.start(); let s=0; $('pgRec').innerHTML='<span class="rec-dot"></span><b id="pgS">0 s</b><button class="btn sm" type="button" id="pgStop">⏹ Parar</button>'; $('pgStop').onclick=parar;
+    recTimer=setInterval(()=>{ s++; if($('pgS')) $('pgS').textContent=s+' s'; if(s>=60) parar(); },1000); }
+  $('pgGrava').onclick=grava;
+  $('pgE').onclick=async()=>{ const M=$('pgMsg'); M.className='msg'; M.textContent=''; const nome=anon?'':$('pgN').value.trim(), mesa=$('pgM').value.trim();
+    if(tipo==='texto' && $('pgT').value.trim().length<3){ M.className='msg err'; M.textContent='Escreva a pergunta.'; return; }
+    if(tipo==='audio' && !gravado){ M.className='msg err'; M.textContent='Grave a pergunta primeiro.'; return; }
+    if(tipo==='microfone' && !mesa){ M.className='msg err'; M.textContent='Diga onde você está (mesa ou lugar).'; return; }
+    $('pgE').disabled=true;
+    try{ let audio=null; if(tipo==='audio'){ M.innerHTML='<span class="spin"></span> Enviando o áudio…'; const ty=gravado.type||'audio/webm'; audio=await subir(gravado,'pergunta/audio',ty.includes('mp4')?'m4a':ty.includes('ogg')?'ogg':'webm',ty); }
+      await rpc('fe_perguntar',{p_festa:f.id,p_aparelho:deviceId(),p_nome:nome,p_mesa:mesa,p_tipo:tipo,p_texto:tipo==='texto'?$('pgT').value.trim():'',p_audio:audio});
+      if(nome) store.set('mf_nome',nome); $('pgT').value=''; gravado=null; if(tipo==='audio'){ $('pgRec').innerHTML='<button class="btn alt" type="button" id="pgGrava">⏺ Gravar (até 60 s)</button>'; $('pgGrava').onclick=grava; }
+      M.className='msg ok'; M.textContent=tipo==='microfone'?'Pedido enviado! Aguarde o microfone 🎤':'Pergunta enviada! Ela passa pela moderação 🙋'; minhas(); }
+    catch(e){ M.className='msg err'; M.textContent=/Calma|fila|abertas|Escreva|Grave|Diga/.test(e.message||'')?e.message:ERR(e); } $('pgE').disabled=false; };
+  const ST={pendente:'⏳ aguardando moderação',aprovada:'✅ aprovada, na fila',a_caminho:'🎤 o microfone está indo até você',respondida:'✔ respondida',recusada:'não selecionada'};
+  const minhas=async()=>{ try{ const l=await rpc('fe_minhas_perguntas',{p_festa:f.id,p_aparelho:deviceId()}); $('pgL').innerHTML=l.length?'<p style="margin:14px 0 4px;font-weight:600;text-align:left">Suas perguntas</p>'+l.map(x=>`<div><span>${x.tipo==='microfone'?'🎤 Pedido de microfone':x.tipo==='audio'?'🎙️ Pergunta gravada':esc(x.texto||'')}</span><span>${ST[x.status]||x.status}</span></div>`).join(''):''; }catch(e){} };
+  minhas(); setInterval(()=>{ if(!document.hidden) minhas(); }, 10000);
 }
 function ligarQuiz(){
   const box=$('qz'); if(!box) return; const f=FESTA; let q={fase:'off'}, timer=null, tick=null, chave='', enviando=false;
@@ -1401,7 +1509,7 @@ async function telaTelao(){
     document.body.appendChild(box); setTimeout(()=>box.remove(),5000); }
 
   async function puxar(){
-    try{ const l=await postsAprovados(f.id); tv.list=l; for(const p of l){ if(!tv.known.has(p.id)){ tv.known.add(p.id); if(tv.started) tv.queue.push(p); } } $('tvN').textContent = l.length ? `${l.length} homenage${l.length>1?'ns':'m'} 💛` : ''; }catch(e){}
+    try{ let l=await postsAprovados(f.id); try{ const cs=await rpc('fe_correio_publico',{p_festa:f.id}); l=l.concat(cs.map(c=>({id:'c'+c.id,tipo:'correio',para:c.para,de:c.de,texto:c.mensagem,criado_em:c.criado_em}))).sort((a,b)=>new Date(a.criado_em)-new Date(b.criado_em)); }catch(_){} tv.list=l; for(const p of l){ if(!tv.known.has(p.id)){ tv.known.add(p.id); if(tv.started) tv.queue.push(p); } } $('tvN').textContent = l.length ? `${l.length} homenage${l.length>1?'ns':'m'} 💛` : ''; }catch(e){}
   }
   // ---- pré-download: áudio e vídeo só entram no telão depois de baixados por inteiro ----
   const midiaPesada = p => p && (p.tipo==='video' || p.tipo==='audio');
@@ -1457,7 +1565,8 @@ async function telaTelao(){
     else if(p.tipo==='col'){ el.classList.add('sl-col'); el.innerHTML=p.fotos.map((c,i)=>`<div class="pol c${i+1}" style="--r:${[-9,4,10][i]}deg;animation-delay:${i*.45}s"><img src="${midia(c)}" alt=""></div>`).join('')+`<div class="cap">📖 A história de ${esc(nome)}</div>`; dur=8500; }
     else if(p.tipo==='intro'){ el.className='sl sl-intro e-zoom'; el.innerHTML=`<div class="hey">✨ Bem-vindos à festa ✨</div><div class="nm">${[...nome].map((ch,i)=>`<span style="animation-delay:${(i*.08).toFixed(2)}s">${ch===' '?'&nbsp;':esc(ch)}</span>`).join('')}</div><div class="sub">${esc(subtitulo(f))}</div><div class="cta">📸 ✍️ 🎤 🎥 Mande sua homenagem pelo QR Code aqui embaixo!</div>`; dur=7500; confete(60); chars.festa(); }
     else if(p.tipo==='qr'){ el.className='sl tv-empty e-zoom'; el.innerHTML=`<div class="qr" id="tvQrBig"></div><h2>${tv.list.length?'Deixe a sua homenagem também!':'Mande a primeira homenagem!'}</h2><p>Aponte a câmera do celular para o código</p>`; dur=7000; }
-    else if(p.tipo==='foto'){ el.classList.add('sl-foto'); el.innerHTML=`<img class="ph" style="--r:${giro()}" src="${midia(p.caminho)}" alt="">${(p.texto||by||p.curtidas)?`<div class="cap">${esc(p.texto||'')}${p.curtidas?`<span class="tvlike">♥ ${p.curtidas}</span>`:''}${by?`<small>📸 ${by}</small>`:''}</div>`:''}`; dur=8000; }
+    else if(p.tipo==='foto'){ el.classList.add('sl-foto'); el.innerHTML=`<img class="ph" style="--r:${giro()}" src="${midia(p.caminho)}" alt="">${(p.texto||by||p.curtidas)?`<div class="cap">${esc(p.texto||'')}${p.curtidas?`<span class="tvlike">♥ ${p.curtidas}</span>`:''}${Object.entries(p.reacoes||{}).map(([e,n])=>`<span class="tvreac">${e} ${n}</span>`).join('')}${by?`<small>📸 ${by}</small>`:''}</div>`:''}`; dur=8000; }
+    else if(p.tipo==='correio'){ el.classList.add('sl-texto','sl-correio'); const L=(p.texto||'').length; const fs=L<60?6:L<140?4.6:3.6; el.innerHTML=`<div><div class="env">💌 Correio elegante</div><div class="pa">Para: ${esc(p.para)}</div><div class="q${t.fundo?' card-on':''}" style="font-size:${fs}vw">${esc(p.texto)}</div><div class="by">${p.de?'— '+esc(p.de):'🤫 De: alguém especial'}</div></div>`; dur=Math.min(16000, 8000+L*40); }
     else if(p.tipo==='texto'){ el.classList.add('sl-texto'); const L=(p.texto||'').length; const fs = L<40?9:L<90?7:L<180?5.4:L<320?4.2:3.4; el.innerHTML=`<div class="q${t.fundo?' card-on':''}" style="font-size:${fs}vw">${esc(p.texto)}</div>${by||p.curtidas?`<div class="by">${by?'— '+by:''}${p.curtidas?`<span class="tvlike">♥ ${p.curtidas}</span>`:''}</div>`:''}`; dur=Math.min(18000, 7000+L*45); }
     else if(p.tipo==='audio'){ el.classList.add('sl-audio'); el.innerHTML=`<div class="mic">🎤</div><div class="eq">${'<i></i>'.repeat(12)}</div><div class="cap">Recado de ${by||'um convidado'}</div><audio src="${(cacheM.get(p.id)||{}).url||midia(p.caminho)}" preload="auto"></audio>`; dur=null; }
     else if(p.tipo==='video'){ el.classList.add('sl-video'); el.innerHTML=`<video src="${(cacheM.get(p.id)||{}).url||midia(p.caminho)}" playsinline preload="auto" ${p.thumb?`poster="${midia(p.thumb)}"`:''}></video>${by?`<div class="cap"><small>🎥 Recado de ${by}</small></div>`:''}`; dur=null; }
@@ -1492,10 +1601,13 @@ async function telaTelao(){
     if(modo==='apresentacao' && sl.length){ camada.className='tv-apr'; camada.hidden=false; const src=midia(sl[Math.min(e.slide||0,sl.length-1)]); const img=camada.querySelector('img'); if(!img || img.dataset.src!==src) camada.innerHTML=`<img data-src="${src}" src="${src}" alt="">`; }
     else if(modo==='sorteio'){ telaoSorteio(e.sorteio||{}); }
     else if(modo==='quiz'){ telaoQuiz(e.quiz||{}); }
+    else if(modo==='pergunta' && e.pergunta){ const q=e.pergunta; if(camada.dataset.pq!=String(q.id)){ camada.dataset.pq=q.id; camada.className='tv-prg'; camada.hidden=false;
+        camada.innerHTML=`<div><div class="k">🙋 Pergunta da plateia</div><div class="t">${q.texto?esc(q.texto):q.tipo==='audio'?'🎙️ Pergunta gravada':''}</div><div class="w">${q.nome?esc(q.nome):'Anônimo'}${q.mesa?' · '+esc(q.mesa):''}</div>${q.audio?`<audio id="tvPa" src="${midia(q.audio)}" autoplay></audio>`:''}</div>`; } }
     else if(modo==='pausa'){ camada.className='tv-pausa'; camada.hidden=false; if(!camada.querySelector('.who')) camada.innerHTML=`<div><div class="who">${esc(nome)}</div><p>Já voltamos 💛</p></div>`; }
     else { camada.hidden=true; camada.innerHTML=''; }
-    const parar = modo!=='mural' && (modo==='pausa' || modo==='sorteio' || modo==='quiz' || sl.length);
+    const parar = modo!=='mural' && (modo==='pausa' || modo==='sorteio' || modo==='quiz' || modo==='pergunta' || sl.length);
     if(modo!=='quiz'){ clearInterval(qzTick); qzChave=''; }
+    if(modo!=='pergunta') delete camada.dataset.pq;
     if(parar && !tv.ctlPausa){ tv.ctlPausa=true; tv.paused=true; clearTimeout(tv.timer); $('stage').querySelectorAll('audio,video').forEach(m=>{ try{ m.pause(); }catch(_){} }); if(mus) mus.duck(true); }
     if(!parar && tv.ctlPausa){ tv.ctlPausa=false; tv.paused=false; if(mus) mus.duck(false); if(tv.started) proxima(); }
     if(modo!=='sorteio') srtUlt=null;
@@ -1855,12 +1967,13 @@ function painelAdmin(){
      <button data-v="apresentacao" aria-pressed="false">🎤 Apresentação</button>
      <button data-v="sorteio" aria-pressed="false">🎲 Sorteio</button>
      <button data-v="quiz" aria-pressed="false">🧠 Quiz</button>
+     <button data-v="interacoes" aria-pressed="false">💬 Interações</button>
      <button data-v="recordacoes" aria-pressed="false">📖 Álbum</button>
    </div>
    <div id="vw"></div></div>`;
   $('sair').onclick=()=>{ store.sset('mf_pin_'+SLUG,null); store.set('mf_pin_'+SLUG,null); location.reload(); };
   const abas=$('abasTop');
-  abas.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; abas.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed', x===b)); if(b.dataset.v==='meutema' && $('seuCta')) $('seuCta').remove(); ({moderar:vModerar, festa:vFesta, meutema:vMeuTema, compartilhar:vCompartilhar, recordacoes:vRecordacoes, cardapio:vCardapio, apresentacao:vApresentacao, sorteio:vSorteio, quiz:vQuiz})[b.dataset.v](); };
+  abas.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; abas.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed', x===b)); if(b.dataset.v==='meutema' && $('seuCta')) $('seuCta').remove(); ({moderar:vModerar, festa:vFesta, meutema:vMeuTema, compartilhar:vCompartilhar, recordacoes:vRecordacoes, cardapio:vCardapio, apresentacao:vApresentacao, sorteio:vSorteio, quiz:vQuiz, interacoes:vInteracoes})[b.dataset.v](); };
   const ir=v=>{ const b=abas.querySelector(`[data-v="${v}"]`); if(b) b.click(); };
   document.querySelectorAll('[data-ir]').forEach(b=>b.onclick=()=>ir(b.dataset.ir));
   if($('psOk')) $('psOk').onclick=()=>{ store.set('mf_novo_'+f.slug,null); $('passos').remove(); };
@@ -1871,7 +1984,7 @@ function painelAdmin(){
   else if(pidS && /^[0-9a-f-]{36}$/.test(pidS) && f.plano==='teste') fetch(FN_PAG,{method:'POST',headers:{'Content-Type':'application/json',apikey:SUPABASE_KEY},body:JSON.stringify({acao:'conferir',pagamento:pidS})}).then(r=>r.json()).then(async j=>{ if(j.status==='approved'){ FESTA=await carregarFesta(SLUG); store.set('mf_pag_'+f.slug,null); toast('Pagamento confirmado! Festa liberada 🎉',4000); painelAdmin(); } }).catch(()=>{});
   if($('seuGo')) $('seuGo').onclick=()=>{ ir('meutema'); $('vw').scrollIntoView({behavior:'smooth'}); };
   const abaIni = Q.get('aba') || (!f.custom ? 'meutema' : 'moderar');
-  ir(['meutema','moderar','festa','compartilhar','recordacoes','cardapio','apresentacao','sorteio','quiz'].includes(abaIni) ? abaIni : 'moderar'); if(ADM.view!=='moderar') carregarAdmPosts();
+  ir(['meutema','moderar','festa','compartilhar','recordacoes','cardapio','apresentacao','sorteio','quiz','interacoes'].includes(abaIni) ? abaIni : 'moderar'); if(ADM.view!=='moderar') carregarAdmPosts();
   setInterval(()=>{ if(!document.hidden && ADM.view==='moderar') carregarAdmPosts(); }, 12000);
 }
 function ativarFesta(){
@@ -2329,6 +2442,41 @@ async function vQuiz(){
   $('qzMural').onclick=async()=>{ try{ await rpc('fe_admin_tv',{p_slug:SLUG,p_pin:PIN,p_modo:'mural',p_slide:0}); toast('O telão voltou ao mural 💌'); }catch(e){ toast(ERR(e)); } };
   await carregar(); const it=setInterval(()=>{ if(ADM.view!=='quiz') return clearInterval(it); if(!document.hidden) carregar(); }, 2000);
 }
+async function vInteracoes(){
+  ADM.view='interacoes'; const f=FESTA; let D={comentarios:[],correio:[],perguntas:[]}, filtro='pendentes';
+  $('vw').innerHTML=`<div class="card" style="padding:18px"><h3 style="margin:0 0 4px">💬 Interações <span class="muted" style="font-size:14px;font-weight:500">(tudo passa por você)</span></h3>
+      <p class="muted" style="margin:0 0 12px">Comentários nas homenagens, correio elegante e perguntas para o palco só aparecem depois que você aprova. As reações com emoji são livres.</p>
+      <label class="row" style="gap:8px;font-weight:600"><input type="checkbox" id="itCr" style="width:22px;height:22px"> 💌 Correio elegante aberto para os convidados</label>
+      <label class="row" style="gap:8px;font-weight:600;margin-top:8px"><input type="checkbox" id="itPg" style="width:22px;height:22px"> 🙋 Perguntas para o palco (palestras, apresentações)</label></div>
+    <div class="card" style="padding:18px;margin-top:12px"><div class="seg" style="justify-content:flex-start;margin:0 0 12px" id="itF">
+        <button type="button" data-f="pendentes" aria-pressed="true">⏳ Para aprovar <b id="itNp"></b></button><button type="button" data-f="perguntas" aria-pressed="false">🙋 Fila do palco <b id="itNq"></b></button><button type="button" data-f="aprovados" aria-pressed="false">✅ Aprovados</button></div>
+      <div id="itL"><div class="empty"><span class="spin"></span></div></div></div>`;
+  const quando=d=>new Date(d).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+  const item=(k,x)=>{ let corpo='', bt='';
+    if(k==='comentario'){ corpo=`${x.post_tipo==='foto'||x.post_tipo==='video'?`<img src="${midia(x.post_caminho)}" alt="">`:''}<div class="tx"><b>💬 Comentário</b> <small>${esc(x.autor||'sem nome')} · ${quando(x.criado_em)}${x.post_texto?` · em “${esc(x.post_texto)}”`:''}</small>${esc(x.texto)}</div>`; }
+    if(k==='correio'){ corpo=`<div class="tx"><b>💌 Correio para ${esc(x.para)}</b> <small>${x.de?'de '+esc(x.de):'🤫 anônimo'} · ${quando(x.criado_em)}</small>${esc(x.mensagem)}</div>`; }
+    if(k==='pergunta'){ corpo=`<div class="tx"><b>${x.tipo==='microfone'?'🎤 Pedido de microfone':x.tipo==='audio'?'🎙️ Pergunta gravada':'🙋 Pergunta'}</b> <small>${esc(x.nome||'anônimo')}${x.mesa?' · '+esc(x.mesa):''} · ${quando(x.criado_em)}</small>${x.texto?esc(x.texto):''}${x.audio?`<audio controls preload="none" src="${midia(x.audio)}" style="width:100%;margin-top:4px"></audio>`:''}</div>`; }
+    const st=x.status;
+    if(st==='pendente') bt=`<button class="btn ok sm" data-k="${k}" data-id="${x.id}" data-s="${k==='pergunta'?'aprovada':'aprovado'}">✓ Aprovar</button><button class="btn ghost sm" data-k="${k}" data-id="${x.id}" data-s="${k==='pergunta'?'recusada':'recusado'}">✕</button>`;
+    else if(k==='pergunta' && st!=='recusada'){ bt=(x.tipo==='microfone'? (st==='aprovada'?`<button class="btn sm" data-k="pergunta" data-id="${x.id}" data-s="a_caminho">🎤 Levar microfone</button>`:st==='a_caminho'?`<button class="btn ok sm" data-k="pergunta" data-id="${x.id}" data-s="respondida">✓ Atendido</button>`:'')
+        : `${st!=='respondida'?`<button class="btn sm" data-tv="${x.id}">📺 No telão</button><button class="btn ok sm" data-k="pergunta" data-id="${x.id}" data-s="respondida">✓ Respondida</button>`:'<span class="muted" style="font-size:13px">✔ respondida</span>'}`); }
+    else if(st==='aprovado') bt=`<button class="btn ghost sm" data-k="${k}" data-id="${x.id}" data-s="recusado">Tirar</button>`;
+    return `<div class="mod-it">${corpo}<div class="bt">${bt}</div></div>`; };
+  const pintar=()=>{ const pend=[...D.comentarios.filter(x=>x.status==='pendente').map(x=>['comentario',x]), ...D.correio.filter(x=>x.status==='pendente').map(x=>['correio',x]), ...D.perguntas.filter(x=>x.status==='pendente').map(x=>['pergunta',x])].sort((a,b)=>new Date(a[1].criado_em)-new Date(b[1].criado_em));
+    const fila=D.perguntas.filter(x=>['aprovada','a_caminho'].includes(x.status)), apr=[...D.comentarios.filter(x=>x.status==='aprovado').map(x=>['comentario',x]), ...D.correio.filter(x=>x.status==='aprovado').map(x=>['correio',x]), ...D.perguntas.filter(x=>x.status==='respondida').map(x=>['pergunta',x])].sort((a,b)=>new Date(b[1].criado_em)-new Date(a[1].criado_em));
+    $('itNp').textContent=pend.length?`(${pend.length})`:''; $('itNq').textContent=fila.length?`(${fila.length})`:'';
+    const L = filtro==='pendentes'?pend : filtro==='perguntas'?fila.map(x=>['pergunta',x]) : apr;
+    $('itL').innerHTML = L.length ? (filtro==='pendentes'&&L.length>1?`<div class="row" style="justify-content:flex-end;margin-bottom:8px"><button class="btn ok sm" id="itTodos">✓ Aprovar todos (${L.length})</button></div>`:'')+L.map(([k,x])=>item(k,x)).join('') : `<div class="empty">${filtro==='pendentes'?'Nada esperando aprovação 👌':filtro==='perguntas'?'Nenhuma pergunta na fila.':'Nada aprovado ainda.'}</div>`;
+    $('itL').querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>mudar(b.dataset.k,[+b.dataset.id],b.dataset.s,b));
+    $('itL').querySelectorAll('[data-tv]').forEach(b=>b.onclick=async()=>{ try{ await rpc('fe_admin_tv_pergunta',{p_slug:SLUG,p_pin:PIN,p_id:+b.dataset.tv}); toast('A pergunta está no telão 📺'); }catch(e){ toast(/Aprove/.test(e.message||'')?e.message:ERR(e)); } });
+    if($('itTodos')) $('itTodos').onclick=async()=>{ const g={}; pend.forEach(([k,x])=>(g[k]=g[k]||[]).push(x.id)); for(const k in g) await mudar(k,g[k],k==='pergunta'?'aprovada':'aprovado'); }; };
+  const mudar=async(k,ids,st,btn)=>{ if(btn) btn.disabled=true; try{ await rpc('fe_admin_moderar_item',{p_slug:SLUG,p_pin:PIN,p_tipo:k,p_ids:ids,p_status:st}); await carregar(); }catch(e){ toast(ERR(e)); if(btn) btn.disabled=false; } };
+  const carregar=async()=>{ try{ D=await rpc('fe_admin_interacoes',{p_slug:SLUG,p_pin:PIN}); $('itCr').checked=D.correio_ativo!==false; $('itPg').checked=!!D.perguntas_ativas; pintar(); }catch(e){ $('itL').innerHTML=`<div class="empty">${ERR(e)}</div>`; } };
+  const cfg=async()=>{ try{ await rpc('fe_admin_interacoes_config',{p_slug:SLUG,p_pin:PIN,p_correio:$('itCr').checked,p_perguntas:$('itPg').checked}); FESTA=await carregarFesta(SLUG); toast('Pronto!'); }catch(e){ toast(ERR(e)); } };
+  $('itCr').onchange=cfg; $('itPg').onchange=cfg;
+  $('itF').querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{ filtro=b.dataset.f; $('itF').querySelectorAll('[data-f]').forEach(x=>x.setAttribute('aria-pressed',x===b)); pintar(); });
+  await carregar(); const it=setInterval(()=>{ if(ADM.view!=='interacoes') return clearInterval(it); if(!document.hidden && !document.querySelector('#itL audio:not([paused])')) carregar(); }, 6000);
+}
 const SORTEIO_SUG=['🎁 Um presente surpresa','💃 Uma dança com o homenageado','🎤 Discurso improvisado de 1 minuto','📸 Foto oficial com o homenageado','🍾 Um brinde especial','🎶 Cantar um trecho no microfone','🍰 O primeiro pedaço do bolo','🕺 Puxar a próxima dança'];
 async function vSorteio(){
   ADM.view='sorteio'; const f=FESTA; let info={}, lista={participantes:[],ganhadores:[]};
@@ -2747,6 +2895,7 @@ function telaTermos(){
   <p>O anfitrião pode enviar imagens próprias para decorar a festa (fundo, personagens, enfeites), fotos do homenageado e músicas para tocar no telão. <b>O Mural da Festa não fornece personagens, marcas ou artes de terceiros.</b> Ao enviar um tema próprio, o anfitrião declara ter autorização para usar todos os elementos enviados e assume <b>integral e exclusiva responsabilidade</b> por eles, inclusive por direitos autorais, marcas e direitos de imagem, isentando o Mural da Festa. A declaração fica registrada com o nome do responsável, a festa, a data e a hora.</p>
   <p><b>Portaria e selfie (opcional):</b> se o anfitrião ligar a portaria, quem confirma presença pode tirar uma selfie e recebe um ingresso com QR Code. A selfie serve só para a equipe do anfitrião conferir a entrada, é vista apenas pelo anfitrião e pela equipe dele e é apagada junto com os arquivos da festa.</p>
   <p><b>Cardápio e pedidos na mesa (opcional):</b> quando o anfitrião usa o cardápio, guardamos o nome, a escolha e a observação de cada convidado, e nos pedidos o número da mesa e os itens pedidos. Só o anfitrião e a equipe dele veem esses dados, que são apagados junto com os arquivos da festa.</p>
+  <p><b>Comentários, correio elegante e perguntas (opcionais):</b> o que o convidado escreve ou grava nesses espaços só aparece depois que o anfitrião aprova. No correio e nas perguntas, o convidado pode não se identificar; mesmo assim, o anfitrião pode recusar qualquer mensagem. Tudo é apagado junto com os arquivos da festa.</p>
   <p><b>Manobrista (opcional):</b> quando o anfitrião oferece manobrista, a equipe registra a placa, o modelo, o local onde o carro ficou e, se quiser, fotos do carro na chegada. Esses dados servem só para devolver o carro, são vistos pelo convidado dono do ticket, pelo anfitrião e pela equipe, e são apagados junto com os arquivos da festa. A guarda do veículo é responsabilidade do serviço de manobristas contratado pelo anfitrião; o Mural da Festa só organiza os registros.</p>
   <p><b>Músicas:</b> as trilhas prontas são criadas pelo próprio Mural da Festa. Músicas enviadas pelo anfitrião são de sua inteira responsabilidade, inclusive os direitos de execução pública no local do evento (por exemplo, junto ao ECAD), quando exigidos.</p>
   <p>Se alguém (por exemplo, um titular de direitos) se sentir prejudicado por um tema ou conteúdo, pode pedir a remoção ${canal}. Ao receber um pedido fundamentado, o tema próprio pode ser desligado e o conteúdo removido, sem prejuízo da responsabilidade de quem o enviou.</p>
@@ -2775,7 +2924,7 @@ const PERFIS={
     passosT:'Como funciona ✨',
     passos:[['📲 O convidado aponta a câmera','Para o QR Code da mesa ou o link do grupo. Não precisa baixar nada.'],['💌 Deixa a homenagem','Uma foto, um recado escrito, um áudio ou um vídeo.'],['✅ Você aprova','Nada aparece no telão sem passar por quem organiza.'],['📺 Telão e álbum','As homenagens passam ao vivo e viram um álbum em PDF.']],
     featT:'Do jeito da sua festa 🎈',
-    feat:[['🎨 Tema e personagens','Escolha um dos temas prontos ou use a arte do seu convite.'],['📖 A história do homenageado','De 8 a 12 fotos, do bebê até hoje, no telão e no álbum.'],['🎵 Música no telão','Uma trilha suave, que se cala sozinha quando entra um vídeo.'],['💌 Convite com QR Code','Para o WhatsApp ou para imprimir. O convidado já chega sabendo.'],['✅ Confirmação de presença','O convidado confirma pelo link e você vê quantos adultos e crianças vão.'],['🎲 Sorteio no telão','Você escolhe o prêmio (um presente, uma dança, um discurso) e o telão sorteia entre quem está na festa.'],['🧠 Quiz ao vivo','Perguntas sobre o homenageado no telão, respostas pelo celular e ranking: quem acerta mais rápido ganha.'],['❤️ Curtidas e moldura','Os convidados curtem as homenagens e postam a foto com a moldura da festa.']],
+    feat:[['🎨 Tema e personagens','Escolha um dos temas prontos ou use a arte do seu convite.'],['📖 A história do homenageado','De 8 a 12 fotos, do bebê até hoje, no telão e no álbum.'],['🎵 Música no telão','Uma trilha suave, que se cala sozinha quando entra um vídeo.'],['💌 Convite com QR Code','Para o WhatsApp ou para imprimir. O convidado já chega sabendo.'],['✅ Confirmação de presença','O convidado confirma pelo link e você vê quantos adultos e crianças vão.'],['🎲 Sorteio no telão','Você escolhe o prêmio (um presente, uma dança, um discurso) e o telão sorteia entre quem está na festa.'],['🧠 Quiz ao vivo','Perguntas sobre o homenageado no telão, respostas pelo celular e ranking: quem acerta mais rápido ganha.'],['💌 Correio elegante','Recados para alguém da festa, assinados ou anônimos, no telão depois da sua aprovação.'],['❤️ Curtidas e moldura','Os convidados curtem as homenagens e postam a foto com a moldura da festa.']],
     mais:'Festa grande? Também tem portaria com QR, cardápio do buffet, pedidos na mesa, manobrista e apresentação no telão. Tudo opcional.'},
   buffet:{chip:'🍽️ Buffet ou cerimonialista', marca:'🍽️ Para buffets e cerimonialistas', h1:'Entregue uma festa que o concorrente não entrega.',
     sub:'Telão de homenagens, cardápio pelo celular, pedidos na mesa, portaria com QR e manobrista. Você indica, o cliente paga direto e você ganha 30% de cada festa.',
@@ -2791,7 +2940,7 @@ const PERFIS={
     passosT:'Como funciona no seu evento 📋',
     passos:[['📝 Cadastre','Crie o evento, envie os slides em PDF e o cardápio do buffet.'],['🎟️ Convide','Os convidados confirmam pelo link e recebem o ingresso com QR.'],['🚪 Credencie','Na entrada, a equipe lê o QR pelo celular e você vê quem chegou.'],['🎤 Apresente','Passe os slides e pause o telão pelo celular, sem precisar de técnico.']],
     featT:'Tudo o que o evento precisa 💼',
-    feat:[['🎤 Apresentação no telão','Slides em PDF, controlados pelo celular: passar, pausar e voltar ao mural.'],['🚪 Credenciamento com QR','Ingresso no celular, conferência na entrada e contagem em tempo real.'],['✅ Lista de presença','Quem confirmou, quem chegou e quantos são, para copiar e enviar.'],['🍽️ Cardápio e pedidos','Escolha do prato antes do evento e pedidos de bebida na mesa.'],['🚗 Manobrista','Registro do carro com fotos e pedido de saída pelo celular.'],['💬 Mural de mensagens','Fotos e recados da equipe no telão, para homenagens e premiações.'],['🎲 Sorteio e quiz ao vivo','Brindes sorteados no telão e quiz com ranking pelo celular, para integrar a equipe.']]}
+    feat:[['🎤 Apresentação no telão','Slides em PDF, controlados pelo celular: passar, pausar e voltar ao mural.'],['🚪 Credenciamento com QR','Ingresso no celular, conferência na entrada e contagem em tempo real.'],['✅ Lista de presença','Quem confirmou, quem chegou e quantos são, para copiar e enviar.'],['🍽️ Cardápio e pedidos','Escolha do prato antes do evento e pedidos de bebida na mesa.'],['🚗 Manobrista','Registro do carro com fotos e pedido de saída pelo celular.'],['💬 Mural de mensagens','Fotos e recados da equipe no telão, para homenagens e premiações.'],['🎲 Sorteio e quiz ao vivo','Brindes sorteados no telão e quiz com ranking pelo celular, para integrar a equipe.'],['🙋 Perguntas para o palco','A plateia pergunta por escrito, gravando ou pedindo o microfone, com moderação antes de ir ao telão.']]}
 };
 const CENAS={
   festa: o=>`<div class="lpol"><div class="lfoto"></div><span>a primeira valsa</span></div>

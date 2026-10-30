@@ -481,6 +481,30 @@ h2.sec .muted{font-family:var(--body)}
 .pres-lista div{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line);padding:6px 2px;font-size:15px}
 .mol-prev{width:min(320px,80%);border-radius:10px;box-shadow:0 14px 34px -16px rgba(0,0,0,.45);display:block;margin:4px auto 12px}
 .tvlike{display:inline-block;margin-left:.5em;color:#ff5c7f;font-family:var(--body);font-weight:700;font-size:.55em}
+
+.selfie{display:flex;align-items:center;gap:12px;border:1px dashed var(--line);border-radius:16px;padding:10px 12px;background:var(--bg)}
+.sfprev{width:64px;height:64px;border-radius:50%;flex:none;display:grid;place-items:center;font-size:26px;background:var(--surface);border:1px solid var(--line);overflow:hidden}
+.sfprev img{width:100%;height:100%;object-fit:cover}
+.selfie small{display:block;color:var(--muted);font-size:12.5px;margin-top:4px}
+.ingresso{border:1.5px dashed color-mix(in srgb,var(--accent) 45%, var(--line));border-radius:20px;padding:18px;max-width:340px;margin:12px auto 0;background:var(--surface)}
+.ingresso .qr{background:#fff;padding:10px;border-radius:12px;width:min(220px,70vw);margin:10px auto}
+.ingresso .ok{color:#2b8a3e;font-weight:700}
+.psf{width:34px;height:34px;border-radius:50%;object-fit:cover;vertical-align:middle;margin-right:8px;border:1px solid var(--line)}
+.port-top{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;margin-bottom:14px}
+.port-cont{font-family:var(--serif);font-size:clamp(30px,6vw,46px);line-height:1}
+.port-cont small{font-family:var(--body);font-size:15px;color:var(--muted);display:block;margin-top:4px}
+.port-lista{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.port-lista button{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:1px solid var(--line);border-radius:16px;background:var(--surface);padding:8px 12px;cursor:pointer;font:inherit;color:var(--ink)}
+.port-lista button img,.port-lista .ph0{width:46px;height:46px;border-radius:50%;object-fit:cover;flex:none;background:var(--bg);display:grid;place-items:center}
+.port-lista .st{margin-left:auto;font-size:13px;font-weight:600;color:var(--muted);text-align:right}
+.port-lista .st.in{color:#2b8a3e}
+.port-sf{width:min(260px,70vw);aspect-ratio:1;border-radius:24px;object-fit:cover;display:block;margin:0 auto 12px;border:4px solid #fff;box-shadow:0 12px 30px -16px rgba(0,0,0,.5)}
+.port-alerta{background:#ffe3e3;color:#a61e1e;border-radius:14px;padding:12px;font-weight:700;text-align:center}
+.port-ok{background:#d3f9d8;color:#1b5e20;border-radius:14px;padding:12px;font-weight:700;text-align:center}
+.scan{position:relative;border-radius:18px;overflow:hidden;background:#000;aspect-ratio:3/4;max-height:62vh}
+.scan video{width:100%;height:100%;object-fit:cover;display:block}
+.scan::after{content:"";position:absolute;inset:18%;border:3px solid rgba(255,255,255,.85);border-radius:22px;box-shadow:0 0 0 999px rgba(0,0,0,.35)}
+@media (max-width:480px){.port-top{grid-template-columns:1fr}.port-top .btn{width:100%}}
 </style>
 </head>
 <body>
@@ -506,7 +530,7 @@ const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const Q = new URLSearchParams(location.search);
 const SLUG = (Q.get('f') || '').trim().toLowerCase();
-const MODE = Q.has('termos') ? 'termos' : Q.has('criar') ? 'criar' : Q.has('mestre') ? 'mestre' : SLUG ? (Q.has('telao') ? 'telao' : Q.has('admin') ? 'admin' : 'convidado') : 'inicio';
+const MODE = Q.has('termos') ? 'termos' : Q.has('criar') ? 'criar' : Q.has('mestre') ? 'mestre' : SLUG ? (Q.has('telao') ? 'telao' : Q.has('portaria') ? 'portaria' : Q.has('admin') ? 'admin' : 'convidado') : 'inicio';
 const BASE = location.origin + location.pathname.replace(/index\.html$/, '');
 const linkFesta = (slug, extra) => BASE + '?f=' + slug + (extra ? '&' + extra : '');
 const midia = p => !p ? '' : /^(blob:|data:|https?:)/.test(p) ? p : `${SUPABASE_URL}/storage/v1/object/public/fe-midia/${p.split('/').map(encodeURIComponent).join('/')}`;
@@ -756,7 +780,7 @@ async function telaConvidado(){
       ${f.mensagem?`<p class="msgf">${esc(f.mensagem)}</p>`:''}
       <div class="fio"></div>
     </header>
-    ${f.ativo && f.data && f.data > new Date(Date.now()-3*3600e3).toISOString().slice(0,10) ? `<section class="card rsvp" id="rsvp"></section>` : ''}
+    ${f.ativo && ((f.data && f.data > new Date().toLocaleDateString('sv')) || f.portaria) ? `<section class="card rsvp" id="rsvp"></section>` : ''}
     ${f.ativo ? `
     <section class="deixe">
       <h2 class="sec" style="justify-content:center">💌 Deixe sua homenagem</h2>
@@ -823,17 +847,32 @@ async function ligarPresenca(){
           <div class="contador"><span>Adultos</span><span class="row" style="gap:10px"><button type="button" data-q="ad" data-d="-1" aria-label="Menos adultos">−</button><b id="rsAd">${ad}</b><button type="button" data-q="ad" data-d="1" aria-label="Mais adultos">+</button></span></div>
           <div class="contador"><span>Crianças</span><span class="row" style="gap:10px"><button type="button" data-q="cr" data-d="-1" aria-label="Menos crianças">−</button><b id="rsCr">${cr}</b><button type="button" data-q="cr" data-d="1" aria-label="Mais crianças">+</button></span></div>
         </div>
+        ${f.portaria&&f.portaria_selfie?`<div class="selfie" id="rsSfBox" ${vai===false?'hidden':''}><div class="sfprev" id="rsSfPv">${d&&d.selfie?`<img src="${midia(d.selfie)}" alt="">`:'🤳'}</div><div><label class="btn alt sm" style="position:relative">${d&&d.selfie?'Trocar selfie':'Tirar selfie'}<input type="file" accept="image/*" capture="user" id="rsSf" style="position:absolute;inset:0;opacity:0;cursor:pointer"></label><small>Para entrar na festa. Só a equipe do anfitrião vê.</small></div></div>`:''}
         <input class="in" id="rsR" maxlength="200" placeholder="Um recadinho (opcional)" value="${esc((d&&d.recado)||'')}" aria-label="Recado">
         <button class="btn" id="rsOk" type="button">Enviar resposta</button><div class="msg" id="rsMsg"></div></div>`;
-    box.querySelectorAll('.rsvp-op .opt').forEach(b=>b.onclick=()=>{ vai=b.dataset.v==='1'; box.querySelectorAll('.rsvp-op .opt').forEach(x=>x.setAttribute('aria-pressed',x===b)); $('rsM').hidden=false; $('rsQ').hidden=!vai; if(!vai) $('rsQ').style.display='none'; else $('rsQ').style.display='flex'; });
+    let selfie=null;
+    box.querySelectorAll('.rsvp-op .opt').forEach(b=>b.onclick=()=>{ vai=b.dataset.v==='1'; box.querySelectorAll('.rsvp-op .opt').forEach(x=>x.setAttribute('aria-pressed',x===b)); $('rsM').hidden=false; $('rsQ').hidden=!vai; if(!vai) $('rsQ').style.display='none'; else $('rsQ').style.display='flex'; if($('rsSfBox')) $('rsSfBox').hidden=!vai; });
+    if($('rsSf')) $('rsSf').onchange=async e=>{ const fl=e.target.files[0]; e.target.value=''; if(!fl) return; $('rsSfPv').innerHTML='<span class="spin"></span>'; try{ selfie=await encolher(fl,720,.82); $('rsSfPv').innerHTML=`<img src="${URL.createObjectURL(selfie)}" alt="Sua selfie">`; }catch(_){ selfie=null; $('rsSfPv').textContent='🤳'; $('rsMsg').className='msg err'; $('rsMsg').textContent='Não consegui abrir essa foto. Tente de novo.'; } };
     box.querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>{ if(b.dataset.q==='ad'){ ad=Math.max(1,Math.min(20,ad+(+b.dataset.d))); $('rsAd').textContent=ad; } else { cr=Math.max(0,Math.min(20,cr+(+b.dataset.d))); $('rsCr').textContent=cr; } });
     $('rsOk').onclick=async()=>{ const nome=$('rsN').value.trim(); if(nome.length<2){ $('rsMsg').className='msg err'; $('rsMsg').textContent='Escreva seu nome.'; return; }
-      $('rsOk').disabled=true; try{ await rpc('fe_confirmar',{p_festa:f.id,p_aparelho:deviceId(),p_nome:nome,p_vai:vai,p_adultos:ad,p_criancas:cr,p_recado:$('rsR').value.trim()}); store.set('mf_nome',nome);
-        mostrar({nome,vai,adultos:ad,criancas:cr}); }catch(e){ $('rsMsg').className='msg err'; $('rsMsg').textContent=/Informe/.test(e.message||'')?'Escreva seu nome.':ERR(e); $('rsOk').disabled=false; } };
+      const precisaSf = f.portaria && f.portaria_selfie && vai && !selfie && !(d&&d.selfie);
+      if(precisaSf){ $('rsMsg').className='msg err'; $('rsMsg').textContent='Tire a selfie para receber o seu ingresso.'; return; }
+      $('rsOk').disabled=true; $('rsMsg').className='msg'; $('rsMsg').innerHTML='<span class="spin"></span>';
+      try{ let path=null; if(selfie && vai) path=await subir(selfie,'portaria/selfie','jpg','image/jpeg');
+        const r=await rpc('fe_confirmar',{p_festa:f.id,p_aparelho:deviceId(),p_nome:nome,p_vai:vai,p_adultos:ad,p_criancas:cr,p_recado:$('rsR').value.trim(),p_selfie:path}); store.set('mf_nome',nome);
+        mostrar({nome,vai,adultos:ad,criancas:cr,token:r.token,selfie:path||(d&&d.selfie)}); }catch(e){ $('rsMsg').className='msg err'; $('rsMsg').textContent=/Informe/.test(e.message||'')?'Escreva seu nome.':ERR(e); $('rsOk').disabled=false; } };
   };
   const mostrar=(d)=>{ box.innerHTML=`<div class="rsvp-ok"><div style="font-size:40px">${d.vai?'🎉':'💛'}</div><b>${d.vai?`Presença confirmada, ${esc(d.nome)}!`:`Obrigado por avisar, ${esc(d.nome)}.`}</b>
       <p class="sub" style="margin:0">${d.vai?`${d.adultos} adulto${d.adultos>1?'s':''}${d.criancas?` e ${d.criancas} criança${d.criancas>1?'s':''}`:''}. Te esperamos!`:'Você vai fazer falta. Pode deixar uma homenagem aqui embaixo mesmo assim.'}</p>
-      <button class="molbtn" id="rsAlt" type="button">Alterar resposta</button></div>`; $('rsAlt').onclick=()=>form(d); };
+      ${d.vai&&d.token?`<div class="ingresso"><b>🎟️ Seu ingresso</b>${d.entrou_em?`<p class="ok" style="margin:6px 0 0">✅ Entrada registrada às ${new Date(d.entrou_em).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}</p>`:''}<div class="qr" id="rsQr"></div><p class="sub" style="margin:0">Mostre este código na entrada. Vale para ${d.adultos+d.criancas} pessoa${d.adultos+d.criancas>1?'s':''}.</p><button class="btn ghost sm" id="rsSalvar" type="button" style="margin-top:10px">⬇️ Salvar ingresso</button></div>`:''}
+      <button class="molbtn" id="rsAlt" type="button">Alterar resposta</button></div>`; $('rsAlt').onclick=()=>form(d);
+      if($('rsQr')){ qrInto($('rsQr'), 'MF1:'+d.token, 320); $('rsSalvar').onclick=async()=>{ const W=900,H=1300, cv=document.createElement('canvas'); cv.width=W; cv.height=H; const c=cv.getContext('2d'); const t=temaDe(f);
+        c.fillStyle='#fff'; c.fillRect(0,0,W,H); c.fillStyle=t.accent; c.fillRect(0,0,W,180); c.fillStyle=t.on||'#fff'; c.textAlign='center'; c.font='700 44px Figtree, sans-serif'; c.fillText('INGRESSO', W/2, 80); c.font='500 34px Figtree, sans-serif'; c.fillText(f.homenageado||f.titulo, W/2, 135);
+        c.drawImage(qrCanvas('MF1:'+d.token,600),150,230,600,600); c.fillStyle='#222'; c.font='700 50px Figtree, sans-serif'; c.fillText(d.nome, W/2, 920); c.font='500 34px Figtree, sans-serif'; c.fillStyle='#666';
+        c.fillText(`${d.adultos} adulto${d.adultos>1?'s':''}${d.criancas?` e ${d.criancas} criança${d.criancas>1?'s':''}`:''}`, W/2, 980); c.fillText([dataBonita(f), f.hora].filter(Boolean).join(', às '), W/2, 1040); if(f.local) c.fillText(f.local, W/2, 1090);
+        c.font='500 26px Figtree, sans-serif'; c.fillStyle='#999'; c.fillText('Mostre este código na entrada · Mural da Festa', W/2, 1230);
+        baixar(await new Promise(r=>cv.toBlob(r,'image/png')), `Ingresso_${f.slug}.png`); }; }
+    };
   atual ? mostrar(atual) : form(null);
 }
 function telaNaoAchou(){
@@ -1162,6 +1201,73 @@ async function telaTelao(){
     else if(e.key.toLowerCase()==='f'){ document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen().catch(()=>{}); }
   });
   await puxar(); setInterval(puxar, 10000);
+}
+
+// =====================================================================
+// PORTARIA (equipe do anfitrião confere os ingressos)
+// =====================================================================
+let _jsqr=null;
+function carregarJsQR(){ return _jsqr || (_jsqr=new Promise((res,rej)=>{ const sc=document.createElement('script'); sc.src='https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js'; sc.onload=()=>res(window.jsQR); sc.onerror=()=>{ _jsqr=null; rej(new Error('jsqr')); }; document.head.appendChild(sc); })); }
+async function telaPortaria(){
+  FESTA = await carregarFesta(SLUG).catch(()=>null); if(!FESTA) return telaNaoAchou();
+  aplicarTema(temaDe(FESTA)); document.title='Portaria · '+(FESTA.homenageado||FESTA.titulo);
+  if(!FESTA.portaria){ $('app').innerHTML=`<div class="wrap center" style="padding-top:14vh"><div style="font-size:56px">🚪</div><h1>Portaria desligada</h1><p class="muted">O anfitrião liga a portaria na área dele, em 📲 Convite e links.</p></div>`; return; }
+  const salvo=store.get('mf_port_'+SLUG);
+  if(salvo && await rpc('fe_portaria_login',{p_slug:SLUG,p_pin:salvo}).catch(()=>false)) return painelPortaria(salvo);
+  telaLogin('🚪 Portaria', esc(FESTA.homenageado||FESTA.titulo), async pin=>{ const ok=await rpc('fe_portaria_login',{p_slug:SLUG,p_pin:pin}); if(!ok) return false; store.set('mf_port_'+SLUG,pin); painelPortaria(pin); return true; });
+}
+function painelPortaria(pin){
+  const f=FESTA; let L=[], busca='';
+  $('app').innerHTML=`<div class="wrap" style="max-width:640px">
+    <div class="top"><h1>🚪 Portaria · <em>${esc(f.homenageado||f.titulo)}</em></h1><button class="btn ghost sm" id="pSair">Sair</button></div>
+    <div class="card" style="padding:18px"><div class="port-top"><div class="port-cont"><span id="pE">0</span> <span class="muted" style="font-size:.5em">de</span> <span id="pT">0</span><small>pessoas já entraram</small></div>
+      <button class="btn big" id="pScan">📷 Ler ingresso</button></div>
+      <div class="row"><input class="in" id="pBusca" placeholder="🔎 Buscar pelo nome" style="flex:1"><button class="btn ghost sm" id="pAvulso">➕ Entrada avulsa</button></div>
+      <div class="port-lista" id="pLista"><div class="empty"><span class="spin"></span></div></div></div></div>`;
+  $('pSair').onclick=()=>{ store.set('mf_port_'+SLUG,null); location.reload(); };
+  const render=()=>{ const tot=L.reduce((a,x)=>a+x.adultos+x.criancas,0), ent=L.reduce((a,x)=>a+(x.entrou_em?(x.entrou_qtd||0):0),0); $('pE').textContent=ent; $('pT').textContent=tot;
+    const q=busca.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase(); const lst=L.filter(x=>!q || x.nome.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().includes(q));
+    $('pLista').innerHTML = lst.length ? lst.map(x=>`<button data-id="${x.id}">${x.selfie?`<img src="${midia(x.selfie)}" alt="" loading="lazy">`:'<span class="ph0">👤</span>'}<span><b>${esc(x.nome)}</b><br><small class="muted">${x.adultos} adulto${x.adultos>1?'s':''}${x.criancas?` + ${x.criancas} criança${x.criancas>1?'s':''}`:''}${x.avulso?' · avulsa':''}</small></span><span class="st${x.entrou_em?' in':''}">${x.entrou_em?'✅ '+new Date(x.entrou_em).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}):'aguardando'}</span></button>`).join('') : `<div class="empty">${L.length?'Ninguém com esse nome na lista.':'Ninguém confirmou presença ainda.'}</div>`;
+    $('pLista').querySelectorAll('[data-id]').forEach(b=>b.onclick=()=>abrir(L.find(x=>x.id===+b.dataset.id))); };
+  const carregar=async()=>{ try{ L=await rpc('fe_portaria_lista',{p_slug:SLUG,p_pin:pin}); render(); }catch(e){ $('pLista').innerHTML=`<div class="empty">${ERR(e)}</div>`; } };
+  $('pBusca').oninput=e=>{ busca=e.target.value.trim(); render(); };
+  const abrir=(g, aviso)=>{ if(!g) return; let qtd=g.adultos+g.criancas||1;
+    abrirFolha(`${aviso||''}${g.selfie?`<img class="port-sf" src="${midia(g.selfie)}" alt="Selfie de ${esc(g.nome)}">`:'<div style="font-size:64px;text-align:center">👤</div>'}
+      <h3 style="justify-content:center;text-align:center">${esc(g.nome)}</h3><p class="muted center" style="margin-top:-6px">Confirmou ${g.adultos} adulto${g.adultos>1?'s':''}${g.criancas?` e ${g.criancas} criança${g.criancas>1?'s':''}`:''}</p>
+      ${g.entrou_em?`<div class="port-alerta">⚠️ JÁ ENTROU às ${new Date(g.entrou_em).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})} (${g.entrou_qtd} pessoa${g.entrou_qtd>1?'s':''})</div>
+        <div class="foot" style="justify-content:space-between"><button class="btn ghost sm" id="gDesf">Desfazer entrada</button><button class="btn" id="eCancel">Fechar</button></div>`
+      :`<div class="contador" style="max-width:300px;margin:0 auto"><span>Estão entrando</span><span class="row" style="gap:10px"><button type="button" id="gMenos">−</button><b id="gQ">${qtd}</b><button type="button" id="gMais">+</button></span></div>
+        <div class="foot" style="justify-content:center"><button class="btn ghost" id="eCancel">Cancelar</button><button class="btn ok" id="gEntrar" style="font-size:18px">✅ Liberar entrada</button></div>`}<div class="msg" id="eMsg"></div>`);
+    $('eCancel').onclick=fecharFolha;
+    if($('gMenos')){ $('gMenos').onclick=()=>{ qtd=Math.max(1,qtd-1); $('gQ').textContent=qtd; }; $('gMais').onclick=()=>{ qtd=Math.min(40,qtd+1); $('gQ').textContent=qtd; };
+      $('gEntrar').onclick=async()=>{ try{ const r=await rpc('fe_portaria_entrar',{p_slug:SLUG,p_pin:pin,p_id:g.id,p_qtd:qtd}); fecharFolha(); toast(r.ja?'⚠️ Esse ingresso já tinha sido usado.':`✅ Entrada liberada: ${qtd} pessoa${qtd>1?'s':''}`,3500); carregar(); }catch(e){ msgE(ERR(e),'err'); } }; }
+    if($('gDesf')) $('gDesf').onclick=async()=>{ try{ await rpc('fe_portaria_desfazer',{p_slug:SLUG,p_pin:pin,p_id:g.id}); fecharFolha(); toast('Entrada desfeita.'); carregar(); }catch(e){ msgE(ERR(e),'err'); } };
+  };
+  $('pAvulso').onclick=()=>{ let q=1; abrirFolha(`<h3>➕ Entrada avulsa</h3><p class="muted" style="margin-top:0">Para quem não confirmou, mas o anfitrião autorizou entrar.</p><input class="in" id="avN" maxlength="60" placeholder="Nome">
+      <div class="contador" style="margin-top:10px"><span>Pessoas</span><span class="row" style="gap:10px"><button type="button" id="avM">−</button><b id="avQ">1</b><button type="button" id="avP">+</button></span></div>
+      <div class="msg" id="eMsg"></div><div class="foot"><button class="btn ghost" id="eCancel">Cancelar</button><button class="btn ok" id="eSend">Registrar entrada</button></div>`);
+    $('eCancel').onclick=fecharFolha; $('avM').onclick=()=>{ q=Math.max(1,q-1); $('avQ').textContent=q; }; $('avP').onclick=()=>{ q=Math.min(40,q+1); $('avQ').textContent=q; };
+    $('eSend').onclick=async()=>{ const n=$('avN').value.trim(); if(n.length<2){ msgE('Escreva o nome.','err'); return; } try{ await rpc('fe_portaria_avulso',{p_slug:SLUG,p_pin:pin,p_nome:n,p_qtd:q}); fecharFolha(); toast('Entrada avulsa registrada.'); carregar(); }catch(e){ msgE(ERR(e),'err'); } }; };
+  $('pScan').onclick=async()=>{
+    abrirFolha(`<h3>📷 Aponte para o QR do ingresso</h3><div class="scan"><video id="scV" playsinline muted></video></div><div class="msg" id="eMsg"></div><div class="foot"><button class="btn ghost" id="eCancel">Fechar</button></div>`);
+    let stream=null, vivo=true; const parar=()=>{ vivo=false; if(stream) stream.getTracks().forEach(t=>t.stop()); };
+    $('eCancel').onclick=()=>{ parar(); fecharFolha(); };
+    try{ stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false}); }catch(e){ msgE('Não consegui abrir a câmera. Libere a câmera para este site e tente de novo.','err'); return; }
+    const v=$('scV'); v.srcObject=stream; await v.play().catch(()=>{});
+    let det=null; try{ if('BarcodeDetector' in window){ const fm=await BarcodeDetector.getSupportedFormats(); if(fm.includes('qr_code')) det=new BarcodeDetector({formats:['qr_code']}); } }catch(e){}
+    let jsQR=null; if(!det){ try{ jsQR=await carregarJsQR(); }catch(e){ msgE('Leitor indisponível. Use a busca pelo nome.','err'); return; } }
+    const cv=document.createElement('canvas'), cx=cv.getContext('2d',{willReadFrequently:true});
+    const ler=async()=>{ if(!vivo || !$('scV')) return; let txt=null;
+      try{ if(det){ const r=await det.detect(v); if(r[0]) txt=r[0].rawValue; } else if(v.videoWidth){ const k=Math.min(1,640/v.videoWidth); cv.width=v.videoWidth*k; cv.height=v.videoHeight*k; cx.drawImage(v,0,0,cv.width,cv.height); const r=jsQR(cx.getImageData(0,0,cv.width,cv.height).data,cv.width,cv.height); if(r) txt=r.data; } }catch(e){}
+      if(txt){ const m=/^MF1:([0-9a-f]{18})$/.exec(txt.trim()); if(!m){ msgE('Esse QR não é um ingresso desta festa.','err'); setTimeout(ler,1200); return; }
+        let g=L.find(x=>x.token===m[1]); if(!g){ await carregar(); g=L.find(x=>x.token===m[1]); }
+        parar(); if(navigator.vibrate) navigator.vibrate(120);
+        if(!g){ abrirFolha(`<div class="port-alerta">⛔ Ingresso não encontrado na lista desta festa.</div><p class="muted center">Pode ser de outra festa ou ter sido apagado. Confira pelo nome.</p><div class="foot"><button class="btn" id="eCancel">Fechar</button></div>`); $('eCancel').onclick=fecharFolha; return; }
+        abrir(g, g.entrou_em?'':'<div class="port-ok">🎟️ Ingresso válido — confira o rosto</div><div style="height:10px"></div>'); return; }
+      requestAnimationFrame(()=>setTimeout(ler,120)); };
+    ler();
+  };
+  carregar(); setInterval(()=>{ if(!document.hidden && $('ov').hidden) carregar(); }, 15000);
 }
 
 // =====================================================================
@@ -1557,11 +1663,21 @@ function vCompartilhar(){
    <div class="card" style="padding:18px;display:flex;flex-direction:column;gap:10px"><h3 style="margin:0">Links</h3>
      ${L.map(([n,e,u])=>`<div><div style="font-weight:600;font-size:14px;margin-bottom:4px">${e} ${n}</div><div class="linkbox"><code>${esc(u)}</code><button class="btn sm" data-copy="${esc(u)}">Copiar</button></div></div>`).join('')}
      <h3 style="margin:8px 0 0">Mensagem para o grupo</h3><textarea class="in" id="shTxt" style="min-height:130px">${esc(textoConvite(f))}</textarea><button class="btn alt" id="shCopy">📋 Copiar mensagem</button></div></div>`;
-  $('vw').insertAdjacentHTML('beforeend', `<div class="card" style="padding:18px;margin-top:12px" id="presBox"><div class="row" style="justify-content:space-between"><h3 style="margin:0">✅ Confirmações de presença</h3><button class="btn ghost sm" id="presCopy">📋 Copiar lista</button></div><div id="presL"><span class="spin"></span></div></div>`);
+  $('vw').insertAdjacentHTML('beforeend', `<div class="card" style="padding:18px;margin-top:12px" id="portBox"><h3 style="margin:0 0 4px">🚪 Portaria <span class="muted" style="font-size:14px;font-weight:500">(opcional)</span></h3>
+    <p class="muted" style="margin:0 0 12px">Para evitar penetras: quem confirma presença tira uma selfie e recebe um ingresso com QR Code. Na chegada, a sua equipe lê o código pelo celular e confere o rosto.</p>
+    <label class="row" style="font-weight:600;gap:8px"><input type="checkbox" id="ptOn" ${f.portaria?'checked':''} style="width:22px;height:22px"> Usar portaria com ingresso</label>
+    <label class="row" style="font-weight:600;gap:8px;margin-top:8px"><input type="checkbox" id="ptSf" ${f.portaria_selfie!==false?'checked':''} style="width:22px;height:22px"> Pedir selfie na confirmação</label>
+    <div class="grid2" style="margin-top:12px"><label class="f">Senha da equipe da portaria<input class="in" id="ptPin" maxlength="20" placeholder="${f.portaria?'deixe vazio para manter':'crie uma senha só para a equipe'}" autocomplete="off"></label></div>
+    <div class="row" style="justify-content:flex-end;margin-top:10px"><span class="msg" id="ptM"></span><button class="btn" id="ptSalvar">Salvar portaria</button></div>
+    ${f.portaria?`<div style="margin-top:10px"><div style="font-weight:600;font-size:14px;margin-bottom:4px">🚪 Link da portaria (mande para a equipe da entrada, com a senha)</div><div class="linkbox"><code>${esc(linkFesta(f.slug,'portaria'))}</code><button class="btn sm" data-copy="${esc(linkFesta(f.slug,'portaria'))}">Copiar</button></div></div>`:''}</div>
+  <div class="card" style="padding:18px;margin-top:12px" id="presBox"><div class="row" style="justify-content:space-between"><h3 style="margin:0">✅ Confirmações de presença</h3><button class="btn ghost sm" id="presCopy">📋 Copiar lista</button></div><div id="presL"><span class="spin"></span></div></div>`);
+  $('ptSalvar').onclick=async()=>{ const pin=$('ptPin').value.trim(); if($('ptOn').checked && !f.portaria && pin.length<4){ $('ptM').className='msg err'; $('ptM').textContent='Crie a senha da equipe (4 ou mais).'; return; }
+    try{ FESTA=await rpc('fe_admin_portaria',{p_slug:SLUG,p_pin:PIN,p_ativa:$('ptOn').checked,p_selfie:$('ptSf').checked,p_pin_equipe:pin}); toast($('ptOn').checked?'Portaria ligada! Mande o link para a equipe 🚪':'Portaria desligada.',4000); vCompartilhar(); }catch(e){ $('ptM').className='msg err'; $('ptM').textContent=/4 caracteres/.test(e.message||'')?'A senha da equipe precisa de 4 ou mais.':ERR(e); } };
+  document.querySelectorAll('#portBox [data-copy]').forEach(b=>b.onclick=()=>copiar(b.dataset.copy));
   (async()=>{ let L2=[]; try{ L2=await rpc('fe_admin_presencas',{p_slug:SLUG,p_pin:PIN}); }catch(e){ $('presL').textContent=ERR(e); return; }
     const vao=L2.filter(x=>x.vai), ad=vao.reduce((a,x)=>a+x.adultos,0), cr=vao.reduce((a,x)=>a+x.criancas,0);
     $('presL').innerHTML = L2.length ? `<div class="pres-tot"><div><b>${ad+cr}</b>pessoas vão</div><div><b>${ad}</b>adultos · <b style="display:inline;font-size:inherit">${cr}</b> crianças</div><div><b>${L2.length-vao.length}</b>não vão</div></div>
-      <div class="pres-lista">${L2.map(x=>`<div><span>${x.vai?'✅':'❌'} ${esc(x.nome)}${x.recado?`<br><small class="muted">“${esc(x.recado)}”</small>`:''}</span><span class="muted">${x.vai?`${x.adultos} ad.${x.criancas?` + ${x.criancas} cr.`:''}`:'não vai'}</span></div>`).join('')}</div>`
+      ${f.portaria?`<p style="margin:0 0 8px;font-weight:600">🚪 Já entraram: ${L2.filter(x=>x.entrou_em).reduce((a,x)=>a+(x.entrou_qtd||0),0)} pessoas</p>`:''}<div class="pres-lista">${L2.map(x=>`<div><span>${x.selfie?`<img class="psf" src="${midia(x.selfie)}" alt="">`:''}${x.avulso?'🚪':x.vai?'✅':'❌'} ${esc(x.nome)}${x.avulso?' <small class="muted">(entrada avulsa)</small>':''}${x.recado?`<br><small class="muted">“${esc(x.recado)}”</small>`:''}</span><span class="muted">${x.vai?`${x.adultos} ad.${x.criancas?` + ${x.criancas} cr.`:''}`:'não vai'}${x.entrou_em?`<br><b style="color:#2b8a3e">entrou ${new Date(x.entrou_em).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}</b>`:''}</span></div>`).join('')}</div>`
       : `<p class="muted" style="margin:8px 0 0">Ninguém respondeu ainda. Quando você mandar o convite, as respostas aparecem aqui. Os convidados confirmam pelo mesmo link do convite.</p>`;
     $('presCopy').onclick=()=>copiar(`Confirmações · ${f.homenageado||f.titulo}\nVão: ${ad+cr} pessoas (${ad} adultos, ${cr} crianças)\n\n`+L2.map(x=>`${x.vai?'✅':'❌'} ${x.nome}${x.vai?` — ${x.adultos} ad.${x.criancas?` + ${x.criancas} cr.`:''}`:''}${x.recado?` — "${x.recado}"`:''}`).join('\n'),'Lista copiada!'); })();
   qrInto($('shQr'), linkFesta(f.slug), 220);
@@ -1950,6 +2066,7 @@ function telaTermos(){
   <p>Quem envia uma foto, áudio, vídeo ou recado é responsável por ele. Ao enviar, o convidado declara que as pessoas que aparecem concordam com o envio e que, no caso de crianças e adolescentes, tem a autorização dos pais ou responsáveis. É proibido enviar conteúdo ofensivo, discriminatório, sexual, violento, ilegal ou que viole direitos de terceiros. O anfitrião pode não aprovar ou ocultar qualquer homenagem, e o Mural da Festa pode remover conteúdo que viole estes termos.</p>
   <h2>5. Tema próprio, fotos, músicas e direitos autorais</h2>
   <p>O anfitrião pode enviar imagens próprias para decorar a festa (fundo, personagens, enfeites), fotos do homenageado e músicas para tocar no telão. <b>O Mural da Festa não fornece personagens, marcas ou artes de terceiros.</b> Ao enviar um tema próprio, o anfitrião declara ter autorização para usar todos os elementos enviados e assume <b>integral e exclusiva responsabilidade</b> por eles, inclusive por direitos autorais, marcas e direitos de imagem, isentando o Mural da Festa. A declaração fica registrada com o nome do responsável, a festa, a data e a hora.</p>
+  <p><b>Portaria e selfie (opcional):</b> se o anfitrião ligar a portaria, quem confirma presença pode tirar uma selfie e recebe um ingresso com QR Code. A selfie serve só para a equipe do anfitrião conferir a entrada, é vista apenas pelo anfitrião e pela equipe dele e é apagada junto com os arquivos da festa.</p>
   <p><b>Músicas:</b> as trilhas prontas são criadas pelo próprio Mural da Festa. Músicas enviadas pelo anfitrião são de sua inteira responsabilidade, inclusive os direitos de execução pública no local do evento (por exemplo, junto ao ECAD), quando exigidos.</p>
   <p>Se alguém (por exemplo, um titular de direitos) se sentir prejudicado por um tema ou conteúdo, pode pedir a remoção ${canal}. Ao receber um pedido fundamentado, o tema próprio pode ser desligado e o conteúdo removido, sem prejuízo da responsabilidade de quem o enviou.</p>
   <h2>6. Privacidade (LGPD)</h2>
@@ -2027,6 +2144,7 @@ function telaInicio(){
   try{
     if(MODE==='convidado') await telaConvidado();
     else if(MODE==='telao') await telaTelao();
+    else if(MODE==='portaria') await telaPortaria();
     else if(MODE==='admin') await telaAdmin();
     else if(MODE==='mestre') await telaMestre();
     else if(MODE==='termos') telaTermos();

@@ -1185,8 +1185,8 @@ async function ligarValet(){
 async function ligarCorreio(){
   const box=$('crr'); if(!box) return; const f=FESTA; let anon=false;
   box.innerHTML=`<h2 class="sec">💌 Correio elegante</h2><p class="sub">Mande um recado para alguém da festa. Ele aparece no telão depois que o anfitrião aprovar.</p>
-    <div style="text-align:left;max-width:460px;margin:0 auto"><label class="f">Para quem?<input class="in" id="crP" maxlength="60" placeholder="Ex.: A moça de vestido azul da mesa 5"></label>
-      <label class="f" style="margin-top:10px">Mensagem<textarea class="in" id="crM" maxlength="240" rows="3" placeholder="Escreva com carinho (e bom humor) 😉"></textarea></label>
+    <div style="text-align:left;max-width:460px;margin:0 auto"><label class="f">Para quem?<input class="in" id="crP" maxlength="60" placeholder="${CORP(f)?'Ex.: Equipe de vendas da mesa 5':'Ex.: A moça de vestido azul da mesa 5'}"></label>
+      <label class="f" style="margin-top:10px">Mensagem<textarea class="in" id="crM" maxlength="240" rows="3" placeholder="${CORP(f)?'Escreva seu recado (com respeito e bom senso)':'Escreva com carinho (e bom humor) 😉'}"></textarea></label>
       <div class="seg" style="justify-content:flex-start;margin-top:10px"><button type="button" id="crId" aria-pressed="true">✍️ Assinar com meu nome</button><button type="button" id="crAn" aria-pressed="false">🤫 Anônimo</button></div>
       <input class="in" id="crD" maxlength="40" placeholder="Seu nome" value="${esc(store.get('mf_nome')||'')}"></div>
     <button class="btn" id="crE" style="margin-top:12px">💌 Enviar correio</button><div class="msg" id="crMsg"></div><div class="crr-l" id="crL"></div>`;
@@ -1359,7 +1359,7 @@ function folhaFoto(){
   abrirFolha(`<h3>📸 Fotos da festa</h3>
    <label class="drop"><input type="file" id="pF" accept="image/*" multiple><span class="ic">🖼️</span>Toque para tirar ou escolher fotos<span class="muted" style="font-weight:500;font-size:14px">Pode mandar várias de uma vez</span></label>
    <div class="thumbs" id="pT"></div>
-   <label class="f" style="margin-top:12px">Legenda (opcional)<input class="in" id="pL" maxlength="80" placeholder="Ex.: A tia mais animada da pista!"></label>
+   <label class="f" style="margin-top:12px">Legenda (opcional)<input class="in" id="pL" maxlength="80" placeholder="${CORP(FESTA)?'Ex.: Equipe comercial no palco':'Ex.: A tia mais animada da pista!'}"></label>
    ${rodapeEnvio('Enviar fotos')}<p class="nota">Ao enviar, você declara que as pessoas que aparecem concordam (no caso de crianças, os pais ou responsáveis) e aceita os <a href="${BASE}?termos" target="_blank" rel="noopener">Termos de uso</a>.</p>`);
   let files=[];
   $('pF').onchange=async e=>{ const fs=[...e.target.files].filter(f=>/^image\//.test(f.type)||ehHeic(f)).slice(0,20); e.target.value=''; files=[]; $('pT').innerHTML=''; msgE(fs.length?'<span class="spin"></span> Preparando as fotos…':'');
@@ -1374,9 +1374,9 @@ function folhaFoto(){
   });
 }
 function folhaTexto(){
-  const sug=['Parabéns! 🎉','Muitas felicidades! 🥳','Que dia lindo! ✨','Te amamos muito! ❤️','Que Deus abençoe sempre 🙏','Felicidades ao casal! 💍'];
+  const sug=CORP(FESTA)?['Parabéns pelo evento!','Excelente apresentação','Orgulho de fazer parte deste time','Rumo à meta!','Obrigado pela organização','Grande dia para a equipe']:['Parabéns! 🎉','Muitas felicidades! 🥳','Que dia lindo! ✨','Te amamos muito! ❤️','Que Deus abençoe sempre 🙏','Felicidades ao casal! 💍'];
   abrirFolha(`<h3>✍️ Recado</h3>
-   <textarea class="in" id="tT" maxlength="600" placeholder="Escreva seu carinho para ${esc(FESTA.homenageado||'o homenageado')}…"></textarea>
+   <textarea class="in" id="tT" maxlength="600" placeholder="${CORP(FESTA)?'Escreva sua mensagem para o evento…':'Escreva seu carinho para '+esc(FESTA.homenageado||'o homenageado')+'…'}"></textarea>
    <div class="row" style="justify-content:space-between"><div class="sugs">${sug.map(s=>`<button type="button">${s}</button>`).join('')}</div><span class="muted" id="tC" style="font-size:13px">0/600</span></div>
    ${rodapeEnvio('Enviar recado')}`);
   const ta=$('tT'); ta.oninput=()=>$('tC').textContent=`${ta.value.length}/600`; setTimeout(()=>ta.focus(),60);
@@ -2117,7 +2117,7 @@ function formFesta(f, {mestre, auto}={}){
      <label class="f">Horário<input class="in" id="ffHora" maxlength="10" placeholder="Ex.: 16h" value="${esc(f.hora||'')}"></label>
      <label class="f">Local<input class="in" id="ffLocal" maxlength="120" value="${esc(f.local||'')}"></label>
    </div>
-   <label class="f" style="margin-top:12px">Mensagem de boas-vindas (opcional)<textarea class="in" id="ffMsg" maxlength="300" style="min-height:80px" placeholder="Ex.: Deixe aqui seu carinho para a Maria Clara!">${esc(f.mensagem||'')}</textarea></label>
+   <label class="f" style="margin-top:12px">Mensagem de boas-vindas (opcional)<textarea class="in" id="ffMsg" maxlength="300" style="min-height:80px" placeholder="${CORP(f)?'Ex.: Bem-vindos à Convenção de Vendas! Deixe aqui sua mensagem.':'Ex.: Deixe aqui seu carinho para a Maria Clara!'}">${esc(f.mensagem||'')}</textarea></label>
    <label class="row" style="margin-top:12px;font-weight:600;gap:8px"><input type="checkbox" id="ffMod" ${f.moderacao!==false?'checked':''} style="width:22px;height:22px"> Aprovar as homenagens antes de irem para o telão</label>
   </div>
   ${mestre?`<div class="card" style="padding:18px;margin-top:12px"><h3 style="margin:0 0 10px">Cliente e acesso</h3><div class="grid2">
@@ -2472,6 +2472,7 @@ async function vApresentacao(){
     }catch(err){ M.className='msg err'; M.textContent=/80 slides/.test(err.message||'')?'Máximo de 80 slides.':'Não consegui preparar os slides. '+ERR(err); } };
 }
 const QZ_COR=['#e21b3c','#1368ce','#d89e00','#26890c'], QZ_FORMA=['▲','◆','●','■'];
+const QZ_PRONTAS_CORP=n=>[`Em que ano ${n} foi fundada?`,`Quantas lojas ou unidades ${n} tem hoje?`,`Qual é o principal valor de ${n}?`,`Qual foi o maior resultado de ${n} neste ano?`,`Qual destes produtos é o mais vendido de ${n}?`,`Qual é a próxima meta de ${n}?`];
 const QZ_PRONTAS=n=>[`Em que cidade ${n} nasceu?`,`Qual a comida favorita de ${n}?`,`Qual era o apelido de ${n} quando criança?`,`Qual a cor favorita de ${n}?`,`Qual destes lugares ${n} mais quer conhecer?`,`Qual a música que ${n} mais canta?`];
 async function vQuiz(){
   ADM.view='quiz'; const f=FESTA, nm=f.homenageado||'o homenageado'; let Q=[], est={fase:'off'};
@@ -2498,7 +2499,7 @@ async function vQuiz(){
     document.querySelectorAll('#qzEd [data-rm]').forEach(b=>b.onclick=()=>{ ler(); Q.splice(+b.dataset.rm,1); desenhar(); }); };
   desenhar();
   $('qzAdd').onclick=()=>{ ler(); if(Q.length>=30) return; Q.push({p:'',o:[],c:0,t:20}); desenhar(); };
-  $('qzProntas').onclick=()=>{ ler(); QZ_PRONTAS(nm).forEach(p=>{ if(Q.length<30) Q.push({p,o:[],c:0,t:20}); }); desenhar(); toast('Perguntas adicionadas: agora escreva as respostas e marque a certa.',4000); };
+  $('qzProntas').onclick=()=>{ ler(); (CORP(f)?QZ_PRONTAS_CORP(f.homenageado&&f.homenageado!==f.titulo?f.homenageado:'a empresa'):QZ_PRONTAS(nm)).forEach(p=>{ if(Q.length<30) Q.push({p,o:[],c:0,t:20}); }); desenhar(); toast('Perguntas adicionadas: agora escreva as respostas e marque a certa.',4000); };
   $('qzSalvar').onclick=async()=>{ ler(); const lista=Q.filter(q=>q.p||q.o.length).map(({p,o,c,t})=>({p,o,c,t})); const M=$('qzSM');
     const ruim=lista.findIndex(q=>q.o.length<2); if(ruim>=0){ M.className='msg err'; M.textContent=`A pergunta ${ruim+1} precisa de pelo menos 2 respostas.`; return; }
     try{ await rpc('fe_admin_quiz_salvar',{p_slug:SLUG,p_pin:PIN,p_perguntas:lista}); Q=lista; desenhar(); M.className='msg ok'; M.textContent='Perguntas salvas! ✨'; }catch(e){ M.className='msg err'; M.textContent=/pergunta|respost|Marque|Tempo/.test(e.message||'')?e.message:ERR(e); } };
@@ -2588,13 +2589,14 @@ async function vEvento(){
   if($('evPinOk')) $('evPinOk').onclick=async()=>{ const p=$('evPin').value.trim(); if(p.length<4){ toast('A senha precisa de 4 ou mais caracteres.'); return; } try{ await rpc('fe_admin_senha_equipe',{p_slug:SLUG,p_pin:PIN,p_pin_equipe:p}); toast('Senha da equipe criada! 🔑'); vEvento(); }catch(e){ toast(ERR(e)); } };
   $('evCopiar').onclick=()=>copiar(`🧭 *${f.titulo}* · links da equipe\n\n📺 Telão (notebook na TV):\n${L.tv}\n\n🍹 Cozinha e garçons (pedidos das mesas):\n${L.ped}\n\n🚪 Recepção (credenciamento):\n${L.port}\n\n🚗 Manobristas:\n${L.valet}\n\nTodos entram com a senha da equipe.${!f.pedidos_ativos||!f.portaria||!f.valet?'\n(Os links de funções desligadas só funcionam depois que o organizador ligar cada uma.)':''}`,'Links da equipe copiados! Cole no grupo da equipe.');
 }
+const SORTEIO_SUG_CORP=['🎁 Kit de boas-vindas da empresa','🎫 Voucher de experiência','💻 Um acessório de tecnologia','📚 Uma vaga em curso ou treinamento','🏅 Destaque no palco com a diretoria','🍽️ Jantar para duas pessoas','🗓️ Um dia de folga','🎤 Fazer a pergunta final ao palestrante'];
 const SORTEIO_SUG=['🎁 Um presente surpresa','💃 Uma dança com o homenageado','🎤 Discurso improvisado de 1 minuto','📸 Foto oficial com o homenageado','🍾 Um brinde especial','🎶 Cantar um trecho no microfone','🍰 O primeiro pedaço do bolo','🕺 Puxar a próxima dança'];
 async function vSorteio(){
   ADM.view='sorteio'; const f=FESTA; let info={}, lista={participantes:[],ganhadores:[]};
   $('vw').innerHTML=`<div class="card" style="padding:18px"><h3 style="margin:0 0 4px">🎲 Sorteio entre os convidados <span class="muted" style="font-size:14px;font-weight:500">(opcional)</span></h3>
       <p class="muted" style="margin:0 0 12px">Escreva o prêmio e abra o sorteio: o telão mostra o prêmio e o QR, os convidados tocam em “Quero participar” no celular e você sorteia na hora, com animação no telão.</p>
-      <label class="f">O que a pessoa sorteada ganha (ou vai fazer)<input class="in" id="srP" maxlength="80" placeholder="Ex.: Uma dança com a aniversariante"></label>
-      <div class="srt-sug">${SORTEIO_SUG.map(x=>`<button type="button" data-sug="${esc(x)}">${x}</button>`).join('')}</div>
+      <label class="f">${CORP(f)?'O que a pessoa sorteada ganha':'O que a pessoa sorteada ganha (ou vai fazer)'}<input class="in" id="srP" maxlength="80" placeholder="${CORP(f)?'Ex.: Kit de boas-vindas da empresa':'Ex.: Uma dança com a aniversariante'}"></label>
+      <div class="srt-sug">${(CORP(f)?SORTEIO_SUG_CORP:SORTEIO_SUG).map(x=>`<button type="button" data-sug="${esc(x)}">${x}</button>`).join('')}</div>
       <label class="row" style="gap:8px;font-weight:600;margin-top:12px"><input type="checkbox" id="srRep" style="width:20px;height:20px"> Quem já ganhou pode ser sorteado de novo</label>
       <div class="ctrl" style="margin-top:14px">
         <button class="btn" id="srAbrir">📢 Abrir e mostrar no telão</button>

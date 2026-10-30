@@ -314,6 +314,18 @@ h2.sec{font-weight:700;font-size:22px;margin:28px 0 12px;display:flex;align-item
 .demo{position:fixed;left:0;top:0;z-index:2;pointer-events:none;background:rgba(201,42,42,.82);color:#fff;font:900 clamp(24px,4vw,68px)/1.05 Fredoka,sans-serif;text-align:center;padding:1.4vh 2.4vw;border-radius:2vh;border:.4vh solid rgba(255,255,255,.85);box-shadow:0 1vh 3vh rgba(0,0,0,.3);letter-spacing:.04em;will-change:transform}
 .demo small{display:block;font-weight:700;font-size:.42em;letter-spacing:0;opacity:.95}
 .demo-faixa{position:fixed;left:0;right:0;top:0;z-index:10;background:#c92a2a;color:#fff;text-align:center;font:800 clamp(13px,1.8vw,30px)/1.25 Fredoka,sans-serif;padding:.9vh 2vw;box-shadow:0 .5vh 2vh rgba(0,0,0,.3)}
+.planos{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:10px;padding-top:12px}
+.plano{position:relative;border:3px solid var(--line);border-radius:20px;padding:16px;background:var(--surface);color:var(--ink);display:flex;flex-direction:column;gap:8px}
+.plano.dest{border-color:var(--accent);box-shadow:0 8px 26px color-mix(in srgb,var(--accent) 22%, transparent)}
+.plano .tag{position:absolute;top:-12px;right:14px;background:var(--accent);color:var(--on);font-size:12px;font-weight:800;padding:3px 10px;border-radius:99px}
+.plano .e{font-size:34px;line-height:1}
+.plano h4{margin:0;font-size:21px}
+.plano .p{font-size:30px;font-weight:800;color:var(--accent);line-height:1}
+.plano .p small{font-size:13px;color:var(--muted);font-weight:600}
+.plano ul{margin:0;padding-left:20px;font-size:14px;display:flex;flex-direction:column;gap:3px}
+.plano .d{margin:0;color:var(--muted);font-size:14px}
+.plano .btn{margin-top:auto}
+.plano-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;padding:12px 14px;border-radius:16px;background:#d3f9d8;color:#1b5e20;margin-bottom:12px}
 .teste-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;padding:12px 14px;border-radius:16px;background:#fff3bf;color:#5c4400;margin-bottom:12px}
 .teste-bar b{font-size:16px}
 .passos{padding:16px 18px;margin-bottom:12px;border:3px solid var(--accent)}
@@ -343,7 +355,8 @@ h2.sec{font-weight:700;font-size:22px;margin:28px 0 12px;display:flex;align-item
 // ===== CONFIGURAÇÃO =====
 const SUPABASE_URL = 'https://dcddaxipusfthklmmhxq.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_jonZ2Lq8W33xfCpDxLvJqQ_OLcG87eV';
-const LIMITE_GRAVACAO = 60;   // segundos
+const limGrav = () => Math.max(15, +(FESTA && FESTA.max_seg) || 60);   // segundos, conforme o plano
+const txtLim = () => { const s=limGrav(); return s<60 ? `${s} segundos` : s===60 ? '1 minuto' : `${s/60} minutos`; };
 const LIMITE_MB = 45;         // tamanho máximo de um vídeo escolhido da galeria
 // ========================
 
@@ -537,7 +550,7 @@ async function postsAprovados(festaId){
   const {data,error}=await sb.from('fe_posts').select('id,tipo,autor,texto,caminho,thumb,duracao,criado_em').eq('festa_id',festaId).order('criado_em',{ascending:true}).limit(1000);
   if(error) throw error; return data;
 }
-const ERR = e => { const m=(e&&e.message)||''; if(/Calma/.test(m)) return 'Calma! Espere uns segundinhos para mandar outra.'; if(/Limite do teste/.test(m)) return 'Esta festa está em modo teste e já recebeu as 10 homenagens do teste. O anfitrião precisa ativar a festa para receber mais.'; if(/Código inválido/.test(m)) return 'Código inválido ou já usado. Confira as letras e os números.'; if(/Muitas festas/.test(m)) return m; if(/Informe|Aceite/.test(m)) return m+'.'; if(/Senha/.test(m)) return 'Senha incorreta.'; if(/row-level|policy/i.test(m)) return 'Esta festa não está aceitando homenagens agora.'; if(/size|large|exceed/i.test(m)) return 'Arquivo grande demais. Tente um menor.'; if(/mime|type/i.test(m)) return 'Tipo de arquivo não aceito.'; return 'Não deu certo agora. Confira a internet e tente de novo.'; };
+const ERR = e => { const m=(e&&e.message)||''; if(/Calma/.test(m)) return 'Calma! Espere uns segundinhos para mandar outra.'; if(/Limite do plano/.test(m)) return 'Esta festa chegou ao limite de homenagens do plano contratado. O anfitrião pode mudar para um plano maior.'; if(/Gravação maior/.test(m)) return 'A gravação passou do tempo permitido nesta festa.'; if(/Limite do teste/.test(m)) return 'Esta festa está em modo teste e já recebeu as 10 homenagens do teste. O anfitrião precisa ativar a festa para receber mais.'; if(/Código inválido/.test(m)) return 'Código inválido ou já usado. Confira as letras e os números.'; if(/Muitas festas/.test(m)) return m; if(/Informe|Aceite/.test(m)) return m+'.'; if(/Senha/.test(m)) return 'Senha incorreta.'; if(/row-level|policy/i.test(m)) return 'Esta festa não está aceitando homenagens agora.'; if(/size|large|exceed/i.test(m)) return 'Arquivo grande demais. Tente um menor.'; if(/mime|type/i.test(m)) return 'Tipo de arquivo não aceito.'; return 'Não deu certo agora. Confira a internet e tente de novo.'; };
 
 // ---------- imagens ----------
 // Fotos HEIC/HEIF (padrão de vários Samsung e iPhone) não abrem no navegador: convertemos para JPG
@@ -712,13 +725,13 @@ function folhaGravar(kind){
    <div class="rec">
      ${v?`<div class="vbox"><video id="gLive" class="live" autoplay muted playsinline></video><video id="gPrev" controls playsinline hidden></video><span class="badge" id="gBadge" hidden>● 0:00</span></div>`
         :`<canvas id="gWave" width="600" height="120"></canvas><audio id="gPrev" controls hidden style="width:100%"></audio>`}
-     <div class="time" id="gTime">0:00 <span class="muted" style="font-size:16px">/ ${fmtDur(LIMITE_GRAVACAO)}</span></div>
+     <div class="time" id="gTime">0:00 <span class="muted" style="font-size:16px">/ ${fmtDur(limGrav())}</span></div>
      <div class="row" style="justify-content:center">
        <button class="recbtn" id="gRec" type="button" ${podeGravar?'':'hidden'}>● Gravar</button>
        ${v?`<button class="btn ghost sm" id="gFlip" type="button" hidden>🔄 Trocar câmera</button>`:''}
        <button class="btn ghost" id="gRedo" type="button" hidden>↺ Gravar de novo</button>
      </div>
-     <p class="muted center" style="margin:0;font-size:14px">${podeGravar?`Até ${LIMITE_GRAVACAO/60} minuto. Fale com o coração 💛`:'Seu navegador não grava aqui, mas dá para mandar um arquivo:'}</p>
+     <p class="muted center" style="margin:0;font-size:14px">${podeGravar?`Até ${txtLim()}. Fale com o coração 💛`:'Seu navegador não grava aqui, mas dá para mandar um arquivo:'}</p>
      <div class="alt"><label>${v?'ou escolher um vídeo do celular':'ou escolher um áudio do celular'}<input type="file" id="gFile" accept="${v?'video/*':'audio/*'}"></label></div>
    </div>
    ${rodapeEnvio('Enviar')}<p class="nota">Ao enviar, você declara que as pessoas que aparecem concordam (no caso de crianças, os pais ou responsáveis) e aceita os <a href="${BASE}?termos" target="_blank" rel="noopener">Termos de uso</a>.</p>`);
@@ -771,7 +784,7 @@ function folhaGravar(kind){
       };
       rec.start(1000); btn.textContent='■ Parar'; btn.classList.add('on'); $('eSend').disabled=true;
       if(v){ $('gFlip').hidden=true; $('gBadge').hidden=false; }
-      recState.timer=setInterval(()=>{ const s=(Date.now()-t0)/1000; $('gTime').firstChild.textContent=fmtDur(s)+' '; if(v) $('gBadge').textContent='● '+fmtDur(s); if(s>=LIMITE_GRAVACAO && rec.state==='recording') rec.stop(); },250);
+      recState.timer=setInterval(()=>{ const s=(Date.now()-t0)/1000; $('gTime').firstChild.textContent=fmtDur(s)+' '; if(v) $('gBadge').textContent='● '+fmtDur(s); if(s>=limGrav() && rec.state==='recording') rec.stop(); },250);
       if(!v){ // ondas do microfone
         const AC=window.AudioContext||window.webkitAudioContext; if(AC){ const ac=new AC(); recState.ac=ac; const src=ac.createMediaStreamSource(recState.stream); const an=ac.createAnalyser(); an.fftSize=256; src.connect(an);
           const data=new Uint8Array(an.frequencyBinCount), cv=$('gWave'), c=cv.getContext('2d'); const cs=getComputedStyle(document.documentElement); const a1=cs.getPropertyValue('--accent').trim(), a2=cs.getPropertyValue('--accent2').trim();
@@ -783,7 +796,7 @@ function folhaGravar(kind){
     const file=e.target.files[0]; e.target.value=''; if(!file) return;
     if(file.size > LIMITE_MB*1048576){ msgE(`Esse arquivo tem ${(file.size/1048576).toFixed(0)} MB. O limite é ${LIMITE_MB} MB — grave um mais curtinho 😉`,'err'); return; }
     const dur=await duracaoArquivo(file, v?'video':'audio');
-    if(dur && dur > LIMITE_GRAVACAO+2){ msgE(`Esse ${v?'vídeo':'áudio'} tem ${fmtDur(dur)}. O limite é ${fmtDur(LIMITE_GRAVACAO)}.`,'err'); return; }
+    if(dur && dur > limGrav()+2){ msgE(`Esse ${v?'vídeo':'áudio'} tem ${fmtDur(dur)}. O limite desta festa é ${fmtDur(limGrav())}.`,'err'); return; }
     pararCaptura(); if(v){ $('gLive').hidden=true; }
     const pv=$('gPrev'); pv.src=URL.createObjectURL(file); pv.hidden=false;
     const type=file.type || (v?'video/mp4':'audio/mpeg'); const ext=(file.name.split('.').pop()||'').toLowerCase().slice(0,5) || (v?'mp4':'mp3');
@@ -894,6 +907,62 @@ async function telaTelao(){
 // ANFITRIÃO
 // =====================================================================
 let PIN=null, ADM={posts:[], aba:'pendente'};
+// ---------- planos e pagamento (Mercado Pago) ----------
+const FN_PAG = `${SUPABASE_URL}/functions/v1/mural-pagamento`;
+const ICONE_PLANO = {festinha:'🏠', festa:'🎉', grande:'🎓', completo:'⭐', teste:'🧪'};
+const NOME_PLANO = {festinha:'Festinha', festa:'Festa', grande:'Grande Evento', completo:'Completo', teste:'Teste'};
+let PLANOS=null;
+async function carregarPlanos(){ if(!PLANOS){ const {data}=await sb.from('fe_planos').select('*').order('ordem'); PLANOS=data||[]; } return PLANOS; }
+const brl = v => Number(v).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const segTxt = s => s<60 ? `${s} segundos` : s===60 ? '1 minuto' : `${s/60} minutos`;
+function htmlPlanos(lista, {atual, botao}={}){
+  const precoAtual = (lista.find(p=>p.id===(atual==='completo'?'festa':atual))||{}).preco || 0;
+  return `<div class="planos">${lista.map(p=>{ const dif=Math.max(0,p.preco-precoAtual), pode=p.preco>precoAtual;
+    return `<div class="plano${p.id==='festa'?' dest':''}">${p.id==='festa'?'<span class="tag">mais escolhido</span>':''}<div class="e">${ICONE_PLANO[p.id]||'🎈'}</div><h4>${esc(p.nome)}</h4><p class="d">${esc(p.descricao||'')}</p>
+      <div class="p">${brl(precoAtual&&pode?dif:p.preco)}${precoAtual&&pode?' <small>(diferença)</small>':' <small>por festa</small>'}</div>
+      <ul><li>até <b>${p.max_posts}</b> homenagens</li><li>áudio e vídeo de até <b>${segTxt(p.max_seg)}</b></li><li>telão, mural, tema próprio, fotos e música</li><li>álbum em PDF e todos os arquivos</li><li>no ar até <b>${p.dias_pos} dias</b> depois da festa</li></ul>
+      ${botao ? (pode ? `<button class="btn" data-plano="${p.id}">${atual&&atual!=='teste'?'⬆️ Mudar para este':'💳 Pagar e liberar'}</button>` : `<button class="btn ghost" disabled>${p.id===(atual==='completo'?'festa':atual)?'✓ Seu plano':'—'}</button>`) : ''}</div>`; }).join('')}</div>`;
+}
+async function pagarPlano(plano, slug=SLUG, pin=PIN, msg){
+  const M = msg || (t=>toast(t,5000));
+  M('Abrindo o Mercado Pago…');
+  try{
+    const r = await fetch(FN_PAG, {method:'POST', headers:{'Content-Type':'application/json', apikey:SUPABASE_KEY}, body:JSON.stringify({acao:'pagar', slug, pin, plano})});
+    const j = await r.json().catch(()=>({}));
+    if(j.url){ store.set('mf_pag_'+slug, j.pagamento); location.href = j.url; return; }
+    M(j.erro || 'Não consegui abrir o pagamento agora. Tente de novo em instantes.');
+  }catch(e){ M('Não consegui abrir o pagamento agora. Confira a internet e tente de novo.'); }
+}
+async function escolherPlano(){
+  const lista = await carregarPlanos(); const atual = FESTA.plano;
+  abrirFolha(`<h3>💳 ${atual==='teste'?'Escolha o plano da sua festa':'Mudar de plano'}</h3><p class="muted" style="margin-top:0">Pagamento único pelo Mercado Pago (Pix ou cartão em até 3x). A festa é liberada na hora em que o pagamento é confirmado.</p>
+    ${htmlPlanos(lista,{atual, botao:true})}
+    <div class="msg" id="eMsg"></div><div class="foot" style="justify-content:space-between"><button class="btn ghost sm" id="plCod">🔓 Tenho um código</button><button class="btn ghost" id="eCancel">Fechar</button></div>`);
+  $('eCancel').onclick=fecharFolha; $('plCod').onclick=()=>{ fecharFolha(); setTimeout(ativarFesta,60); };
+  document.querySelectorAll('#sheet [data-plano]').forEach(b=>b.onclick=()=>{ b.disabled=true; pagarPlano(b.dataset.plano, SLUG, PIN, t=>msgE(t, /Abrindo/.test(t)?'':'err')); setTimeout(()=>b.disabled=false,6000); });
+}
+async function conferirPagamento(pid){
+  const antes = FESTA.plano;
+  abrirFolha(`<div class="thanks"><div class="big">💳</div><h3 style="justify-content:center">Confirmando o pagamento…</h3><p id="cpT">Assim que o Mercado Pago confirmar, sua festa é liberada. No Pix costuma ser na hora.</p><div class="center"><span class="spin"></span></div>
+    <div class="foot" style="justify-content:center"><button class="btn ghost" id="eCancel">Fechar</button></div></div>`);
+  $('eCancel').onclick=()=>{ fecharFolha(); };
+  const limpa=()=>{ const q=new URLSearchParams(location.search); q.delete('pago'); q.delete('collection_id'); q.delete('collection_status'); q.delete('payment_id'); q.delete('status'); q.delete('external_reference'); q.delete('payment_type'); q.delete('merchant_order_id'); q.delete('preference_id'); q.delete('site_id'); q.delete('processing_mode'); q.delete('merchant_account_id'); history.replaceState(null,'',location.pathname+'?'+q.toString().replace(/=(&|$)/g,'$1')); };
+  for(let i=0;i<90;i++){
+    let st='';
+    try{ const r=await fetch(FN_PAG,{method:'POST',headers:{'Content-Type':'application/json',apikey:SUPABASE_KEY},body:JSON.stringify({acao:'conferir', pagamento:pid})}); const j=await r.json(); st=j.status||''; }catch(e){}
+    try{ FESTA = await carregarFesta(SLUG); }catch(e){}
+    if(FESTA && FESTA.plano!=='teste' && FESTA.plano!==antes || (FESTA && FESTA.plano!=='teste' && st==='approved')){
+      limpa(); store.set('mf_pag_'+SLUG,null);
+      $('sheet').innerHTML=`<div class="thanks"><div class="big">🎉</div><h3 style="justify-content:center">Pagamento confirmado!</h3><p>Sua festa está liberada no plano <b>${esc(NOME_PLANO[FESTA.plano]||FESTA.plano)}</b>: até ${FESTA.max_posts} homenagens, sem aviso de teste. Aproveite!</p><div class="foot" style="justify-content:center"><button class="btn" id="tOk">Começar</button></div></div>`;
+      $('tOk').onclick=()=>{ fecharFolha(); painelAdmin(); }; return;
+    }
+    if(/rejected|cancelled/.test(st)){ limpa(); $('cpT').innerHTML='O pagamento não foi aprovado. Você pode tentar de novo com outra forma de pagamento.'; const sp=document.querySelector('#sheet .spin'); if(sp) sp.remove(); return; }
+    if(i===8 && $('cpT')) $('cpT').textContent='Ainda aguardando o Mercado Pago. Se você pagou por boleto, a confirmação pode levar até 1 dia útil — a festa libera sozinha quando chegar.';
+    await sleep(i<15?4000:10000);
+    if(!$('cpT')) return;
+  }
+}
+
 async function telaAdmin(){
   FESTA = await carregarFesta(SLUG).catch(()=>null);
   if(!FESTA) return telaNaoAchou();
@@ -917,7 +986,8 @@ function painelAdmin(){
   const f=FESTA;
   $('app').innerHTML=`<div class="wrap">
    <div class="top"><h1>Anfitrião · <em>${esc(f.homenageado||f.titulo)}</em></h1><div class="row"><a class="btn ghost sm" href="${linkFesta(f.slug)}" target="_blank" rel="noopener">👀 Ver como convidado</a><a class="btn sm" href="${linkFesta(f.slug,'telao')}" target="_blank" rel="noopener">📺 Abrir telão</a><button class="btn ghost sm" id="sair">Sair</button></div></div>
-   ${f.plano==='teste'?`<div class="teste-bar"><div><b>🧪 Festa em modo teste</b><br><span style="font-size:14px">Funciona de verdade, com até 10 homenagens e a marca “teste” no telão e no álbum. Ative para liberar tudo.</span></div><div class="row">${COMPRA_URL?`<a class="btn alt sm" href="${COMPRA_URL}" target="_blank" rel="noopener">💳 Comprar ativação</a>`:''}<button class="btn sm" id="btAtivar">🔓 Tenho um código</button></div></div>`:''}
+   ${f.plano==='teste'?`<div class="teste-bar"><div><b>🧪 Festa em modo teste</b><br><span style="font-size:14px">Funciona de verdade, com até 10 homenagens e o aviso “teste” no telão e no álbum. Escolha um plano para liberar tudo.</span></div><div class="row"><button class="btn sm" id="btPlano">💳 Escolher plano e liberar</button><button class="btn ghost sm" id="btAtivar">🔓 Tenho um código</button></div></div>`
+     :`<div class="plano-bar"><div><b>${ICONE_PLANO[f.plano]||'⭐'} Plano ${esc(NOME_PLANO[f.plano]||f.plano)}</b> · até ${f.max_posts} homenagens · áudio e vídeo de até ${segTxt(f.max_seg)}${f.expira_em?` · no ar até ${new Date(f.expira_em+'T12:00:00').toLocaleDateString('pt-BR')}`:''}</div>${f.plano!=='grande'?'<button class="btn ghost sm" id="btPlano">⬆️ Mudar de plano</button>':''}</div>`}
    ${store.get('mf_novo_'+f.slug)?`<div class="card passos" id="passos"><div class="row" style="justify-content:space-between"><b style="font-size:18px">🎉 Sua festa está criada! Próximos passos:</b><button class="btn ghost sm" id="psOk">Entendi</button></div><ol>
      <li><button class="link" data-ir="meutema">Faça o seu tema</button>: imagem de fundo, personagens, 8 a 12 fotos do homenageado e a música do telão.</li>
      <li><button class="link" data-ir="compartilhar">Mande o convite com QR Code</button> no grupo da família e imprima os cartões de mesa.</li>
@@ -939,6 +1009,10 @@ function painelAdmin(){
   document.querySelectorAll('[data-ir]').forEach(b=>b.onclick=()=>ir(b.dataset.ir));
   if($('psOk')) $('psOk').onclick=()=>{ store.set('mf_novo_'+f.slug,null); $('passos').remove(); };
   if($('btAtivar')) $('btAtivar').onclick=ativarFesta;
+  if($('btPlano')) $('btPlano').onclick=escolherPlano;
+  const pidQ = new URLSearchParams(location.search).get('pago'), pidS = store.get('mf_pag_'+f.slug);
+  if(pidQ && /^[0-9a-f-]{36}$/.test(pidQ)) setTimeout(()=>conferirPagamento(pidQ),300);
+  else if(pidS && /^[0-9a-f-]{36}$/.test(pidS) && f.plano==='teste') fetch(FN_PAG,{method:'POST',headers:{'Content-Type':'application/json',apikey:SUPABASE_KEY},body:JSON.stringify({acao:'conferir',pagamento:pidS})}).then(r=>r.json()).then(async j=>{ if(j.status==='approved'){ FESTA=await carregarFesta(SLUG); store.set('mf_pag_'+f.slug,null); toast('Pagamento confirmado! Festa liberada 🎉',4000); painelAdmin(); } }).catch(()=>{});
   if($('seuGo')) $('seuGo').onclick=()=>{ ir('meutema'); $('vw').scrollIntoView({behavior:'smooth'}); };
   const abaIni = Q.get('aba') || (!f.custom ? 'meutema' : 'moderar');
   ir(['meutema','moderar','festa','compartilhar','recordacoes'].includes(abaIni) ? abaIni : 'moderar'); if(ADM.view!=='moderar') carregarAdmPosts();
@@ -951,7 +1025,7 @@ function ativarFesta(){
     <div class="msg" id="eMsg"></div><div class="foot"><button class="btn ghost" id="eCancel">Cancelar</button><button class="btn" id="eSend">Ativar</button></div>`);
   $('eCancel').onclick=fecharFolha; setTimeout(()=>$('atC').focus(),60);
   $('eSend').onclick=async()=>{ const c=$('atC').value.trim(); if(c.length<8){ msgE('Digite o código completo.','err'); return; }
-    try{ FESTA=await rpc('fe_ativar',{p_slug:SLUG,p_pin:PIN,p_codigo:c}); fecharFolha(); toast('Festa ativada! Agora é sem limite 🎉',4000); painelAdmin(); }catch(e){ msgE(ERR(e),'err'); } };
+    try{ FESTA=await rpc('fe_ativar',{p_slug:SLUG,p_pin:PIN,p_codigo:c}); fecharFolha(); toast(`Festa liberada no plano ${NOME_PLANO[FESTA.plano]||''}! 🎉`,4000); painelAdmin(); }catch(e){ msgE(ERR(e),'err'); } };
 }
 async function carregarAdmPosts(){
   try{ ADM.posts = await rpc('fe_admin_posts',{p_slug:SLUG,p_pin:PIN}); }catch(e){ toast(ERR(e)); return; }
@@ -1446,11 +1520,11 @@ async function telaMestre(){
   telaLogin('Área do organizador','Mural da Festa', async pin=>{ const ok=await rpc('fe_mestre_login',{p_pin:pin}); if(!ok) return false; MPIN=pin; store.sset('mf_mestre',pin); painelMestre(); return true; });
 }
 function painelMestre(){
-  $('app').innerHTML=`<div class="wrap"><div class="top"><h1>🎉 <em>Mural da Festa</em> · organizador</h1><div class="row"><button class="btn" id="mNova">＋ Nova festa</button><button class="btn alt sm" id="mCod">🎟️ Códigos de ativação</button><button class="btn ghost sm" id="mSenha">Trocar senha mestra</button><button class="btn ghost sm" id="mSair">Sair</button></div></div>
+  $('app').innerHTML=`<div class="wrap"><div class="top"><h1>🎉 <em>Mural da Festa</em> · organizador</h1><div class="row"><button class="btn" id="mNova">＋ Nova festa</button><button class="btn alt sm" id="mCod">🎟️ Códigos de ativação</button><button class="btn alt sm" id="mPag">💳 Planos e pagamentos</button><button class="btn ghost sm" id="mSenha">Trocar senha mestra</button><button class="btn ghost sm" id="mSair">Sair</button></div></div>
    <div class="card" style="padding:14px 16px;margin-bottom:14px"><div class="row" style="justify-content:space-between"><b>Espaço usado</b><span class="muted" id="mUso"></span></div><div class="bar" style="margin-top:8px"><i id="mBar" style="width:0%"></i></div><p class="muted" style="font-size:13px;margin:6px 0 0">Plano gratuito do Supabase: 1 GB para todas as festas (inclui o Halloween).</p></div>
    <div id="mList"><div class="empty"><span class="spin"></span></div></div></div>`;
   $('mSair').onclick=()=>{ store.sset('mf_mestre',null); location.reload(); };
-  $('mNova').onclick=novaFesta; $('mSenha').onclick=trocarMestra; $('mCod').onclick=codigosMestre;
+  $('mNova').onclick=novaFesta; $('mSenha').onclick=trocarMestra; $('mCod').onclick=codigosMestre; $('mPag').onclick=planosMestre;
   listarFestas();
 }
 async function listarFestas(){
@@ -1460,11 +1534,12 @@ async function listarFestas(){
   $('mList').innerHTML=FESTAS.map((f,i)=>{ const t=temaDe(f); return `<div class="card fest" style="margin-bottom:10px;border-left:8px solid ${t.accent}">
     <div><h3>${CATS[f.categoria]?.e||'🎉'} ${esc(f.homenageado||f.titulo)} <span class="pill" style="background:${f.ativo?'#d3f9d8':'#ffe3e3'};color:${f.ativo?'#2b8a3e':'#c92a2a'}">${f.ativo?'ativa':'encerrada'}</span></h3>
       <div class="meta"><span>${esc(f.titulo)}</span>${f.data?`<span>📅 ${new Date(f.data+'T12:00:00').toLocaleDateString('pt-BR')}</span>`:''}<span>${t.e} ${t.n}</span>${f.cliente?`<span>👤 ${esc(f.cliente)}${f.contato?' · '+esc(f.contato):''}</span>`:''}${f.expira_em?`<span>⏳ até ${new Date(f.expira_em+'T12:00:00').toLocaleDateString('pt-BR')}</span>`:''}</div>
-      <div class="stats">${f.plano==='teste'?'<span class="pill" style="background:#fff3bf">🧪 teste</span>':''}${f.origem==='cliente'?'<span class="pill">🙋 criada pelo cliente</span>':''}<span class="pill">💌 ${f.total} homenagens</span>${f.pendentes?`<span class="pill" style="background:#fff3bf">⏳ ${f.pendentes} aguardando</span>`:''}<span class="pill">💾 ${(+f.mb).toFixed(1)} MB</span>${f.tem_custom?`<span class="pill" style="background:${f.custom_bloqueado?'#ffe3e3':f.custom_ativo?'#e7f5ff':'#f1f3f5'}">🖼️ tema próprio ${f.custom_bloqueado?'desligado por você':f.custom_ativo?'ligado':'desligado'}${f.aceite?` · declarado por ${esc(f.aceite.responsavel)} em ${new Date(f.aceite.criado_em).toLocaleDateString('pt-BR')}`:''}</span>`:''}</div></div>
+      <div class="stats">${f.plano==='teste'?'<span class="pill" style="background:#fff3bf">🧪 teste</span>':`<span class="pill" style="background:#d3f9d8">${ICONE_PLANO[f.plano]||'⭐'} ${esc(NOME_PLANO[f.plano]||f.plano)}</span>`}${f.origem==='cliente'?'<span class="pill">🙋 criada pelo cliente</span>':''}<span class="pill">💌 ${f.total} homenagens</span>${f.pendentes?`<span class="pill" style="background:#fff3bf">⏳ ${f.pendentes} aguardando</span>`:''}<span class="pill">💾 ${(+f.mb).toFixed(1)} MB</span>${f.tem_custom?`<span class="pill" style="background:${f.custom_bloqueado?'#ffe3e3':f.custom_ativo?'#e7f5ff':'#f1f3f5'}">🖼️ tema próprio ${f.custom_bloqueado?'desligado por você':f.custom_ativo?'ligado':'desligado'}${f.aceite?` · declarado por ${esc(f.aceite.responsavel)} em ${new Date(f.aceite.criado_em).toLocaleDateString('pt-BR')}`:''}</span>`:''}</div></div>
     <div class="acts3"><a class="btn sm" href="${linkFesta(f.slug,'admin')}" target="_blank" rel="noopener">🔐 Anfitrião</a><a class="btn ghost sm" href="${linkFesta(f.slug,'telao')}" target="_blank" rel="noopener">📺 Telão</a><a class="btn ghost sm" href="${linkFesta(f.slug)}" target="_blank" rel="noopener">👀 Ver</a><button class="btn ghost sm" data-i="${i}" data-a="msg">📋 Mensagem</button><button class="btn ghost sm" data-i="${i}" data-a="cfg">⚙️ Ajustes</button>${f.plano==='teste'?`<button class="btn ok sm" data-i="${i}" data-a="lib">✓ Liberar (cortesia)</button>`:''}${f.tem_custom?`<button class="btn ${f.custom_bloqueado?'ok':'bad'} sm" data-i="${i}" data-a="bloq">${f.custom_bloqueado?'✓ Liberar tema próprio':'🚫 Desligar tema próprio'}</button>`:''}</div></div>`; }).join('');
   $('mList').querySelectorAll('[data-a]').forEach(b=>b.onclick=async()=>{ const f=FESTAS[+b.dataset.i]; const a=b.dataset.a;
     if(a==='msg') return copiar(msgCliente(f),'Mensagem para o cliente copiada!');
-    if(a==='lib'){ try{ await rpc('fe_mestre_liberar',{p_pin:MPIN,p_id:f.id}); toast('Festa liberada sem limite.'); listarFestas(); }catch(e){ toast(ERR(e)); } return; }
+    if(a==='lib'){ const lista=await carregarPlanos(); abrirFolha(`<h3>✓ Liberar ${esc(f.homenageado||f.titulo)} de cortesia</h3><p class="muted" style="margin-top:0">Escolha o plano:</p><div class="row">${lista.map(p=>`<button class="btn" data-lp="${p.id}">${ICONE_PLANO[p.id]||''} ${esc(p.nome)}</button>`).join('')}</div><div class="msg" id="eMsg"></div><div class="foot"><button class="btn ghost" id="eCancel">Cancelar</button></div>`);
+      $('eCancel').onclick=fecharFolha; document.querySelectorAll('[data-lp]').forEach(x=>x.onclick=async()=>{ try{ await rpc('fe_mestre_liberar',{p_pin:MPIN,p_id:f.id,p_plano:x.dataset.lp}); fecharFolha(); toast('Festa liberada de cortesia.'); listarFestas(); }catch(e){ msgE(ERR(e),'err'); } }); return; }
     if(a==='bloq'){ try{ await rpc('fe_mestre_tema',{p_pin:MPIN,p_id:f.id,p_bloquear:!f.custom_bloqueado}); toast(f.custom_bloqueado?'Tema próprio liberado.':'Tema próprio desligado. A festa voltou ao tema pronto.'); listarFestas(); }catch(e){ toast(ERR(e)); } return; }
     ajustesFesta(f); });
 }
@@ -1505,12 +1580,12 @@ function telaCriar(){
     catch(e){ erro(ERR(e)); $('nfCriar').disabled=false; }
   };
 }
-function telaCriada(f, senha, tentouCodigo, seu){
+async function telaCriada(f, senha, tentouCodigo, seu){
   aplicarTema(temaDe(f)); history.replaceState(null,'',BASE+'?criar');
-  const okCod=f.plano==='completo';
+  const okCod=f.plano!=='teste'; const lista = okCod ? [] : await carregarPlanos().catch(()=>[]);
   $('app').innerHTML=`<div class="wrap" style="max-width:720px"><div class="card" style="padding:24px;text-align:center"><div style="font-size:64px">${tema(f.tema).e}</div><h1 style="margin:4px 0">Sua festa está criada!</h1>
     <p class="muted">${esc(f.titulo)}</p>
-    ${okCod?`<p class="aviso" style="background:#d3f9d8;color:#1b5e20">✅ Ativada: homenagens sem limite.</p>`:`<p class="aviso">${tentouCodigo?'⚠️ O código não funcionou, então a festa começou em modo teste. Você pode ativar depois, na sua área.':'🧪 Modo teste: até 10 homenagens. Ative quando quiser, na sua área.'}</p>`}
+    ${okCod?`<p class="aviso" style="background:#d3f9d8;color:#1b5e20">✅ Liberada no plano ${esc(NOME_PLANO[f.plano]||f.plano)}.</p>`:`<p class="aviso">${tentouCodigo?'⚠️ O código não funcionou, então a festa começou em modo teste.':'🧪 A festa já funciona em modo teste (até 10 homenagens). Para liberar tudo, escolha o plano:'}</p>${lista.length?htmlPlanos(lista,{atual:'teste',botao:true}):''}<div class="msg" id="fcPM"></div>`}
     <div class="qrbig" id="fcQr"></div>
     <div style="text-align:left;margin-top:16px;display:flex;flex-direction:column;gap:10px">
      ${[['📲 Link dos convidados',linkFesta(f.slug)],['📺 Telão',linkFesta(f.slug,'telao')],['🔐 Sua área de anfitrião',linkFesta(f.slug,'admin')]].map(([n,u])=>`<div><div style="font-weight:600;font-size:14px;margin-bottom:4px">${n}</div><div class="linkbox"><code>${esc(u)}</code><button class="btn sm" data-copy="${esc(u)}">Copiar</button></div></div>`).join('')}</div>
@@ -1519,6 +1594,7 @@ function telaCriada(f, senha, tentouCodigo, seu){
   qrInto($('fcQr'), linkFesta(f.slug), 200);
   document.querySelectorAll('[data-copy]').forEach(b=>b.onclick=()=>copiar(b.dataset.copy));
   $('fcMsg').onclick=()=>copiar(msgCliente(f, senha),'Copiado! Cole no seu WhatsApp para guardar.');
+  document.querySelectorAll('[data-plano]').forEach(b=>b.onclick=()=>{ b.disabled=true; pagarPlano(b.dataset.plano, f.slug, senha, t=>{ $('fcPM').className='msg'+(/Abrindo/.test(t)?'':' err'); $('fcPM').textContent=t; }); setTimeout(()=>b.disabled=false,6000); });
 }
 function festaCriada(f, senha){
   aplicarTema(temaDe(f));
@@ -1546,17 +1622,30 @@ function ajustesFesta(f){
     const d={ativo:$('ajAtivo').checked, cliente:$('ajCli').value.trim(), contato:$('ajCont').value.trim(), expira_em:$('ajExp').value}; if(s) d.nova_senha=s;
     try{ await rpc('fe_mestre_editar',{p_pin:MPIN,p_id:f.id,d}); fecharFolha(); toast(s?`Salvo! Nova senha do anfitrião: ${s}`:'Salvo!', 4000); listarFestas(); }catch(e){ msgE(ERR(e),'err'); } };
 }
+async function planosMestre(){
+  abrirFolha(`<h3>💳 Planos e pagamentos</h3><div id="pmL"><span class="spin"></span></div><div class="msg" id="eMsg"></div><div class="foot"><button class="btn ghost" id="eCancel">Fechar</button><button class="btn" id="eSend">Salvar preços</button></div>`);
+  $('eCancel').onclick=fecharFolha;
+  let pl=[], pg=[]; try{ pl=await rpc('fe_mestre_planos',{p_pin:MPIN,p_planos:null}); pg=await rpc('fe_mestre_pagamentos',{p_pin:MPIN}); }catch(e){ msgE(ERR(e),'err'); return; }
+  const pagos=pg.filter(x=>x.status==='aprovado'), total=pagos.reduce((a,x)=>a+(+x.valor),0);
+  $('pmL').innerHTML=`<div style="display:flex;flex-direction:column;gap:10px">${pl.map(p=>`<div class="card" style="padding:12px" data-id="${p.id}"><b>${ICONE_PLANO[p.id]||''} ${esc(p.nome)}</b><div class="grid2" style="margin-top:8px">
+      <label class="f">Preço (R$)<input class="in" data-k="preco" type="number" min="1" step="1" value="${+p.preco}"></label><label class="f">Homenagens<input class="in" data-k="max_posts" type="number" min="10" value="${p.max_posts}"></label>
+      <label class="f">Áudio/vídeo (segundos)<input class="in" data-k="max_seg" type="number" min="15" max="120" value="${p.max_seg}"></label><label class="f">Dias no ar depois da festa<input class="in" data-k="dias_pos" type="number" min="1" max="90" value="${p.dias_pos}"></label></div></div>`).join('')}</div>
+    <h3 style="margin:16px 0 6px">Pagamentos <span class="muted" style="font-size:14px">${pagos.length} aprovados · ${brl(total)}</span></h3>
+    <div style="max-height:30vh;overflow:auto">${pg.length?pg.map(x=>`<div class="linkbox" style="margin-bottom:6px"><code>${new Date(x.criado_em).toLocaleDateString('pt-BR')} · ${esc(x.festa||'festa excluída')} · ${esc(NOME_PLANO[x.plano]||x.plano)} · ${brl(x.valor)} · ${x.status==='aprovado'?'✅ pago'+(x.metodo?' ('+esc(x.metodo)+')':''):x.status==='pendente'?'⏳ aguardando':'⚠️ '+esc(x.status)}</code></div>`).join(''):'<p class="muted">Nenhum pagamento ainda.</p>'}</div>`;
+  $('eSend').onclick=async()=>{ const d=[...document.querySelectorAll('#pmL [data-id]')].map(c=>{ const o={id:c.dataset.id}; c.querySelectorAll('[data-k]').forEach(i=>o[i.dataset.k]=+i.value); return o; });
+    try{ await rpc('fe_mestre_planos',{p_pin:MPIN,p_planos:d}); PLANOS=null; msgE('Preços salvos! ✨','ok'); }catch(e){ msgE(ERR(e)+' '+(e.message||''),'err'); } };
+}
 async function codigosMestre(){
   abrirFolha(`<h3>🎟️ Códigos de ativação</h3><p class="muted" style="margin-top:0">Cada código ativa uma festa, uma única vez. Gere um lote e cadastre na plataforma de venda (Kiwify, Hotmart…) para o cliente receber o código sozinho depois de pagar.</p>
-    <div class="grid2"><label class="f">Quantos códigos<input class="in" id="cgN" type="number" min="1" max="200" value="20"></label><label class="f">Nome do lote (opcional)<input class="in" id="cgL" maxlength="40" placeholder="Ex.: Kiwify novembro"></label></div>
+    <div class="grid2"><label class="f">Quantos códigos<input class="in" id="cgN" type="number" min="1" max="200" value="20"></label><label class="f">Nome do lote (opcional)<input class="in" id="cgL" maxlength="40" placeholder="Ex.: Buffet Alegria"></label><label class="f">Plano que o código libera<select class="in" id="cgP"><option value="festinha">🏠 Festinha</option><option value="festa" selected>🎉 Festa</option><option value="grande">🎓 Grande Evento</option></select></label></div>
     <div class="row" style="margin-top:10px"><button class="btn" id="cgGerar">Gerar</button><button class="btn ghost sm" id="cgCopiar">📋 Copiar os livres</button><button class="btn ghost sm" id="cgCsv">⬇️ Planilha (CSV)</button></div>
     <div class="msg" id="eMsg"></div><div id="cgList" style="max-height:42vh;overflow:auto;margin-top:8px"><span class="spin"></span></div><div class="foot"><button class="btn ghost" id="eCancel">Fechar</button></div>`);
   $('eCancel').onclick=fecharFolha; let L=[];
   const carregar=async()=>{ try{ L=await rpc('fe_mestre_codigos',{p_pin:MPIN}); }catch(e){ msgE(ERR(e),'err'); return; }
     const livres=L.filter(x=>!x.usado_em).length;
-    $('cgList').innerHTML = L.length ? `<p style="margin:0 0 6px;font-weight:600">${livres} livres · ${L.length-livres} usados</p>` + L.map(x=>`<div class="linkbox" style="margin-bottom:6px;${x.usado_em?'opacity:.55':''}"><code>${esc(x.codigo)}${x.lote?` · ${esc(x.lote)}`:''}${x.usado_em?` · usado por ${esc(x.festa||'festa excluída')} em ${new Date(x.usado_em).toLocaleDateString('pt-BR')}`:''}</code>${x.usado_em?'':`<button class="btn sm" data-copy="${esc(x.codigo)}">Copiar</button>`}</div>`).join('') : '<p class="muted">Nenhum código ainda.</p>';
+    $('cgList').innerHTML = L.length ? `<p style="margin:0 0 6px;font-weight:600">${livres} livres · ${L.length-livres} usados</p>` + L.map(x=>`<div class="linkbox" style="margin-bottom:6px;${x.usado_em?'opacity:.55':''}"><code>${esc(x.codigo)} · ${ICONE_PLANO[x.plano]||''} ${esc(NOME_PLANO[x.plano]||x.plano||'')}${x.lote?` · ${esc(x.lote)}`:''}${x.usado_em?` · usado por ${esc(x.festa||'festa excluída')} em ${new Date(x.usado_em).toLocaleDateString('pt-BR')}`:''}</code>${x.usado_em?'':`<button class="btn sm" data-copy="${esc(x.codigo)}">Copiar</button>`}</div>`).join('') : '<p class="muted">Nenhum código ainda.</p>';
     $('cgList').querySelectorAll('[data-copy]').forEach(b=>b.onclick=()=>copiar(b.dataset.copy)); };
-  $('cgGerar').onclick=async()=>{ const n=+$('cgN').value; if(!(n>=1&&n<=200)){ msgE('Escolha de 1 a 200.','err'); return; } try{ const novos=await rpc('fe_mestre_gerar_codigos',{p_pin:MPIN,p_qtd:n,p_lote:$('cgL').value.trim()}); msgE(`${novos.length} códigos gerados!`,'ok'); carregar(); }catch(e){ msgE(ERR(e),'err'); } };
+  $('cgGerar').onclick=async()=>{ const n=+$('cgN').value; if(!(n>=1&&n<=200)){ msgE('Escolha de 1 a 200.','err'); return; } try{ const novos=await rpc('fe_mestre_gerar_codigos',{p_pin:MPIN,p_qtd:n,p_lote:$('cgL').value.trim(),p_plano:$('cgP').value}); msgE(`${novos.length} códigos gerados!`,'ok'); carregar(); }catch(e){ msgE(ERR(e),'err'); } };
   $('cgCopiar').onclick=()=>{ const l=L.filter(x=>!x.usado_em).map(x=>x.codigo); if(!l.length){ msgE('Não há códigos livres.','err'); return; } copiar(l.join('\n'), `${l.length} códigos copiados (um por linha).`); };
   $('cgCsv').onclick=()=>{ const rows=[['codigo','lote','criado_em','usado_em','festa'],...L.map(x=>[x.codigo,x.lote||'',x.criado_em||'',x.usado_em||'',x.festa||''])]; const csv=rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(';')).join('\n'); const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob(['﻿'+csv],{type:'text/csv'})); a.download='codigos-mural-da-festa.csv'; a.click(); };
   carregar();
@@ -1587,7 +1676,8 @@ function telaTermos(){
   <li><b>Convidado:</b> quem acessa o link ou o QR Code da festa e envia homenagens.</li>
   <li><b>Mural da Festa:</b> fornece a ferramenta e o armazenamento.</li></ul>
   <h2>3. Criação da festa, modo teste e ativação</h2>
-  <p>O contratante cria a festa sozinho, nesta página, e define a senha de anfitrião. Sem ativação, a festa funciona em <b>modo teste</b>: até 10 homenagens, com a marca “teste” no telão e no álbum, e fica disponível até 7 dias depois da data da festa. A ativação é feita com um código de uso único, adquirido pelo canal de venda do Mural da Festa. A festa ativada recebe homenagens sem limite e fica disponível até 60 dias depois da data da festa. A guarda da senha é responsabilidade do contratante.</p>
+  <p>O contratante cria a festa sozinho, nesta página, e define a senha de anfitrião. Sem pagamento, a festa funciona em <b>modo teste</b>: até 10 homenagens, com aviso de teste no telão, no álbum e no convite, e fica disponível até 7 dias depois da data da festa.</p>
+  <p>A festa é liberada ao contratar um dos planos (Festinha, Festa ou Grande Evento), pagos uma única vez pelo Mercado Pago, ou com um código de ativação. Cada plano tem um limite de homenagens, um tempo máximo para áudios e vídeos e um prazo: a festa fica no ar até alguns dias depois da data da festa, conforme o plano escolhido. Depois desse prazo, a festa deixa de receber homenagens e os arquivos podem ser apagados — por isso, baixe o álbum e os arquivos antes. É possível mudar para um plano maior pagando a diferença. O contratante pode desistir em até 7 dias da compra, com reembolso integral, desde que a festa ainda não tenha acontecido. A guarda da senha é responsabilidade do contratante.</p>
   <h2>4. Conteúdo enviado pelos convidados</h2>
   <p>Quem envia uma foto, áudio, vídeo ou recado é responsável por ele. Ao enviar, o convidado declara que as pessoas que aparecem concordam com o envio e que, no caso de crianças e adolescentes, tem a autorização dos pais ou responsáveis. É proibido enviar conteúdo ofensivo, discriminatório, sexual, violento, ilegal ou que viole direitos de terceiros. O anfitrião pode não aprovar ou ocultar qualquer homenagem, e o Mural da Festa pode remover conteúdo que viole estes termos.</p>
   <h2>5. Tema próprio, fotos, músicas e direitos autorais</h2>
@@ -1636,9 +1726,13 @@ function telaInicio(){
      <div class="card step"><div class="e">🎵</div><h3>Música no telão</h3><p class="muted">Trilhas prontas ou as suas músicas, que abaixam sozinhas quando entra um vídeo.</p></div>
      <div class="card step"><div class="e">💌</div><h3>Convite com QR Code</h3><p class="muted">Para o WhatsApp ou para imprimir. O convidado já chega sabendo.</p></div>
    </div>
+   <h2 class="sec">Planos</h2>
+   <p class="muted" style="margin:-6px 0 0">Crie e teste de graça. Pague só quando gostar: Pix ou cartão em até 3x, liberação na hora.</p>
+   <div id="inPlanos"><div class="empty"><span class="spin"></span></div></div>
    <p class="center" style="margin-top:26px"><a class="btn" href="?criar" style="font-size:18px">✨ Criar minha festa agora</a></p>
    <p class="center" style="margin-top:30px"><a class="btn ghost sm" href="?mestre">🔐 Área do organizador</a></p>
    <p class="rod"><a href="?termos">Termos de uso e Privacidade</a></p></div>`;
+  carregarPlanos().then(l=>{ $('inPlanos').innerHTML = l.length ? htmlPlanos(l) : ''; }).catch(()=>{ $('inPlanos').innerHTML=''; });
   $('inF').onsubmit=e=>{ e.preventDefault(); const v=$('inC').value.trim().toLowerCase().replace(/.*[?&]f=/,'').replace(/[^a-z0-9-]/g,''); if(v) location.href=linkFesta(v); };
 }
 

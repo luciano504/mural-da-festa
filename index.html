@@ -997,13 +997,13 @@ async function telaConvidado(){
       <h2 class="sec" style="justify-content:center">${CORP(f)?'💬 Deixe sua mensagem':'💌 Deixe sua homenagem'}</h2>
       <p class="sub">${CORP(f)?'Foto, recado, áudio ou vídeo. Depois de aprovada, ela pode aparecer no telão do evento.':'Ela passa no telão durante a festa e fica guardada no álbum de recordações.'}</p>
       <div class="acts">
-        <button class="act" data-k="foto"><span class="ic">${ICO.foto}</span>Foto<small>da festa ou de vocês</small></button>
-        <button class="act" data-k="texto"><span class="ic">${ICO.texto}</span>Recado<small>umas palavras de carinho</small></button>
+        <button class="act" data-k="foto"><span class="ic">${ICO.foto}</span>Foto<small>${CORP(f)?'do evento ou da equipe':'da festa ou de vocês'}</small></button>
+        <button class="act" data-k="texto"><span class="ic">${ICO.texto}</span>Recado<small>${CORP(f)?'uma mensagem escrita':'umas palavras de carinho'}</small></button>
         <button class="act" data-k="audio"><span class="ic">${ICO.audio}</span>Áudio<small>a sua voz, gravada aqui</small></button>
-        <button class="act" data-k="video"><span class="ic">${ICO.video}</span>Vídeo<small>um recado olhando nos olhos</small></button>
+        <button class="act" data-k="video"><span class="ic">${ICO.video}</span>Vídeo<small>${CORP(f)?'um depoimento curto':'um recado olhando nos olhos'}</small></button>
       </div>
       <div class="namebar"><input class="in" id="nome" maxlength="40" placeholder="Seu nome, para assinar" aria-label="Seu nome" value="${esc(store.get('mf_nome')||'')}"></div>
-      ${f.moderacao?`<p class="nota">As homenagens aparecem no telão depois que o anfitrião aprova 💛</p>`:''}
+      ${f.moderacao?`<p class="nota">${CORP(f)?'As mensagens aparecem no telão depois da aprovação da organização.':'As homenagens aparecem no telão depois que o anfitrião aprova 💛'}</p>`:''}
     </section>
     ` : `<div class="closed">As homenagens desta festa foram encerradas. Obrigado por fazer parte.</div>`}
     ${f.ativo && f.tem_cardapio && !MESA ? '<section class="card rsvp" id="cdp"></section>' : ''}
@@ -1011,7 +1011,7 @@ async function telaConvidado(){
     ${(t.fotos||[]).length ? `<h2 class="sec">📖 A história de ${esc(f.homenageado||'quem a gente ama')}</h2><div class="hist">${t.fotos.map(p=>`<figure><img loading="lazy" src="${midia(p)}" alt=""></figure>`).join('')}</div>` : ''}
     <h2 class="sec">🖼️ Mural <span class="muted" id="muralN" style="font-size:16px;font-weight:500"></span></h2>
     <div class="mural" id="mural"></div>
-    <p class="rod">Ao enviar uma homenagem, você concorda com os <a href="${BASE}?termos" target="_blank" rel="noopener">Termos de uso e Privacidade</a>.</p>
+    <p class="rod">Ao enviar ${CORP(f)?'uma mensagem':'uma homenagem'}, você concorda com os <a href="${BASE}?termos" target="_blank" rel="noopener">Termos de uso e Privacidade</a>.</p>
   </div>`;
   document.querySelectorAll('.act').forEach(b=>b.onclick=()=>abrirEnvio(b.dataset.k));
   document.querySelectorAll('.capa .enfc').forEach(im=>{ const t2=new Image(); t2.crossOrigin='anonymous'; t2.onload=()=>{ try{ const c=document.createElement('canvas'); c.width=c.height=16; const x=c.getContext('2d'); x.drawImage(t2,0,0,16,16); const d=x.getImageData(0,0,16,16).data; if(![0,15,240,255].some(k=>d[k*4+3]<200)) im.classList.add('sticker'); }catch(e){ im.classList.add('sticker'); } }; t2.src=im.src; });
@@ -1025,7 +1025,7 @@ async function atualizarMural(){
   const key=POSTS.map(p=>p.id+':'+(p.curtidas||0)+':'+JSON.stringify(p.reacoes||{})+':'+(p.comentarios||0)).join(','); if(key===muralKey) return; muralKey=key;
   $('muralN').textContent = POSTS.length ? `(${POSTS.length})` : '';
   const m=$('mural'); const list=[...POSTS].reverse();
-  m.innerHTML = list.length ? list.map(cardPost).join('') : `<div class="empty">Ainda não chegou nenhuma homenagem. A primeira pode ser a sua ✨</div>`;
+  m.innerHTML = list.length ? list.map(cardPost).join('') : `<div class="empty">${CORP(FESTA)?'Ainda não há mensagens. A primeira pode ser a sua.':'Ainda não chegou nenhuma homenagem. A primeira pode ser a sua ✨'}</div>`;
 }
 const curtidasMinhas = () => { try{ return new Set(JSON.parse(store.get('mf_curt_'+(FESTA&&FESTA.id))||'[]')); }catch(e){ return new Set(); } };
 const EMOJIS=['😂','😍','👏','🥹','🔥'];
@@ -1073,7 +1073,7 @@ async function ligarPresenca(){
   const box=$('rsvp'); if(!box) return; const f=FESTA;
   let atual=null; try{ atual=await rpc('fe_minha_presenca',{p_festa:f.id,p_aparelho:deviceId()}); }catch(e){}
   const form=(d)=>{ let vai = d ? d.vai : null, ad = d ? Math.max(1,d.adultos||1) : 1, cr = d ? d.criancas||0 : 0;
-    box.innerHTML=`<h2 class="sec">✅ Você vai?</h2><p class="sub">Confirme sua presença para ajudar ${esc(f.homenageado||'o anfitrião')} a preparar tudo com carinho.</p>
+    box.innerHTML=`<h2 class="sec">✅ Você vai?</h2><p class="sub">${CORP(f)?'Confirme sua presença para a organização preparar o credenciamento e o jantar.':`Confirme sua presença para ajudar ${esc(f.homenageado||'o anfitrião')} a preparar tudo com carinho.`}</p>
       <div class="rsvp-op"><button type="button" class="opt" data-v="1" aria-pressed="${vai===true}">🎉 Vou, sim!</button><button type="button" class="opt" data-v="0" aria-pressed="${vai===false}">😢 Não vou poder</button></div>
       <div class="rsvp-mais" id="rsM" ${vai===null?'hidden':''}>
         <input class="in" id="rsN" maxlength="60" placeholder="Seu nome (ou da família)" value="${esc((d&&d.nome)||store.get('mf_nome')||'')}" aria-label="Seu nome">
@@ -1184,7 +1184,7 @@ async function ligarValet(){
 }
 async function ligarCorreio(){
   const box=$('crr'); if(!box) return; const f=FESTA; let anon=false;
-  box.innerHTML=`<h2 class="sec">💌 Correio elegante</h2><p class="sub">Mande um recado para alguém da festa. Ele aparece no telão depois que o anfitrião aprovar.</p>
+  box.innerHTML=`<h2 class="sec">${CORP(f)?'💬 Recado para um colega':'💌 Correio elegante'}</h2><p class="sub">${CORP(f)?'Reconheça alguém da equipe. O recado aparece no telão depois da aprovação da organização.':'Mande um recado para alguém da festa. Ele aparece no telão depois que o anfitrião aprovar.'}</p>
     <div style="text-align:left;max-width:460px;margin:0 auto"><label class="f">Para quem?<input class="in" id="crP" maxlength="60" placeholder="${CORP(f)?'Ex.: Equipe de vendas da mesa 5':'Ex.: A moça de vestido azul da mesa 5'}"></label>
       <label class="f" style="margin-top:10px">Mensagem<textarea class="in" id="crM" maxlength="240" rows="3" placeholder="${CORP(f)?'Escreva seu recado (com respeito e bom senso)':'Escreva com carinho (e bom humor) 😉'}"></textarea></label>
       <div class="seg" style="justify-content:flex-start;margin-top:10px"><button type="button" id="crId" aria-pressed="true">✍️ Assinar com meu nome</button><button type="button" id="crAn" aria-pressed="false">🤫 Anônimo</button></div>
@@ -1196,7 +1196,7 @@ async function ligarCorreio(){
     if(para.length<2){ M.className='msg err'; M.textContent='Escreva para quem é.'; return; } if(msg.length<2){ M.className='msg err'; M.textContent='Escreva a mensagem.'; return; } if(!anon && de.length<2){ M.className='msg err'; M.textContent='Escreva seu nome ou escolha anônimo.'; return; }
     $('crE').disabled=true; try{ await rpc('fe_correio_enviar',{p_festa:f.id,p_aparelho:deviceId(),p_para:para,p_de:de,p_mensagem:msg}); if(de) store.set('mf_nome',de); $('crP').value=''; $('crM').value=''; M.className='msg ok'; M.textContent='Correio enviado! Aparece no telão depois da aprovação 💌'; }
     catch(e){ M.className='msg err'; M.textContent=/Calma|Limite|aberto|Escreva/.test(e.message||'')?e.message:ERR(e); } $('crE').disabled=false; };
-  const lista=async()=>{ try{ const l=await rpc('fe_correio_publico',{p_festa:f.id}); $('crL').innerHTML=l.slice(0,12).map(c=>`<div class="crr-c"><div class="pa">💌 Para: ${esc(c.para)}</div><div>${esc(c.mensagem)}</div><div class="de">${c.de?'De: '+esc(c.de):'🤫 De: alguém especial'}</div></div>`).join(''); }catch(e){} };
+  const lista=async()=>{ try{ const l=await rpc('fe_correio_publico',{p_festa:f.id}); $('crL').innerHTML=l.slice(0,12).map(c=>`<div class="crr-c"><div class="pa">💌 Para: ${esc(c.para)}</div><div>${esc(c.mensagem)}</div><div class="de">${c.de?'De: '+esc(c.de):(CORP(f)?'De: um colega':'🤫 De: alguém especial')}</div></div>`).join(''); }catch(e){} };
   lista(); setInterval(()=>{ if(!document.hidden) lista(); }, 30000);
 }
 function ligarPerguntas(MESA){
@@ -1534,7 +1534,7 @@ async function telaTelao(){
     document.body.appendChild(box); setTimeout(()=>box.remove(),5000); }
 
   async function puxar(){
-    try{ let l=await postsAprovados(f.id); try{ const cs=await rpc('fe_correio_publico',{p_festa:f.id}); l=l.concat(cs.map(c=>({id:'c'+c.id,tipo:'correio',para:c.para,de:c.de,texto:c.mensagem,criado_em:c.criado_em}))).sort((a,b)=>new Date(a.criado_em)-new Date(b.criado_em)); }catch(_){} tv.list=l; for(const p of l){ if(!tv.known.has(p.id)){ tv.known.add(p.id); if(tv.started) tv.queue.push(p); } } $('tvN').textContent = l.length ? `${l.length} homenage${l.length>1?'ns':'m'} 💛` : ''; }catch(e){}
+    try{ let l=await postsAprovados(f.id); try{ const cs=await rpc('fe_correio_publico',{p_festa:f.id}); l=l.concat(cs.map(c=>({id:'c'+c.id,tipo:'correio',para:c.para,de:c.de,texto:c.mensagem,criado_em:c.criado_em}))).sort((a,b)=>new Date(a.criado_em)-new Date(b.criado_em)); }catch(_){} tv.list=l; for(const p of l){ if(!tv.known.has(p.id)){ tv.known.add(p.id); if(tv.started) tv.queue.push(p); } } $('tvN').textContent = l.length ? `${CORP(f)?`${l.length} mensage${l.length>1?'ns':'m'}`:`${l.length} homenage${l.length>1?'ns':'m'} 💛`}` : ''; }catch(e){}
   }
   // ---- pré-download: áudio e vídeo só entram no telão depois de baixados por inteiro ----
   const midiaPesada = p => p && (p.tipo==='video' || p.tipo==='audio');
@@ -1595,7 +1595,7 @@ async function telaTelao(){
     else if(p.tipo==='intro'){ el.className='sl sl-intro e-zoom'; el.innerHTML=`<div class="hey">${CORP(f)?'Bem-vindos':'✨ Bem-vindos à festa ✨'}</div><div class="nm">${(()=>{ let i=0; return nome.split(' ').map(w=>`<span class="w" style="display:inline-block;white-space:nowrap">${[...w].map(ch=>`<span style="animation-delay:${(i++*.08).toFixed(2)}s">${esc(ch)}</span>`).join('')}</span>`).join(' '); })()}</div><div class="sub">${esc(subtitulo(f))}</div><div class="cta">${CORP(f)?'📲 Participe pelo QR Code aqui embaixo':'📸 ✍️ 🎤 🎥 Mande sua homenagem pelo QR Code aqui embaixo!'}</div>`; dur=7500; if(!CORP(f)){ confete(60); chars.festa(); } }
     else if(p.tipo==='qr'){ el.className='sl tv-empty e-zoom'; el.innerHTML=`<div class="qr" id="tvQrBig"></div><h2>${tv.list.length?'Deixe a sua homenagem também!':'Mande a primeira homenagem!'}</h2><p>Aponte a câmera do celular para o código</p>`; dur=7000; }
     else if(p.tipo==='foto'){ el.classList.add('sl-foto'); el.innerHTML=`<img class="ph" style="--r:${giro()}" src="${midia(p.caminho)}" alt="">${(p.texto||by||p.curtidas)?`<div class="cap">${esc(p.texto||'')}${p.curtidas?`<span class="tvlike">♥ ${p.curtidas}</span>`:''}${Object.entries(p.reacoes||{}).map(([e,n])=>`<span class="tvreac">${e} ${n}</span>`).join('')}${by?`<small>📸 ${by}</small>`:''}</div>`:''}`; dur=8000; }
-    else if(p.tipo==='correio'){ el.classList.add('sl-texto','sl-correio'); const L=(p.texto||'').length; const fs=L<60?6:L<140?4.6:3.6; el.innerHTML=`<div><div class="env">💌 Correio elegante</div><div class="pa">Para: ${esc(p.para)}</div><div class="q${t.fundo?' card-on':''}" style="font-size:${fs}vw">${esc(p.texto)}</div><div class="by">${p.de?'— '+esc(p.de):'🤫 De: alguém especial'}</div></div>`; dur=Math.min(16000, 8000+L*40); }
+    else if(p.tipo==='correio'){ el.classList.add('sl-texto','sl-correio'); const L=(p.texto||'').length; const fs=L<60?6:L<140?4.6:3.6; el.innerHTML=`<div><div class="env">${CORP(f)?'💬 Recado para um colega':'💌 Correio elegante'}</div><div class="pa">Para: ${esc(p.para)}</div><div class="q${t.fundo?' card-on':''}" style="font-size:${fs}vw">${esc(p.texto)}</div><div class="by">${p.de?'— '+esc(p.de):(CORP(f)?'— um colega':'🤫 De: alguém especial')}</div></div>`; dur=Math.min(16000, 8000+L*40); }
     else if(p.tipo==='texto'){ el.classList.add('sl-texto'); const L=(p.texto||'').length; const fs = L<40?9:L<90?7:L<180?5.4:L<320?4.2:3.4; el.innerHTML=`<div class="q${t.fundo?' card-on':''}" style="font-size:${fs}vw">${esc(p.texto)}</div>${by||p.curtidas?`<div class="by">${by?'— '+by:''}${p.curtidas?`<span class="tvlike">♥ ${p.curtidas}</span>`:''}</div>`:''}`; dur=Math.min(18000, 7000+L*45); }
     else if(p.tipo==='audio'){ el.classList.add('sl-audio'); el.innerHTML=`<div class="mic">🎤</div><div class="eq">${'<i></i>'.repeat(12)}</div><div class="cap">Recado de ${by||'um convidado'}</div><audio src="${(cacheM.get(p.id)||{}).url||midia(p.caminho)}" preload="auto"></audio>`; dur=null; }
     else if(p.tipo==='video'){ el.classList.add('sl-video'); el.innerHTML=`<video src="${(cacheM.get(p.id)||{}).url||midia(p.caminho)}" playsinline preload="auto" ${p.thumb?`poster="${midia(p.thumb)}"`:''}></video>${by?`<div class="cap"><small>🎥 Recado de ${by}</small></div>`:''}`; dur=null; }

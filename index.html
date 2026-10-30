@@ -171,7 +171,7 @@ h2.sec{font-weight:700;font-size:22px;margin:28px 0 12px;display:flex;align-item
 @keyframes pkb{0%{transform:translate(-50%,110%)}16%{transform:translate(-50%,-6%) scale(1.05)}24%{transform:translate(-50%,2%) scale(.97)}32%,78%{transform:translate(-50%,0)}50%{transform:translate(-50%,-4%) rotate(4deg)}64%{transform:translate(-50%,0) rotate(-4deg)}100%{transform:translate(-50%,115%)}}
 @keyframes voa{0%{transform:translate(-45vw,0) rotate(-8deg)}25%{transform:translate(20vw,-4vh) rotate(6deg)}50%{transform:translate(50vw,3vh) rotate(-6deg)}75%{transform:translate(80vw,-4vh) rotate(6deg)}100%{transform:translate(115vw,0) rotate(-8deg)}}
 @keyframes pula{0%{transform:translate(-50vw,0)}12%{transform:translate(0,0)}20%{transform:translate(0,-10vh) rotate(-8deg)}28%{transform:translate(0,0) scale(1.05,.93)}36%{transform:translate(0,-6vh) rotate(8deg)}44%{transform:translate(0,0)}52%{transform:translate(0,-3vh)}60%,82%{transform:translate(0,0)}100%{transform:translate(-55vw,0)}}
-.conf{position:fixed;inset:0;pointer-events:none;z-index:8;overflow:hidden}
+.conf{position:fixed;inset:0;pointer-events:none;z-index:35;overflow:hidden}
 .conf i{position:absolute;top:-4vh;width:1.5vh;height:.9vh;border-radius:2px;animation:cf 3s ease-in both}
 @keyframes cf{to{transform:translate(var(--x),112vh) rotate(var(--g))}}
 .sl.e-zoom{animation:ezoom .9s cubic-bezier(.3,1.4,.5,1) both}
@@ -597,6 +597,24 @@ h2.sec .muted{font-family:var(--body)}
 .pz-it{display:flex;justify-content:space-between;align-items:center;gap:10px;border-bottom:1px solid var(--line);padding:10px 2px;width:100%;background:none;border-left:0;border-right:0;border-top:0;font:inherit;color:inherit;cursor:pointer;text-align:left}
 .pz-it .sw{flex:none;font-size:13px;font-weight:700;border-radius:999px;padding:6px 12px;background:#d3f9d8;color:#1b5e20}
 .pz-it.off .sw{background:#fdecee;color:#b02a37} .pz-it.off span:first-child{color:var(--muted);text-decoration:line-through}
+
+.tv-srt{position:fixed;inset:0;z-index:30;display:grid;place-items:center;text-align:center;background:radial-gradient(120% 90% at 50% 20%,var(--bg2),var(--bg));overflow:hidden}
+.tv-srt .srt-t{font-family:var(--display);color:var(--accent);font-size:clamp(48px,8vw,130px);line-height:1}
+.tv-srt .srt-p{font-size:clamp(22px,3.2vw,48px);margin:2vh 0 0;color:var(--ink)}
+.tv-srt .srt-p b{font-family:var(--display);color:var(--accent)}
+.tv-srt .srt-row{display:flex;align-items:center;justify-content:center;gap:4vw;margin-top:4vh}
+.tv-srt .srt-qr{width:min(26vh,260px);background:#fff;padding:1.4vh;border-radius:2vh}
+.tv-srt .srt-info{text-align:left;font-size:clamp(18px,2.4vw,34px);color:var(--muted);max-width:30vw}
+.tv-srt .srt-n{font-family:var(--display);font-size:clamp(40px,6vw,96px);color:var(--accent);line-height:1}
+.tv-srt .srt-roda{font-family:var(--display);font-size:clamp(56px,11vw,180px);line-height:1.05;color:var(--ink);min-height:1.2em;margin-top:3vh}
+.tv-srt .srt-roda.win{color:var(--accent);animation:srtWin .9s cubic-bezier(.2,1.6,.4,1) both}
+@keyframes srtWin{from{transform:scale(.4);opacity:0}}
+.tv-srt .srt-ok{font-size:clamp(22px,3vw,44px);color:var(--muted);margin-top:2vh}
+.srt-sug{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0}
+.srt-sug button{font:inherit;font-size:13.5px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:6px 12px;cursor:pointer}
+.srt-ganhou{background:#fff3bf;border-radius:18px;padding:16px;font-size:20px;font-weight:800;animation:pedNovo 1.2s ease 3}
+.srt-lista{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.srt-lista span{background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-size:13.5px}
 </style>
 </head>
 <body>
@@ -877,6 +895,7 @@ async function telaConvidado(){
       ${MESA&&f.mesas?`<span class="mesa-chip">🍽️ Mesa ${MESA}</span>`:''}
       <div class="fio"></div>
     </header>
+    ${f.ativo ? '<section class="card rsvp" id="srt" hidden></section>' : ''}
     ${f.ativo && f.valet ? '<section class="card rsvp" id="vlt"></section>' : ''}
     ${f.ativo && f.tem_cardapio && MESA ? '<section class="card rsvp" id="cdp"></section>' : ''}
     ${f.ativo && ((f.data && f.data > new Date().toLocaleDateString('sv')) || f.portaria) ? `<section class="card rsvp" id="rsvp"></section>` : ''}
@@ -904,7 +923,7 @@ async function telaConvidado(){
   document.querySelectorAll('.capa .enfc').forEach(im=>{ const t2=new Image(); t2.crossOrigin='anonymous'; t2.onload=()=>{ try{ const c=document.createElement('canvas'); c.width=c.height=16; const x=c.getContext('2d'); x.drawImage(t2,0,0,16,16); const d=x.getImageData(0,0,16,16).data; if(![0,15,240,255].some(k=>d[k*4+3]<200)) im.classList.add('sticker'); }catch(e){ im.classList.add('sticker'); } }; t2.src=im.src; });
   const nome=$('nome'); if(nome) nome.addEventListener('change',()=>store.set('mf_nome',nome.value.trim().slice(0,40)));
   $('mural').addEventListener('click', e=>{ const l=e.target.closest('[data-like]'); if(l) return curtir(l); const m=e.target.closest('[data-mol]'); if(m){ const p=POSTS.find(x=>x.id===+m.dataset.mol); if(p) abrirMoldura(midia(p.caminho), p.autor); } });
-  ligarPresenca(); ligarCardapio(MESA); ligarValet();
+  ligarPresenca(); ligarCardapio(MESA); ligarValet(); ligarSorteio();
   await atualizarMural(); setInterval(()=>{ if(!document.hidden) atualizarMural(); }, 20000);
 }
 async function atualizarMural(){
@@ -1047,6 +1066,24 @@ async function ligarValet(){
   const agendar=()=>{ clearTimeout(timer); if(!t || t.status==='entregue') return; const ms=['solicitado','buscando','aguardando'].includes(t.status)?6000:20000;
     timer=setTimeout(async()=>{ if(!document.hidden){ try{ const n=await rpc('fe_meu_valet',{p_festa:f.id,p_aparelho:deviceId()}); if(n && (n.status!==t.status || n.vaga!==t.vaga || (n.fotos||[]).length!==(t.fotos||[]).length)){ t=n; render(); return; } }catch(e){} } agendar(); }, ms); };
   render();
+}
+function ligarSorteio(){
+  const box=$('srt'); if(!box) return; const f=FESTA; let est=null, chave='', ganhouVisto=null;
+  const pintar=()=>{
+    const k=JSON.stringify([est&&est.aberto,est&&est.premio,est&&est.inscrito,est&&est.ganhou&&est.ganhou.em]);
+    if(!est || (!est.aberto && !est.ganhou)){ box.hidden=true; chave=k; return; }
+    box.hidden=false; if(k===chave){ const n=$('srtN'); if(n) n.textContent=est.n; return; } chave=k;
+    if(est.ganhou){ box.innerHTML=`<h2 class="sec">🎉 Você foi sorteado!</h2><div class="srt-ganhou">${est.ganhou.premio?esc(est.ganhou.premio):'Você ganhou!'}</div><p class="sub" style="margin-top:12px">Procure o anfitrião. Seu nome está no telão! 🥳</p>`;
+      if(ganhouVisto!==est.ganhou.em){ ganhouVisto=est.ganhou.em; if(navigator.vibrate) navigator.vibrate([300,120,300,120,600]); box.scrollIntoView({behavior:'smooth',block:'center'}); } return; }
+    if(est.inscrito){ box.innerHTML=`<h2 class="sec">🎲 Você está no sorteio!</h2>${est.premio?`<p class="sub">Prêmio: <b>${esc(est.premio)}</b></p>`:''}<p style="margin:0">Fique de olho no telão 🤞 · <b id="srtN">${est.n}</b> participantes</p>`; return; }
+    box.innerHTML=`<h2 class="sec">🎲 Sorteio no telão!</h2>${est.premio?`<p class="sub">Prêmio: <b>${esc(est.premio)}</b></p>`:''}
+      <input class="in" id="srtNome" maxlength="40" placeholder="Seu nome" value="${esc(nomeAtual()||store.get('mf_nome')||'')}" style="max-width:320px;margin:0 auto 10px;display:block">
+      <button class="btn big" id="srtEntrar">🙋 Quero participar</button><div class="msg" id="srtM"></div>`;
+    $('srtEntrar').onclick=async()=>{ const nm=$('srtNome').value.trim(); if(nm.length<2){ $('srtM').className='msg err'; $('srtM').textContent='Escreva seu nome.'; return; }
+      $('srtEntrar').disabled=true; try{ est=await rpc('fe_sorteio_entrar',{p_festa:f.id,p_aparelho:deviceId(),p_nome:nm}); store.set('mf_nome',nm); pintar(); toast('Você está no sorteio! 🤞'); }
+      catch(e){ $('srtM').className='msg err'; $('srtM').textContent=/aberto|nome/.test(e.message||'')?e.message:ERR(e); $('srtEntrar').disabled=false; } }; };
+  const ler=async()=>{ if(document.hidden) return; try{ est=await rpc('fe_sorteio_estado',{p_festa:f.id,p_aparelho:deviceId()}); pintar(); }catch(e){} };
+  ler(); setInterval(ler, 8000);
 }
 function telaNaoAchou(){
   aplicarTema(TEMA_MARCA);
@@ -1381,14 +1418,32 @@ async function telaTelao(){
     const modo=(e&&e.modo)||'mural', sl=(e&&e.slides)||[];
     if(sl.join()!==slidesCache.join()){ slidesCache=sl; sl.forEach(p=>{ const im=new Image(); im.src=midia(p); }); }
     if(modo==='apresentacao' && sl.length){ camada.className='tv-apr'; camada.hidden=false; const src=midia(sl[Math.min(e.slide||0,sl.length-1)]); const img=camada.querySelector('img'); if(!img || img.dataset.src!==src) camada.innerHTML=`<img data-src="${src}" src="${src}" alt="">`; }
+    else if(modo==='sorteio'){ telaoSorteio(e.sorteio||{}); }
     else if(modo==='pausa'){ camada.className='tv-pausa'; camada.hidden=false; if(!camada.querySelector('.who')) camada.innerHTML=`<div><div class="who">${esc(nome)}</div><p>Já voltamos 💛</p></div>`; }
     else { camada.hidden=true; camada.innerHTML=''; }
-    const parar = modo!=='mural' && (modo==='pausa' || sl.length);
+    const parar = modo!=='mural' && (modo==='pausa' || modo==='sorteio' || sl.length);
     if(parar && !tv.ctlPausa){ tv.ctlPausa=true; tv.paused=true; clearTimeout(tv.timer); $('stage').querySelectorAll('audio,video').forEach(m=>{ try{ m.pause(); }catch(_){} }); if(mus) mus.duck(true); }
     if(!parar && tv.ctlPausa){ tv.ctlPausa=false; tv.paused=false; if(mus) mus.duck(false); if(tv.started) proxima(); }
-    tvCtl={modo, slide:e&&e.slide||0, em:e&&e.em};
+    if(modo!=='sorteio') srtUlt=null;
+    tvCtl={modo, slide:e&&e.slide||0, em:e&&e.em, n:e&&e.sorteio?e.sorteio.n:null};
   };
-  const lerCtl=async()=>{ try{ const e=await rpc('fe_tv_estado',{p_festa:f.id}); if(!e) return; if(e.em!==tvCtl.em || e.modo!==tvCtl.modo) aplicarCtl(e); }catch(_){} };
+  let srtUlt=null, srtRodando=false;
+  const telaoSorteio=s=>{
+    const g=s.ganhador, novo = g && srtUlt!==null && g.id!==srtUlt, recente = g && srtUlt===null && (Date.now()-new Date(g.em))<12000;
+    if(srtUlt===null) srtUlt = g ? (recente ? -1 : g.id) : 0;
+    camada.className='tv-srt'; camada.hidden=false;
+    if((novo || recente) && !srtRodando){ srtUlt=g.id; srtRodando=true;
+      camada.innerHTML=`<div><div class="srt-t" style="font-size:clamp(36px,5vw,80px)">🎲 Sorteando…</div>${g.premio?`<div class="srt-p">Prêmio: <b>${esc(g.premio)}</b></div>`:''}<div class="srt-roda" id="srtR"></div><div class="srt-ok" id="srtOk"></div></div>`;
+      const nomes=(s.nomes&&s.nomes.length?s.nomes:[g.nome.split(' ')[0]]); let i=0, d=60; const fim=Date.now()+5200;
+      const girar=()=>{ const el=$('srtR'); if(!el){ srtRodando=false; return; } if(Date.now()<fim){ el.textContent=nomes[i++%nomes.length]; d=Math.min(420,d*1.09); setTimeout(girar,d); return; }
+        el.textContent=g.nome; el.classList.add('win'); const tt=camada.querySelector('.srt-t'); if(tt) tt.textContent='🏆 Sorteado!'; $('srtOk').innerHTML='🎉 Parabéns! Procure o anfitrião 🎉'; confete(140); if(chars&&chars.festa) chars.festa(); srtRodando=false; };
+      girar(); return; }
+    if(srtRodando) return;
+    if(s.aberto || !g){ camada.innerHTML=`<div><div class="srt-t">🎲 Sorteio!</div>${s.premio?`<div class="srt-p">Prêmio: <b>${esc(s.premio)}</b></div>`:''}
+        <div class="srt-row"><div class="srt-qr" id="srtQr"></div><div class="srt-info"><div class="srt-n">${s.n||0}</div>participante${s.n==1?'':'s'}<br><br>Aponte a câmera e toque em <b>“Quero participar”</b></div></div></div>`; qrInto($('srtQr'), url, 300); }
+    else camada.innerHTML=`<div><div class="srt-t" style="font-size:clamp(36px,5vw,80px)">🏆 Sorteado</div><div class="srt-roda win">${esc(g.nome)}</div>${g.premio?`<div class="srt-p">${esc(g.premio)}</div>`:''}</div>`;
+  };
+  const lerCtl=async()=>{ try{ const e=await rpc('fe_tv_estado',{p_festa:f.id}); if(!e) return; if(e.em!==tvCtl.em || e.modo!==tvCtl.modo || (e.sorteio && e.sorteio.n!==tvCtl.n)) aplicarCtl(e); }catch(_){} };
   setInterval(lerCtl, 2000); lerCtl();
   document.addEventListener('keydown', e=>{ if(tvCtl.modo!=='apresentacao' || !slidesCache.length) return;
     if(e.key==='ArrowRight' || e.key==='ArrowLeft'){ e.stopImmediatePropagation(); const n=Math.max(0,Math.min(slidesCache.length-1,tvCtl.slide+(e.key==='ArrowRight'?1:-1))); aplicarCtl({modo:'apresentacao',slide:n,em:tvCtl.em,slides:slidesCache}); } }, true);
@@ -1701,12 +1756,13 @@ function painelAdmin(){
      <button data-v="compartilhar" aria-pressed="false">📲 Convite e links</button>
      <button data-v="cardapio" aria-pressed="false">🍽️ Cardápio e pedidos</button>
      <button data-v="apresentacao" aria-pressed="false">🎤 Apresentação</button>
+     <button data-v="sorteio" aria-pressed="false">🎲 Sorteio</button>
      <button data-v="recordacoes" aria-pressed="false">📖 Álbum</button>
    </div>
    <div id="vw"></div></div>`;
   $('sair').onclick=()=>{ store.sset('mf_pin_'+SLUG,null); store.set('mf_pin_'+SLUG,null); location.reload(); };
   const abas=$('abasTop');
-  abas.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; abas.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed', x===b)); if(b.dataset.v==='meutema' && $('seuCta')) $('seuCta').remove(); ({moderar:vModerar, festa:vFesta, meutema:vMeuTema, compartilhar:vCompartilhar, recordacoes:vRecordacoes, cardapio:vCardapio, apresentacao:vApresentacao})[b.dataset.v](); };
+  abas.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; abas.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed', x===b)); if(b.dataset.v==='meutema' && $('seuCta')) $('seuCta').remove(); ({moderar:vModerar, festa:vFesta, meutema:vMeuTema, compartilhar:vCompartilhar, recordacoes:vRecordacoes, cardapio:vCardapio, apresentacao:vApresentacao, sorteio:vSorteio})[b.dataset.v](); };
   const ir=v=>{ const b=abas.querySelector(`[data-v="${v}"]`); if(b) b.click(); };
   document.querySelectorAll('[data-ir]').forEach(b=>b.onclick=()=>ir(b.dataset.ir));
   if($('psOk')) $('psOk').onclick=()=>{ store.set('mf_novo_'+f.slug,null); $('passos').remove(); };
@@ -1717,7 +1773,7 @@ function painelAdmin(){
   else if(pidS && /^[0-9a-f-]{36}$/.test(pidS) && f.plano==='teste') fetch(FN_PAG,{method:'POST',headers:{'Content-Type':'application/json',apikey:SUPABASE_KEY},body:JSON.stringify({acao:'conferir',pagamento:pidS})}).then(r=>r.json()).then(async j=>{ if(j.status==='approved'){ FESTA=await carregarFesta(SLUG); store.set('mf_pag_'+f.slug,null); toast('Pagamento confirmado! Festa liberada 🎉',4000); painelAdmin(); } }).catch(()=>{});
   if($('seuGo')) $('seuGo').onclick=()=>{ ir('meutema'); $('vw').scrollIntoView({behavior:'smooth'}); };
   const abaIni = Q.get('aba') || (!f.custom ? 'meutema' : 'moderar');
-  ir(['meutema','moderar','festa','compartilhar','recordacoes','cardapio','apresentacao'].includes(abaIni) ? abaIni : 'moderar'); if(ADM.view!=='moderar') carregarAdmPosts();
+  ir(['meutema','moderar','festa','compartilhar','recordacoes','cardapio','apresentacao','sorteio'].includes(abaIni) ? abaIni : 'moderar'); if(ADM.view!=='moderar') carregarAdmPosts();
   setInterval(()=>{ if(!document.hidden && ADM.view==='moderar') carregarAdmPosts(); }, 12000);
 }
 function ativarFesta(){
@@ -2132,6 +2188,47 @@ async function vApresentacao(){
       M.innerHTML='<span class="spin"></span> Salvando…'; await rpc('fe_admin_slides',{p_slug:SLUG,p_pin:PIN,p_slides:caminhos}); toast(`${caminhos.length} slide${caminhos.length>1?'s':''} pronto${caminhos.length>1?'s':''}! 🎤`); vApresentacao();
     }catch(err){ M.className='msg err'; M.textContent=/80 slides/.test(err.message||'')?'Máximo de 80 slides.':'Não consegui preparar os slides. '+ERR(err); } };
 }
+const SORTEIO_SUG=['🎁 Um presente surpresa','💃 Uma dança com o homenageado','🎤 Discurso improvisado de 1 minuto','📸 Foto oficial com o homenageado','🍾 Um brinde especial','🎶 Cantar um trecho no microfone','🍰 O primeiro pedaço do bolo','🕺 Puxar a próxima dança'];
+async function vSorteio(){
+  ADM.view='sorteio'; const f=FESTA; let info={}, lista={participantes:[],ganhadores:[]};
+  $('vw').innerHTML=`<div class="card" style="padding:18px"><h3 style="margin:0 0 4px">🎲 Sorteio entre os convidados <span class="muted" style="font-size:14px;font-weight:500">(opcional)</span></h3>
+      <p class="muted" style="margin:0 0 12px">Escreva o prêmio e abra o sorteio: o telão mostra o prêmio e o QR, os convidados tocam em “Quero participar” no celular e você sorteia na hora, com animação no telão.</p>
+      <label class="f">O que a pessoa sorteada ganha (ou vai fazer)<input class="in" id="srP" maxlength="80" placeholder="Ex.: Uma dança com a aniversariante"></label>
+      <div class="srt-sug">${SORTEIO_SUG.map(x=>`<button type="button" data-sug="${esc(x)}">${x}</button>`).join('')}</div>
+      <label class="row" style="gap:8px;font-weight:600;margin-top:12px"><input type="checkbox" id="srRep" style="width:20px;height:20px"> Quem já ganhou pode ser sorteado de novo</label>
+      <div class="ctrl" style="margin-top:14px">
+        <button class="btn" id="srAbrir">📢 Abrir e mostrar no telão</button>
+        <button class="btn ok" id="srSortear">🎲 Sortear agora</button>
+        <button class="btn ghost" id="srTv">📺 Mostrar no telão</button>
+        <button class="btn ghost" id="srMural">💌 Voltar ao mural</button>
+        <button class="btn alt" id="srFechar">🔒 Encerrar sorteio</button></div>
+      <div class="msg" id="srM"></div></div>
+    <div class="grid2" style="margin-top:12px">
+      <div class="card" style="padding:18px"><div class="row" style="justify-content:space-between"><h3 style="margin:0">🙋 Participantes <span class="muted" id="srN"></span></h3><button class="btn ghost sm" id="srLimpar">Zerar lista</button></div><p class="muted" id="srEst" style="margin:6px 0 0;font-size:14px"></p><div class="srt-lista" id="srL"></div></div>
+      <div class="card" style="padding:18px"><h3 style="margin:0">🏆 Sorteados</h3><div id="srG" style="margin-top:8px"></div></div></div>`;
+  const pintar=()=>{ $('srN').textContent=`(${lista.participantes.length})`; $('srEst').textContent=info.aberto?'🟢 Inscrições abertas: o convidado vê o botão “Quero participar” no celular.':'⚪ Inscrições fechadas.';
+    if(document.activeElement!==$('srP') && info.premio!=null && !$('srP').dataset.mexeu) $('srP').value=info.premio||'';
+    $('srL').innerHTML=lista.participantes.length?lista.participantes.map(n=>`<span>${esc(n)}</span>`).join(''):'<p class="muted" style="margin:0">Ninguém ainda. Abra o sorteio para os convidados entrarem.</p>';
+    $('srG').innerHTML=lista.ganhadores.length?lista.ganhadores.map(g=>`<div class="linkbox" style="margin-bottom:6px"><code>${new Date(g.em).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})} · <b>${esc(g.nome)}</b>${g.premio?` · ${esc(g.premio)}`:''}</code></div>`).join(''):'<p class="muted" style="margin:0">Nenhum sorteio feito ainda.</p>'; };
+  const carregar=async()=>{ try{ lista=await rpc('fe_admin_sorteio_lista',{p_slug:SLUG,p_pin:PIN}); const e=await rpc('fe_sorteio_estado',{p_festa:f.id,p_aparelho:'anfitriao-'+SLUG}); if(e) info=e; pintar(); }catch(e){} };
+  const acao=async(a, btn)=>{ const M=$('srM'); if(btn) btn.disabled=true; M.className='msg'; M.textContent='';
+    try{ const r=await rpc('fe_admin_sorteio',{p_slug:SLUG,p_pin:PIN,p_acao:a,p_premio:$('srP').value.trim(),p_repetir:$('srRep').checked}); delete $('srP').dataset.mexeu;
+      if(a==='sortear' && r.ganhador){ M.className='msg ok'; M.innerHTML=`🎉 Sorteado: <b>${esc(r.ganhador.nome)}</b>. O telão faz a animação agora.`; }
+      else toast({abrir:'Sorteio aberto! O telão já mostra o prêmio e o QR 🎲',fechar:'Sorteio encerrado. O telão voltou ao mural.',limpar:'Lista de participantes zerada.',premio:'Prêmio atualizado.'}[a]||'Pronto!',3000);
+      await carregar(); }
+    catch(e){ M.className='msg err'; M.textContent=/sortead|Ninguém|aberto/.test(e.message||'')?e.message:ERR(e); }
+    if(btn) btn.disabled=false; };
+  $('srP').oninput=()=>{ $('srP').dataset.mexeu='1'; };
+  document.querySelectorAll('[data-sug]').forEach(b=>b.onclick=()=>{ $('srP').value=b.dataset.sug; $('srP').dataset.mexeu='1'; if(info.aberto) acao('premio'); });
+  $('srP').onchange=()=>{ if(info.aberto) acao('premio'); };
+  $('srAbrir').onclick=e=>{ if(!$('srP').value.trim()){ $('srM').className='msg err'; $('srM').textContent='Escreva o prêmio primeiro (ou toque numa sugestão).'; return; } acao('abrir',e.target); };
+  $('srSortear').onclick=e=>acao('sortear',e.target);
+  $('srFechar').onclick=e=>acao('fechar',e.target);
+  $('srLimpar').onclick=e=>{ if(confirm('Zerar a lista de participantes? Os convidados precisarão entrar de novo.')) acao('limpar',e.target); };
+  $('srTv').onclick=async()=>{ try{ await rpc('fe_admin_tv',{p_slug:SLUG,p_pin:PIN,p_modo:'sorteio',p_slide:0}); toast('O telão está mostrando o sorteio.'); }catch(e){ toast(ERR(e)); } };
+  $('srMural').onclick=async()=>{ try{ await rpc('fe_admin_tv',{p_slug:SLUG,p_pin:PIN,p_modo:'mural',p_slide:0}); toast('O telão voltou ao mural 💌'); }catch(e){ toast(ERR(e)); } };
+  await carregar(); const it=setInterval(()=>{ if(ADM.view!=='sorteio') return clearInterval(it); if(!document.hidden) carregar(); }, 4000);
+}
 function vRecordacoes(){
   ADM.view='recordacoes';
   const ap=ADM.posts.filter(p=>p.status==='aprovado'); const c={foto:0,texto:0,audio:0,video:0}; ap.forEach(p=>c[p.tipo]++);
@@ -2537,7 +2634,7 @@ const PERFIS={
     passosT:'Como funciona ✨',
     passos:[['📲 O convidado aponta a câmera','Para o QR Code da mesa ou o link do grupo. Não precisa baixar nada.'],['💌 Deixa a homenagem','Uma foto, um recado escrito, um áudio ou um vídeo.'],['✅ Você aprova','Nada aparece no telão sem passar por quem organiza.'],['📺 Telão e álbum','As homenagens passam ao vivo e viram um álbum em PDF.']],
     featT:'Do jeito da sua festa 🎈',
-    feat:[['🎨 Tema e personagens','Escolha um dos temas prontos ou use a arte do seu convite.'],['📖 A história do homenageado','De 8 a 12 fotos, do bebê até hoje, no telão e no álbum.'],['🎵 Música no telão','Uma trilha suave, que se cala sozinha quando entra um vídeo.'],['💌 Convite com QR Code','Para o WhatsApp ou para imprimir. O convidado já chega sabendo.'],['✅ Confirmação de presença','O convidado confirma pelo link e você vê quantos adultos e crianças vão.'],['❤️ Curtidas e moldura','Os convidados curtem as homenagens e postam a foto com a moldura da festa.']],
+    feat:[['🎨 Tema e personagens','Escolha um dos temas prontos ou use a arte do seu convite.'],['📖 A história do homenageado','De 8 a 12 fotos, do bebê até hoje, no telão e no álbum.'],['🎵 Música no telão','Uma trilha suave, que se cala sozinha quando entra um vídeo.'],['💌 Convite com QR Code','Para o WhatsApp ou para imprimir. O convidado já chega sabendo.'],['✅ Confirmação de presença','O convidado confirma pelo link e você vê quantos adultos e crianças vão.'],['🎲 Sorteio no telão','Você escolhe o prêmio (um presente, uma dança, um discurso) e o telão sorteia entre quem está na festa.'],['❤️ Curtidas e moldura','Os convidados curtem as homenagens e postam a foto com a moldura da festa.']],
     mais:'Festa grande? Também tem portaria com QR, cardápio do buffet, pedidos na mesa, manobrista e apresentação no telão. Tudo opcional.'},
   buffet:{chip:'🍽️ Buffet ou cerimonialista', marca:'🍽️ Para buffets e cerimonialistas', h1:'Entregue uma festa que o concorrente não entrega.',
     sub:'Telão de homenagens, cardápio pelo celular, pedidos na mesa, portaria com QR e manobrista. Você indica, o cliente paga direto e você ganha 30% de cada festa.',
@@ -2553,7 +2650,7 @@ const PERFIS={
     passosT:'Como funciona no seu evento 📋',
     passos:[['📝 Cadastre','Crie o evento, envie os slides em PDF e o cardápio do buffet.'],['🎟️ Convide','Os convidados confirmam pelo link e recebem o ingresso com QR.'],['🚪 Credencie','Na entrada, a equipe lê o QR pelo celular e você vê quem chegou.'],['🎤 Apresente','Passe os slides e pause o telão pelo celular, sem precisar de técnico.']],
     featT:'Tudo o que o evento precisa 💼',
-    feat:[['🎤 Apresentação no telão','Slides em PDF, controlados pelo celular: passar, pausar e voltar ao mural.'],['🚪 Credenciamento com QR','Ingresso no celular, conferência na entrada e contagem em tempo real.'],['✅ Lista de presença','Quem confirmou, quem chegou e quantos são, para copiar e enviar.'],['🍽️ Cardápio e pedidos','Escolha do prato antes do evento e pedidos de bebida na mesa.'],['🚗 Manobrista','Registro do carro com fotos e pedido de saída pelo celular.'],['💬 Mural de mensagens','Fotos e recados da equipe no telão, para homenagens e premiações.']]}
+    feat:[['🎤 Apresentação no telão','Slides em PDF, controlados pelo celular: passar, pausar e voltar ao mural.'],['🚪 Credenciamento com QR','Ingresso no celular, conferência na entrada e contagem em tempo real.'],['✅ Lista de presença','Quem confirmou, quem chegou e quantos são, para copiar e enviar.'],['🍽️ Cardápio e pedidos','Escolha do prato antes do evento e pedidos de bebida na mesa.'],['🚗 Manobrista','Registro do carro com fotos e pedido de saída pelo celular.'],['💬 Mural de mensagens','Fotos e recados da equipe no telão, para homenagens e premiações.'],['🎲 Sorteio no telão','Brindes e prêmios sorteados ao vivo entre os participantes, com animação no telão.']]}
 };
 const CENAS={
   festa: o=>`<div class="lpol"><div class="lfoto"></div><span>a primeira valsa</span></div>

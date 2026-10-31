@@ -175,6 +175,11 @@ h2.sec{font-weight:700;font-size:22px;margin:28px 0 12px;display:flex;align-item
 .conf i{position:absolute;top:-4vh;width:1.5vh;height:.9vh;border-radius:2px;animation:cf 3s ease-in both}
 @keyframes cf{to{transform:translate(var(--x),112vh) rotate(var(--g))}}
 .sl.e-zoom{animation:ezoom .9s cubic-bezier(.3,1.4,.5,1) both}
+.sl.e-calma{animation:ecalma .7s ease-out both}
+@keyframes ecalma{from{opacity:0;transform:translateY(1.2vh)}to{opacity:1;transform:none}}
+.sl-intro.quieto .nm{color:var(--ink);text-shadow:none;font-size:clamp(48px,7.5vw,128px);line-height:1.05;max-width:86vw;margin:0 auto}
+.sl-intro.quieto .nm span{animation:none}
+.sl-intro.quieto .hey{font-size:clamp(16px,1.8vw,30px);letter-spacing:.14em;text-transform:uppercase}
 .sl.e-left{animation:eleft .8s cubic-bezier(.3,1.2,.5,1) both}
 .sl.e-right{animation:eright .8s cubic-bezier(.3,1.2,.5,1) both}
 .sl.e-up{animation:eup .8s cubic-bezier(.3,1.2,.5,1) both}
@@ -1586,14 +1591,14 @@ async function telaTelao(){
     mostrar(p);
   }
   const ENTRADAS=['e-zoom','e-left','e-right','e-up','e-tilt'];
-  const giro = () => (Math.random()*8-4).toFixed(1)+'deg';
+  const giro = () => CORP(f) ? '0deg' : (Math.random()*8-4).toFixed(1)+'deg';
   function mostrar(p){
     const st=$('stage'); const old=st.firstElementChild; if(old){ old.classList.add('out'); const o=old; setTimeout(()=>o.remove(),600); old.querySelectorAll('audio,video').forEach(m=>{ try{ m.pause(); }catch(e){} }); }
-    const el=document.createElement('div'); el.className='sl '+ENTRADAS[Math.floor(Math.random()*ENTRADAS.length)]; const by = p.autor ? esc(p.autor) : '';
+    const el=document.createElement('div'); el.className='sl '+(CORP(f)?'e-calma':ENTRADAS[Math.floor(Math.random()*ENTRADAS.length)]); const by = p.autor ? esc(p.autor) : '';
     let dur=8000;
     if(p.tipo==='hist'){ el.classList.add('sl-hist'); el.innerHTML=`<div class="pol" style="--r:${giro()}"><img src="${midia(p.caminho)}" alt=""></div><div class="cap">📖 A história de ${esc(nome)}</div>`; dur=6500; }
     else if(p.tipo==='col'){ el.classList.add('sl-col'); el.innerHTML=p.fotos.map((c,i)=>`<div class="pol c${i+1}" style="--r:${[-9,4,10][i]}deg;animation-delay:${i*.45}s"><img src="${midia(c)}" alt=""></div>`).join('')+`<div class="cap">📖 A história de ${esc(nome)}</div>`; dur=8500; }
-    else if(p.tipo==='intro'){ el.className='sl sl-intro e-zoom'; el.innerHTML=`<div class="hey">${CORP(f)?'Bem-vindos':'✨ Bem-vindos à festa ✨'}</div><div class="nm">${(()=>{ let i=0; return nome.split(' ').map(w=>`<span class="w" style="display:inline-block;white-space:nowrap">${[...w].map(ch=>`<span style="animation-delay:${(i++*.08).toFixed(2)}s">${esc(ch)}</span>`).join('')}</span>`).join(' '); })()}</div><div class="sub">${esc(subtitulo(f))}</div><div class="cta">${CORP(f)?'📲 Participe pelo QR Code aqui embaixo':'📸 ✍️ 🎤 🎥 Mande sua homenagem pelo QR Code aqui embaixo!'}</div>`; dur=7500; if(!CORP(f)){ confete(60); chars.festa(); } }
+    else if(p.tipo==='intro'){ el.className='sl sl-intro '+(CORP(f)?'quieto e-calma':'e-zoom'); el.innerHTML=`<div class="hey">${CORP(f)?'Bem-vindos':'✨ Bem-vindos à festa ✨'}</div><div class="nm">${CORP(f)?esc(nome):(()=>{ let i=0; return nome.split(' ').map(w=>`<span class="w" style="display:inline-block;white-space:nowrap">${[...w].map(ch=>`<span style="animation-delay:${(i++*.08).toFixed(2)}s">${esc(ch)}</span>`).join('')}</span>`).join(' '); })()}</div><div class="sub">${esc(subtitulo(f))}</div><div class="cta">${CORP(f)?'Participe pelo QR Code aqui embaixo':'📸 ✍️ 🎤 🎥 Mande sua homenagem pelo QR Code aqui embaixo!'}</div>`; dur=7500; if(!CORP(f)){ confete(60); chars.festa(); } }
     else if(p.tipo==='qr'){ el.className='sl tv-empty e-zoom'; el.innerHTML=`<div class="qr" id="tvQrBig"></div><h2>${tv.list.length?'Deixe a sua homenagem também!':'Mande a primeira homenagem!'}</h2><p>Aponte a câmera do celular para o código</p>`; dur=7000; }
     else if(p.tipo==='foto'){ el.classList.add('sl-foto'); el.innerHTML=`<img class="ph" style="--r:${giro()}" src="${midia(p.caminho)}" alt="">${(p.texto||by||p.curtidas)?`<div class="cap">${esc(p.texto||'')}${p.curtidas?`<span class="tvlike">♥ ${p.curtidas}</span>`:''}${Object.entries(p.reacoes||{}).map(([e,n])=>`<span class="tvreac">${e} ${n}</span>`).join('')}${by?`<small>📸 ${by}</small>`:''}</div>`:''}`; dur=8000; }
     else if(p.tipo==='correio'){ el.classList.add('sl-texto','sl-correio'); const L=(p.texto||'').length; const fs=L<60?6:L<140?4.6:3.6; el.innerHTML=`<div><div class="env">${CORP(f)?'💬 Recado para um colega':'💌 Correio elegante'}</div><div class="pa">Para: ${esc(p.para)}</div><div class="q${t.fundo?' card-on':''}" style="font-size:${fs}vw">${esc(p.texto)}</div><div class="by">${p.de?'— '+esc(p.de):(CORP(f)?'— um colega':'🤫 De: alguém especial')}</div></div>`; dur=Math.min(16000, 8000+L*40); }

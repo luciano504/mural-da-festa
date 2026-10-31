@@ -143,6 +143,7 @@ h2.sec{font-weight:700;font-size:22px;margin:28px 0 12px;display:flex;align-item
 @keyframes eq{0%,100%{height:15%}50%{height:100%}}
 .sl-audio .mic{font-size:12vh}
 .tv-bar{display:flex;align-items:center;gap:2vw;padding:1.2vh 3vw 2.2vh}
+body.sem-qr .tv-bar{display:none}
 .tv-bar .qr{background:#fff;padding:1vh;border-radius:1.4vh;line-height:0}
 .tv-bar .qr{width:17vh;flex:none}
 .tv-bar b{display:block;font-size:clamp(20px,2.6vw,44px);font-family:var(--display);color:var(--accent)}
@@ -420,6 +421,28 @@ h2.sec .muted{font-family:var(--body)}
 .lperfis button{font:inherit;font-size:14.5px;font-weight:600;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 16px;cursor:pointer;transition:background .2s,color .2s}
 .lperfis button[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:var(--on)}
 .lmais{margin:18px 0 0;color:var(--muted);font-size:15px;border-left:3px solid var(--accent2);padding-left:12px}
+.cdp-pes{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0 4px;font-weight:600}
+.cdp-sec h4 small{font-weight:500;color:var(--muted);font-size:13px;margin-left:6px}
+.cdp-pp{display:flex;flex-direction:column;gap:6px;margin:8px 0 10px}
+.cdp-pl{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.cdp-chips{display:flex;flex-wrap:wrap;gap:8px}
+.cdp-chips button{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;padding:10px 12px;border:1px solid var(--line,#dce2ea);border-radius:12px;background:var(--surface);color:var(--ink);font:inherit;font-weight:600;font-size:15px;cursor:pointer;min-height:44px}
+.cdp-chips button small{font-weight:400;font-size:12px;color:var(--muted)}
+.cdp-chips button em{font-style:normal;font-size:11px;font-weight:700;color:#b45309;text-transform:uppercase}
+.cdp-chips button[aria-pressed="true"]{border:2px solid var(--accent);background:color-mix(in srgb,var(--accent) 12%, var(--surface))}
+.cdp-chips button:disabled{opacity:.5;cursor:not-allowed}
+.vl-fila{margin:12px 0 0;font-size:15px;color:var(--muted)}
+.vl-pos{display:flex;flex-direction:column;align-items:center;gap:2px;margin:14px auto 0;padding:14px 22px;border-radius:16px;background:color-mix(in srgb,var(--accent) 10%, var(--surface));border:1px solid var(--line)}
+.vl-pos span{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.vl-pos b{font-size:48px;line-height:1;color:var(--accent)}
+.vl-pos small{font-size:14px;color:var(--muted)}
+.mesa-ok{display:inline-flex;align-items:center;gap:8px;margin-top:10px;padding:10px 16px;border-radius:14px;background:color-mix(in srgb,var(--accent) 12%, var(--surface));font-weight:700;font-size:18px}
+.mesa-ok b{font-size:28px;color:var(--accent)}
+.pmesa{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--ink)}
+.pmesa input{width:64px;height:34px;padding:0 8px;border:1px solid var(--line);border-radius:8px;font:inherit}
+.cv-up{display:block;width:min(420px,100%);margin:0 auto 18px;padding:0;border:0;background:none;cursor:pointer;font:inherit}
+.cv-up img{display:block;width:100%;max-height:420px;object-fit:cover;object-position:top;border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,.14)}
+.cv-up span{display:block;margin-top:8px;font-size:14px;color:var(--muted)}
 .lcom{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:720px}
 @media (max-width:640px){.lcom{grid-template-columns:1fr}}
 .lcom div{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px 18px;display:flex;flex-direction:column;gap:4px}
@@ -992,6 +1015,7 @@ async function telaConvidado(){
       ${MESA&&f.mesas?`<span class="mesa-chip">🍽️ Mesa ${MESA}</span>`:''}
       <div class="fio"></div>
     </header>
+    <div id="cvUp"></div>
     ${f.ativo && f.perguntas_ativas ? '<section class="card rsvp" id="prg"></section>' : ''}
     ${f.ativo ? '<section class="card rsvp" id="qz" hidden></section>' : ''}
     ${f.ativo ? '<section class="card rsvp" id="srt" hidden></section>' : ''}
@@ -1023,7 +1047,7 @@ async function telaConvidado(){
   document.querySelectorAll('.capa .enfc').forEach(im=>{ const t2=new Image(); t2.crossOrigin='anonymous'; t2.onload=()=>{ try{ const c=document.createElement('canvas'); c.width=c.height=16; const x=c.getContext('2d'); x.drawImage(t2,0,0,16,16); const d=x.getImageData(0,0,16,16).data; if(![0,15,240,255].some(k=>d[k*4+3]<200)) im.classList.add('sticker'); }catch(e){ im.classList.add('sticker'); } }; t2.src=im.src; });
   const nome=$('nome'); if(nome) nome.addEventListener('change',()=>store.set('mf_nome',nome.value.trim().slice(0,40)));
   $('mural').addEventListener('click', e=>{ const l=e.target.closest('[data-like]'); if(l) return curtir(l); const rc=e.target.closest('[data-reac]'); if(rc) return reagir(rc); const cm=e.target.closest('[data-com]'); if(cm) return abrirComentarios(+cm.dataset.com); const m=e.target.closest('[data-mol]'); if(m){ const p=POSTS.find(x=>x.id===+m.dataset.mol); if(p) abrirMoldura(midia(p.caminho), p.autor); } });
-  ligarPresenca(); ligarCardapio(MESA); ligarValet(); ligarSorteio(); ligarQuiz(); ligarCorreio(); ligarPerguntas(MESA);
+  ligarConvite(); ligarPresenca(); ligarCardapio(MESA); ligarValet(); ligarSorteio(); ligarQuiz(); ligarCorreio(); ligarPerguntas(MESA);
   await atualizarMural(); setInterval(()=>{ if(!document.hidden) atualizarMural(); }, 20000);
 }
 async function atualizarMural(){
@@ -1075,6 +1099,21 @@ async function curtir(btn){
   try{ const r=await rpc('fe_curtir',{p_post:id,p_aparelho:deviceId()}); b.textContent=r.curtidas; const p=POSTS.find(x=>x.id===id); if(p) p.curtidas=r.curtidas;
     if(r.curtido!==on){ r.curtido?set.add(id):set.delete(id); store.set('mf_curt_'+FESTA.id, JSON.stringify([...set])); btn.classList.toggle('on',r.curtido); btn.querySelector('.co').textContent=r.curtido?'♥':'♡'; } }catch(e){}
 }
+async function ligarConvite(){
+  const box=$('cvUp'); if(!box) return; let img=null; try{ img=await rpc('fe_convite_img',{p_festa:FESTA.id}); }catch(e){} if(!img) return;
+  box.innerHTML=`<button type="button" class="cv-up" id="cvUpB" aria-label="Ver o convite"><img src="${midia(img)}" alt="Convite"><span>Toque para ver o convite</span></button>`;
+  $('cvUpB').onclick=()=>{ abrirFolha(`<h3>💌 Convite</h3><img src="${midia(img)}" alt="Convite" style="width:100%;border-radius:12px;display:block"><div class="foot"><a class="btn ghost" href="${midia(img)}" download target="_blank" rel="noopener">Salvar</a><button class="btn" id="eCancel">Fechar</button></div>`); $('eCancel').onclick=fecharFolha; };
+}
+// convite enviado pelo anfitrião + faixa com o QR da festa
+async function conviteProprio(f, img){
+  const im=await new Promise((ok,no)=>{ const i=new Image(); i.crossOrigin='anonymous'; i.onload=()=>ok(i); i.onerror=no; i.src=midia(img); });
+  const W=1080, h=Math.round(im.height*W/im.width), B=300, cv=document.createElement('canvas'); cv.width=W; cv.height=h+B; const c=cv.getContext('2d');
+  c.drawImage(im,0,0,W,h); const t=temaDe(f); c.fillStyle='#ffffff'; c.fillRect(0,h,W,B);
+  const q=qrCanvas(linkFesta(f.slug), 240); c.drawImage(q,40,h+30,240,240);
+  c.fillStyle=t.ink||'#16213a'; c.font='700 44px Figtree, system-ui, sans-serif'; c.fillText(CORP(f)?'Confirme e participe':'Confirme sua presença',320,h+120);
+  c.fillStyle='#5d6b82'; c.font='500 30px Figtree, system-ui, sans-serif'; c.fillText('Aponte a câmera do celular para o código',320,h+175);
+  return cv;
+}
 async function ligarPresenca(){
   const box=$('rsvp'); if(!box) return; const f=FESTA;
   let atual=null; try{ atual=await rpc('fe_minha_presenca',{p_festa:f.id,p_aparelho:deviceId()}); }catch(e){}
@@ -1100,12 +1139,14 @@ async function ligarPresenca(){
       $('rsOk').disabled=true; $('rsMsg').className='msg'; $('rsMsg').innerHTML='<span class="spin"></span>';
       try{ let path=null; if(selfie && vai) path=await subir(selfie,'portaria/selfie','jpg','image/jpeg');
         const r=await rpc('fe_confirmar',{p_festa:f.id,p_aparelho:deviceId(),p_nome:nome,p_vai:vai,p_adultos:ad,p_criancas:cr,p_recado:$('rsR').value.trim(),p_selfie:path}); store.set('mf_nome',nome);
-        mostrar({nome,vai,adultos:ad,criancas:cr,token:r.token,selfie:path||(d&&d.selfie)}); }catch(e){ $('rsMsg').className='msg err'; $('rsMsg').textContent=/Informe/.test(e.message||'')?'Escreva seu nome.':ERR(e); $('rsOk').disabled=false; } };
+        mostrar({nome,vai,adultos:ad,criancas:cr,token:r.token,selfie:path||(d&&d.selfie),mesa:d&&d.mesa}); }catch(e){ $('rsMsg').className='msg err'; $('rsMsg').textContent=/Informe/.test(e.message||'')?'Escreva seu nome.':ERR(e); $('rsOk').disabled=false; } };
   };
   const mostrar=(d)=>{ box.innerHTML=`<div class="rsvp-ok"><div style="font-size:40px">${d.vai?'🎉':'💛'}</div><b>${d.vai?`Presença confirmada, ${esc(d.nome)}!`:`Obrigado por avisar, ${esc(d.nome)}.`}</b>
       <p class="sub" style="margin:0">${d.vai?`${d.adultos} adulto${d.adultos>1?'s':''}${d.criancas?` e ${d.criancas} criança${d.criancas>1?'s':''}`:''}. Te esperamos!`:'Você vai fazer falta. Pode deixar uma homenagem aqui embaixo mesmo assim.'}</p>
+      ${d.vai&&d.mesa?`<div class="mesa-ok">🍽️ Sua mesa: <b>${d.mesa}</b></div>`:''}${d.vai?'<div id="rsMapa"></div>':''}
       ${d.vai&&d.token?`<div class="ingresso"><b>🎟️ Seu ingresso</b>${d.entrou_em?`<p class="ok" style="margin:6px 0 0">✅ Entrada registrada às ${new Date(d.entrou_em).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}</p>`:''}<div class="qr" id="rsQr"></div><p class="sub" style="margin:0">Mostre este código na entrada. Vale para ${d.adultos+d.criancas} pessoa${d.adultos+d.criancas>1?'s':''}.</p><button class="btn ghost sm" id="rsSalvar" type="button" style="margin-top:10px">⬇️ Salvar ingresso</button></div>`:''}
       <button class="molbtn" id="rsAlt" type="button">Alterar resposta</button></div>`; $('rsAlt').onclick=()=>form(d);
+    if($('rsMapa')) (async()=>{ let mp={}; try{ mp=await rpc('fe_mesas_mapa',{p_festa:f.id})||{}; }catch(e){} if(!mp.img && !mp.texto) return; $('rsMapa').innerHTML='<button class="btn ghost sm" type="button" id="rsMapaB" style="margin-top:10px">🗺️ Ver mapa das mesas</button>'; $('rsMapaB').onclick=()=>{ abrirFolha(`<h3>🗺️ Mapa das mesas</h3>${d.mesa?`<p style="margin:0 0 10px"><b>Sua mesa: ${d.mesa}</b></p>`:''}${mp.img?`<img src="${midia(mp.img)}" alt="Mapa das mesas" style="width:100%;border-radius:12px;display:block">`:''}${mp.texto?`<p style="white-space:pre-line;margin:12px 0 0">${esc(mp.texto)}</p>`:''}<div class="foot"><button class="btn" id="eCancel">Fechar</button></div>`); $('eCancel').onclick=fecharFolha; }; })();
       if($('rsQr')){ qrInto($('rsQr'), 'MF1:'+d.token, 320); $('rsSalvar').onclick=async()=>{ const W=900,H=1300, cv=document.createElement('canvas'); cv.width=W; cv.height=H; const c=cv.getContext('2d'); const t=temaDe(f);
         c.fillStyle='#fff'; c.fillRect(0,0,W,H); c.fillStyle=t.accent; c.fillRect(0,0,W,180); c.fillStyle=t.on||'#fff'; c.textAlign='center'; c.font='700 44px Figtree, sans-serif'; c.fillText('INGRESSO', W/2, 80); c.font='500 34px Figtree, sans-serif'; c.fillText(f.homenageado||f.titulo, W/2, 135);
         c.drawImage(qrCanvas('MF1:'+d.token,600),150,230,600,600); c.fillStyle='#222'; c.font='700 50px Figtree, sans-serif'; c.fillText(d.nome, W/2, 920); c.font='500 34px Figtree, sans-serif'; c.fillStyle='#666';
@@ -1124,24 +1165,38 @@ async function ligarCardapio(MESA){
   const linha = (i,q,pref) => `<div class="cdp-item${i.pausado?' off':''}" data-it="${i.id}"><div><b>${esc(i.nome)}</b><em class="cdp-off">acabou por agora</em>${i.descricao?`<small>${esc(i.descricao)}</small>`:''}</div><div class="cdp-q"><button type="button" data-${pref}="${i.id}" data-d="-1" aria-label="Menos">−</button><b id="${pref}${i.id}">${q||0}</b><button type="button" data-${pref}="${i.id}" data-d="1" aria-label="Mais">+</button></div></div>`;
   let minha=null; try{ minha=await rpc('fe_minha_escolha',{p_festa:f.id,p_aparelho:deviceId()}); }catch(e){}
   const qe={...(minha&&minha.itens||{})}, qp={};
+  let menu=[]; try{ menu=await rpc('fe_cardapio_menu',{p_festa:f.id})||[]; }catch(e){}
+  // escolha antecipada: uma opção de cada etapa por pessoa
+  const secoesE=porSecao(esc_);
+  let pessoas=Math.max(1, ...Object.values(secoesE).map(l=>l.reduce((t,i)=>t+(+qe[i.id]||0),0)));
+  const sel={}; Object.entries(secoesE).forEach(([sec,l])=>{ const a=[]; l.forEach(i=>{ for(let k=0;k<(+qe[i.id]||0);k++) a.push(i.id); }); sel[sec]=Array.from({length:pessoas},(_,k)=>a[k]||null); });
+  const ajustaPessoas=n=>{ pessoas=Math.max(1,Math.min(12,n)); Object.keys(sel).forEach(sec=>{ sel[sec]=Array.from({length:pessoas},(_,k)=>sel[sec][k]||null); }); };
+  const blocoEscolha=()=>`<div class="cdp-pes"><span>Quantas pessoas vão comer?</span><span class="cdp-q"><button type="button" data-pes="-1" aria-label="Menos">−</button><b>${pessoas}</b><button type="button" data-pes="1" aria-label="Mais">+</button></span></div>
+    ${Object.entries(secoesE).map(([sec,l])=>`<div class="cdp-sec"><h4>${esc(sec)} <small>uma opção por pessoa</small></h4>${sel[sec].map((v,k)=>`<div class="cdp-pp">${pessoas>1?`<span class="cdp-pl">Pessoa ${k+1}</span>`:''}<div class="cdp-chips">${l.map(i=>`<button type="button" data-sec="${esc(sec)}" data-k="${k}" data-op="${i.id}" aria-pressed="${v==i.id}" ${i.pausado&&v!=i.id?'disabled':''}>${esc(i.nome)}${i.descricao?`<small>${esc(i.descricao)}</small>`:''}${i.pausado?'<em>acabou</em>':''}</button>`).join('')}</div></div>`).join('')}</div>`).join('')}`;
   let mesa=MESA||0;
+  if(!mesa){ try{ const pr=await rpc('fe_minha_presenca',{p_festa:f.id,p_aparelho:deviceId()}); if(pr&&pr.mesa){ mesa=+pr.mesa; store.set('mf_mesa_'+f.slug,String(mesa)); } }catch(e){} }
+  let nomeTmp=null, obsTmp=null; const guardaCampos=()=>{ if($('cdN')) nomeTmp=$('cdN').value; if($('cdO')) obsTmp=$('cdO').value; };
   const render=()=>{
-    box.innerHTML=`<h2 class="sec">🍽️ Cardápio</h2>
+    box.innerHTML=`<h2 class="sec">🍽️ Cardápio</h2>${menu.length?'<p style="margin:-4px 0 12px"><button class="btn ghost sm" type="button" id="cdMenu">📄 Ver cardápio completo</button></p>':''}
       ${esc_.length?`<p class="sub">${minha?'✅ Sua escolha está salva. Pode alterar até o dia da festa.':'Escolha o que você vai querer comer. O buffet prepara com base nas escolhas.'}</p>
-        <div style="text-align:left">${Object.entries(porSecao(esc_)).map(([sec,l])=>`<div class="cdp-sec"><h4>${esc(sec)}</h4>${l.map(i=>linha(i,qe[i.id],'e')).join('')}</div>`).join('')}
-        <input class="in" id="cdN" maxlength="60" placeholder="Seu nome (ou da família)" value="${esc((minha&&minha.nome)||store.get('mf_nome')||'')}" style="margin-top:12px">
-        <input class="in" id="cdO" maxlength="200" placeholder="Alguma restrição? (ex.: sem glúten)" value="${esc((minha&&minha.obs)||'')}" style="margin-top:8px"></div>
+        <div style="text-align:left">${blocoEscolha()}
+        <input class="in" id="cdN" maxlength="60" placeholder="Seu nome (ou da família)" value="${esc(nomeTmp??((minha&&minha.nome)||store.get('mf_nome')||''))}" style="margin-top:12px">
+        <input class="in" id="cdO" maxlength="200" placeholder="Alguma restrição? (ex.: sem glúten)" value="${esc(obsTmp??((minha&&minha.obs)||''))}" style="margin-top:8px"></div>
         <button class="btn" id="cdSalvar" style="margin-top:12px">${minha?'Atualizar minha escolha':'Salvar minha escolha'}</button><div class="msg" id="cdM"></div>`:''}
       ${ped.length && f.pedidos_ativos ? `<div style="text-align:left;margin-top:${esc_.length?'26px':'0'}"><h3 style="margin:0 0 4px">🍹 Pedir na mesa</h3><p class="muted" style="margin:0 0 6px;font-size:14px">O garçom leva até você.</p>
         ${mesa?`<p style="margin:0 0 6px"><b>Mesa ${mesa}</b> <button class="molbtn" id="cdTroca" type="button">trocar</button></p>`:`<label class="f">Qual é a sua mesa?<select class="in" id="cdMesa"><option value="">Escolha a mesa</option>${Array.from({length:f.mesas||0},(_,k)=>`<option value="${k+1}">Mesa ${k+1}</option>`).join('')}</select></label>`}
         ${Object.entries(porSecao(ped)).map(([sec,l])=>`<div class="cdp-sec"><h4>${esc(sec)}</h4>${l.map(i=>linha(i,qp[i.id],'p')).join('')}</div>`).join('')}
         <input class="in" id="cdPO" maxlength="200" placeholder="Observação (ex.: sem gelo)" style="margin-top:10px">
         <button class="btn" id="cdPedir" style="margin-top:10px;width:100%">🍹 Fazer pedido</button><div class="msg" id="cdPM"></div><div class="meus-ped" id="cdMeus"></div></div>` : ''}`;
-    box.querySelectorAll('[data-e]').forEach(b=>b.onclick=()=>{ const id=b.dataset.e; if(+b.dataset.d>0 && (itens.find(i=>i.id==id)||{}).pausado && (qe[id]||0)>=((minha&&minha.itens||{})[id]||0)) return; qe[id]=Math.max(0,Math.min(20,(qe[id]||0)+(+b.dataset.d))); $('e'+id).textContent=qe[id]; });
+    box.querySelectorAll('[data-pes]').forEach(b=>b.onclick=()=>{ guardaCampos(); ajustaPessoas(pessoas+(+b.dataset.pes)); render(); });
+    box.querySelectorAll('[data-op]').forEach(b=>b.onclick=()=>{ const sec=b.dataset.sec, k=+b.dataset.k; sel[sec][k]=b.dataset.op; b.parentNode.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed', x===b)); });
+    if($('cdMenu')) $('cdMenu').onclick=()=>{ abrirFolha(`<h3>📄 Cardápio</h3><div style="display:flex;flex-direction:column;gap:10px">${menu.map((m,i)=>`<img src="${midia(m)}" alt="Página ${i+1} do cardápio" style="width:100%;border-radius:12px;display:block">`).join('')}</div><div class="foot"><button class="btn" id="eCancel">Fechar</button></div>`); $('eCancel').onclick=fecharFolha; };
     box.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{ const id=b.dataset.p; if(+b.dataset.d>0 && (itens.find(i=>i.id==id)||{}).pausado) return; qp[id]=Math.max(0,Math.min(10,(qp[id]||0)+(+b.dataset.d))); $('p'+id).textContent=qp[id]; });
-    if($('cdSalvar')) $('cdSalvar').onclick=async()=>{ const nome=$('cdN').value.trim(); const it={}; Object.entries(qe).forEach(([k,v])=>{ if(v>0) it[k]=v; });
+    if($('cdSalvar')) $('cdSalvar').onclick=async()=>{ const nome=$('cdN').value.trim(); const it={};
+      const falta=Object.entries(sel).find(([sec,a])=>a.some(v=>!v)); if(falta){ $('cdM').className='msg err'; $('cdM').textContent=`Escolha uma opção de ${falta[0]} para ${pessoas>1?'cada pessoa':'você'}.`; return; }
+      Object.values(sel).forEach(a=>a.forEach(id=>{ it[id]=(it[id]||0)+1; }));
       if(nome.length<2){ $('cdM').className='msg err'; $('cdM').textContent='Escreva seu nome.'; return; } if(!Object.keys(it).length){ $('cdM').className='msg err'; $('cdM').textContent='Escolha pelo menos um item.'; return; }
-      try{ await rpc('fe_escolher',{p_festa:f.id,p_aparelho:deviceId(),p_nome:nome,p_itens:it,p_obs:$('cdO').value.trim()}); store.set('mf_nome',nome); minha={nome,itens:it,obs:$('cdO').value.trim()}; render(); toast('Escolha salva! 🍽️'); }catch(e){ $('cdM').className='msg err'; $('cdM').textContent=/Acabou/.test(e.message||'')?e.message:ERR(e); atualizarPausas(); } };
+      try{ await rpc('fe_escolher',{p_festa:f.id,p_aparelho:deviceId(),p_nome:nome,p_itens:it,p_obs:$('cdO').value.trim()}); store.set('mf_nome',nome); minha={nome,itens:it,obs:$('cdO').value.trim()}; nomeTmp=obsTmp=null; render(); toast('Escolha salva! 🍽️'); }catch(e){ $('cdM').className='msg err'; $('cdM').textContent=/Acabou/.test(e.message||'')?e.message:ERR(e); atualizarPausas(); } };
     if($('cdTroca')) $('cdTroca').onclick=()=>{ mesa=0; render(); };
     if($('cdMesa')) $('cdMesa').onchange=e=>{ mesa=+e.target.value||0; if(mesa) store.set('mf_mesa_'+f.slug,String(mesa)); };
     if($('cdPedir')) $('cdPedir').onclick=async()=>{ const it={}; Object.entries(qp).forEach(([k,v])=>{ if(v>0) it[k]=v; }); const M=$('cdPM');
@@ -1154,6 +1209,7 @@ async function ligarCardapio(MESA){
   const meus=async()=>{ const el=$('cdMeus'); if(!el) return; try{ const l=await rpc('fe_meus_pedidos',{p_festa:f.id,p_aparelho:deviceId()}); el.innerHTML = l.length ? `<p style="margin:14px 0 4px;font-weight:600">Seus pedidos</p>`+l.map(p=>`<div><span>Mesa ${p.mesa} · ${p.itens.map(i=>`${i.qtd}× ${esc(i.nome)}`).join(', ')}</span><span>${ST[p.status]||p.status}</span></div>`).join('') : ''; }catch(e){} };
   const atualizarPausas=async()=>{ try{ const {data}=await sb.from('fe_cardapio').select('id,pausado').eq('festa_id',f.id); (data||[]).forEach(d=>{ const it=itens.find(i=>i.id===d.id); if(!it) return; it.pausado=d.pausado;
       box.querySelectorAll(`[data-it="${d.id}"]`).forEach(r=>r.classList.toggle('off',!!d.pausado));
+      box.querySelectorAll(`[data-op="${d.id}"]`).forEach(b=>{ if(b.getAttribute('aria-pressed')!=='true') b.disabled=!!d.pausado; });
       if(d.pausado && qp[d.id]){ qp[d.id]=0; const el=$('p'+d.id); if(el) el.textContent=0; } }); }catch(e){} };
   render(); setInterval(()=>{ if(!document.hidden){ meus(); atualizarPausas(); } }, 15000);
 }
@@ -1171,9 +1227,9 @@ async function ligarValet(){
       $('vlTenho').onclick=vincular; return; }
     const st=t.status;
     if(st==='aguardando'){ box.innerHTML=`<h2 class="sec">🎫 Seu ticket do manobrista</h2><p class="sub">Mostre este QR ao manobrista quando chegar.</p><div class="vl-qr" id="vlQr"></div><p class="muted" style="margin:4px 0 0">Ticket nº <b>${t.numero}</b></p>`; qrInto($('vlQr'),'MFV:'+t.token,320); }
-    else if(st==='estacionado'){ box.innerHTML=`<h2 class="sec">🚗 Seu carro está estacionado</h2>${passos(st)}<div class="vl-num">nº ${t.numero}</div>${dados()}<button class="btn big" id="vlPedir" style="margin-top:16px;width:100%">🚗 Pedir meu carro</button><div class="msg" id="vlM"></div>`;
+    else if(st==='estacionado'){ box.innerHTML=`<h2 class="sec">🚗 Seu carro está estacionado</h2>${passos(st)}<div class="vl-num">nº ${t.numero}</div>${dados()}<p class="vl-fila">${t.fila_total?`Fila de saída agora: <b>${t.fila_total} carro${t.fila_total>1?'s':''}</b> na sua frente se pedir já.`:'Fila de saída vazia: seu carro sai na hora.'}</p><button class="btn big" id="vlPedir" style="margin-top:12px;width:100%">🚗 Pedir meu carro</button><div class="msg" id="vlM"></div>`;
       $('vlPedir').onclick=async()=>{ $('vlPedir').disabled=true; try{ t=await rpc('fe_valet_pedir',{p_festa:f.id,p_aparelho:deviceId()}); render(); toast('Pedido enviado! O manobrista já vai buscar 🚗',3500); }catch(e){ $('vlM').className='msg err'; $('vlM').textContent=ERR(e); $('vlPedir').disabled=false; } }; }
-    else if(st==='solicitado' || st==='buscando'){ box.innerHTML=`<h2 class="sec">${st==='solicitado'?'⏳ Pedido recebido':'🏃 O manobrista está buscando'}</h2>${passos(st)}<p class="sub" style="margin-top:8px">${st==='solicitado'?'Já avisamos o manobrista. Pode ir se despedindo 💛':'Seu carro já está a caminho. Te avisamos aqui quando estiver na porta.'}</p><div class="vl-num">nº ${t.numero}</div>${dados()}`; }
+    else if(st==='solicitado' || st==='buscando'){ box.innerHTML=`<h2 class="sec">${st==='solicitado'?'⏳ Pedido recebido':'🏃 O manobrista está buscando'}</h2>${passos(st)}${st==='solicitado'&&t.fila?`<div class="vl-pos"><span>Sua posição na fila</span><b>${t.fila}º</b><small>${t.fila>1?`${t.fila-1} carro${t.fila>2?'s':''} na sua frente`:'Você é o próximo'}</small></div>`:''}<p class="sub" style="margin-top:8px">${st==='solicitado'?'Já avisamos o manobrista. Pode ir se despedindo 💛':'Seu carro já está a caminho. Te avisamos aqui quando estiver na porta.'}</p><div class="vl-num">nº ${t.numero}</div>${dados()}`; }
     else if(st==='pronto'){ box.innerHTML=`<h2 class="sec">🎉 Seu carro está na porta!</h2>${passos(st)}<div class="vl-pronto">🚗 Pode ir até a saída</div><div class="vl-num" style="margin-top:12px">nº ${t.numero}</div>${dados()}`; }
     else { box.innerHTML=`<h2 class="sec">💛 Boa volta para casa!</h2><p class="sub">Carro entregue. Obrigado por vir.</p>`; }
     if(ultimo && ultimo!==st && st==='pronto' && navigator.vibrate) navigator.vibrate([200,100,200,100,400]);
@@ -1185,7 +1241,7 @@ async function ligarValet(){
     $('eCancel').onclick=fecharFolha;
     $('eSend').onclick=async()=>{ try{ t=await rpc('fe_valet_vincular',{p_festa:f.id,p_aparelho:deviceId(),p_numero:+$('vnN').value||0,p_final:$('vnP').value}); fecharFolha(); render(); toast('Ticket ligado ao seu celular 🚗'); }catch(e){ msgE(ERR(e),'err'); } }; };
   const agendar=()=>{ clearTimeout(timer); if(!t || t.status==='entregue') return; const ms=['solicitado','buscando','aguardando'].includes(t.status)?6000:20000;
-    timer=setTimeout(async()=>{ if(!document.hidden){ try{ const n=await rpc('fe_meu_valet',{p_festa:f.id,p_aparelho:deviceId()}); if(n && (n.status!==t.status || n.vaga!==t.vaga || (n.fotos||[]).length!==(t.fotos||[]).length)){ t=n; render(); return; } }catch(e){} } agendar(); }, ms); };
+    timer=setTimeout(async()=>{ if(!document.hidden){ try{ const n=await rpc('fe_meu_valet',{p_festa:f.id,p_aparelho:deviceId()}); if(n && (n.status!==t.status || n.fila!==t.fila || n.fila_total!==t.fila_total || n.vaga!==t.vaga || (n.fotos||[]).length!==(t.fotos||[]).length)){ t=n; render(); return; } }catch(e){} } agendar(); }, ms); };
   render();
 }
 async function ligarCorreio(){
@@ -1573,7 +1629,7 @@ async function telaTelao(){
   setInterval(baixador, 2000);
   // QR grande no telão só de vez em quando (o QR pequeno fica sempre no rodapé):
   // com mensagens no mural, no máximo a cada 10 min; mural vazio, a cada 2 min
-  function padrao(arr,k){ for(let n=0;n<arr.length;n++){ const t=arr[tv[k]++ % arr.length]; if(t!=='qr') return t;
+  function padrao(arr,k){ for(let n=0;n<arr.length;n++){ const t=arr[tv[k]++ % arr.length]; if(t!=='qr') return t; if(document.body.classList.contains('sem-qr')) continue;
       const gap=tv.list.length?600000:120000; if(Date.now()-(tv.qrEm||0)>=gap){ tv.qrEm=Date.now(); return t; } } return 'intro'; }
   function proxima(back){
     clearTimeout(tv.timer); if(tv.paused) return;
@@ -1634,6 +1690,7 @@ async function telaTelao(){
   const camada=document.createElement('div'); camada.hidden=true; document.body.appendChild(camada);
   const aplicarCtl=e=>{
     const modo=(e&&e.modo)||'mural', sl=(e&&e.slides)||[];
+    document.body.classList.toggle('sem-qr', !!e && e.qr===false);
     if(sl.join()!==slidesCache.join()){ slidesCache=sl; sl.forEach(p=>{ const im=new Image(); im.src=midia(p); }); }
     if(modo==='apresentacao' && sl.length){ camada.className='tv-apr'; camada.hidden=false; const src=midia(sl[Math.min(e.slide||0,sl.length-1)]); const img=camada.querySelector('img'); if(!img || img.dataset.src!==src) camada.innerHTML=`<img data-src="${src}" src="${src}" alt="">`; }
     else if(modo==='sorteio'){ telaoSorteio(e.sorteio||{}); }
@@ -2341,11 +2398,13 @@ function textoConvite(f, senha){
   if(CORP(f)) return `💼 *${f.titulo}*\n\n${f.data&&f.data>=new Date().toISOString().slice(0,10)?'Confirme sua presença pelo link 👇. No dia, é por ele que você participa: perguntas, mensagens, cardápio e muito mais.':'Participe pelo link 👇: perguntas, mensagens, cardápio e muito mais.'}\n\n👉 ${linkFesta(f.slug)}`;
   return `${CATS[f.categoria]?.e||'🎉'} *${f.titulo}*\n\n${f.data&&f.data>=new Date().toISOString().slice(0,10)?`Confirme sua presença pelo link 👇 e, no dia, deixe sua homenagem para ${f.homenageado||'o homenageado'}: foto, recado, áudio ou vídeo. Vai aparecer no telão da festa 💛`:`Deixe sua homenagem para ${f.homenageado||'o homenageado'}: foto, recado, áudio ou vídeo! Vai aparecer no telão da festa 💛`}\n\n👉 ${linkFesta(f.slug)}`;
 }
-function vCompartilhar(){
-  ADM.view='compartilhar'; const f=FESTA; const L=[['Convidados','📲',linkFesta(f.slug)],['Telão (abrir no notebook/TV)','📺',linkFesta(f.slug,'telao')],['Área do anfitrião','🔐',linkFesta(f.slug,'admin')]];
+async function vCompartilhar(){
+  ADM.view='compartilhar'; const f=FESTA; let cvMeu=null; try{ cvMeu=await rpc('fe_convite_img',{p_festa:f.id}); }catch(e){} const L=[['Convidados','📲',linkFesta(f.slug)],['Telão (abrir no notebook/TV)','📺',linkFesta(f.slug,'telao')],['Área do anfitrião','🔐',linkFesta(f.slug,'admin')]];
   $('vw').innerHTML=`<div class="grid2">
    <div class="card" style="padding:18px;text-align:center;grid-column:1/-1"><h3 style="margin:0 0 6px">💌 Convite com QR Code</h3><p class="muted" style="margin:0 0 12px">Mande pelo WhatsApp ou imprima. O convidado já chega sabendo como deixar a homenagem.</p>
+     <div class="seg" style="justify-content:center;margin-bottom:12px"><label class="btn ghost sm" style="position:relative">🖼️ ${cvMeu?'Trocar meu convite':'Usar meu próprio convite'}<input type="file" id="cvUpF" accept="image/*,application/pdf" style="position:absolute;inset:0;opacity:0;cursor:pointer"></label>${cvMeu?'<button class="btn ghost sm" type="button" id="cvUpX">Voltar ao convite automático</button>':''}</div>
      <img id="cvPrev" alt="Prévia do convite" style="width:min(240px,70%);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.18);background:var(--bg)">
+     ${cvMeu?'<p class="muted" style="font-size:13px;margin:8px 0 0">Seu convite ganha uma faixa com o QR da festa embaixo. Ele também aparece no topo da página do convidado.</p>':''}
      <div class="row" style="justify-content:center;margin-top:14px"><button class="btn" id="cvImg">📱 Baixar convite (imagem)</button><button class="btn alt" id="cvShare" hidden>📤 Compartilhar</button><button class="btn ghost" id="cvPdf">🖨️ Convite para imprimir (PDF)</button></div><div class="msg" id="cvM"></div></div>
    <div class="card" style="padding:18px;text-align:center"><h3 style="margin:0 0 10px">QR Code dos convidados</h3><div class="qrbig" id="shQr"></div><p class="muted" style="font-size:14px">Mostre na entrada ou imprima nas mesas</p><button class="btn" id="shCartoes">🖨️ Cartões de mesa (PDF)</button></div>
    <div class="card" style="padding:18px;display:flex;flex-direction:column;gap:10px"><h3 style="margin:0">Links</h3>
@@ -2376,15 +2435,25 @@ function vCompartilhar(){
   (async()=>{ let L2=[]; try{ L2=await rpc('fe_admin_presencas',{p_slug:SLUG,p_pin:PIN}); }catch(e){ $('presL').textContent=ERR(e); return; }
     const vao=L2.filter(x=>x.vai), ad=vao.reduce((a,x)=>a+x.adultos,0), cr=vao.reduce((a,x)=>a+x.criancas,0);
     $('presL').innerHTML = L2.length ? `<div class="pres-tot"><div><b>${ad+cr}</b>pessoas vão</div><div><b>${ad}</b>adultos · <b style="display:inline;font-size:inherit">${cr}</b> crianças</div><div><b>${L2.length-vao.length}</b>não vão</div></div>
-      ${f.portaria?`<p style="margin:0 0 8px;font-weight:600">🚪 Já entraram: ${L2.filter(x=>x.entrou_em).reduce((a,x)=>a+(x.entrou_qtd||0),0)} pessoas</p>`:''}<div class="pres-lista">${L2.map(x=>`<div><span>${x.selfie?`<img class="psf" src="${midia(x.selfie)}" alt="">`:''}${x.avulso?'🚪':x.vai?'✅':'❌'} ${esc(x.nome)}${x.avulso?' <small class="muted">(entrada avulsa)</small>':''}${x.recado?`<br><small class="muted">“${esc(x.recado)}”</small>`:''}</span><span class="muted">${x.vai?`${x.adultos} ad.${x.criancas?` + ${x.criancas} cr.`:''}`:'não vai'}${x.entrou_em?`<br><b style="color:#2b8a3e">entrou ${new Date(x.entrou_em).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}</b>`:''}</span></div>`).join('')}</div>`
+      ${f.portaria?`<p style="margin:0 0 8px;font-weight:600">🚪 Já entraram: ${L2.filter(x=>x.entrou_em).reduce((a,x)=>a+(x.entrou_qtd||0),0)} pessoas</p>`:''}<div class="pres-lista">${L2.map(x=>`<div><span>${x.selfie?`<img class="psf" src="${midia(x.selfie)}" alt="">`:''}${x.avulso?'🚪':x.vai?'✅':'❌'} ${esc(x.nome)}${x.avulso?' <small class="muted">(entrada avulsa)</small>':''}${x.recado?`<br><small class="muted">“${esc(x.recado)}”</small>`:''}</span><span class="muted">${x.vai&&x.id?`<label class="pmesa">Mesa <input type="number" min="1" max="999" inputmode="numeric" data-pid="${x.id}" value="${x.mesa||''}" aria-label="Mesa de ${esc(x.nome)}"></label><br>`:''}${x.vai?`${x.adultos} ad.${x.criancas?` + ${x.criancas} cr.`:''}`:'não vai'}${x.entrou_em?`<br><b style="color:#2b8a3e">entrou ${new Date(x.entrou_em).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}</b>`:''}</span></div>`).join('')}</div>`
       : `<p class="muted" style="margin:8px 0 0">Ninguém respondeu ainda. Quando você mandar o convite, as respostas aparecem aqui. Os convidados confirmam pelo mesmo link do convite.</p>`;
-    $('presCopy').onclick=()=>copiar(`Confirmações · ${f.homenageado||f.titulo}\nVão: ${ad+cr} pessoas (${ad} adultos, ${cr} crianças)\n\n`+L2.map(x=>`${x.vai?'✅':'❌'} ${x.nome}${x.vai?` — ${x.adultos} ad.${x.criancas?` + ${x.criancas} cr.`:''}`:''}${x.recado?` — "${x.recado}"`:''}`).join('\n'),'Lista copiada!'); })();
+    $('presL').querySelectorAll('[data-pid]').forEach(inp=>inp.onchange=async()=>{ const m=parseInt(inp.value,10)||null; try{ await rpc('fe_admin_mesa',{p_slug:SLUG,p_pin:PIN,p_id:+inp.dataset.pid,p_mesa:m}); toast(m?`Mesa ${m} salva.`:'Mesa retirada.'); }catch(e){ toast(ERR(e)); } });
+    $('presCopy').onclick=()=>copiar(`Confirmações · ${f.homenageado||f.titulo}\nVão: ${ad+cr} pessoas (${ad} adultos, ${cr} crianças)\n\n`+L2.map(x=>`${x.vai?'✅':'❌'} ${x.nome}${x.mesa?` — mesa ${x.mesa}`:''}${x.vai?` — ${x.adultos} ad.${x.criancas?` + ${x.criancas} cr.`:''}`:''}${x.recado?` — "${x.recado}"`:''}`).join('\n'),'Lista copiada!'); })();
   qrInto($('shQr'), linkFesta(f.slug), 220);
-  (async()=>{ try{ const cv=await conviteCanvas(f,1080,1920); $('cvPrev').src=cv.toDataURL('image/jpeg',.8); }catch(e){} })();
+  const gerarCv=async()=>{ if(cvMeu){ try{ return await conviteProprio(f,cvMeu); }catch(e){} } return conviteCanvas(f,1080,1920); };
+  (async()=>{ try{ const cv=await gerarCv(); $('cvPrev').src=cv.toDataURL('image/jpeg',.8); }catch(e){} })();
+  if($('cvUpX')) $('cvUpX').onclick=async()=>{ try{ await rpc('fe_admin_convite_img',{p_slug:SLUG,p_pin:PIN,p_img:null}); toast('Voltamos ao convite automático.'); vCompartilhar(); }catch(e){ toast(ERR(e)); } };
+  $('cvUpF').onchange=async e=>{ const file=e.target.files[0]; e.target.value=''; if(!file) return; const M=$('cvM'); M.className='msg'; M.innerHTML='<span class="spin"></span> Enviando o convite…';
+    try{ let bl;
+      if(/pdf/.test(file.type) || /\.pdf$/i.test(file.name)){ const pdfjs=await carregarPdfJs(); const pdf=await pdfjs.getDocument({data:await file.arrayBuffer()}).promise; const pgx=await pdf.getPage(1); const vp0=pgx.getViewport({scale:1}); const vp=pgx.getViewport({scale:1600/vp0.width});
+        const cv=document.createElement('canvas'); cv.width=Math.round(vp.width); cv.height=Math.round(vp.height); await pgx.render({canvasContext:cv.getContext('2d'),viewport:vp}).promise; bl=await new Promise(r=>cv.toBlob(r,'image/jpeg',.9)); }
+      else bl=await encolher(file,1600,.9);
+      const path=await subir(bl,'convite/convite','jpg','image/jpeg'); await rpc('fe_admin_convite_img',{p_slug:SLUG,p_pin:PIN,p_img:path}); toast('Convite enviado 💌'); vCompartilhar();
+    }catch(err){ M.className='msg err'; M.textContent='Não consegui enviar o convite. '+ERR(err); } };
   const nomeArq=`Convite_${f.slug}`;
-  $('cvImg').onclick=async()=>{ const b=$('cvImg'); b.disabled=true; try{ const cv=await conviteCanvas(f,1080,1920); baixar(await new Promise(r=>cv.toBlob(r,'image/png')), nomeArq+'.png'); $('cvM').className='msg ok'; $('cvM').textContent='Convite salvo! Mande no grupo da família 💛'; }catch(e){ $('cvM').className='msg err'; $('cvM').textContent='Não consegui gerar o convite agora.'; } b.disabled=false; };
+  $('cvImg').onclick=async()=>{ const b=$('cvImg'); b.disabled=true; try{ const cv=await gerarCv(); baixar(await new Promise(r=>cv.toBlob(r,'image/png')), nomeArq+'.png'); $('cvM').className='msg ok'; $('cvM').textContent='Convite salvo! Mande no grupo da família 💛'; }catch(e){ $('cvM').className='msg err'; $('cvM').textContent='Não consegui gerar o convite agora.'; } b.disabled=false; };
   if(navigator.canShare && navigator.canShare({files:[new File([new Blob(['x'],{type:'image/png'})],'x.png',{type:'image/png'})]})){ $('cvShare').hidden=false;
-    $('cvShare').onclick=async()=>{ try{ const cv=await conviteCanvas(f,1080,1920); const blob=await new Promise(r=>cv.toBlob(r,'image/png')); await navigator.share({files:[new File([blob],nomeArq+'.png',{type:'image/png'})], text:textoConvite(f)}); }catch(e){} }; }
+    $('cvShare').onclick=async()=>{ try{ const cv=await gerarCv(); const blob=await new Promise(r=>cv.toBlob(r,'image/png')); await navigator.share({files:[new File([blob],nomeArq+'.png',{type:'image/png'})], text:textoConvite(f)}); }catch(e){} }; }
   $('cvPdf').onclick=async()=>{ const b=$('cvPdf'); b.disabled=true; try{ baixar(await pdfConvite(f), nomeArq+'.pdf'); $('cvM').className='msg ok'; $('cvM').textContent='PDF pronto: 2 convites por folha A4, é só cortar na linha.'; }catch(e){ $('cvM').className='msg err'; $('cvM').textContent='Não consegui gerar o PDF agora.'; } b.disabled=false; };
   document.querySelectorAll('[data-copy]').forEach(b=>b.onclick=()=>copiar(b.dataset.copy,'Link copiado!'));
   $('shCopy').onclick=()=>copiar($('shTxt').value,'Mensagem copiada!');
@@ -2412,9 +2481,22 @@ async function vCardapio(){
   const L={escolha:itens.filter(i=>i.tipo==='escolha').map(i=>({...i})), pedido:itens.filter(i=>i.tipo==='pedido').map(i=>({...i}))};
   const lin=(tp,i,k)=>`<div class="card-ed"><input class="in" data-t="${tp}" data-k="${k}" data-f="secao" maxlength="40" placeholder="${tp==='escolha'?'Ex.: Prato principal':'Ex.: Bebidas'}" value="${esc(i.secao||'')}"><input class="in" data-t="${tp}" data-k="${k}" data-f="nome" maxlength="80" placeholder="${tp==='escolha'?'Ex.: Filé ao molho madeira':'Ex.: Refrigerante'}" value="${esc(i.nome||'')}"><input class="in ds" data-t="${tp}" data-k="${k}" data-f="descricao" maxlength="200" placeholder="Descrição (opcional)" value="${esc(i.descricao||'')}"><button class="x" type="button" data-rm="${tp}" data-k="${k}" aria-label="Tirar">✕</button></div>`;
   const tot={}; escolhas.forEach(e=>Object.entries(e.itens||{}).forEach(([k,v])=>tot[k]=(tot[k]||0)+(+v)));
-  $('vw').innerHTML=`<div class="card" style="padding:18px"><h3 style="margin:0 0 4px">🍽️ Cardápio <span class="muted" style="font-size:14px;font-weight:500">(opcional)</span></h3>
+  let menu=[]; try{ menu=await rpc('fe_cardapio_menu',{p_festa:f.id})||[]; }catch(e){}
+  let mapa={}; try{ mapa=await rpc('fe_mesas_mapa',{p_festa:f.id})||{}; }catch(e){}
+  $('vw').innerHTML=`<div class="card" style="padding:18px;margin-bottom:12px"><h3 style="margin:0 0 4px">📄 Cardápio completo <span class="muted" style="font-size:14px;font-weight:500">(opcional)</span></h3>
+      <p class="muted" style="margin:0 0 12px">Envie o cardápio do buffet em PDF ou foto. O convidado vê pelo botão "Ver cardápio completo".</p>
+      <div class="row"><label class="btn" style="position:relative">📄 Enviar PDF ou imagens<input type="file" id="mnF" accept="application/pdf,image/*" multiple style="position:absolute;inset:0;opacity:0;cursor:pointer"></label>${menu.length?'<button class="btn ghost" id="mnLimpa">Retirar cardápio</button>':''}</div>
+      <div class="msg" id="mnM"></div>
+      ${menu.length?`<div class="apr-grid" style="margin-top:12px">${menu.map((p,i)=>`<a href="${midia(p)}" target="_blank" rel="noopener"><img src="${midia(p)}" alt="Página ${i+1} do cardápio" loading="lazy"></a>`).join('')}</div>`:''}</div>
+    <div class="card" style="padding:18px;margin-bottom:12px"><h3 style="margin:0 0 4px">🗺️ Mapa das mesas <span class="muted" style="font-size:14px;font-weight:500">(opcional)</span></h3>
+      <p class="muted" style="margin:0 0 12px">Envie a planta do salão com os números das mesas, escreva como chegar, ou os dois. O convidado vê junto com o número da mesa dele.</p>
+      <div class="row"><label class="btn" style="position:relative">🗺️ Enviar imagem ou PDF<input type="file" id="mpF" accept="application/pdf,image/*" style="position:absolute;inset:0;opacity:0;cursor:pointer"></label>${mapa.img?'<button class="btn ghost" id="mpTira">Retirar imagem</button>':''}</div>
+      ${mapa.img?`<a href="${midia(mapa.img)}" target="_blank" rel="noopener"><img src="${midia(mapa.img)}" alt="Mapa das mesas" style="display:block;max-width:100%;max-height:320px;margin-top:12px;border-radius:12px;border:1px solid var(--line)"></a>`:''}
+      <label class="f" style="margin-top:12px">Como chegar à mesa (opcional)<textarea class="in" id="mpT" maxlength="600" rows="3" placeholder="Ex.: Mesas 1 a 10 ficam em frente ao palco; 11 a 20 perto do bar; 21 a 30 na varanda.">${esc(mapa.texto||'')}</textarea></label>
+      <div class="row" style="justify-content:flex-end;margin-top:8px"><span class="msg" id="mpM"></span><button class="btn" id="mpSalvar">Salvar mapa</button></div></div>
+    <div class="card" style="padding:18px"><h3 style="margin:0 0 4px">🍽️ Cardápio <span class="muted" style="font-size:14px;font-weight:500">(opcional)</span></h3>
       <p class="muted" style="margin:0 0 14px">Cadastre o cardápio que o buffet enviou. Deixe em branco se não quiser usar.</p>
-      <b>1 · Escolha antecipada</b><p class="muted" style="margin:2px 0 8px;font-size:14px">O convidado escolhe o prato pelo link, antes da festa. Você vê o total de cada item para passar ao buffet.</p>
+      <b>1 · Escolha antecipada</b><p class="muted" style="margin:2px 0 8px;font-size:14px">O convidado escolhe pelo link, antes da festa: <b>uma opção de cada etapa por pessoa</b> (ex.: um prato principal e uma sobremesa para cada um). Use o mesmo nome de etapa nos itens que são opções entre si. Você vê o total de cada item para passar ao buffet.</p>
       <div id="edE">${L.escolha.map((i,k)=>lin('escolha',i,k)).join('')}</div><button class="btn ghost sm" id="addE">＋ Item para escolher</button>
       <div style="height:18px"></div><b>2 · Pedidos na mesa</b><p class="muted" style="margin:2px 0 8px;font-size:14px">Durante a festa, o convidado pede pelo QR da mesa (bebidas, por exemplo) e o garçom recebe no celular.</p>
       <div id="edP">${L.pedido.map((i,k)=>lin('pedido',i,k)).join('')}</div><button class="btn ghost sm" id="addP">＋ Item para pedir</button>
@@ -2431,6 +2513,31 @@ async function vCardapio(){
       ${escolhas.length?`<div class="pres-tot" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">${L.escolha.filter(i=>i.id).map(i=>`<div><b>${tot[i.id]||0}</b>${esc(i.nome)}</div>`).join('')}</div>
         <div class="pres-lista">${escolhas.map(e=>`<div><span>${esc(e.nome)}${e.obs?`<br><small class="muted">“${esc(e.obs)}”</small>`:''}</span><span class="muted">${Object.entries(e.itens).map(([k,v])=>`${v}× ${esc((itens.find(i=>i.id==k)||{}).nome||'?')}`).join(', ')}</span></div>`).join('')}</div>`
       :'<p class="muted" style="margin:8px 0 0">Ninguém escolheu ainda.</p>'}</div>`;
+  const salvaMapa=async(img)=>{ const M=$('mpM'); try{ M.className='msg'; M.innerHTML='<span class="spin"></span>'; await rpc('fe_admin_mesas_mapa',{p_slug:SLUG,p_pin:PIN,p_img:img===undefined?(mapa.img||null):img,p_texto:$('mpT').value.trim()}); toast('Mapa das mesas salvo 🗺️'); vCardapio(); }catch(e){ M.className='msg err'; M.textContent=ERR(e); } };
+  $('mpSalvar').onclick=()=>salvaMapa();
+  if($('mpTira')) $('mpTira').onclick=()=>salvaMapa(null);
+  $('mpF').onchange=async e=>{ const file=e.target.files[0]; e.target.value=''; if(!file) return; const M=$('mpM'); M.className='msg'; M.innerHTML='<span class="spin"></span> Enviando…';
+    try{ let bl;
+      if(/pdf/.test(file.type) || /\.pdf$/i.test(file.name)){ const pdfjs=await carregarPdfJs(); const pdf=await pdfjs.getDocument({data:await file.arrayBuffer()}).promise; const pgx=await pdf.getPage(1); const vp0=pgx.getViewport({scale:1}); const vp=pgx.getViewport({scale:1800/vp0.width});
+        const cv=document.createElement('canvas'); cv.width=Math.round(vp.width); cv.height=Math.round(vp.height); await pgx.render({canvasContext:cv.getContext('2d'),viewport:vp}).promise; bl=await new Promise(r=>cv.toBlob(r,'image/jpeg',.88)); }
+      else bl=await encolher(file,1800,.88);
+      await salvaMapa(await subir(bl,'cardapio/mapa','jpg','image/jpeg'));
+    }catch(err){ M.className='msg err'; M.textContent='Não consegui enviar o mapa. '+ERR(err); } };
+  if($('mnLimpa')) $('mnLimpa').onclick=async()=>{ try{ await rpc('fe_admin_cardapio_menu',{p_slug:SLUG,p_pin:PIN,p_imgs:[]}); toast('Cardápio completo retirado.'); vCardapio(); }catch(e){ toast(ERR(e)); } };
+  $('mnF').onchange=async e=>{ const fs=[...e.target.files]; e.target.value=''; if(!fs.length) return; const M=$('mnM'); const caminhos=[];
+    try{
+      for(const file of fs){
+        if(/pdf/.test(file.type) || /\.pdf$/i.test(file.name)){
+          M.className='msg'; M.innerHTML='<span class="spin"></span> Abrindo o PDF…'; const pdfjs=await carregarPdfJs(); const pdf=await pdfjs.getDocument({data:await file.arrayBuffer()}).promise;
+          if(pdf.numPages>12) throw new Error('Máximo de 12 páginas');
+          for(let i=1;i<=pdf.numPages;i++){ M.innerHTML=`<span class="spin"></span> Preparando página ${i} de ${pdf.numPages}…`; const pgx=await pdf.getPage(i); const vp0=pgx.getViewport({scale:1}); const vp=pgx.getViewport({scale:1400/vp0.width});
+            const cv=document.createElement('canvas'); cv.width=Math.round(vp.width); cv.height=Math.round(vp.height); await pgx.render({canvasContext:cv.getContext('2d'),viewport:vp}).promise;
+            const bl=await new Promise(r=>cv.toBlob(r,'image/jpeg',.86)); caminhos.push(await subir(bl,'cardapio/menu','jpg','image/jpeg')); }
+        } else { M.className='msg'; M.innerHTML=`<span class="spin"></span> Enviando imagem ${caminhos.length+1}…`; const bl=await encolher(file,1400,.86); caminhos.push(await subir(bl,'cardapio/menu','jpg','image/jpeg')); }
+      }
+      if(caminhos.length>12) throw new Error('Máximo de 12 páginas');
+      M.innerHTML='<span class="spin"></span> Salvando…'; await rpc('fe_admin_cardapio_menu',{p_slug:SLUG,p_pin:PIN,p_imgs:caminhos}); toast('Cardápio completo publicado 🍽️'); vCardapio();
+    }catch(err){ M.className='msg err'; M.textContent=/12 páginas/.test(err.message||'')?'Máximo de 12 páginas.':'Não consegui preparar o cardápio. '+ERR(err); } };
   const ler=()=>{ ['escolha','pedido'].forEach(tp=>document.querySelectorAll(`[data-t="${tp}"]`).forEach(inp=>{ L[tp][+inp.dataset.k][inp.dataset.f]=inp.value; })); };
   const redesenhar=()=>{ $('edE').innerHTML=L.escolha.map((i,k)=>lin('escolha',i,k)).join(''); $('edP').innerHTML=L.pedido.map((i,k)=>lin('pedido',i,k)).join(''); ligar(); };
   const ligar=()=>document.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{ ler(); L[b.dataset.rm].splice(+b.dataset.k,1); redesenhar(); });
@@ -2462,11 +2569,13 @@ async function vApresentacao(){
         <button class="btn ghost" data-nav="1" ${slides.length?'':'disabled'}>Próximo ▶</button>
         <button class="btn alt" data-m="pausa">⏸ Pausar telão</button>
         <button class="btn ok" data-m="mural">💌 Voltar ao mural</button></div>
+      <label class="row" style="gap:8px;font-weight:600;margin-top:12px"><input type="checkbox" id="apQr" style="width:20px;height:20px" ${est.qr===false?'':'checked'}> Mostrar o QR Code de participação no telão</label>
       ${slides.length?`<div class="apr-grid" id="apG">${slides.map((p,i)=>`<button data-i="${i}" aria-pressed="false"><img src="${midia(p)}" alt="Slide ${i+1}" loading="lazy"><span>${i+1}</span></button>`).join('')}</div>`:'<p class="muted" style="margin:12px 0 0">Sem slides ainda. Mesmo sem apresentação, dá para pausar o telão (por exemplo, durante um discurso).</p>'}</div>`;
   const mostrarEst=e=>{ est=e||est; const nomes={mural:'💌 mostrando o mural',apresentacao:`🎤 slide ${(est.slide||0)+1} de ${slides.length}`,pausa:'⏸ telão pausado'}; $('apEst').textContent=nomes[est.modo]||''; document.querySelectorAll('#apG [data-i]').forEach(b=>b.setAttribute('aria-pressed', est.modo==='apresentacao' && +b.dataset.i===est.slide)); };
   mostrarEst(est);
   const mandar=async(modo, slide)=>{ try{ mostrarEst(await rpc('fe_admin_tv',{p_slug:SLUG,p_pin:PIN,p_modo:modo,p_slide:slide})); }catch(e){ toast(ERR(e)); } };
   document.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>mandar(b.dataset.m, est.slide||0));
+  $('apQr').onchange=async ev=>{ try{ await rpc('fe_admin_tv_qr',{p_slug:SLUG,p_pin:PIN,p_on:ev.target.checked}); toast(ev.target.checked?'QR Code ligado no telão.':'QR Code escondido do telão.'); }catch(e){ ev.target.checked=!ev.target.checked; toast(ERR(e)); } };
   document.querySelectorAll('[data-nav]').forEach(b=>b.onclick=()=>mandar('apresentacao', Math.max(0,Math.min(slides.length-1,(est.slide||0)+(+b.dataset.nav)))));
   document.querySelectorAll('#apG [data-i]').forEach(b=>b.onclick=()=>mandar('apresentacao', +b.dataset.i));
   if($('apLimpa')) $('apLimpa').onclick=async()=>{ try{ await rpc('fe_admin_slides',{p_slug:SLUG,p_pin:PIN,p_slides:[]}); toast('Apresentação retirada.'); vApresentacao(); }catch(e){ toast(ERR(e)); } };

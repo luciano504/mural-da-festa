@@ -797,6 +797,42 @@ h2.sec{font-family:var(--body);font-size:22px;line-height:28px;font-weight:700;l
 body.corp .hero .deco, body.corp .deco{display:none}
 .plano-bar{background:color-mix(in srgb,#15803d 8%, var(--surface));color:var(--ink);border:1px solid color-mix(in srgb,#15803d 25%, var(--line));border-radius:var(--r-lg)}
 .plano-bar b{color:#15803d}
+
+/* painel do organizador: menu lateral no computador e números do momento */
+@media (min-width:1100px){
+  .adm-grid{display:grid;grid-template-columns:230px minmax(0,1fr);gap:20px;align-items:start}
+  .adm-grid #abasTop{position:sticky;top:12px;flex-direction:column;align-items:stretch;width:auto;border-radius:var(--r-lg);padding:6px;margin:0;overflow:visible;background:var(--surface)}
+  .adm-grid #abasTop button{text-align:left;padding:10px 12px;border-radius:var(--r-md);white-space:normal}
+}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:12px}
+.kpis:empty{display:none}
+.kpi{display:flex;flex-direction:column;gap:6px;padding:16px;border:1px solid var(--line);border-radius:var(--r-lg);background:var(--surface);color:var(--ink);text-align:left;font:inherit}
+button.kpi{cursor:pointer} button.kpi:hover{border-color:var(--accent)}
+.kpi .kt{font-size:14px;font-weight:600;color:var(--muted)}
+.kpi .kv{font-size:32px;line-height:36px;font-weight:700} .kpi .kv small{font-size:17px;font-weight:500;color:var(--muted)}
+.kpi .kb{display:block;height:6px;border-radius:999px;background:color-mix(in srgb,var(--ink) 8%, transparent);overflow:hidden} .kpi .kb i{display:block;height:100%;background:var(--accent)}
+.kpi .kd{font-size:13px;color:var(--muted)} .kpi .warn{color:#b45309}
+
+/* telas da equipe no mesmo padrão: cozinha, recepção e manobrista */
+.ped-board{gap:16px}
+.ped-col{background:color-mix(in srgb,var(--ink) 3%, transparent);border:1px solid var(--line);border-radius:var(--r-lg);padding:12px}
+.ped-col h3{display:flex;align-items:center;gap:8px;font-family:var(--body);font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:2px 4px 12px}
+.ped-col h3 .muted{margin-left:auto;font-size:13px;letter-spacing:0;text-transform:none}
+.ped-col h3 #cN:not(:empty),.ped-col h3 #cP:not(:empty){background:var(--accent);color:var(--on,#fff);border-radius:999px;padding:1px 9px}
+.ped{box-shadow:none;border-radius:var(--r-lg);padding:14px 16px;position:relative;overflow:hidden}
+.ped.ped-novo{border:1px solid var(--accent);animation:pedNovo 1.2s ease 2}
+.ped.ped-novo::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--accent)}
+.ped .m{font-family:var(--body);font-weight:800;font-size:40px;letter-spacing:-.02em;color:var(--ink);font-variant-numeric:tabular-nums}
+.ped ul{list-style:none;padding:0;margin:10px 0;font-size:17px}
+.ped ul li{padding:5px 0;border-top:1px solid var(--line)}
+.ped ul li b{display:inline-block;min-width:34px;color:var(--accent)}
+.ped .row .btn{min-height:48px}
+.port-cont{font-family:var(--body);font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.port-lista button{border-radius:var(--r-md);padding:10px 12px}
+.port-alerta{border-radius:var(--r-md);border:1px solid #f5b5b5}
+.port-ok{border-radius:var(--r-md);border:1px solid #9fdcae}
+.vl-card{border-radius:var(--r-md);padding:12px 14px}
+.vl-card .vl-num{font-family:var(--body);font-weight:800;font-variant-numeric:tabular-nums}
 </style>
 </head>
 <body>
@@ -2069,7 +2105,7 @@ function painelPedidos(pin){
       <ul>${p.itens.map(i=>`<li><b>${i.qtd}×</b> ${esc(i.nome)}</li>`).join('')}</ul>${p.obs?`<p style="margin:0 0 8px">📝 ${esc(p.obs)}</p>`:''}${p.nome?`<p class="t" style="margin:0 0 8px">${esc(p.nome)}</p>`:''}
       <div class="row">${p.status==='novo'?`<button class="btn sm" data-s="preparando" data-id="${p.id}">👨‍🍳 Preparar</button>`:''}${p.status!=='entregue'?`<button class="btn ok sm" data-s="entregue" data-id="${p.id}">✅ Entregue</button>`:''}${p.status==='novo'?`<button class="btn ghost sm" data-s="cancelado" data-id="${p.id}" style="flex:0">✕</button>`:''}${p.status==='entregue'?`<button class="btn ghost sm" data-s="preparando" data-id="${p.id}">↩ Desfazer</button>`:''}</div></div>`;
   const render=()=>{ const by=s=>L.filter(p=>p.status===s); $('colN').innerHTML=by('novo').map(card).join('')||'<div class="empty">Nenhum pedido novo.</div>'; $('colP').innerHTML=by('preparando').map(card).join('')||'<div class="empty">—</div>'; $('colE').innerHTML=by('entregue').reverse().map(card).join('')||'<div class="empty">—</div>';
-    $('cN').textContent=by('novo').length?`(${by('novo').length})`:''; $('cP').textContent=by('preparando').length?`(${by('preparando').length})`:''; document.title=(by('novo').length?`(${by('novo').length}) `:'')+'Pedidos · '+(f.homenageado||f.titulo);
+    $('cN').textContent=by('novo').length||''; $('cP').textContent=by('preparando').length||''; document.title=(by('novo').length?`(${by('novo').length}) `:'')+'Pedidos · '+(f.homenageado||f.titulo);
     document.querySelectorAll('[data-s]').forEach(b=>b.onclick=async()=>{ b.disabled=true; try{ await rpc('fe_equipe_status',{p_slug:SLUG,p_pin:pin,p_id:+b.dataset.id,p_status:b.dataset.s}); await carregar(); }catch(e){ toast(ERR(e)); b.disabled=false; } }); };
   const carregar=async()=>{ try{ L=await rpc('fe_equipe_pedidos',{p_slug:SLUG,p_pin:pin}); const ids=new Set(L.map(p=>p.id)); if(vistos && L.some(p=>p.status==='novo' && !vistos.has(p.id))) bip(); vistos=ids; render(); }catch(e){ $('colN').innerHTML=`<div class="empty">${ERR(e)}</div>`; } };
   carregar(); setInterval(carregar, 5000);
@@ -2228,6 +2264,7 @@ function painelAdmin(){
      <button data-v="recordacoes" aria-pressed="false">📖 Álbum</button>
    </div>
    <div id="vw"></div></div>`;
+  (()=>{ const a=$('abasTop'), v=$('vw'); if(a && v && !a.parentNode.classList.contains('adm-grid')){ const g=document.createElement('div'); g.className='adm-grid'; a.parentNode.insertBefore(g,a); g.appendChild(a); g.appendChild(v); } })();
   $('sair').onclick=()=>{ store.sset('mf_pin_'+SLUG,null); store.set('mf_pin_'+SLUG,null); location.reload(); };
   const abas=$('abasTop');
   abas.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; abas.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed', x===b)); if(b.dataset.v==='meutema' && $('seuCta')) $('seuCta').remove(); ({moderar:vModerar, festa:vFesta, meutema:vMeuTema, compartilhar:vCompartilhar, recordacoes:vRecordacoes, cardapio:vCardapio, apresentacao:vApresentacao, sorteio:vSorteio, quiz:vQuiz, enquete:vEnquete, interacoes:vInteracoes, evento:vEvento})[b.dataset.v](); };
@@ -2837,7 +2874,18 @@ async function vEvento(){
   const card=(ic,tit,st,desc,aba,extra)=>`<div class="ev-c"><div class="h"><b>${ic} ${tit}</b>${st}</div><p>${desc}</p><div class="row">${aba?`<button class="btn sm" data-ir="${aba}">Configurar →</button>`:''}${extra||''}</div></div>`;
   const cp=(u,t)=>`<button class="btn ghost sm" data-copy="${esc(u)}">${t||'Copiar link'}</button>`;
   const nSl=(f.slides||[]).length;
-  $('vw').innerHTML=`<div class="card" style="padding:18px"><h3 style="margin:0 0 4px">🧭 Painel do evento</h3><p class="muted" style="margin:0">Tudo do seu evento numa tela. Cada item é opcional: ligue só o que for usar. A senha da equipe vale para cozinha, recepção e manobristas.</p>
+  const kpis=async()=>{ const box=$('evK'); if(!box || ADM.view!=='evento') return; const K=[];
+    try{ const P=await rpc('fe_admin_presencas',{p_slug:SLUG,p_pin:PIN})||[]; const vao=P.filter(x=>x.vai); const pes=vao.reduce((a,x)=>a+(x.adultos||0)+(x.criancas||0),0);
+      if(f.portaria){ const ent=P.filter(x=>x.entrou_em).reduce((a,x)=>a+(x.entrou_qtd||0),0); K.push(['Credenciados',`${ent}<small> de ${pes}</small>`, pes?Math.min(100,Math.round(100*ent/pes)):0, `${Math.max(0,pes-ent)} ainda não chegaram`]); }
+      else K.push(['Confirmados',`${pes}<small> pessoas</small>`,null,`${P.length-vao.length} não vão`]); }catch(e){}
+    try{ const ps=await rpc('fe_admin_posts',{p_slug:SLUG,p_pin:PIN})||[]; const no=ps.filter(p=>p.status==='aprovado').length, pe=ps.filter(p=>p.status==='pendente').length; K.push(['Mensagens no ar',`${no}`,null,pe?`<b class="warn">${pe} esperando aprovação</b>`:'nada pendente','moderar']); }catch(e){}
+    if(f.pedidos_ativos){ try{ const L=await rpc('fe_equipe_pedidos',{p_slug:SLUG,p_pin:PIN})||[]; const nv=L.filter(x=>x.status==='novo').length, pr=L.filter(x=>x.status==='preparando').length; K.push(['Pedidos abertos',`${nv+pr}`,null,`${nv} novos · ${pr} em preparo`,'cardapio']); }catch(e){} }
+    if(f.valet){ try{ const V=await rpc('fe_admin_valet_lista',{p_slug:SLUG,p_pin:PIN})||[]; const no=V.filter(x=>x.status!=='entregue').length, sai=V.filter(x=>['solicitado','buscando'].includes(x.status)).length; K.push(['Carros no valet',`${no}`,null,sai?`<b class="warn">${sai} pedido${sai>1?'s':''} para sair</b>`:'nenhum pedido de saída']); }catch(e){} }
+    if(!$('evK') || ADM.view!=='evento') return;
+    $('evK').innerHTML=K.map(([t,v,pc,d,aba])=>`<${aba?`button type="button" data-ir="${aba}"`:'div'} class="kpi"><span class="kt">${t}</span><span class="kv">${v}</span>${pc!=null?`<span class="kb"><i style="width:${pc}%"></i></span>`:''}<span class="kd">${d}</span></${aba?'button':'div'}>`).join('');
+    $('evK').querySelectorAll('[data-ir]').forEach(b=>b.onclick=()=>ir(b.dataset.ir)); };
+  setTimeout(kpis,50); const kt=setInterval(()=>{ if(ADM.view!=='evento' || !$('evK')){ clearInterval(kt); return; } if(!document.hidden) kpis(); },20000);
+  $('vw').innerHTML=`<div class="kpis" id="evK"></div><div class="card" style="padding:18px"><h3 style="margin:0 0 4px">🧭 Painel do evento</h3><p class="muted" style="margin:0">Tudo do seu evento numa tela. Cada item é opcional: ligue só o que for usar. A senha da equipe vale para cozinha, recepção e manobristas.</p>
       <ol class="ev-passos"><li>Configure o que vai usar nos cartões abaixo.</li><li>Crie a senha da equipe e mande o link de cada função.</li><li>Mande o convite (confirmação de presença e ingresso).</li><li>Imprima os QR das mesas e teste o telão antes do evento.</li></ol></div>
     <div class="card" style="padding:16px;margin-top:12px"><div class="row" style="justify-content:space-between"><b>🔑 Senha da equipe</b>${chip(eq,'criada','falta criar')}</div>
       ${eq?'<p class="muted" style="margin:6px 0 0;font-size:14px">Mande para a equipe junto com o link da função de cada um.</p>':'<div class="row" style="margin-top:8px"><input class="in" id="evPin" maxlength="20" placeholder="4 ou mais caracteres" style="flex:1;min-width:160px" autocomplete="off"><button class="btn sm" id="evPinOk">Criar senha</button></div>'}

@@ -809,6 +809,7 @@ function temaDe(f){
 function aplicarTema(k, veu){
   const t = typeof k==='object' && k ? k : tema(k), r=document.documentElement.style;
   const bgi=$('bgimg'); if(t.fundo){ bgi.style.backgroundImage=`url("${midia(t.fundo)}")`; bgi.hidden=false; r.setProperty('--veu', veu ?? .8); } else { bgi.style.backgroundImage=''; bgi.hidden=true; }
+  r.setProperty('--hand', (()=>{ try{ return CORP(FESTA); }catch(e){ return false; } })() ? "'Figtree', system-ui, sans-serif" : "'Caveat', 'Fredoka', cursive");
   r.setProperty('--bg',t.bg); r.setProperty('--bg2',t.bg2); r.setProperty('--surface',t.surface); r.setProperty('--ink',t.ink);
   r.setProperty('--muted',t.muted); r.setProperty('--accent',t.accent); r.setProperty('--accent2',t.accent2); r.setProperty('--on',t.on); r.setProperty('--on2', /^#[0-9a-f]{6}$/i.test(t.accent2) && lum(t.accent2)<.3 ? '#ffffff' : '#1a1a1a');
   r.setProperty('--line', t.dark ? 'rgba(255,255,255,.14)' : 'rgba(0,0,0,.10)');
@@ -979,8 +980,8 @@ async function telaConvidado(){
       ${t.enfeite?`<img class="enfc l" src="${midia(t.enfeites[0])}" alt="">${t.enfeites[1]?`<img class="enfc r" src="${midia(t.enfeites[1])}" alt="">`:''}`:''}
       ${retrato?`<div class="arco"><img src="${midia(retrato)}" alt="${esc(f.homenageado||'')}"></div>`:''}
       <p class="lead">${CATS[f.categoria]?.e||"🎉"} ${esc(subtitulo(f))}</p>
-      <h1 class="who">${esc(f.homenageado||f.titulo)}</h1>
-      ${f.homenageado && f.homenageado.trim().toLowerCase()!==String(f.titulo||"").trim().toLowerCase()?`<p class="tit">${esc(f.titulo)}</p>`:''}
+      <h1 class="who">${esc(DESTAQUE(f))}</h1>
+      ${f.homenageado && f.homenageado.trim().toLowerCase()!==String(f.titulo||"").trim().toLowerCase()?`<p class="tit">${esc(SEGUNDO(f))}</p>`:''}
       ${quando?`<p class="quando">${quando}</p>`:''}
       ${f.mensagem?`<p class="msgf">${esc(f.mensagem)}</p>`:''}
       ${MESA&&f.mesas?`<span class="mesa-chip">🍽️ Mesa ${MESA}</span>`:''}
@@ -1321,7 +1322,7 @@ async function molduraCanvas(src, autor){
   c.save(); c.shadowColor='rgba(0,0,0,.28)'; c.shadowBlur=40; c.shadowOffsetY=16; c.fillStyle='#fff'; c.fillRect(px-18,py-18,pw+36,ph+36); c.restore();
   if(im){ c.save(); c.beginPath(); c.rect(px,py,pw,ph); c.clip(); cobrir(c,im,px,py,pw,ph); c.restore(); }
   if(t._enf){ const e=t._enf, eh=230, ew=Math.min(300, eh*e.width/e.height); c.drawImage(e, W-ew-40, py+ph-eh+70, ew, ew*e.height/e.width); }
-  c.textAlign='center'; const nome=f.homenageado||f.titulo; let fs=/Great|Pacifico/.test(t.font)?120:96; c.font=`400 ${fs}px ${fonte(t)}`; while(c.measureText(nome).width>W-160 && fs>44){ fs-=4; c.font=`400 ${fs}px ${fonte(t)}`; }
+  c.textAlign='center'; const nome=DESTAQUE(f); let fs=/Great|Pacifico/.test(t.font)?120:96; c.font=`400 ${fs}px ${fonte(t)}`; while(c.measureText(nome).width>W-160 && fs>44){ fs-=4; c.font=`400 ${fs}px ${fonte(t)}`; }
   c.fillStyle=t.dark&&!t._fundo?t.accent:t.accent; c.fillText(nome, W/2, py+ph+130);
   c.fillStyle=t.ink; c.font='600 34px Figtree, Fredoka, sans-serif'; c.fillText([subtitulo(f), f.data?new Date(f.data+'T12:00:00').toLocaleDateString('pt-BR'):''].filter(Boolean).join(' · '), W/2, py+ph+190);
   c.fillStyle=t.muted; c.font='500 24px Figtree, Fredoka, sans-serif'; c.fillText((autor?`📸 ${autor}  ·  `:'')+'feito com Mural da Festa', W/2, H-34);
@@ -1493,7 +1494,7 @@ function folhaGravar(kind){
 async function telaTelao(){
   FESTA = await carregarFesta(SLUG).catch(()=>null);
   if(!FESTA) return telaNaoAchou();
-  const f=FESTA, t=temaDe(f), url=linkFesta(f.slug), nome=f.homenageado||f.titulo; aplicarTema(t, .62); document.title='Telão · '+nome;
+  const f=FESTA, t=temaDe(f), url=linkFesta(f.slug), nome=DESTAQUE(f); aplicarTema(t, .62); document.title='Telão · '+nome;
   $('app').innerHTML = `
    <div class="tv">
      <div class="tv-top"><div class="t">${esc(nome)}</div><div class="n" id="tvN"></div></div>
@@ -1899,6 +1900,9 @@ function painelPedidos(pin){
 // =====================================================================
 let PIN=null, ADM={posts:[], aba:'pendente'};
 const CORP = f => !!f && f.categoria==='corporativo';
+// no corporativo o destaque é o nome do evento; nas festas, o homenageado
+const DESTAQUE = f => CORP(f) ? (f.titulo||f.homenageado) : (f.homenageado||f.titulo);
+const SEGUNDO = f => CORP(f) ? f.homenageado : f.titulo;
 // ---------- planos e pagamento (Mercado Pago) ----------
 const FN_PAG = `${SUPABASE_URL}/functions/v1/mural-pagamento`;
 const ICONE_PLANO = {festinha:'🏠', festa:'🎉', grande:'🎓', completo:'⭐', teste:'🧪'};
@@ -2698,7 +2702,7 @@ function capa(c,t,f,foto){
   c.textAlign='center';
   if(t._enf){ const e=t._enf, h=300, w=h*e.width/e.height; c.drawImage(e, PW-w-30, PH-h-150, w, h); } else { c.font='96px serif'; c.fillText(t.deco[0], 170, 210); c.fillText(t.deco[1], PW-170, 230); c.fillText(t.deco[2], PW-200, PH-170); }
   c.fillStyle=t.muted; c.font='700 34px Fredoka, sans-serif'; c.fillText(`${CATS[f.categoria]?.e||''} ${(CATS[f.categoria]?.n||'').toUpperCase()}`, PW/2, 180);
-  const nome=f.homenageado||f.titulo; let fs=/Great|Pacifico/.test(t.font)?190:150; c.font=`400 ${fs}px ${fonte(t)}`; while(c.measureText(nome).width>PW-160 && fs>70){ fs-=8; c.font=`400 ${fs}px ${fonte(t)}`; }
+  const nome=DESTAQUE(f); let fs=/Great|Pacifico/.test(t.font)?190:150; c.font=`400 ${fs}px ${fonte(t)}`; while(c.measureText(nome).width>PW-160 && fs>70){ fs-=8; c.font=`400 ${fs}px ${fonte(t)}`; }
   c.fillStyle=t.accent; c.fillText(nome, PW/2, 360);
   c.fillStyle=t.ink; c.font='700 46px Fredoka, sans-serif'; c.fillText(subtitulo(f), PW/2, 440);
   c.font='500 34px Fredoka, sans-serif'; c.fillStyle=t.muted; c.fillText([dataBonita(f), f.local].filter(Boolean).join(' · '), PW/2, 495);
@@ -2796,7 +2800,7 @@ async function conviteCanvas(f, W, H){
   let y=190*u*k;
   if(t._enf){ const e=t._enf, eh=380*u*k*k, ew=Math.min(W*.8, eh*e.width/e.height), eh2=ew*e.height/e.width; c.drawImage(e,(W-ew)/2,y,ew,eh2); y+=eh2+30*u*k; }
   else { c.font=`${230*u*k*k}px serif`; c.fillText(t.e, W/2, y+220*u*k*k); y+=270*u*k*k; }
-  const nome=f.homenageado||f.titulo; let fs=(/Great|Pacifico/.test(t.font)?190:150)*u*k; c.font=`400 ${fs}px ${fonte(t)}`; while(c.measureText(nome).width>W-120*u && fs>60*u){ fs-=6*u; c.font=`400 ${fs}px ${fonte(t)}`; }
+  const nome=DESTAQUE(f); let fs=(/Great|Pacifico/.test(t.font)?190:150)*u*k; c.font=`400 ${fs}px ${fonte(t)}`; while(c.measureText(nome).width>W-120*u && fs>60*u){ fs-=6*u; c.font=`400 ${fs}px ${fonte(t)}`; }
   c.fillStyle=t.accent; c.fillText(nome, W/2, y+fs*.8); y+=fs*.8+70*u;
   c.fillStyle=ink; c.font=`700 ${54*u}px Fredoka, sans-serif`; c.fillText(subtitulo(f), W/2, y); y+=60*u;
   if(f.homenageado && f.titulo){ c.font=`500 ${36*u}px Fredoka, sans-serif`; c.fillStyle=t.muted; c.fillText(f.titulo, W/2, y); y+=40*u; }
@@ -2824,7 +2828,7 @@ async function pdfCartoes(f){
     if(t._fundo){ c.save(); c.beginPath(); c.rect(x+14,y+14,w-28,h-28); c.clip(); cobrir(c,t._fundo,x+14,y+14,w-28,h-28); c.globalAlpha=.6; c.fillStyle=t.bg; c.fillRect(x+14,y+14,w-28,h-28); c.restore(); c.globalAlpha=1; }
     c.textAlign='center'; if(t._enf){ const e=t._enf, eh=120, ew=eh*e.width/e.height; c.drawImage(e,x+28,y+h-28-eh,ew,eh); } else { c.font='54px serif'; c.fillText(t.deco[0],x+70,y+90); c.fillText(t.deco[1],x+w-70,y+90); }
     c.fillStyle=t.muted; c.font='700 24px Fredoka, sans-serif'; c.fillText(subtitulo(f).toUpperCase(), x+w/2, y+80);
-    const nome=f.homenageado||f.titulo; let fs=/Great|Pacifico/.test(t.font)?86:66; c.font=`400 ${fs}px ${fonte(t)}`; while(c.measureText(nome).width>w-100 && fs>34){ fs-=4; c.font=`400 ${fs}px ${fonte(t)}`; } c.fillStyle=t.accent; c.fillText(nome, x+w/2, y+170);
+    const nome=DESTAQUE(f); let fs=/Great|Pacifico/.test(t.font)?86:66; c.font=`400 ${fs}px ${fonte(t)}`; while(c.measureText(nome).width>w-100 && fs>34){ fs-=4; c.font=`400 ${fs}px ${fonte(t)}`; } c.fillStyle=t.accent; c.fillText(nome, x+w/2, y+170);
     c.fillStyle=t.ink; c.font='700 34px Fredoka, sans-serif'; c.fillText('Deixe sua homenagem!', x+w/2, y+228);
     rr(c,x+w/2-170,y+258,340,340,24); c.fillStyle='#fff'; c.fill(); c.drawImage(qr,x+w/2-150,y+278,300,300);
     c.fillStyle=t.ink; c.font='600 26px Fredoka, sans-serif'; c.fillText('📸 foto · ✍️ recado · 🎤 áudio · 🎥 vídeo', x+w/2, y+650);

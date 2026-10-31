@@ -701,6 +701,23 @@ h2.sec .muted{font-family:var(--body)}
 .mod-it .tx{flex:1;min-width:0} .mod-it .tx small{color:var(--muted);display:block}
 .mod-it img{width:52px;height:52px;object-fit:cover;border-radius:8px;flex:none}
 .mod-it .bt{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.tv-enq{position:fixed;inset:0;z-index:30;display:flex;flex-direction:column;padding:6vh 6vw 5vh;gap:3vh;background:radial-gradient(120% 90% at 50% 15%,var(--bg2),var(--bg));overflow:hidden}
+.tv-enq .k{font-size:clamp(14px,1.6vw,26px);font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.tv-enq .t{font-family:var(--display);font-size:clamp(30px,4.4vw,72px);line-height:1.1;color:var(--ink);margin-top:1vh}
+.tv-enq .tot{position:absolute;top:6vh;right:6vw;padding:1vh 1.4vw;border-radius:99px;background:color-mix(in srgb,var(--accent) 14%, var(--surface));color:var(--accent);font-weight:700;font-size:clamp(14px,1.6vw,26px)}
+.tv-enq .bars{flex:1;display:flex;flex-direction:column;justify-content:center;gap:2.6vh}
+.tv-enq .eb .l{display:flex;justify-content:space-between;font-size:clamp(18px,2.4vw,40px);font-weight:600;color:var(--ink);margin-bottom:1vh}
+.tv-enq .eb .tr{height:4.2vh;border-radius:1.2vh;background:color-mix(in srgb,var(--ink) 8%, transparent);overflow:hidden}
+.tv-enq .eb .fi{height:100%;border-radius:1.2vh;background:color-mix(in srgb,var(--accent) 55%, var(--surface));transition:width .8s ease}
+.tv-enq .eb.lider .fi{background:var(--accent)} .tv-enq .eb.lider .l b{color:var(--accent)}
+.tv-enq .nuv{flex:1;display:flex;flex-wrap:wrap;align-content:center;justify-content:center;gap:1.2vh 2.6vw;padding:0 4vw}
+.tv-enq .nuv span{font-weight:700;line-height:1.05;transition:font-size .8s ease;animation:fadein .6s ease both}
+.tv-enq .vazio{flex:1;display:grid;place-items:center;font-size:clamp(20px,2.6vw,42px);color:var(--muted)}
+.enq-ops{display:flex;flex-direction:column;gap:8px;max-width:440px;margin:0 auto}
+.enq-ops button{position:relative;overflow:hidden;text-align:left;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--ink);font:inherit;font-weight:600;font-size:16px;cursor:pointer;min-height:48px}
+.enq-ops button[aria-pressed="true"]{border:2px solid var(--accent)}
+.enq-ops button i{position:absolute;inset:0 auto 0 0;background:color-mix(in srgb,var(--accent) 14%, transparent);z-index:0;transition:width .6s ease}
+.enq-ops button span{position:relative;z-index:1;display:flex;justify-content:space-between;gap:10px}
 .tv-prg{position:fixed;inset:0;z-index:30;display:grid;place-items:center;text-align:center;padding:6vh 8vw;background:radial-gradient(120% 90% at 50% 15%,var(--bg2),var(--bg))}
 .tv-prg .k{font-size:clamp(18px,2.6vw,38px);color:var(--muted);font-weight:700}
 .tv-prg .t{font-family:var(--display);font-size:clamp(34px,5.4vw,88px);line-height:1.12;color:var(--ink);margin:3vh 0;max-width:24ch}
@@ -1018,6 +1035,7 @@ async function telaConvidado(){
     <div id="cvUp"></div>
     ${f.ativo && f.perguntas_ativas ? '<section class="card rsvp" id="prg"></section>' : ''}
     ${f.ativo ? '<section class="card rsvp" id="qz" hidden></section>' : ''}
+    ${f.ativo ? '<section class="card rsvp" id="enq" hidden></section>' : ''}
     ${f.ativo ? '<section class="card rsvp" id="srt" hidden></section>' : ''}
     ${f.ativo && f.valet ? '<section class="card rsvp" id="vlt"></section>' : ''}
     ${f.ativo && f.tem_cardapio && MESA ? '<section class="card rsvp" id="cdp"></section>' : ''}
@@ -1047,7 +1065,7 @@ async function telaConvidado(){
   document.querySelectorAll('.capa .enfc').forEach(im=>{ const t2=new Image(); t2.crossOrigin='anonymous'; t2.onload=()=>{ try{ const c=document.createElement('canvas'); c.width=c.height=16; const x=c.getContext('2d'); x.drawImage(t2,0,0,16,16); const d=x.getImageData(0,0,16,16).data; if(![0,15,240,255].some(k=>d[k*4+3]<200)) im.classList.add('sticker'); }catch(e){ im.classList.add('sticker'); } }; t2.src=im.src; });
   const nome=$('nome'); if(nome) nome.addEventListener('change',()=>store.set('mf_nome',nome.value.trim().slice(0,40)));
   $('mural').addEventListener('click', e=>{ const l=e.target.closest('[data-like]'); if(l) return curtir(l); const rc=e.target.closest('[data-reac]'); if(rc) return reagir(rc); const cm=e.target.closest('[data-com]'); if(cm) return abrirComentarios(+cm.dataset.com); const m=e.target.closest('[data-mol]'); if(m){ const p=POSTS.find(x=>x.id===+m.dataset.mol); if(p) abrirMoldura(midia(p.caminho), p.autor); } });
-  ligarConvite(); ligarPresenca(); ligarCardapio(MESA); ligarValet(); ligarSorteio(); ligarQuiz(); ligarCorreio(); ligarPerguntas(MESA);
+  ligarConvite(); ligarPresenca(); ligarCardapio(MESA); ligarValet(); ligarSorteio(); ligarQuiz(); ligarEnquete(); ligarCorreio(); ligarPerguntas(MESA);
   await atualizarMural(); setInterval(()=>{ if(!document.hidden) atualizarMural(); }, 20000);
 }
 async function atualizarMural(){
@@ -1299,6 +1317,32 @@ function ligarPerguntas(MESA){
   const ST={pendente:'⏳ aguardando moderação',aprovada:'✅ aprovada, na fila',a_caminho:'🎤 o microfone está indo até você',respondida:'✔ respondida',recusada:'não selecionada'};
   const minhas=async()=>{ try{ const l=await rpc('fe_minhas_perguntas',{p_festa:f.id,p_aparelho:deviceId()}); $('pgL').innerHTML=l.length?'<p style="margin:14px 0 4px;font-weight:600;text-align:left">Suas perguntas</p>'+l.map(x=>`<div><span>${x.tipo==='microfone'?'🎤 Pedido de microfone':x.tipo==='audio'?'🎙️ Pergunta gravada':esc(x.texto||'')}</span><span>${ST[x.status]||x.status}</span></div>`).join(''):''; }catch(e){} };
   minhas(); setInterval(()=>{ if(!document.hidden) minhas(); }, 10000);
+}
+function ligarEnquete(){
+  const box=$('enq'); if(!box) return; const f=FESTA; let e=null, chave='', timer=null, editando=false;
+  const pct=(n,t)=>t?Math.round(100*n/t):0;
+  const pintar=()=>{
+    if(!e){ box.hidden=true; chave=''; return; } box.hidden=false;
+    const k=JSON.stringify([e.id,e.minha,editando,e.tipo==='enquete'?e.contagem:null]); if(k===chave) return; chave=k;
+    if(e.tipo==='enquete'){
+      const t=e.total||0, ja=e.minha&&e.minha.opcao!=null;
+      box.innerHTML=`<h2 class="sec">📊 Enquete</h2><p class="sub" style="font-weight:600;color:var(--ink)">${esc(e.pergunta)}</p>
+        <div class="enq-ops">${(e.opcoes||[]).map((o,i)=>`<button type="button" data-eo="${i}" aria-pressed="${ja&&e.minha.opcao===i}">${ja?`<i style="width:${pct((e.contagem||[])[i]||0,t)}%"></i>`:''}<span>${esc(o)}${ja?`<b>${pct((e.contagem||[])[i]||0,t)}%</b>`:''}</span></button>`).join('')}</div>
+        <p class="muted" style="margin:10px 0 0;font-size:14px">${ja?`Voto registrado · ${t} voto${t==1?'':'s'} até agora. Pode trocar enquanto a enquete estiver aberta.`:'Toque numa opção. 1 voto por celular.'}</p><div class="msg" id="enqM"></div>`;
+      box.querySelectorAll('[data-eo]').forEach(b=>b.onclick=async()=>{ try{ e=await rpc('fe_enquete_responder',{p_festa:f.id,p_aparelho:deviceId(),p_id:e.id,p_opcao:+b.dataset.eo,p_palavra:null}); if(navigator.vibrate) navigator.vibrate(30); pintar(); }catch(err){ $('enqM').className='msg err'; $('enqM').textContent=/aberta/.test(err.message||'')?err.message:ERR(err); } });
+    } else {
+      const minha=e.minha&&e.minha.palavra;
+      box.innerHTML=`<h2 class="sec">☁️ Nuvem de palavras</h2><p class="sub" style="font-weight:600;color:var(--ink)">${esc(e.pergunta)}</p>
+        ${minha&&!editando?`<p style="margin:0">Sua palavra: <b style="color:var(--accent)">${esc(minha)}</b></p><p class="muted" style="margin:6px 0 0;font-size:14px">Ela já está no telão. As mais repetidas aparecem maiores.</p><button class="molbtn" type="button" id="enqTroca">trocar palavra</button>`
+        :`<div class="row" style="justify-content:center;gap:8px"><input class="in" id="enqP" maxlength="25" placeholder="Sua palavra" style="max-width:260px" value="${esc(minha||'')}"><button class="btn" type="button" id="enqOk">Enviar</button></div><div class="msg" id="enqM"></div>`}`;
+      if($('enqTroca')) $('enqTroca').onclick=()=>{ editando=true; pintar(); };
+      if($('enqOk')) $('enqOk').onclick=async()=>{ const w=$('enqP').value.trim(); if(!w){ $('enqM').className='msg err'; $('enqM').textContent='Escreva uma palavra.'; return; } $('enqOk').disabled=true;
+        try{ e=await rpc('fe_enquete_responder',{p_festa:f.id,p_aparelho:deviceId(),p_id:e.id,p_opcao:null,p_palavra:w}); editando=false; pintar(); toast('Palavra enviada ao telão ☁️'); }catch(err){ $('enqM').className='msg err'; $('enqM').textContent=/palavra|aberta/i.test(err.message||'')?err.message:ERR(err); $('enqOk').disabled=false; } };
+    }
+  };
+  const ler=async()=>{ if(document.hidden || editando) return; try{ const n=await rpc('fe_enquete_estado',{p_festa:f.id,p_aparelho:deviceId()}); const novo=!e || !n || n.id!==e.id; e=n||null; pintar(); if(novo && e) box.scrollIntoView({behavior:'smooth',block:'center'}); }catch(_){} };
+  const agendar=()=>{ clearTimeout(timer); timer=setTimeout(async()=>{ await ler(); agendar(); }, e?4000:8000); };
+  ler().then(agendar);
 }
 function ligarQuiz(){
   const box=$('qz'); if(!box) return; const f=FESTA; let q={fase:'off'}, timer=null, tick=null, chave='', enviando=false;
@@ -1695,17 +1739,35 @@ async function telaTelao(){
     if(modo==='apresentacao' && sl.length){ camada.className='tv-apr'; camada.hidden=false; const src=midia(sl[Math.min(e.slide||0,sl.length-1)]); const img=camada.querySelector('img'); if(!img || img.dataset.src!==src) camada.innerHTML=`<img data-src="${src}" src="${src}" alt="">`; }
     else if(modo==='sorteio'){ telaoSorteio(e.sorteio||{}); }
     else if(modo==='quiz'){ telaoQuiz(e.quiz||{}); }
+    else if(modo==='enquete' && e.enquete){ telaoEnquete(e.enquete); }
     else if(modo==='pergunta' && e.pergunta){ const q=e.pergunta; if(camada.dataset.pq!=String(q.id)){ camada.dataset.pq=q.id; camada.className='tv-prg'; camada.hidden=false;
         camada.innerHTML=`<div><div class="k">🙋 Pergunta da plateia</div><div class="t">${q.texto?esc(q.texto):q.tipo==='audio'?'🎙️ Pergunta gravada':''}</div><div class="w">${q.nome?esc(q.nome):'Anônimo'}${q.mesa?' · '+esc(q.mesa):''}</div>${q.audio?`<audio id="tvPa" src="${midia(q.audio)}" autoplay></audio>`:''}</div>`; } }
     else if(modo==='pausa'){ camada.className='tv-pausa'; camada.hidden=false; if(!camada.querySelector('.who')) camada.innerHTML=`<div><div class="who">${esc(nome)}</div><p>Já voltamos 💛</p></div>`; }
     else { camada.hidden=true; camada.innerHTML=''; }
-    const parar = modo!=='mural' && (modo==='pausa' || modo==='sorteio' || modo==='quiz' || modo==='pergunta' || sl.length);
+    const parar = modo!=='mural' && (modo==='pausa' || modo==='sorteio' || modo==='quiz' || modo==='pergunta' || modo==='enquete' || sl.length);
+    if(modo!=='enquete') delete camada.dataset.eid;
     if(modo!=='quiz'){ clearInterval(qzTick); qzChave=''; }
     if(modo!=='pergunta') delete camada.dataset.pq;
     if(parar && !tv.ctlPausa){ tv.ctlPausa=true; tv.paused=true; clearTimeout(tv.timer); $('stage').querySelectorAll('audio,video').forEach(m=>{ try{ m.pause(); }catch(_){} }); if(mus) mus.duck(true); }
     if(!parar && tv.ctlPausa){ tv.ctlPausa=false; tv.paused=false; if(mus) mus.duck(false); if(tv.started) proxima(); }
     if(modo!=='sorteio') srtUlt=null;
-    tvCtl={modo, slide:e&&e.slide||0, em:e&&e.em, n:e&&e.sorteio?e.sorteio.n:null, qk:e&&e.quiz?[e.quiz.fase,e.quiz.idx,e.quiz.jogadores,e.quiz.respostas].join():null};
+    tvCtl={modo, slide:e&&e.slide||0, em:e&&e.em, n:e&&e.sorteio?e.sorteio.n:null, qk:e&&e.quiz?[e.quiz.fase,e.quiz.idx,e.quiz.jogadores,e.quiz.respostas].join():null, ek:e&&e.enquete?JSON.stringify([e.enquete.id,e.enquete.total,e.enquete.contagem,e.enquete.palavras,e.enquete.aberta]):null};
+  };
+  const telaoEnquete=q=>{
+    camada.className='tv-enq'; camada.hidden=false; const t=q.total||0;
+    const topo=`<div><div class="k">${q.tipo==='nuvem'?'Nuvem de palavras':'Enquete ao vivo'}${q.aberta?'':' · encerrada'}</div><div class="t">${esc(q.pergunta)}</div></div><div class="tot">${t} ${q.tipo==='nuvem'?(t==1?'resposta':'respostas'):(t==1?'voto':'votos')}</div>`;
+    if(q.tipo==='enquete'){ const c=q.contagem||[], mx=Math.max(0,...c);
+      const corpo=`<div class="bars">${(q.opcoes||[]).map((o,i)=>{ const p=t?Math.round(100*(c[i]||0)/t):0; return `<div class="eb${mx&&c[i]===mx?' lider':''}"><div class="l"><span>${esc(o)}</span><b>${p}%</b></div><div class="tr"><div class="fi" data-w="${p}" style="width:0"></div></div></div>`; }).join('')}</div>`;
+      if(camada.dataset.eid!=String(q.id)){ camada.dataset.eid=q.id; camada.innerHTML=topo+corpo; }
+      else { const tmp=document.createElement('div'); tmp.innerHTML=topo+corpo; camada.querySelector('.tot').textContent=tmp.querySelector('.tot').textContent; camada.querySelector('.k').textContent=tmp.querySelector('.k').textContent;
+        const novas=tmp.querySelectorAll('.eb'); camada.querySelectorAll('.eb').forEach((b,i)=>{ if(!novas[i]) return; b.className=novas[i].className; b.querySelector('.l b').textContent=novas[i].querySelector('.l b').textContent; b.querySelector('.fi').dataset.w=novas[i].querySelector('.fi').dataset.w; }); }
+      requestAnimationFrame(()=>camada.querySelectorAll('.fi').forEach(fi=>fi.style.width=fi.dataset.w+'%'));
+      return; }
+    const pal=q.palavras||[], mx=Math.max(1,...pal.map(x=>x.n)), mn=Math.min(mx,...pal.map(x=>x.n));
+    const cores=['var(--accent)','var(--ink)','color-mix(in srgb,var(--accent) 70%, var(--ink))','var(--muted)','color-mix(in srgb,var(--accent2) 80%, var(--ink))'];
+    const ord=pal.map((x,i)=>({...x,i})).sort((a,b)=>((a.i*7)%pal.length)-((b.i*7)%pal.length));
+    const corpo=pal.length?`<div class="nuv">${ord.map(x=>{ const r=mx===mn?1:(x.n-mn)/(mx-mn); const fs=(2.2+r*6.8).toFixed(2); return `<span style="font-size:${fs}vw;color:${cores[x.i%cores.length]}">${esc(x.p)}</span>`; }).join('')}</div>`:'<div class="vazio">Mande a sua palavra pelo celular</div>';
+    camada.dataset.eid=q.id; camada.innerHTML=topo+corpo;
   };
   let qzTick=null, qzChave='', qzFinalVisto=false;
   const telaoQuiz=q=>{
@@ -1746,7 +1808,7 @@ async function telaTelao(){
         <div class="srt-row"><div class="srt-qr" id="srtQr"></div><div class="srt-info"><div class="srt-n">${s.n||0}</div>participante${s.n==1?'':'s'}<br><br>Aponte a câmera e toque em <b>“Quero participar”</b></div></div></div>`; qrInto($('srtQr'), url, 300); }
     else camada.innerHTML=`<div><div class="srt-t" style="font-size:clamp(36px,5vw,80px)">🏆 Sorteado</div><div class="srt-roda win">${esc(g.nome)}</div>${g.premio?`<div class="srt-p">${esc(g.premio)}</div>`:''}</div>`;
   };
-  const lerCtl=async()=>{ try{ const e=await rpc('fe_tv_estado',{p_festa:f.id}); if(!e) return; if(e.em!==tvCtl.em || e.modo!==tvCtl.modo || (e.sorteio && e.sorteio.n!==tvCtl.n) || (e.quiz && [e.quiz.fase,e.quiz.idx,e.quiz.jogadores,e.quiz.respostas].join()!==tvCtl.qk)) aplicarCtl(e); }catch(_){} };
+  const lerCtl=async()=>{ try{ const e=await rpc('fe_tv_estado',{p_festa:f.id}); if(!e) return; if(e.em!==tvCtl.em || e.modo!==tvCtl.modo || (e.sorteio && e.sorteio.n!==tvCtl.n) || (e.quiz && [e.quiz.fase,e.quiz.idx,e.quiz.jogadores,e.quiz.respostas].join()!==tvCtl.qk) || (e.enquete && JSON.stringify([e.enquete.id,e.enquete.total,e.enquete.contagem,e.enquete.palavras,e.enquete.aberta])!==tvCtl.ek)) aplicarCtl(e); }catch(_){} };
   setInterval(lerCtl, 2000); lerCtl();
   document.addEventListener('keydown', e=>{ if(tvCtl.modo!=='apresentacao' || !slidesCache.length) return;
     if(e.key==='ArrowRight' || e.key==='ArrowLeft'){ e.stopImmediatePropagation(); const n=Math.max(0,Math.min(slidesCache.length-1,tvCtl.slide+(e.key==='ArrowRight'?1:-1))); aplicarCtl({modo:'apresentacao',slide:n,em:tvCtl.em,slides:slidesCache}); } }, true);
@@ -2104,13 +2166,14 @@ function painelAdmin(){
      <button data-v="apresentacao" aria-pressed="false">🎤 Apresentação</button>
      <button data-v="sorteio" aria-pressed="false">🎲 Sorteio</button>
      <button data-v="quiz" aria-pressed="false">🧠 Quiz</button>
+     <button data-v="enquete" aria-pressed="false">📊 Enquetes</button>
      <button data-v="interacoes" aria-pressed="false">💬 Interações</button>
      <button data-v="recordacoes" aria-pressed="false">📖 Álbum</button>
    </div>
    <div id="vw"></div></div>`;
   $('sair').onclick=()=>{ store.sset('mf_pin_'+SLUG,null); store.set('mf_pin_'+SLUG,null); location.reload(); };
   const abas=$('abasTop');
-  abas.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; abas.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed', x===b)); if(b.dataset.v==='meutema' && $('seuCta')) $('seuCta').remove(); ({moderar:vModerar, festa:vFesta, meutema:vMeuTema, compartilhar:vCompartilhar, recordacoes:vRecordacoes, cardapio:vCardapio, apresentacao:vApresentacao, sorteio:vSorteio, quiz:vQuiz, interacoes:vInteracoes, evento:vEvento})[b.dataset.v](); };
+  abas.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; abas.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed', x===b)); if(b.dataset.v==='meutema' && $('seuCta')) $('seuCta').remove(); ({moderar:vModerar, festa:vFesta, meutema:vMeuTema, compartilhar:vCompartilhar, recordacoes:vRecordacoes, cardapio:vCardapio, apresentacao:vApresentacao, sorteio:vSorteio, quiz:vQuiz, enquete:vEnquete, interacoes:vInteracoes, evento:vEvento})[b.dataset.v](); };
   const ir=v=>{ const b=abas.querySelector(`[data-v="${v}"]`); if(b) b.click(); };
   document.querySelectorAll('[data-ir]').forEach(b=>b.onclick=()=>ir(b.dataset.ir));
   if($('psOk')) $('psOk').onclick=()=>{ store.set('mf_novo_'+f.slug,null); $('passos').remove(); };
@@ -2596,6 +2659,41 @@ async function vApresentacao(){
 const QZ_COR=['#e21b3c','#1368ce','#d89e00','#26890c'], QZ_FORMA=['▲','◆','●','■'];
 const QZ_PRONTAS_CORP=n=>[`Em que ano ${n} foi fundada?`,`Quantas lojas ou unidades ${n} tem hoje?`,`Qual é o principal valor de ${n}?`,`Qual foi o maior resultado de ${n} neste ano?`,`Qual destes produtos é o mais vendido de ${n}?`,`Qual é a próxima meta de ${n}?`];
 const QZ_PRONTAS=n=>[`Em que cidade ${n} nasceu?`,`Qual a comida favorita de ${n}?`,`Qual era o apelido de ${n} quando criança?`,`Qual a cor favorita de ${n}?`,`Qual destes lugares ${n} mais quer conhecer?`,`Qual a música que ${n} mais canta?`];
+const ENQ_PRONTAS=f=>CORP(f)?[['nuvem','Em uma palavra: como foi o seu ano?'],['nuvem','O que não pode faltar no próximo ano?'],['enquete','Qual meta mais te anima?',['Crescer em vendas','Novos produtos','Mais treinamento','Melhor atendimento']],['enquete','Como você avalia o evento até agora?',['Excelente','Bom','Regular']]]
+  :[['nuvem',`Uma palavra para definir ${f.homenageado||'o homenageado'}`],['nuvem','Um desejo para o futuro'],['enquete','Qual foi o melhor momento da festa?',['A entrada','A valsa ou a dança','O bolo','A pista']],['enquete','Qual música não pode faltar?',['Pop','Sertanejo','Forró','Axé']]];
+async function vEnquete(){
+  ADM.view='enquete'; const f=FESTA; let D={lista:[]}, tipo='enquete', editId=null, ops=['',''];
+  const carregar=async()=>{ try{ D=await rpc('fe_admin_enquetes',{p_slug:SLUG,p_pin:PIN}); }catch(e){} };
+  await carregar();
+  const form=()=>`<div class="card" style="padding:18px"><h3 style="margin:0 0 4px">📊 Enquete ao vivo e nuvem de palavras <span class="muted" style="font-size:14px;font-weight:500">(opcional)</span></h3>
+      <p class="muted" style="margin:0 0 12px">Os convidados respondem pelo celular e o resultado aparece no telão na hora. Enquete: barras com a porcentagem de cada opção. Nuvem: as palavras mais repetidas aparecem maiores. 1 resposta por celular; palavrões são barrados e você pode esconder qualquer palavra.</p>
+      <div class="seg" role="tablist" style="justify-content:flex-start;margin-bottom:10px"><button type="button" data-tp="enquete" aria-pressed="${tipo==='enquete'}">📊 Enquete</button><button type="button" data-tp="nuvem" aria-pressed="${tipo==='nuvem'}">☁️ Nuvem de palavras</button></div>
+      <label class="f">Pergunta<input class="in" id="enP" maxlength="140" placeholder="${tipo==='enquete'?'Ex.: Qual meta mais te anima?':'Ex.: Em uma palavra: como foi o seu ano?'}"></label>
+      ${tipo==='enquete'?`<div id="enOps" style="display:flex;flex-direction:column;gap:6px;margin-top:10px">${ops.map((o,i)=>`<input class="in" data-op="${i}" maxlength="60" placeholder="Opção ${i+1}" value="${esc(o)}">`).join('')}</div>${ops.length<6?'<button class="btn ghost sm" type="button" id="enAddOp" style="margin-top:6px">＋ Opção</button>':''}`:''}
+      <div class="row" style="justify-content:space-between;margin-top:12px;flex-wrap:wrap;gap:8px"><span class="row" style="gap:6px;flex-wrap:wrap">${ENQ_PRONTAS(f).map((x,i)=>`<button class="btn ghost sm" type="button" data-pr="${i}">✨ ${esc(x[1].length>34?x[1].slice(0,32)+'…':x[1])}</button>`).join('')}</span>
+        <span class="row"><span class="msg" id="enM"></span>${editId?'<button class="btn ghost" type="button" id="enCancel">Cancelar</button>':''}<button class="btn" type="button" id="enSalvar">${editId?'Salvar alterações':'Criar'}</button></span></div></div>`;
+  const item=x=>{ const noTv=D.modo==='enquete' && D.atual===x.id; const t=x.total||0;
+    const res = x.tipo==='enquete' ? `<div class="enq-ops" style="max-width:none;margin-top:10px">${(x.opcoes||[]).map((o,i)=>{ const c=(x.contagem||[])[i]||0, p=t?Math.round(100*c/t):0; return `<button type="button" disabled style="cursor:default;opacity:1"><i style="width:${p}%"></i><span>${esc(o)}<b>${c} · ${p}%</b></span></button>`; }).join('')}</div>`
+      : `<div class="srt-lista" style="margin-top:10px">${(x.palavras||[]).map(w=>`<span>${esc(w.p)} <b>${w.n}</b> <button type="button" class="molbtn" data-oc="${x.id}" data-w="${esc(w.p)}" aria-label="Esconder ${esc(w.p)}">esconder</button></span>`).join('')||'<span class="muted">Nenhuma palavra ainda</span>'}</div>${(x.ocultas||[]).length?`<p class="muted" style="font-size:13px;margin:8px 0 0">Escondidas: ${(x.ocultas||[]).map(w=>`<button type="button" class="molbtn" data-mo="${x.id}" data-w="${esc(w)}">${esc(w)} ↺</button>`).join(' ')}</p>`:''}`;
+    return `<div class="card" style="padding:16px;margin-top:12px"><div class="row" style="justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap"><div><span class="muted" style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">${x.tipo==='nuvem'?'☁️ Nuvem de palavras':'📊 Enquete'}${x.aberta?' · <span style="color:#15803d">recebendo respostas</span>':''}${noTv?' · <span style="color:var(--accent)">no telão</span>':''}</span><div style="font-weight:700;font-size:18px;margin-top:2px">${esc(x.pergunta)}</div><div class="muted" style="font-size:14px">${t} resposta${t==1?'':'s'}</div></div>
+      <div class="ctrl">${x.aberta?`<button class="btn alt sm" data-ac="fechar" data-id="${x.id}">🔒 Encerrar votação</button>`:`<button class="btn sm" data-ac="abrir" data-id="${x.id}">📢 Abrir e mostrar no telão</button>`}${noTv?`<button class="btn ghost sm" data-ac="mural" data-id="${x.id}">💌 Voltar ao mural</button>`:`<button class="btn ghost sm" data-ac="telao" data-id="${x.id}">📺 Mostrar no telão</button>`}<button class="btn ghost sm" data-ed="${x.id}">✏️ Editar</button><button class="btn ghost sm" data-ac="zerar" data-id="${x.id}">🔄 Zerar</button><button class="btn ghost sm" data-ac="apagar" data-id="${x.id}" style="color:#b42318">Apagar</button></div></div>${res}</div>`; };
+  const pintar=()=>{ if(ADM.view!=='enquete') return; const pv=$('enP')?$('enP').value:''; const lerOps=()=>{ if($('enOps')) ops=[...$('enOps').querySelectorAll('[data-op]')].map(i=>i.value); };
+    $('vw').innerHTML=form()+`<div id="enL">${(D.lista||[]).map(item).join('')||'<p class="muted" style="margin:14px 4px">Nenhuma enquete criada ainda. Use uma das sugestões ✨ para começar rápido.</p>'}</div>`; $('enP').value=pv;
+    $('vw').querySelectorAll('[data-tp]').forEach(b=>b.onclick=()=>{ lerOps(); tipo=b.dataset.tp; pintar(); });
+    if($('enAddOp')) $('enAddOp').onclick=()=>{ lerOps(); ops.push(''); pintar(); };
+    $('vw').querySelectorAll('[data-pr]').forEach(b=>b.onclick=()=>{ const x=ENQ_PRONTAS(f)[+b.dataset.pr]; tipo=x[0]; ops=x[2]?[...x[2]]:['','']; pintar(); $('enP').value=x[1]; });
+    if($('enCancel')) $('enCancel').onclick=()=>{ editId=null; ops=['','']; $('enP').value=''; pintar(); };
+    $('enSalvar').onclick=async()=>{ lerOps(); const M=$('enM'); const op=ops.map(o=>o.trim()).filter(Boolean);
+      try{ await rpc('fe_admin_enquete_salvar',{p_slug:SLUG,p_pin:PIN,p_id:editId,p_tipo:tipo,p_pergunta:$('enP').value.trim(),p_opcoes:tipo==='enquete'?op:[]}); toast(editId?'Enquete atualizada.':'Pronto! Agora é só abrir no telão 📊'); editId=null; ops=['','']; $('enP').value=''; await carregar(); pintar(); }
+      catch(e){ M.className='msg err'; M.textContent=/pergunta|opç|Até 30/i.test(e.message||'')?e.message:ERR(e); } };
+    $('vw').querySelectorAll('[data-ac]').forEach(b=>b.onclick=async()=>{ const ac=b.dataset.ac; if(ac==='apagar' && !confirm('Apagar esta enquete e as respostas?')) return; if(ac==='zerar' && !confirm('Apagar todas as respostas desta enquete?')) return;
+      b.disabled=true; try{ D=await rpc('fe_admin_enquete_acao',{p_slug:SLUG,p_pin:PIN,p_id:+b.dataset.id,p_acao:ac,p_palavra:null}); pintar(); }catch(e){ toast(ERR(e)); b.disabled=false; } });
+    $('vw').querySelectorAll('[data-oc],[data-mo]').forEach(b=>b.onclick=async()=>{ try{ D=await rpc('fe_admin_enquete_acao',{p_slug:SLUG,p_pin:PIN,p_id:+(b.dataset.oc||b.dataset.mo),p_acao:b.dataset.oc?'ocultar':'mostrar',p_palavra:b.dataset.w}); pintar(); }catch(e){ toast(ERR(e)); } });
+    $('vw').querySelectorAll('[data-ed]').forEach(b=>b.onclick=()=>{ const x=D.lista.find(y=>y.id==b.dataset.ed); if(!x) return; editId=x.id; tipo=x.tipo; ops=x.tipo==='enquete'?[...x.opcoes]:['','']; pintar(); $('enP').value=x.pergunta; $('enP').focus(); window.scrollTo({top:0,behavior:'smooth'}); });
+  };
+  pintar();
+  const t=setInterval(async()=>{ if(ADM.view!=='enquete'){ clearInterval(t); return; } if(document.activeElement && /INPUT|TEXTAREA/.test(document.activeElement.tagName)) return; await carregar(); if($('enOps')) ops=[...$('enOps').querySelectorAll('[data-op]')].map(i=>i.value); const sy=scrollY; pintar(); scrollTo(0,sy); }, 5000);
+}
 async function vQuiz(){
   ADM.view='quiz'; const f=FESTA, nm=f.homenageado||'o homenageado'; let Q=[], est={fase:'off'};
   try{ Q=await rpc('fe_admin_quiz_get',{p_slug:SLUG,p_pin:PIN})||[]; }catch(e){}

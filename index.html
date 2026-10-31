@@ -751,6 +751,52 @@ body.tem-ajuda{padding-bottom:64px}
 .ev-passos{counter-reset:p;list-style:none;padding:0;margin:8px 0 0;display:flex;flex-direction:column;gap:6px}
 .ev-passos li{counter-increment:p;display:flex;gap:10px;align-items:baseline}
 .ev-passos li::before{content:counter(p);font-weight:800;color:var(--on);background:var(--accent);border-radius:50%;width:24px;height:24px;display:inline-grid;place-items:center;font-size:13px;flex:none}
+
+/* =====================================================================
+   DESIGN SYSTEM Mural da Festa (camada final: vale para todos os temas)
+   2 famílias (display do tema só no nome do evento), borda em vez de sombra,
+   botões 44px, raio 10/16, ações sem cores misturadas
+   ===================================================================== */
+:root{ --hand:'Figtree', system-ui, sans-serif; --r-sm:6px; --r-md:10px; --r-lg:16px; }
+body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+.card{border-radius:var(--r-lg);box-shadow:none;border:1px solid var(--line)}
+.btn{border-radius:var(--r-md);min-height:44px;padding:10px 18px;font-weight:700;letter-spacing:.01em;box-shadow:none}
+.btn.sm{min-height:36px;padding:6px 12px;font-size:14px}
+.btn.big{min-height:52px;font-size:17px}
+.btn.ghost{border:1px solid var(--line);background:var(--surface)}
+.btn.ghost:hover{border-color:color-mix(in srgb,var(--ink) 30%, transparent);filter:none}
+.btn.alt{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
+.btn:focus-visible,.in:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.in, textarea.in, select.in{border:1px solid var(--line);border-radius:var(--r-md);background:var(--surface);min-height:44px}
+.in:focus{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 18%, transparent);outline:none}
+label.f{color:var(--ink);font-weight:600}
+.chip{border-radius:var(--r-sm)}
+h2.sec{font-family:var(--body);font-size:22px;line-height:28px;font-weight:700;letter-spacing:-.01em}
+.card h3{font-family:var(--body);font-weight:700;letter-spacing:-.01em}
+.sub{color:var(--muted)}
+/* ações do convidado: todas iguais, ícone na cor do tema */
+.act{border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:none;font-size:16px;align-items:flex-start;text-align:left;padding:16px}
+.act:nth-child(1),.act:nth-child(4){background:var(--surface);color:var(--ink);border-color:var(--line)}
+.act:hover{transform:none;border-color:var(--accent)}
+.act .ic{color:var(--accent)}
+.act small{font-weight:500;color:var(--muted)}
+/* mural */
+.post{border-radius:var(--r-lg);box-shadow:none}
+.post.t blockquote,.mod .media blockquote{font-family:var(--body);font-size:19px;line-height:1.35;font-weight:500}
+/* abas do painel */
+#abasTop{border-radius:var(--r-lg);box-shadow:none}
+#abasTop button{border-radius:var(--r-md);font-weight:600}
+#abasTop button[aria-pressed="true"]{background:color-mix(in srgb,var(--accent) 12%, var(--surface));color:var(--accent);box-shadow:none}
+/* telão: mensagens e legendas em letra reta */
+.sl .cap,.sl-texto .q{font-family:var(--body);font-weight:500;letter-spacing:-.01em}
+.sl-texto .q::before{display:none}
+.tv-bar{border-top:1px solid var(--line)}
+.tv-bar b{font-family:var(--body);font-weight:700}
+.tv-empty h2{font-family:var(--body);font-weight:700}
+/* sóbrio (empresa): sem enfeites */
+body.corp .hero .deco, body.corp .deco{display:none}
+.plano-bar{background:color-mix(in srgb,#15803d 8%, var(--surface));color:var(--ink);border:1px solid color-mix(in srgb,#15803d 25%, var(--line));border-radius:var(--r-lg)}
+.plano-bar b{color:#15803d}
 </style>
 </head>
 <body>
@@ -851,10 +897,21 @@ function temaDe(f){
     accent:acc, accent2, on: lum(acc)>.5?'#1a1a1a':'#ffffff', font:c.font||base.font, pal:[accent,accent2,mix(accent,'#ffffff',.5)],
     paper:mix(bg,'#ffffff',.55), dark:0, fundo:c.fundo||null, ...kit};
 }
+// Empresa: tira o emoji do começo de títulos, botões e abas (o conteúdo dos convidados não é tocado)
+const EMOJI_INI=/^\s*(?:[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}\u{2190}-\u{21FF}\u{2300}-\u{23FF}\u{25A0}-\u{25FF}\u{1F1E6}-\u{1F1FF}](?:\u{FE0F}|\u{200D}[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}])*\s*)+/u;
+const SOBRIO_SEL='h1,h2,h3,h4,.btn,button,label.f,.sec,.srt-t,.qt,.k,.lead,.tv-bar b,.chip,.molbtn,.nota,.sub,summary,.ped-col h3,b,strong,a,legend,.ev-c .h,.plano-bar div,p.muted';
+const SOBRIO_NAO='.post,.mural,.crr-l,.tvlike,.reac,.enq-ops,.cdp-chips,.sl,.mod .media,#sheet .post,[data-o]';
+function limparEmoji(root){ (root.matches&&root.matches(SOBRIO_SEL)?[root]:[]).concat([...(root.querySelectorAll?root.querySelectorAll(SOBRIO_SEL):[])]).forEach(el=>{
+    if(el.closest(SOBRIO_NAO)) return; const w=document.createTreeWalker(el, NodeFilter.SHOW_TEXT); const t=w.nextNode(); if(!t) return;
+    const novo=t.nodeValue.replace(EMOJI_INI,''); if(novo===t.nodeValue) return; const resto=(el.textContent||'').replace(t.nodeValue,novo).trim(); if(!resto) return; t.nodeValue=novo; }); }
+let _sobrio=null;
+function iniciarSobrio(){ if(_sobrio) return; limparEmoji(document.body);
+  _sobrio=new MutationObserver(ms=>{ if(!document.body.classList.contains('corp')) return; ms.forEach(m=>m.addedNodes.forEach(n=>{ if(n.nodeType===1) limparEmoji(n); else if(n.nodeType===3 && n.parentElement) limparEmoji(n.parentElement); })); });
+  _sobrio.observe(document.body,{childList:true,subtree:true}); }
 function aplicarTema(k, veu){
   const t = typeof k==='object' && k ? k : tema(k), r=document.documentElement.style;
   const bgi=$('bgimg'); if(t.fundo){ bgi.style.backgroundImage=`url("${midia(t.fundo)}")`; bgi.hidden=false; r.setProperty('--veu', veu ?? .8); } else { bgi.style.backgroundImage=''; bgi.hidden=true; }
-  r.setProperty('--hand', (()=>{ try{ return CORP(FESTA); }catch(e){ return false; } })() ? "'Figtree', system-ui, sans-serif" : "'Caveat', 'Fredoka', cursive");
+  const ehCorp=(()=>{ try{ return CORP(FESTA); }catch(e){ return false; } })(); r.setProperty('--hand', "'Figtree', system-ui, sans-serif"); document.body.classList.toggle('corp', ehCorp); if(ehCorp) iniciarSobrio();
   r.setProperty('--bg',t.bg); r.setProperty('--bg2',t.bg2); r.setProperty('--surface',t.surface); r.setProperty('--ink',t.ink);
   r.setProperty('--muted',t.muted); r.setProperty('--accent',t.accent); r.setProperty('--accent2',t.accent2); r.setProperty('--on',t.on); r.setProperty('--on2', /^#[0-9a-f]{6}$/i.test(t.accent2) && lum(t.accent2)<.3 ? '#ffffff' : '#1a1a1a');
   r.setProperty('--line', t.dark ? 'rgba(255,255,255,.14)' : 'rgba(0,0,0,.10)');
@@ -2149,7 +2206,7 @@ function painelAdmin(){
   $('app').innerHTML=`<div class="wrap">
    <div class="top"><h1>${CORP(f)?'Organizador':'Anfitrião'} · <em>${esc(f.homenageado||f.titulo)}</em></h1><div class="row"><a class="btn ghost sm" href="${linkFesta(f.slug)}" target="_blank" rel="noopener">👀 Ver como convidado</a><a class="btn ghost sm" href="${linkFesta(f.slug,'telao')}&teste" target="_blank" rel="noopener">🧪 Testar telão</a><a class="btn sm" href="${linkFesta(f.slug,'telao')}" target="_blank" rel="noopener">📺 Abrir telão</a><button class="btn ghost sm" id="sair">Sair</button></div></div>
    ${f.plano==='teste'?`<div class="teste-bar"><div><b>🎈 Modo grátis</b><br><span style="font-size:14px">Faça o upgrade para mais diversão: mais homenagens, áudios e vídeos maiores, todos os arquivos e sem o selo no telão.</span></div><div class="row"><button class="btn sm" id="btPlano">⬆️ Fazer upgrade</button><button class="btn ghost sm" id="btAtivar">🔓 Tenho um código</button></div></div>`
-     :`<div class="plano-bar"><div><b>${ICONE_PLANO[f.plano]||'⭐'} Plano ${esc(NOME_PLANO[f.plano]||f.plano)}</b> · até ${f.max_posts} homenagens · áudio e vídeo de até ${segTxt(f.max_seg)}${f.expira_em?` · no ar até ${new Date(f.expira_em+'T12:00:00').toLocaleDateString('pt-BR')}`:''}</div>${f.plano!=='grande'?'<button class="btn ghost sm" id="btPlano">⬆️ Mudar de plano</button>':''}</div>`}
+     :`<div class="plano-bar"><div><b>${ICONE_PLANO[f.plano]||'⭐'} Plano ${esc(NOME_PLANO[f.plano]||f.plano)}</b> · até ${f.max_posts} ${CORP(f)?'mensagens':'homenagens'} · áudio e vídeo de até ${segTxt(f.max_seg)}${f.expira_em?` · no ar até ${new Date(f.expira_em+'T12:00:00').toLocaleDateString('pt-BR')}`:''}</div>${f.plano!=='grande'?'<button class="btn ghost sm" id="btPlano">⬆️ Mudar de plano</button>':''}</div>`}
    ${store.get('mf_novo_'+f.slug)&&!CORP(f)?`<div class="card passos" id="passos"><div class="row" style="justify-content:space-between"><b style="font-size:18px">🎉 Sua festa está criada! Próximos passos:</b><button class="btn ghost sm" id="psOk">Entendi</button></div><ol>
      <li><button class="link" data-ir="meutema">Faça o seu tema</button>: imagem de fundo, personagens, 8 a 12 fotos do homenageado e a música do telão.</li>
      <li><button class="link" data-ir="compartilhar">Mande o convite com QR Code</button> no grupo da família e imprima os cartões de mesa.</li>

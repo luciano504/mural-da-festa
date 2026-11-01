@@ -866,6 +866,16 @@ body.com-aviso .tv-top{margin-top:5.5vh}
 .mol-fmt{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
 .mol-fmt button{height:42px;border:1px solid var(--line);border-radius:var(--r-md);background:var(--surface);color:var(--ink);font:inherit;font-weight:700;cursor:pointer}
 .mol-fmt button[aria-checked=true]{border:2px solid var(--accent);color:var(--accent)}
+
+/* fotos de festas reais na página inicial */
+.lfotos{margin:8px 0 8px}
+.lf-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.lf-grid figure{position:relative;margin:0;border-radius:var(--r-lg);overflow:hidden;aspect-ratio:4/5;background:var(--surface)}
+.lf-grid img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s ease}
+.lf-grid figure:hover img{transform:scale(1.04)}
+.lf-grid figcaption{position:absolute;left:0;right:0;bottom:0;padding:44px 14px 14px;background:linear-gradient(to top,rgba(0,0,0,.72),rgba(0,0,0,0));color:#fff;display:flex;flex-direction:column;gap:4px;text-align:left}
+.lf-grid figcaption b{font-size:17px} .lf-grid figcaption span{font-size:13px;line-height:1.35;opacity:.9}
+@media (max-width:900px){.lf-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
 </head>
 <body>
@@ -3561,6 +3571,10 @@ function telaInicio(perfil){
      </div>
      <div class="lcena" aria-hidden="true">${CENAS[k](ondas)}</div>
    </section>
+   ${k!=='empresa'?`<section class="lfotos" aria-label="Momentos">
+     <h2 class="sec">${k==='buffet'?'Cada festa do seu salão vira lembrança':'Feito para os momentos que valem guardar'}</h2>
+     <div class="lf-grid">${[['15anos','15 anos','A valsa, os recados das amigas e o telão emocionando a debutante'],['casamento','Casamento','Fotos dos convidados e votos gravados, tudo no álbum do casal'],['bodas','Bodas de ouro','Áudios da família e a história do casal em fotos no telão'],['infantil','Aniversário infantil','Os recados dos padrinhos e a festa inteira guardada para sempre']].map(([f,t,d])=>`<figure><img src="fotos/${f}.jpg" alt="${t}" loading="lazy" width="800" height="1000"><figcaption><b>${t}</b><span>${d}</span></figcaption></figure>`).join('')}</div>
+   </section>`:''}
    <section class="lgratis">
      <div class="lg-e">🧪</div>
      <div class="lg-t"><b>${k==='empresa'?'Monte o seu evento de teste agora, de graça':k==='buffet'?'Faça um teste completo com a sua equipe, de graça':'Crie a sua festa agora e teste de graça'}</b>

@@ -887,6 +887,8 @@ body.com-aviso .tv-top{margin-top:5.5vh}
 .passos4 .pmock i{display:flex;gap:6px;font-style:normal} .passos4 .pmock em{font-style:normal;flex:1;text-align:center;border-radius:8px;padding:6px;font-weight:700;font-size:12px;border:1px solid var(--line)} .passos4 .pmock em:first-child{background:var(--accent);color:var(--on);border-color:var(--accent)}
 .lf-grid.lf3{grid-template-columns:repeat(3,minmax(0,1fr))}
 @media (max-width:900px){.lf-grid.lf3{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.lf-grid figure.lf-wide{grid-column:1/-1;aspect-ratio:16/7}.lf-wide img{object-position:50% 40%}.lf-wide figcaption b{font-size:22px}.lf-wide figcaption span{font-size:15px}
+@media (max-width:900px){.lf-grid figure.lf-wide{aspect-ratio:4/3}}
 </style>
 </head>
 <body>
@@ -3582,10 +3584,10 @@ function telaInicio(perfil){
      </div>
      <div class="lcena" aria-hidden="true">${CENAS[k](ondas)}</div>
    </section>
-   ${k!=='empresa'?`<section class="lfotos" aria-label="Momentos">
-     <h2 class="sec">${k==='buffet'?'Cada festa do seu salão vira lembrança':'Feito para os momentos que valem guardar'}</h2>
-     <div class="lf-grid">${[['15anos','15 anos','A valsa, os recados das amigas e o telão emocionando a debutante'],['casamento','Casamento','Fotos dos convidados e votos gravados, tudo no álbum do casal'],['bodas','Bodas de ouro','Áudios da família e a história do casal em fotos no telão'],['infantil','Aniversário infantil','Os recados dos padrinhos e a festa inteira guardada para sempre'],['chabebe','Chá de bebê','Cada recado lido em voz alta vira lembrança para o bebê'],['formatura','Formatura','O abraço da família e os recados da turma no telão'],['cinquenta','Aniversário de 50 anos','Amigos de todas as fases da vida num só mural'],['menino','Aniversário de menino','O pedido, as velinhas e o carinho de toda a família']].map(([f,t,d])=>`<figure><img src="fotos/${f}.jpg" alt="${t}" loading="lazy" width="800" height="1000"><figcaption><b>${t}</b><span>${d}</span></figcaption></figure>`).join('')}</div>
-   </section>`:''}
+   <section class="lfotos" aria-label="Momentos">
+     <h2 class="sec">${k==='buffet'?'Cada festa do seu salão vira lembrança':k==='empresa'?'Feito para o seu time':'Feito para os momentos que valem guardar'}</h2>
+     <div class="lf-grid">${k==='empresa'?'':[['15anos','15 anos','A valsa, os recados das amigas e o telão emocionando a debutante'],['casamento','Casamento','Fotos dos convidados e votos gravados, tudo no álbum do casal'],['bodas','Bodas de ouro','Áudios da família e a história do casal em fotos no telão'],['infantil','Aniversário infantil','Os recados dos padrinhos e a festa inteira guardada para sempre'],['chabebe','Chá de bebê','Cada recado lido em voz alta vira lembrança para o bebê'],['formatura','Formatura','O abraço da família e os recados da turma no telão'],['cinquenta','Aniversário de 50 anos','Amigos de todas as fases da vida num só mural'],['menino','Aniversário de menino','O pedido, as velinhas e o carinho de toda a família']].map(([f,t,d])=>`<figure><img src="fotos/${f}.jpg" alt="${t}" loading="lazy" width="800" height="1000"><figcaption><b>${t}</b><span>${d}</span></figcaption></figure>`).join('')}<figure class="lf-wide"><img src="fotos/corporativo.jpg" alt="Confraternização de empresa" loading="lazy" width="1024" height="572"><figcaption><b>Convenção, premiação ou confraternização</b><span>Mensagens da equipe no telão, perguntas ao palco, quiz, sorteio e credenciamento pelo celular</span></figcaption></figure></div>
+   </section>
    <section class="lgratis">
      <div class="lg-e">🧪</div>
      <div class="lg-t"><b>${k==='empresa'?'Monte o seu evento de teste agora, de graça':k==='buffet'?'Faça um teste completo com a sua equipe, de graça':'Crie a sua festa agora e teste de graça'}</b>

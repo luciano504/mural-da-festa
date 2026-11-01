@@ -890,6 +890,66 @@ body.com-aviso .tv-top{margin-top:5.5vh}
 .lf-grid figure.lf-wide{grid-column:1/-1;aspect-ratio:16/7}.lf-wide img{object-position:50% 40%}.lf-wide figcaption b{font-size:22px}.lf-wide figcaption span{font-size:15px}
 @media (max-width:900px){.lf-grid figure.lf-wide{aspect-ratio:4/3}}
 .lf-grid img[src$='corporativo.jpg']{object-position:60% 50%}
+
+/* bingo */
+.bola{--c:#1E66F5;display:inline-grid;place-items:center;width:44px;height:44px;border-radius:50%;flex:none;background:radial-gradient(circle at 32% 26%,rgba(255,255,255,.85),rgba(255,255,255,0) 30%),var(--c);box-shadow:inset -6px -8px 14px rgba(0,0,0,.35),0 6px 14px -6px rgba(0,0,0,.5)}
+.bola i{display:grid;place-items:center;align-content:center;width:62%;height:62%;border-radius:50%;background:#fff;color:#111;font-style:normal;font-weight:800;font-size:15px;line-height:1;font-variant-numeric:tabular-nums}
+.bola i small{font-size:.5em;font-weight:800;color:var(--c);margin-bottom:1px}
+.bola.p{width:34px;height:34px} .bola.p i{font-size:12px}
+.bola.m{width:56px;height:56px} .bola.m i{font-size:19px}
+.bola.g{width:clamp(120px,22vh,260px);height:clamp(120px,22vh,260px)} .bola.g i{font-size:clamp(44px,8.5vh,104px)}
+.bola.vazia{--c:#9aa3b2} .bl0{--c:#1E66F5} .bl1{--c:#E53935} .bl2{--c:#8E24AA} .bl3{--c:#2E7D32} .bl4{--c:#F59E0B}
+.bg-gtopo{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.bc-lista{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin-top:12px}
+.bc{border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;background:var(--surface)}
+.bc-h,.bc-g{display:grid;grid-template-columns:repeat(5,1fr)}
+.bc-h span{text-align:center;font-weight:800;color:#fff;padding:6px 0;background:var(--c);font-size:18px}
+.bc-g span{aspect-ratio:1;display:grid;place-items:center;font-weight:700;font-size:18px;border-top:1px solid var(--line);border-left:1px solid var(--line);font-variant-numeric:tabular-nums;position:relative}
+.bc-g span:nth-child(5n+1){border-left:0}
+.bc-g span.on::before{content:"";position:absolute;inset:14%;border-radius:50%;background:color-mix(in srgb,var(--accent) 85%, transparent);z-index:0}
+.bc-g span.on{color:var(--on,#fff)} .bc-g span{z-index:0} .bc-g span.on{isolation:isolate} .bc-g span.on::before{z-index:-1}
+.bc-g span.ult::before{animation:carimbo .5s cubic-bezier(.2,1.6,.4,1) both} .bc-g span.livre{color:var(--on,#fff)}
+@keyframes carimbo{from{transform:scale(2.2);opacity:0}to{transform:scale(1);opacity:1}}
+.bg-voce{margin-top:12px;border-radius:var(--r-lg);padding:16px;text-align:center;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;animation:pulsa 1s ease-in-out 3}
+.bg-voce b{display:block;font-size:40px;letter-spacing:.06em} .bg-voce span{font-weight:600}
+@keyframes pulsa{50%{transform:scale(1.04)}}
+.bg-gl{margin:6px 0 0;padding-left:18px}
+.bg-adm{display:flex;gap:18px;align-items:center;flex-wrap:wrap} .bg-adm .bola.g{width:110px;height:110px} .bg-adm .bola.g i{font-size:40px}
+.bg-sai{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.bg-jl{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden}
+.bg-j{display:flex;align-items:center;gap:8px;padding:8px 12px;border-top:1px solid var(--line)} .bg-j:first-child{border-top:0} .bg-j .nm{flex:1;font-weight:600} .bg-j.pend{background:#FFF7E6}
+.tv-bng{position:fixed;inset:0;z-index:30;background:var(--bg);color:var(--ink);display:flex;flex-direction:column;padding:3vh 3vw;gap:2vh}
+.tv-bng .bg-top{display:flex;justify-content:space-between;align-items:flex-end;gap:2vw}
+.tv-bng .k{font-size:clamp(14px,1.5vw,26px);font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.tv-bng .t{font-family:var(--display);font-size:clamp(28px,4.2vw,72px);line-height:1.05;color:var(--accent)}
+.tv-bng .bg-inf{text-align:right;font-size:clamp(14px,1.5vw,26px);color:var(--muted)} .tv-bng .bg-inf b{font-size:1.8em;color:var(--ink)}
+.bg-corpo{flex:1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2.3fr);gap:3vw;align-items:center;min-height:0}
+.bg-esq{display:flex;flex-direction:column;align-items:center;gap:3vh}
+.bg-gira.entra .bola{animation:rola 1.1s cubic-bezier(.2,.9,.3,1) both}
+@keyframes rola{0%{transform:translateX(-60vw) rotate(-540deg)}80%{transform:translateX(2vw) rotate(10deg)}100%{transform:none}}
+.bg-rec{display:flex;gap:1vw} .bg-rec .bola.p{width:clamp(40px,6vh,72px);height:clamp(40px,6vh,72px)} .bg-rec .bola.p i{font-size:clamp(14px,2.2vh,26px)}
+.bg-qt{font-size:clamp(14px,1.6vw,26px);color:var(--muted);font-weight:600}
+.bg-tab{display:flex;flex-direction:column;gap:.8vh}
+.bg-row{display:grid;grid-template-columns:repeat(16,1fr);gap:.5vw;align-items:center}
+.bg-l{display:grid;place-items:center;aspect-ratio:1;border-radius:50%;background:var(--c);color:#fff;font-weight:800;font-size:clamp(16px,2vw,36px)}
+.bg-c{display:grid;place-items:center;aspect-ratio:1;border-radius:50%;font-weight:700;font-size:clamp(12px,1.5vw,28px);color:color-mix(in srgb,var(--ink) 30%, transparent);background:color-mix(in srgb,var(--ink) 5%, transparent);font-variant-numeric:tabular-nums}
+.bg-c.on{background:var(--accent);color:var(--on,#fff)} .bg-c.ult{box-shadow:0 0 0 4px var(--accent2);animation:pulsa 1s ease-in-out 3}
+.bg-abre{flex:1;display:flex;align-items:center;justify-content:center;gap:5vw}
+.bg-abre .bg-qr{background:#fff;padding:14px;border-radius:18px;width:min(32vh,320px)} .bg-abre .bg-qr canvas,.bg-abre .bg-qr img{width:100%;height:auto;display:block}
+.bg-abre .t2{font-family:var(--display);font-size:clamp(32px,5vw,84px);color:var(--accent);line-height:1.05} .bg-abre p{font-size:clamp(16px,2vw,32px);max-width:40vw}
+.bg-abre .bg-jog b{font-size:1.6em;color:var(--accent)}
+.bg-bateu{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:2vh;margin:-3vh -3vw;background:radial-gradient(circle at 50% 40%,color-mix(in srgb,var(--accent2) 35%, var(--bg)),var(--bg) 70%)}
+.bg-grito{font-family:var(--display);font-size:clamp(90px,17vw,320px);line-height:.9;color:var(--accent);animation:grito .9s cubic-bezier(.2,1.6,.4,1) both,pulsa 1.2s 1s ease-in-out infinite}
+@keyframes grito{from{transform:scale(.2) rotate(-8deg);opacity:0}to{transform:none;opacity:1}}
+.bg-nomes{font-size:clamp(30px,5vw,90px);font-weight:800} .bg-pr{font-size:clamp(20px,2.6vw,46px);color:var(--muted)}
+.bg-ult{display:flex;align-items:center;gap:2vw;font-size:clamp(14px,1.6vw,26px);color:var(--muted)} .bg-ult .bola.g{width:14vh;height:14vh} .bg-ult .bola.g i{font-size:5.5vh}
+.bg-fim{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
+.bg-fim .t{margin-bottom:3vh} .bg-fim ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1.4vh;font-size:clamp(20px,2.6vw,46px)} .bg-fim li span{color:var(--muted);margin-left:1vw}
+
+.bg-arte{position:relative;margin:0 -3vw -3vh;padding:0 6vw;border-radius:0;background:linear-gradient(90deg,rgba(10,8,20,.05) 0%,rgba(10,8,20,.15) 40%,rgba(10,8,20,.88) 62%),url("fotos/bingo.jpg") center/cover;justify-content:flex-end;color:#fff}
+.bg-arte .t2{color:#FFD873} .bg-arte p{color:#f4f1ea} .bg-arte .bg-jog b{color:#FFD873} .bg-arte .bg-qr{order:2}
+.bg-banner{margin:-22px -18px 14px;height:150px;background:url("fotos/bingo.jpg") 30% 55%/cover;border-radius:var(--r-lg) var(--r-lg) 0 0}
+.bg-bateu{background:radial-gradient(circle at 50% 45%,color-mix(in srgb,var(--bg) 70%, transparent),color-mix(in srgb,var(--bg) 92%, transparent) 70%),url("fotos/bingo.jpg") center/cover !important}
 </style>
 </head>
 <body>
@@ -1188,6 +1248,7 @@ async function telaConvidado(){
     ${f.ativo && f.perguntas_ativas ? '<section class="card rsvp" id="prg"></section>' : ''}
     ${f.ativo ? '<section class="card rsvp" id="qz" hidden></section>' : ''}
     ${f.ativo ? '<section class="card rsvp" id="enq" hidden></section>' : ''}
+    ${f.ativo ? '<section class="card rsvp" id="bng" hidden></section>' : ''}
     ${f.ativo ? '<section class="card rsvp" id="srt" hidden></section>' : ''}
     ${f.ativo && f.valet ? '<section class="card rsvp" id="vlt"></section>' : ''}
     ${f.ativo && f.tem_cardapio && MESA ? '<section class="card rsvp" id="cdp"></section>' : ''}
@@ -1218,7 +1279,7 @@ async function telaConvidado(){
   document.querySelectorAll('.capa .enfc').forEach(im=>{ const t2=new Image(); t2.crossOrigin='anonymous'; t2.onload=()=>{ try{ const c=document.createElement('canvas'); c.width=c.height=16; const x=c.getContext('2d'); x.drawImage(t2,0,0,16,16); const d=x.getImageData(0,0,16,16).data; if(![0,15,240,255].some(k=>d[k*4+3]<200)) im.classList.add('sticker'); }catch(e){ im.classList.add('sticker'); } }; t2.src=im.src; });
   const nome=$('nome'); if(nome) nome.addEventListener('change',()=>store.set('mf_nome',nome.value.trim().slice(0,40)));
   $('mural').addEventListener('click', e=>{ const l=e.target.closest('[data-like]'); if(l) return curtir(l); const rc=e.target.closest('[data-reac]'); if(rc) return reagir(rc); const cm=e.target.closest('[data-com]'); if(cm) return abrirComentarios(+cm.dataset.com); const m=e.target.closest('[data-mol]'); if(m){ const p=POSTS.find(x=>x.id===+m.dataset.mol); if(p) abrirMoldura(midia(p.caminho), p.autor); } });
-  ligarConvite(); ligarPresenca(); ligarCardapio(MESA); ligarValet(); ligarSorteio(); ligarQuiz(); ligarEnquete(); ligarCorreio(); ligarPerguntas(MESA); ligarAvisoConvidado(); ligarDesafios();
+  ligarConvite(); ligarPresenca(); ligarCardapio(MESA); ligarValet(); ligarSorteio(); ligarQuiz(); ligarEnquete(); ligarCorreio(); ligarPerguntas(MESA); ligarAvisoConvidado(); ligarDesafios(); ligarBingo();
   await atualizarMural(); setInterval(()=>{ if(!document.hidden) atualizarMural(); }, 20000);
 }
 async function atualizarMural(){
@@ -1899,18 +1960,34 @@ async function telaTelao(){
     else if(modo==='sorteio'){ telaoSorteio(e.sorteio||{}); }
     else if(modo==='quiz'){ telaoQuiz(e.quiz||{}); }
     else if(modo==='enquete' && e.enquete){ telaoEnquete(e.enquete); }
+    else if(modo==='bingo' && e.bingo){ telaoBingo(e.bingo); }
     else if(modo==='pergunta' && e.pergunta){ const q=e.pergunta; if(camada.dataset.pq!=String(q.id)){ camada.dataset.pq=q.id; camada.className='tv-prg'; camada.hidden=false;
         camada.innerHTML=`<div><div class="k">🙋 Pergunta da plateia</div><div class="t">${q.texto?esc(q.texto):q.tipo==='audio'?'🎙️ Pergunta gravada':''}</div><div class="w">${q.nome?esc(q.nome):'Anônimo'}${q.mesa?' · '+esc(q.mesa):''}</div>${q.audio?`<audio id="tvPa" src="${midia(q.audio)}" autoplay></audio>`:''}</div>`; } }
     else if(modo==='pausa'){ camada.className='tv-pausa'; camada.hidden=false; if(!camada.querySelector('.who')) camada.innerHTML=`<div><div class="who">${esc(nome)}</div><p>Já voltamos 💛</p></div>`; }
     else { camada.hidden=true; camada.innerHTML=''; }
-    const parar = modo!=='mural' && (modo==='pausa' || modo==='sorteio' || modo==='quiz' || modo==='pergunta' || modo==='enquete' || sl.length);
+    const parar = modo!=='mural' && (modo==='pausa' || modo==='sorteio' || modo==='quiz' || modo==='pergunta' || modo==='enquete' || modo==='bingo' || sl.length);
     if(modo!=='enquete') delete camada.dataset.eid;
+    if(modo!=='bingo'){ delete camada.dataset.bk; bgFesta=null; }
     if(modo!=='quiz'){ clearInterval(qzTick); qzChave=''; }
     if(modo!=='pergunta') delete camada.dataset.pq;
     if(parar && !tv.ctlPausa){ tv.ctlPausa=true; tv.paused=true; clearTimeout(tv.timer); $('stage').querySelectorAll('audio,video').forEach(m=>{ try{ m.pause(); }catch(_){} }); if(mus) mus.duck(true); }
     if(!parar && tv.ctlPausa){ tv.ctlPausa=false; tv.paused=false; if(mus) mus.duck(false); if(tv.started) proxima(); }
     if(modo!=='sorteio') srtUlt=null;
-    tvCtl={modo, slide:e&&e.slide||0, em:e&&e.em, n:e&&e.sorteio?e.sorteio.n:null, qk:e&&e.quiz?[e.quiz.fase,e.quiz.idx,e.quiz.jogadores,e.quiz.respostas].join():null, ek:e&&e.enquete?JSON.stringify([e.enquete.id,e.enquete.total,e.enquete.contagem,e.enquete.palavras,e.enquete.aberta]):null};
+    tvCtl={modo, slide:e&&e.slide||0, em:e&&e.em, n:e&&e.sorteio?e.sorteio.n:null, qk:e&&e.quiz?[e.quiz.fase,e.quiz.idx,e.quiz.jogadores,e.quiz.respostas].join():null, ek:e&&e.enquete?JSON.stringify([e.enquete.id,e.enquete.total,e.enquete.contagem,e.enquete.palavras,e.enquete.aberta]):null, bk:e&&e.bingo?BGK(e.bingo):null};
+  };
+  let bgFesta=null;
+  const telaoBingo=b=>{
+    camada.className='tv-bng'; camada.hidden=false; const nums=b.numeros||[], ult=nums[nums.length-1], prem=b.premio||'';
+    const gan=(b.ganhadores||[]).filter(g=>g.rodada===b.rodada), k=BGK(b), novo=camada.dataset.bk && camada.dataset.bk!==k; const antes=camada.dataset.n?+camada.dataset.n:nums.length;
+    camada.dataset.bk=k; camada.dataset.n=nums.length;
+    const cab=`<div class="bg-top"><div><div class="k">${esc(b.titulo||'Bingo')} · rodada ${b.rodada+1} de ${(b.premios||[]).length}</div><div class="t">${prem?'Prêmio: '+esc(prem):'Bingo!'}</div></div><div class="bg-inf"><b>${b.jogadores||0}</b> jogando<br><span>vale ${b.vitoria==='cheia'?'cartela cheia':'linha, coluna ou diagonal'}</span></div></div>`;
+    if(b.status==='encerrado'){ const G=b.ganhadores||[]; camada.innerHTML=`<div class="bg-fim"><div class="k">${esc(b.titulo||'Bingo')} · encerrado</div><div class="t">Ganhadores</div>${G.length?`<ul>${G.map(g=>`<li><b>${esc(g.nome)}</b><span>${esc(g.premio||'')}</span></li>`).join('')}</ul>`:'<p>Ninguém bateu desta vez.</p>'}</div>`; return; }
+    if(b.status==='bateu' && gan.length){ if(bgFesta!==k){ bgFesta=k; camada.innerHTML=`<div class="bg-bateu"><div class="bg-grito">BINGO!</div><div class="bg-nomes">${gan.map(g=>esc(g.nome)).join(' · ')}</div><div class="bg-pr">${prem?'ganhou '+esc(prem):''}</div><div class="bg-ult">${BOLA(gan[0].numero,'g')}<span>a pedra que fechou</span></div></div>`; confete(200); setTimeout(()=>confete(160),1400); if(chars&&chars.festa) chars.festa(); } return; }
+    bgFesta=null;
+    if(!nums.length){ camada.innerHTML=cab+`<div class="bg-abre bg-arte"><div class="bg-qr" id="bgQr"></div><div><div class="t2">Pegue a sua cartela!</div><p>Aponte a câmera do celular para o código e toque em <b>“Quero jogar”</b>.</p><p class="bg-jog"><b>${b.jogadores||0}</b> ${b.jogadores==1?'pessoa já está':'pessoas já estão'} no jogo</p></div></div>`; qrInto($('bgQr'), url, 320); return; }
+    const L='BINGO', tab=[0,1,2,3,4].map(c=>`<div class="bg-row"><span class="bg-l bl${c}">${L[c]}</span>${Array.from({length:15},(_,i)=>{ const n=c*15+i+1; return `<span class="bg-c${nums.includes(n)?' on':''}${n===ult?' ult':''}">${n}</span>`; }).join('')}</div>`).join('');
+    const rec=nums.slice(-6,-1).reverse().map(n=>BOLA(n,'p')).join('');
+    camada.innerHTML=cab+`<div class="bg-corpo"><div class="bg-esq"><div class="bg-gira${nums.length>antes?' entra':''}">${BOLA(ult,'g')}</div><div class="bg-rec">${rec}</div><div class="bg-qt">${nums.length} de 75 números</div></div><div class="bg-tab">${tab}</div></div>`;
   };
   const telaoEnquete=q=>{
     camada.className='tv-enq'; camada.hidden=false; const t=q.total||0;
@@ -1967,7 +2044,7 @@ async function telaTelao(){
         <div class="srt-row"><div class="srt-qr" id="srtQr"></div><div class="srt-info"><div class="srt-n">${s.n||0}</div>participante${s.n==1?'':'s'}<br><br>Aponte a câmera e toque em <b>“Quero participar”</b></div></div></div>`; qrInto($('srtQr'), url, 300); }
     else camada.innerHTML=`<div><div class="srt-t" style="font-size:clamp(36px,5vw,80px)">🏆 Sorteado</div><div class="srt-roda win">${esc(g.nome)}</div>${g.premio?`<div class="srt-p">${esc(g.premio)}</div>`:''}</div>`;
   };
-  const lerCtl=async()=>{ try{ const e=await rpc('fe_tv_estado',{p_festa:f.id}); if(!e) return; tvExtras(e.extras, e.agora); if(e.em!==tvCtl.em || e.modo!==tvCtl.modo || (e.sorteio && e.sorteio.n!==tvCtl.n) || (e.quiz && [e.quiz.fase,e.quiz.idx,e.quiz.jogadores,e.quiz.respostas].join()!==tvCtl.qk) || (e.enquete && JSON.stringify([e.enquete.id,e.enquete.total,e.enquete.contagem,e.enquete.palavras,e.enquete.aberta])!==tvCtl.ek)) aplicarCtl(e); }catch(_){} };
+  const lerCtl=async()=>{ try{ const e=await rpc('fe_tv_estado',{p_festa:f.id}); if(!e) return; tvExtras(e.extras, e.agora); if(e.em!==tvCtl.em || (e.bingo && BGK(e.bingo)!==tvCtl.bk) || e.modo!==tvCtl.modo || (e.sorteio && e.sorteio.n!==tvCtl.n) || (e.quiz && [e.quiz.fase,e.quiz.idx,e.quiz.jogadores,e.quiz.respostas].join()!==tvCtl.qk) || (e.enquete && JSON.stringify([e.enquete.id,e.enquete.total,e.enquete.contagem,e.enquete.palavras,e.enquete.aberta])!==tvCtl.ek)) aplicarCtl(e); }catch(_){} };
   setInterval(lerCtl, 2000); lerCtl();
   document.addEventListener('keydown', e=>{ if(tvCtl.modo!=='apresentacao' || !slidesCache.length) return;
     if(e.key==='ArrowRight' || e.key==='ArrowLeft'){ e.stopImmediatePropagation(); const n=Math.max(0,Math.min(slidesCache.length-1,tvCtl.slide+(e.key==='ArrowRight'?1:-1))); aplicarCtl({modo:'apresentacao',slide:n,em:tvCtl.em,slides:slidesCache}); } }, true);
@@ -2326,6 +2403,7 @@ function painelAdmin(){
      <button data-v="sorteio" aria-pressed="false">🎲 Sorteio</button>
      <button data-v="quiz" aria-pressed="false">🧠 Quiz</button>
      <button data-v="enquete" aria-pressed="false">📊 Enquetes</button>
+     <button data-v="bingo" aria-pressed="false">🎱 Bingo</button>
      <button data-v="interacoes" aria-pressed="false">💬 Interações</button>
      <button data-v="recordacoes" aria-pressed="false">📖 Álbum</button>
    </div>
@@ -2333,7 +2411,7 @@ function painelAdmin(){
   (()=>{ const a=$('abasTop'), v=$('vw'); if(a && v && !a.parentNode.classList.contains('adm-grid')){ const g=document.createElement('div'); g.className='adm-grid'; a.parentNode.insertBefore(g,a); g.appendChild(a); g.appendChild(v); } })();
   $('sair').onclick=()=>{ store.sset('mf_pin_'+SLUG,null); store.set('mf_pin_'+SLUG,null); location.reload(); };
   const abas=$('abasTop');
-  abas.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; abas.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed', x===b)); if(b.dataset.v==='meutema' && $('seuCta')) $('seuCta').remove(); ({moderar:vModerar, festa:vFesta, meutema:vMeuTema, compartilhar:vCompartilhar, recordacoes:vRecordacoes, cardapio:vCardapio, apresentacao:vApresentacao, sorteio:vSorteio, quiz:vQuiz, enquete:vEnquete, interacoes:vInteracoes, evento:vEvento})[b.dataset.v](); };
+  abas.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; abas.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed', x===b)); if(b.dataset.v==='meutema' && $('seuCta')) $('seuCta').remove(); ({moderar:vModerar, festa:vFesta, meutema:vMeuTema, compartilhar:vCompartilhar, recordacoes:vRecordacoes, cardapio:vCardapio, apresentacao:vApresentacao, sorteio:vSorteio, quiz:vQuiz, enquete:vEnquete, bingo:vBingo, interacoes:vInteracoes, evento:vEvento})[b.dataset.v](); };
   const ir=v=>{ const b=abas.querySelector(`[data-v="${v}"]`); if(b) b.click(); };
   document.querySelectorAll('[data-ir]').forEach(b=>b.onclick=()=>ir(b.dataset.ir));
   if($('psOk')) $('psOk').onclick=()=>{ store.set('mf_novo_'+f.slug,null); $('passos').remove(); };
@@ -2982,6 +3060,96 @@ async function vEvento(){
 }
 const SORTEIO_SUG_CORP=['🎁 Kit de boas-vindas da empresa','🎫 Voucher de experiência','💻 Um acessório de tecnologia','📚 Uma vaga em curso ou treinamento','🏅 Destaque no palco com a diretoria','🍽️ Jantar para duas pessoas','🗓️ Um dia de folga','🎤 Fazer a pergunta final ao palestrante'];
 const SORTEIO_SUG=['🎁 Um presente surpresa','💃 Uma dança com o homenageado','🎤 Discurso improvisado de 1 minuto','📸 Foto oficial com o homenageado','🍾 Um brinde especial','🎶 Cantar um trecho no microfone','🍰 O primeiro pedaço do bolo','🕺 Puxar a próxima dança'];
+// =====================================================================
+// BINGO: cartela no celular, globo no telão
+// =====================================================================
+const BGK = b => JSON.stringify([b.status, (b.numeros||[]).length, b.rodada, b.jogadores, (b.ganhadores||[]).length, b.premio, b.vitoria, b.titulo]);
+const BGL = n => 'BINGO'[Math.min(4,Math.floor((n-1)/15))];
+const BOLA = (n, tam) => n ? `<span class="bola ${tam||''} bl${Math.min(4,Math.floor((n-1)/15))}"><i><small>${BGL(n)}</small>${n}</i></span>` : '';
+function cartelaHTML(c, nums, ult){
+  const L='BINGO';
+  return `<div class="bc"><div class="bc-h">${[...L].map((x,i)=>`<span class="bl${i}">${x}</span>`).join('')}</div><div class="bc-g">${c.map(n=>n===0?'<span class="on livre">★</span>':`<span class="${nums.includes(n)?'on':''}${n===ult?' ult':''}">${n}</span>`).join('')}</div></div>`;
+}
+function ligarBingo(){
+  const box=$('bng'); if(!box) return; const f=FESTA; let est=null, chave='', vitoria=null;
+  const pintar=()=>{
+    if(!est){ box.hidden=true; chave=''; return; }
+    const eu=est.eu, nums=est.numeros||[], ult=nums[nums.length-1], gan=(est.ganhadores||[]).filter(g=>g.rodada===est.rodada);
+    const k=JSON.stringify([BGK(est), eu&&eu.autorizado, eu&&(eu.cartelas||[]).length, !!eu]); if(k===chave) return; chave=k; box.hidden=false;
+    const topo=`<div class="bg-gtopo"><div><h2 class="sec" style="margin:0">🎱 ${esc(est.titulo||'Bingo')}</h2><p class="muted" style="margin:4px 0 0">${est.premio?`Prêmio desta rodada: <b>${esc(est.premio)}</b>`:''}</p></div>${ult?BOLA(ult,'m'):''}</div>`;
+    if(est.status==='encerrado'){ const G=est.ganhadores||[]; box.innerHTML=topo+`<p style="margin:10px 0 6px"><b>O bingo terminou.</b> Ganhadores:</p><ul class="bg-gl">${G.map(g=>`<li><b>${esc(g.nome)}</b> · ${esc(g.premio||'')}</li>`).join('')||'<li>Ninguém bateu desta vez.</li>'}</ul>`; return; }
+    if(!eu){ box.innerHTML=`<div class="bg-banner" aria-hidden="true"></div>`+topo+`<p class="sub" style="margin:10px 0">${est.modo==='organizador'?'Peça sua cartela: o organizador libera a participação.':'Pegue sua cartela e acompanhe os números no telão. Os números marcam sozinhos!'}</p>
+      <input class="in" id="bgNome" maxlength="40" placeholder="Seu nome" value="${esc(nomeAtual()||store.get('mf_nome')||'')}" style="max-width:320px;margin:0 auto 10px;display:block">
+      <button class="btn big" id="bgEntrar">${est.modo==='organizador'?'🙋 Pedir para jogar':'🎱 Quero jogar'}</button><div class="msg" id="bgM"></div>`;
+      $('bgEntrar').onclick=async()=>{ const nm=$('bgNome').value.trim(); if(nm.length<2){ $('bgM').className='msg err'; $('bgM').textContent='Escreva seu nome.'; return; }
+        $('bgEntrar').disabled=true; try{ est=await rpc('fe_bingo_entrar',{p_festa:f.id,p_aparelho:deviceId(),p_nome:nm}); store.set('mf_nome',nm); chave=''; pintar(); toast(est.eu&&est.eu.autorizado?'Sua cartela chegou! Boa sorte!':'Pedido enviado ao organizador.'); }
+        catch(e){ $('bgM').className='msg err'; $('bgM').textContent=/aberto|nome/.test(e.message||'')?e.message:ERR(e); $('bgEntrar').disabled=false; } };
+      return; }
+    if(!eu.autorizado){ box.innerHTML=topo+`<p class="aviso" style="margin-top:10px">Pedido enviado, ${esc(eu.nome)}. Assim que o organizador liberar, sua cartela aparece aqui.</p>`; return; }
+    const ganhei=gan.some(g=>g.id===eu.id);
+    let faixa='';
+    if(est.status==='bateu' && gan.length) faixa = ganhei ? `<div class="bg-voce"><b>BINGO!</b><span>Você ganhou${est.premio?': '+esc(est.premio):''}! Procure o organizador.</span></div>` : `<p class="aviso" style="margin:10px 0 0">${gan.map(g=>esc(g.nome)).join(', ')} bateu! Aguarde a próxima rodada.</p>`;
+    else faixa=`<p class="muted" style="margin:8px 0 0;font-size:14px">${nums.length?`${nums.length} números sorteados · `:'Aguardando o primeiro número · '}vale ${est.vitoria==='cheia'?'cartela cheia':'linha, coluna ou diagonal'}</p>`;
+    box.innerHTML=topo+faixa+`<div class="bc-lista">${(eu.cartelas||[]).map(c=>cartelaHTML(c,nums,ult)).join('')}</div>`;
+    if(ganhei && vitoria!==est.em){ vitoria=est.em; if(navigator.vibrate) navigator.vibrate([300,120,300,120,600]); box.scrollIntoView({behavior:'smooth',block:'center'}); }
+  };
+  const ler=async()=>{ if(document.hidden) return; try{ est=await rpc('fe_bingo_estado',{p_festa:f.id,p_aparelho:deviceId()}); pintar(); }catch(e){} };
+  ler(); setInterval(ler, 4000);
+}
+async function vBingo(){
+  ADM.view='bingo'; const f=FESTA, CP=CORP(f); let D=null, auto=null;
+  const sugP=CP?'Kit de boas-vindas\nFone de ouvido\nVale-jantar':'Uma garrafa de vinho\nKit de doces\nCentro de mesa';
+  $('vw').innerHTML=`<div class="card" style="padding:18px;margin-bottom:12px"><h3 style="margin:0 0 4px">🎱 Bingo no telão</h3>
+      <p class="muted" style="margin:0 0 12px">Cada ${CP?'participante':'convidado'} recebe a cartela no celular, os números saem no telão em bolinhas e as cartelas marcam sozinhas. Quando alguém bate, festa no telão.</p>
+      <label class="f">Nome do bingo<input class="in" id="bgT" maxlength="60" placeholder="Bingo"></label>
+      <label class="f" style="margin-top:10px">Prêmios, um por rodada (até 10)<textarea class="in" id="bgP" rows="4" maxlength="700" placeholder="${esc(sugP)}"></textarea></label>
+      <div class="row" style="gap:12px;margin-top:10px;flex-wrap:wrap">
+        <label class="f" style="flex:1;min-width:220px;margin:0">Quem participa<select class="in" id="bgModo"><option value="livre">Cada convidado pega a cartela sozinho</option><option value="organizador">Eu libero quem pede</option></select></label>
+        <label class="f" style="flex:1;min-width:140px;margin:0">Cartelas por pessoa<select class="in" id="bgC"><option>1</option><option>2</option><option>3</option><option>4</option></select></label>
+        <label class="f" style="flex:1;min-width:200px;margin:0">Para bater<select class="in" id="bgV"><option value="linha">Linha, coluna ou diagonal</option><option value="cheia">Cartela cheia</option></select></label></div>
+      <div class="row" style="margin-top:12px;align-items:center"><button class="btn" id="bgSalvar">Salvar bingo</button><span class="msg" id="bgM"></span></div></div>
+    <div id="bgCtl"></div><div id="bgJog"></div>`;
+  const M=(t,c)=>{ const m=$('bgM'); if(m){ m.className='msg'+(c?' '+c:''); m.textContent=t; } };
+  const preencher=()=>{ const b=D&&D.bingo; if(!b){ $('bgP').value=''; return; } $('bgT').value=b.titulo||''; $('bgP').value=(b.premios||[]).join('\n'); $('bgModo').value=b.modo; $('bgC').value=String(b.cartelas||1); $('bgV').value=b.vitoria; };
+  const acao=async(a,j)=>{ try{ D=await rpc('fe_admin_bingo_acao',{p_slug:SLUG,p_pin:PIN,p_acao:a,p_jog:j||null}); pintar(); return true; }catch(e){ toast(ERR(e)); return false; } };
+  const pintar=()=>{ if(ADM.view!=='bingo' || !$('bgCtl')) return; const b=D&&D.bingo;
+    if(!b){ $('bgCtl').innerHTML=''; $('bgJog').innerHTML=''; return; }
+    const nums=b.numeros||[], ult=nums[nums.length-1], gan=(b.ganhadores||[]).filter(g=>g.rodada===b.rodada), noTv=D.tv==='bingo';
+    const st={inscricao:'Aguardando o primeiro número',jogando:'Em jogo',bateu:'Alguém bateu!',encerrado:'Encerrado'}[b.status];
+    $('bgCtl').innerHTML=`<div class="card" style="padding:18px;margin-bottom:12px"><div class="bg-adm"><div class="bg-adm-b">${ult?BOLA(ult,'g'):'<span class="bola vazia"><i>?</i></span>'}</div>
+        <div style="flex:1;min-width:220px"><div class="muted" style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.05em">${st} · rodada ${b.rodada+1} de ${(b.premios||[]).length}</div>
+          <div style="font-size:20px;font-weight:700;margin:4px 0">${b.premio?esc(b.premio):''}</div>
+          <div class="muted">${b.jogadores} jogando · ${nums.length} de 75 números · ${noTv?'<b style="color:#15803D">no telão agora</b>':'fora do telão'}</div>
+          ${b.status==='bateu'?`<p class="aviso" style="margin:10px 0 0"><b>${gan.map(g=>esc(g.nome)+' (cartela '+g.cartela+')').join(', ')}</b> bateu${b.premio?' e ganhou '+esc(b.premio):''}!</p>`:''}</div></div>
+      <div class="row" style="margin-top:14px;flex-wrap:wrap;gap:8px">
+        ${b.status==='bateu'?`<button class="btn ok" id="bgProx">${b.rodada+1<(b.premios||[]).length?'▶ Próxima rodada':'🏁 Encerrar bingo'}</button>`:`<button class="btn ok" id="bgSort" ${b.status==='encerrado'?'disabled':''}>🎱 Sortear número</button>`}
+        <button class="btn ${auto?'':'alt'}" id="bgAuto" ${b.status!=='inscricao'&&b.status!=='jogando'?'disabled':''}>${auto?'⏸ Parar automático':'⏩ Automático (a cada 10 s)'}</button>
+        <button class="btn ghost" id="bgTv">${noTv?'💌 Voltar ao mural':'📺 Mostrar no telão'}</button>
+        <button class="btn ghost" id="bgReset">↺ Recomeçar do zero</button>
+        <button class="btn alt" id="bgFim" ${b.status==='encerrado'?'disabled':''}>🔒 Encerrar</button></div>
+      ${nums.length?`<div class="bg-sai">${nums.slice().reverse().map(n=>BOLA(n,'p')).join('')}</div>`:''}
+      ${(b.ganhadores||[]).length?`<p style="margin:14px 0 4px"><b>Ganhadores</b></p><ul class="bg-gl">${b.ganhadores.map(g=>`<li>Rodada ${g.rodada+1}: <b>${esc(g.nome)}</b> · ${esc(g.premio||'')}</li>`).join('')}</ul>`:''}</div>`;
+    const J=D.jogadores||[], pend=J.filter(j=>!j.autorizado);
+    $('bgJog').innerHTML=`<div class="card" style="padding:18px"><h3 style="margin:0 0 8px">Participantes <span class="muted" style="font-size:14px;font-weight:500">${J.length-pend.length} jogando${pend.length?` · <b style="color:#b45309">${pend.length} pedindo para jogar</b>`:''}</span></h3>
+      ${J.length?`<div class="bg-jl">${J.map(j=>`<div class="bg-j${j.autorizado?'':' pend'}"><span class="nm">${esc(j.nome)}</span>${j.autorizado?`<span class="muted">${j.n} cartela${j.n>1?'s':''}</span><button class="btn ghost sm" data-a="menos_cartela" data-j="${j.id}" ${j.n<2?'disabled':''} aria-label="Uma cartela a menos">−</button><button class="btn ghost sm" data-a="mais_cartela" data-j="${j.id}" aria-label="Uma cartela a mais">＋</button>`:`<button class="btn sm" data-a="aprovar" data-j="${j.id}">Liberar</button>`}<button class="btn ghost sm" data-a="remover" data-j="${j.id}" aria-label="Tirar do bingo">✕</button></div>`).join('')}</div>${pend.length>1?'<button class="btn alt sm" id="bgTodos" style="margin-top:10px">Liberar todos</button>':''}`:`<p class="muted" style="margin:0">Ninguém ainda. Mostre o bingo no telão: o QR aparece lá e ${CP?'os participantes':'os convidados'} pegam a cartela pelo celular.</p>`}</div>`;
+    const on=(id,fn)=>{ const el=$(id); if(el) el.onclick=fn; };
+    on('bgSort', async()=>{ $('bgSort').disabled=true; await acao('sortear'); });
+    on('bgProx', ()=>acao('proxima'));
+    on('bgTv', ()=>acao(D.tv==='bingo'?'mural':'telao'));
+    on('bgReset', ()=>{ if(confirm('Recomeçar o bingo do zero? Os números sorteados e os ganhadores serão apagados. As cartelas continuam.')) acao('reiniciar'); });
+    on('bgFim', ()=>{ pararAuto(); acao('encerrar'); });
+    on('bgAuto', ()=>{ if(auto){ pararAuto(); pintar(); return; } auto=setInterval(async()=>{ if(ADM.view!=='bingo'){ pararAuto(); return; } const b2=D&&D.bingo; if(!b2 || b2.status==='bateu' || b2.status==='encerrado'){ pararAuto(); pintar(); return; } await acao('sortear'); },10000); pintar(); });
+    on('bgTodos', async()=>{ for(const j of pend){ await rpc('fe_admin_bingo_acao',{p_slug:SLUG,p_pin:PIN,p_acao:'aprovar',p_jog:j.id}).catch(()=>{}); } carregar(); });
+    $('bgJog').querySelectorAll('[data-a]').forEach(x=>x.onclick=()=>{ if(x.dataset.a==='remover' && !confirm('Tirar esta pessoa do bingo?')) return; acao(x.dataset.a, +x.dataset.j); });
+  };
+  const pararAuto=()=>{ if(auto){ clearInterval(auto); auto=null; } };
+  const carregar=async(prim)=>{ try{ D=await rpc('fe_admin_bingo',{p_slug:SLUG,p_pin:PIN}); if(prim) preencher(); pintar(); }catch(e){ if(prim) M(ERR(e),'err'); } };
+  $('bgSalvar').onclick=async()=>{ const pr=$('bgP').value.split('\n').map(x=>x.trim()).filter(Boolean); if(!pr.length){ M('Escreva pelo menos um prêmio.','err'); return; }
+    try{ D=await rpc('fe_admin_bingo_salvar',{p_slug:SLUG,p_pin:PIN,p_dados:{titulo:$('bgT').value.trim(),premios:pr,modo:$('bgModo').value,cartelas:+$('bgC').value,vitoria:$('bgV').value}}); M('Salvo.','ok'); pintar(); }catch(e){ M(ERR(e),'err'); } };
+  await carregar(true);
+  const t=setInterval(()=>{ if(ADM.view!=='bingo'){ clearInterval(t); pararAuto(); return; } if(!document.hidden) carregar(); },4000);
+}
+
 async function vSorteio(){
   ADM.view='sorteio'; const f=FESTA; let info={}, lista={participantes:[],ganhadores:[]};
   $('vw').innerHTML=`<div class="card" style="padding:18px"><h3 style="margin:0 0 4px">🎲 Sorteio entre os convidados <span class="muted" style="font-size:14px;font-weight:500">(opcional)</span></h3>

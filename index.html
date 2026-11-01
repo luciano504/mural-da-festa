@@ -878,6 +878,15 @@ body.com-aviso .tv-top{margin-top:5.5vh}
 @media (max-width:900px){.lf-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
 .lfoto.lreal{background:#000;overflow:hidden}.lfoto.lreal::before,.lfoto.lreal::after{display:none}.lfoto.lreal img{width:100%;height:100%;object-fit:cover;object-position:45% 30%;display:block}
+
+.passos4 .pfoto{aspect-ratio:4/3;border-radius:var(--r-md);overflow:hidden;margin:0 0 14px;background:var(--surface)}
+.passos4 .pfoto img{width:100%;height:100%;object-fit:cover;display:block}
+.passos4 .pmock{display:grid;place-items:center;background:linear-gradient(160deg,color-mix(in srgb,var(--accent) 16%, #fff),color-mix(in srgb,var(--accent2) 22%, #fff))}
+.passos4 .pmock div{width:78%;background:#fff;border-radius:12px;padding:12px;box-shadow:0 10px 24px -14px rgba(0,0,0,.35);display:flex;flex-direction:column;gap:6px;font-size:13px}
+.passos4 .pmock div b{font-size:13px;margin:0} .passos4 .pmock div span{color:var(--ink);font-size:14px}
+.passos4 .pmock i{display:flex;gap:6px;font-style:normal} .passos4 .pmock em{font-style:normal;flex:1;text-align:center;border-radius:8px;padding:6px;font-weight:700;font-size:12px;border:1px solid var(--line)} .passos4 .pmock em:first-child{background:var(--accent);color:var(--on);border-color:var(--accent)}
+.lf-grid.lf3{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:900px){.lf-grid.lf3{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
 </head>
 <body>
@@ -3549,10 +3558,10 @@ const CENAS={
   festa: o=>`<div class="lpol"><div class="lfoto lreal"><img src="fotos/valsa.jpg" alt=""></div><span>a primeira valsa</span></div>
        <div class="lnota">Que você nunca perca esse brilho no olhar. Te amamos!<b>Vovó Lúcia</b></div>
        <div class="laudio"><span class="play"></span><span class="ond">${o}</span><small>Tio Beto · 0:42</small></div>`,
-  buffet: ()=>`<div class="lpol"><div class="lfoto lreal"><img src="fotos/casamento.jpg" alt=""></div><span>no telão, ao vivo</span></div>
+  buffet: ()=>`<div class="lpol"><div class="lfoto lreal"><img src="fotos/buffet.jpg" alt="" style="object-position:32% 50%"></div><span>no telão, ao vivo</span></div>
        <div class="lnota lmock"><b class="lk">🧑‍🍳 Novo pedido</b><span class="lm">Mesa 7</span>2× Refrigerante<br>1× Água com gás<b>📝 sem gelo</b></div>
        <div class="laudio lpill"><span class="ico">🚗</span><span><b>nº 12 · ABC1D23</b><br><small2>na porta · pode buscar</small2></span></div>`,
-  empresa: ()=>`<div class="lpol lslide"><div class="lfoto"><span class="sl-t">Resultados 2026</span><span class="sl-b"><i style="height:38%"></i><i style="height:56%"></i><i style="height:71%"></i><i style="height:92%"></i></span></div><span>slide 3 de 12</span></div>
+  empresa: ()=>`<div class="lpol"><div class="lfoto lreal"><img src="fotos/empresa.jpg" alt="" style="object-position:68% 50%"></div><span>a premiação do ano</span></div>
        <div class="lnota lmock"><b class="lk">🚪 Credenciamento</b><span class="lm">312</span>de 340 convidados já chegaram<b>atualizado agora</b></div>
        <div class="laudio lpill"><span class="ico">🍽️</span><span><b>280 escolhas</b><br><small2>enviadas ao buffet</small2></span></div>`
 };
@@ -3575,7 +3584,7 @@ function telaInicio(perfil){
    </section>
    ${k!=='empresa'?`<section class="lfotos" aria-label="Momentos">
      <h2 class="sec">${k==='buffet'?'Cada festa do seu salão vira lembrança':'Feito para os momentos que valem guardar'}</h2>
-     <div class="lf-grid">${[['15anos','15 anos','A valsa, os recados das amigas e o telão emocionando a debutante'],['casamento','Casamento','Fotos dos convidados e votos gravados, tudo no álbum do casal'],['bodas','Bodas de ouro','Áudios da família e a história do casal em fotos no telão'],['infantil','Aniversário infantil','Os recados dos padrinhos e a festa inteira guardada para sempre']].map(([f,t,d])=>`<figure><img src="fotos/${f}.jpg" alt="${t}" loading="lazy" width="800" height="1000"><figcaption><b>${t}</b><span>${d}</span></figcaption></figure>`).join('')}</div>
+     <div class="lf-grid">${[['15anos','15 anos','A valsa, os recados das amigas e o telão emocionando a debutante'],['casamento','Casamento','Fotos dos convidados e votos gravados, tudo no álbum do casal'],['bodas','Bodas de ouro','Áudios da família e a história do casal em fotos no telão'],['infantil','Aniversário infantil','Os recados dos padrinhos e a festa inteira guardada para sempre'],['chabebe','Chá de bebê','Cada recado lido em voz alta vira lembrança para o bebê'],['formatura','Formatura','O abraço da família e os recados da turma no telão'],['cinquenta','Aniversário de 50 anos','Amigos de todas as fases da vida num só mural'],['menino','Aniversário de menino','O pedido, as velinhas e o carinho de toda a família']].map(([f,t,d])=>`<figure><img src="fotos/${f}.jpg" alt="${t}" loading="lazy" width="800" height="1000"><figcaption><b>${t}</b><span>${d}</span></figcaption></figure>`).join('')}</div>
    </section>`:''}
    <section class="lgratis">
      <div class="lg-e">🧪</div>
@@ -3585,8 +3594,12 @@ function telaInicio(perfil){
    </section>
    <section id="como">
      <h2 class="sec">${P.passosT}</h2>
-     <ol class="passos4">${P.passos.map(([t,d])=>`<li><b>${t}</b><span>${d}</span></li>`).join('')}</ol>
+     <ol class="passos4">${P.passos.map(([t,d],i)=>{ const ft=({festa:['qr','audio','',  'telao']})[k]; const fi=ft?(ft[i]?`<div class="pfoto"><img src="fotos/${ft[i]}.jpg" alt="" loading="lazy"></div>`:`<div class="pfoto pmock"><div><b>Nova homenagem</b><span>“Parabéns, minha princesa!”</span><i><em>Aprovar ✓</em><em>Recusar</em></i></div></div>`):''; return `<li>${fi}<b>${t}</b><span>${d}</span></li>`; }).join('')}</ol>
    </section>
+   ${k!=='festa'?`<section class="lfotos">
+     <h2 class="sec">Sua equipe no mesmo app</h2>
+     <div class="lf-grid lf3">${[['recepcao','Recepção','Lê o QR do convite no celular e você vê quem já chegou'],['garcom','Cozinha e garçons','O pedido chega com o número da mesa e sai na hora certa'],['manobrista','Manobrista','O convidado pede o carro pelo celular e acompanha a fila']].map(([f,t,d])=>`<figure><img src="fotos/${f}.jpg" alt="${t}" loading="lazy" width="800" height="1000"><figcaption><b>${t}</b><span>${d}</span></figcaption></figure>`).join('')}</div>
+   </section>`:''}
    <section>
      <h2 class="sec">${P.featT}</h2>
      <div class="feat">${P.feat.map(([t,d])=>`<div><b>${t}</b><p>${d}</p></div>`).join('')}</div>

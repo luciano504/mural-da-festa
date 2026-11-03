@@ -1715,7 +1715,7 @@ function promoAposEnvio(){ try{ if(!FESTA) return; const k='mf_promo_'+FESTA.slu
   const corp=CORP(FESTA); const href=BASE+(corp?'?para=empresa&origem=convidado':'?experimente&origem=convidado');
   const el=document.createElement('div'); el.className='promo-card'; el.setAttribute('role','status');
   el.innerHTML=`<button class="x" type="button" aria-label="Fechar">×</button><p><b>${corp?'Gostou? Leve o Mural para o evento da sua empresa.':'Gostou? Faça o Mural da sua festa também 💌'}</b><br>${corp?'Teste grátis antes de contratar.':'Veja funcionando em 30 segundos e teste grátis.'}</p><a class="btn sm" href="${href}" target="_blank" rel="noopener">${corp?'Conhecer o Mural':'Quero ver como funciona'}</a>`;
-  document.body.appendChild(el); requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add('on')));
+  document.body.appendChild(el); void el.offsetWidth; el.classList.add('on');
   const fechar=()=>{ el.classList.remove('on'); setTimeout(()=>el.remove(),500); }; el.querySelector('.x').onclick=fechar; setTimeout(fechar, 15000);
 }catch(e){} }
 
@@ -3866,7 +3866,7 @@ function telaExperimente(){
   const tv=$('xpTv'); let fila=SL.slice(), i=0, timer=null;
   const pintar=(s)=>{ const el=document.createElement('div'); el.className='xp-sl';
     el.innerHTML = s.img ? `<div><img src="${s.img}" alt=""><span class="a">${esc(s.a)}</span></div>` : `<div class="q">“${esc(s.q)}”<span class="a">${esc(s.a)}</span></div>`;
-    tv.appendChild(el); requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add('on')));
+    tv.appendChild(el); void el.offsetWidth; el.classList.add('on');
     [...tv.querySelectorAll('.xp-sl')].slice(0,-1).forEach(o=>{ o.classList.remove('on'); setTimeout(()=>o.remove(),700); }); };
   const proximo=()=>{ pintar(fila[i%fila.length]); i++; };
   const rodar=()=>{ clearInterval(timer); timer=setInterval(proximo, 4200); };

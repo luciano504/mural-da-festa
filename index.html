@@ -523,6 +523,10 @@ h2.sec .muted{font-family:var(--body)}
 .molbtn{border:0;background:none;color:var(--accent);font-weight:600;font-size:14px;cursor:pointer;padding:4px 2px}
 .rsvp{padding:22px 18px;text-align:center;margin-top:34px}
 .rs-card{grid-column:1/-1}
+.pix-qr{max-width:240px;margin:8px auto 14px;background:#fff;padding:12px;border-radius:16px}
+.mm-chips{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px}
+.mm-chips .chip{border:0;cursor:pointer;font:inherit}
+.mm-chips .chip.on{background:var(--accent);color:#fff}
 .rs-prev{display:flex;gap:10px;overflow-x:auto;padding:4px 0}
 .rs-prev img{height:300px;width:auto;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,.18);flex:none}
 .rsvp h2.sec{margin:0 0 6px;justify-content:center}
@@ -1300,11 +1304,13 @@ async function telaConvidado(){
       ${f.moderacao?`<p class="nota">${CORP(f)?'As mensagens aparecem no telão depois da aprovação da organização.':'As homenagens aparecem no telão depois que o anfitrião aprova 💛'}</p>`:''}
     </section>
     ` : `<div class="closed">As homenagens desta festa foram encerradas. Obrigado por fazer parte.</div>`}
+    ${f.ativo && PIX(f) ? '<section class="card rsvp" id="pixC"></section>' : ''}
     ${f.ativo && (EXT(f).desafios||[]).length ? '<section class="card rsvp" id="dsf"></section>' : ''}
     ${f.ativo && f.tem_cardapio && !MESA ? '<section class="card rsvp" id="cdp"></section>' : ''}
     ${f.ativo && f.correio_ativo!==false ? '<section class="card rsvp" id="crr"></section>' : ''}
     ${(t.fotos||[]).length ? `<h2 class="sec">📖 A história de ${esc(f.homenageado||'quem a gente ama')}</h2><div class="hist">${t.fotos.map(p=>`<figure><img loading="lazy" src="${midia(p)}" alt=""></figure>`).join('')}</div>` : ''}
     <h2 class="sec">🖼️ Mural <span class="muted" id="muralN" style="font-size:16px;font-weight:500"></span></h2>
+    <div class="mm-chips" id="mmC"></div>
     <div class="mural" id="mural"></div>
     <p class="rod">Ao enviar ${CORP(f)?'uma mensagem':'uma homenagem'}, você concorda com os <a href="${BASE}?termos" target="_blank" rel="noopener">Termos de uso e Privacidade</a>.</p>
   </div>`;
@@ -1312,14 +1318,19 @@ async function telaConvidado(){
   document.querySelectorAll('.capa .enfc').forEach(im=>{ const t2=new Image(); t2.crossOrigin='anonymous'; t2.onload=()=>{ try{ const c=document.createElement('canvas'); c.width=c.height=16; const x=c.getContext('2d'); x.drawImage(t2,0,0,16,16); const d=x.getImageData(0,0,16,16).data; if(![0,15,240,255].some(k=>d[k*4+3]<200)) im.classList.add('sticker'); }catch(e){ im.classList.add('sticker'); } }; t2.src=im.src; });
   const nome=$('nome'); if(nome) nome.addEventListener('change',()=>store.set('mf_nome',nome.value.trim().slice(0,40)));
   $('mural').addEventListener('click', e=>{ const l=e.target.closest('[data-like]'); if(l) return curtir(l); const rc=e.target.closest('[data-reac]'); if(rc) return reagir(rc); const cm=e.target.closest('[data-com]'); if(cm) return abrirComentarios(+cm.dataset.com); const m=e.target.closest('[data-mol]'); if(m){ const p=POSTS.find(x=>x.id===+m.dataset.mol); if(p) abrirMoldura(midia(p.caminho), p.autor); } });
-  ligarConvite(); ligarPresenca(); ligarCardapio(MESA); ligarValet(); ligarSorteio(); ligarQuiz(); ligarEnquete(); ligarCorreio(); ligarPerguntas(MESA); ligarAvisoConvidado(); ligarDesafios(); ligarBingo();
+  ligarConvite(); ligarPresenca(); ligarCardapio(MESA); ligarValet(); ligarSorteio(); ligarQuiz(); ligarEnquete(); ligarCorreio(); ligarPerguntas(MESA); ligarAvisoConvidado(); ligarDesafios(); ligarBingo(); ligarPix();
   await atualizarMural(); setInterval(()=>{ if(!document.hidden) atualizarMural(); }, 20000);
 }
 async function atualizarMural(){
   try{ POSTS = await postsAprovados(FESTA.id); }catch(e){ return; }
-  const key=POSTS.map(p=>p.id+':'+(p.curtidas||0)+':'+JSON.stringify(p.reacoes||{})+':'+(p.comentarios||0)).join(','); if(key===muralKey) return; muralKey=key;
+  const rv=REVELA(FESTA), sel=window.MURAL_MM||'';
+  const key=(rv?'rv'+rv:'')+'|'+sel+'|'+POSTS.map(p=>p.id+':'+(p.curtidas||0)+':'+JSON.stringify(p.reacoes||{})+':'+(p.comentarios||0)).join(','); if(key===muralKey) return; muralKey=key;
   $('muralN').textContent = POSTS.length ? `(${POSTS.length})` : '';
-  const m=$('mural'); const list=[...POSTS].reverse();
+  if(rv){ $('mmC').innerHTML=''; $('mural').innerHTML=`<div class="empty">🔒 <b>O mural abre ${esc(new Date(rv).toLocaleString('pt-BR',{weekday:'long',day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'}))}.</b><br>${CORP(FESTA)?'As mensagens já estão passando no telão. Volte aqui para rever tudo.':'As homenagens já estão passando no telão. Guarde este link e volte para rever tudo 💛'}</div>`; return; }
+  const nomesM=[...new Set(POSTS.map(p=>momentoDe(p,FESTA)).filter(Boolean))];
+  $('mmC').innerHTML = nomesM.length>1 ? ['',...nomesM].map(n=>`<button type="button" class="chip${n===sel?' on':''}" data-mm="${esc(n)}">${n?esc(n):'Todos'}</button>`).join('') : '';
+  $('mmC').querySelectorAll('[data-mm]').forEach(b=>b.onclick=()=>{ window.MURAL_MM=b.dataset.mm; muralKey=null; atualizarMural(); });
+  const m=$('mural'); const list=[...POSTS].filter(p=>!sel||momentoDe(p,FESTA)===sel).reverse();
   m.innerHTML = list.length ? list.map(cardPost).join('') : `<div class="empty">${CORP(FESTA)?'Ainda não há mensagens. A primeira pode ser a sua.':'Ainda não chegou nenhuma homenagem. A primeira pode ser a sua ✨'}</div>`;
 }
 const curtidasMinhas = () => { try{ return new Set(JSON.parse(store.get('mf_curt_'+(FESTA&&FESTA.id))||'[]')); }catch(e){ return new Set(); } };
@@ -1881,8 +1892,9 @@ async function telaTelao(){
   const medir=()=>{ const h=$('stage')?$('stage').clientHeight:0; if(h) document.documentElement.style.setProperty('--sh', h+'px'); const bb=document.querySelector('.tv-bar'); if(bb) document.documentElement.style.setProperty('--bh', bb.offsetHeight+'px'); }; medir(); addEventListener('resize', medir); setTimeout(medir,500);
   const tv = {list:[], known:new Set(), queue:[], loop:0, cur:null, timer:null, paused:false, hist:[], hi:0, pv:1, pm:0, since:0};
   const fotosH = t.fotos||[], mus = criarMusica(t.musica);
-  const PADRAO_VAZIO = fotosH.length>=3 ? ['intro','hist','hist','col','hist','hist','qr'] : fotosH.length ? ['intro','hist','hist','qr'] : ['intro','qr'];
-  const PADRAO_MIX   = fotosH.length>=3 ? ['hist','col','hist','intro','hist','qr'] : fotosH.length ? ['hist','intro','hist','qr'] : ['intro','qr'];
+  const PADRAO_VAZIO = fotosH.length>=3 ? ['intro','hist','hist','col','hist','pix','hist','qr'] : fotosH.length ? ['intro','hist','pix','hist','qr'] : ['intro','pix','qr'];
+  const PADRAO_MIX   = fotosH.length>=3 ? ['hist','col','pix','hist','intro','hist','qr'] : fotosH.length ? ['hist','pix','intro','hist','qr'] : ['intro','pix','qr'];
+  const pixTv = () => { const ex=window.__tvEx||EXT(f); return ex.pix && ex.pix.chave && ex.pix.telao!==false ? ex.pix : null; };
   const proxFoto = () => fotosH[(tv.hi++) % fotosH.length];
   const extra = k => k==='hist' ? {tipo:'hist', caminho:proxFoto()} : k==='col' ? {tipo:'col', fotos:[proxFoto(),proxFoto(),proxFoto()]} : {tipo:k};
 
@@ -1938,7 +1950,7 @@ async function telaTelao(){
   setInterval(baixador, 2000);
   // QR grande no telão só de vez em quando (o QR pequeno fica sempre no rodapé):
   // com mensagens no mural, no máximo a cada 10 min; mural vazio, a cada 2 min
-  function padrao(arr,k){ for(let n=0;n<arr.length;n++){ const t=arr[tv[k]++ % arr.length]; if(t!=='qr') return t; if(document.body.classList.contains('sem-qr')) continue;
+  function padrao(arr,k){ for(let n=0;n<arr.length;n++){ const t=arr[tv[k]++ % arr.length]; if(t==='pix'){ if(pixTv() && Date.now()-(tv.pixEm||0)>=240000){ tv.pixEm=Date.now(); return t; } continue; } if(t!=='qr') return t; if(document.body.classList.contains('sem-qr')) continue;
       const gap=tv.list.length?600000:120000; if(Date.now()-(tv.qrEm||0)>=gap){ tv.qrEm=Date.now(); return t; } } return 'intro'; }
   function proxima(back){
     clearTimeout(tv.timer); if(tv.paused) return;
@@ -1964,15 +1976,18 @@ async function telaTelao(){
     if(p.tipo==='hist'){ el.classList.add('sl-hist'); el.innerHTML=`<div class="pol" style="--r:${giro()}"><img src="${midia(p.caminho)}" alt=""></div><div class="cap">📖 A história de ${esc(nome)}</div>`; dur=6500; }
     else if(p.tipo==='col'){ el.classList.add('sl-col'); el.innerHTML=p.fotos.map((c,i)=>`<div class="pol c${i+1}" style="--r:${[-9,4,10][i]}deg;animation-delay:${i*.45}s"><img src="${midia(c)}" alt=""></div>`).join('')+`<div class="cap">📖 A história de ${esc(nome)}</div>`; dur=8500; }
     else if(p.tipo==='intro'){ el.className='sl sl-intro '+(CORP(f)?'quieto e-calma':'e-zoom'); el.innerHTML=`<div class="hey">${CORP(f)?'Bem-vindos':'✨ Bem-vindos à festa ✨'}</div><div class="nm">${CORP(f)?esc(nome):(()=>{ let i=0; return nome.split(' ').map(w=>`<span class="w" style="display:inline-block;white-space:nowrap">${[...w].map(ch=>`<span style="animation-delay:${(i++*.08).toFixed(2)}s">${esc(ch)}</span>`).join('')}</span>`).join(' '); })()}</div><div class="sub">${esc(subtitulo(f))}</div><div class="cta">${CORP(f)?'Participe pelo QR Code aqui embaixo':'📸 ✍️ 🎤 🎥 Mande sua homenagem pelo QR Code aqui embaixo!'}</div>`; dur=7500; if(!CORP(f)){ confete(60); chars.festa(); } }
+    else if(p.tipo==='pix'){ const px=pixTv(); el.className='sl tv-empty e-zoom'; el.innerHTML=`<div class="qr" id="tvQrBig"></div><h2>🎁 ${esc(px&&px.frase||PIX_FRASE(f))}</h2><p>No app do banco: Pix › Pagar com QR Code · sem taxa, direto para ${esc(px&&px.nome||'o anfitrião')}</p>`; dur=9000; }
     else if(p.tipo==='qr'){ el.className='sl tv-empty e-zoom'; el.innerHTML=`<div class="qr" id="tvQrBig"></div><h2>${tv.list.length?'Deixe a sua homenagem também!':'Mande a primeira homenagem!'}</h2><p>Aponte a câmera do celular para o código</p>`; dur=7000; }
     else if(p.tipo==='foto'){ el.classList.add('sl-foto'); el.innerHTML=`<img class="ph" style="--r:${giro()}" src="${midia(p.caminho)}" alt="">${(p.texto||by||p.curtidas)?`<div class="cap">${esc(p.texto||'')}${p.curtidas?`<span class="tvlike">♥ ${p.curtidas}</span>`:''}${Object.entries(p.reacoes||{}).map(([e,n])=>`<span class="tvreac">${e} ${n}</span>`).join('')}${by?`<small>📸 ${by}</small>`:''}</div>`:''}`; dur=8000; }
     else if(p.tipo==='correio'){ el.classList.add('sl-texto','sl-correio'); const L=(p.texto||'').length; const fs=L<60?6:L<140?4.6:3.6; el.innerHTML=`<div><div class="env">${CORP(f)?'💬 Recado para um colega':'💌 Correio elegante'}</div><div class="pa">Para: ${esc(p.para)}</div><div class="q${t.fundo?' card-on':''}" style="font-size:${fs}vw">${esc(p.texto)}</div><div class="by">${p.de?'— '+esc(p.de):(CORP(f)?'— um colega':'🤫 De: alguém especial')}</div></div>`; dur=Math.min(16000, 8000+L*40); }
     else if(p.tipo==='texto'){ el.classList.add('sl-texto'); const L=(p.texto||'').length; const fs = L<40?9:L<90?7:L<180?5.4:L<320?4.2:3.4; el.innerHTML=`<div class="q${t.fundo?' card-on':''}" style="font-size:${fs}vw">${esc(p.texto)}</div>${by||p.curtidas?`<div class="by">${by?'— '+by:''}${p.curtidas?`<span class="tvlike">♥ ${p.curtidas}</span>`:''}</div>`:''}`; dur=Math.min(18000, 7000+L*45); }
     else if(p.tipo==='audio'){ el.classList.add('sl-audio'); el.innerHTML=`<div class="mic">🎤</div><div class="eq">${'<i></i>'.repeat(12)}</div><div class="cap">Recado de ${by||'um convidado'}</div><audio src="${(cacheM.get(p.id)||{}).url||midia(p.caminho)}" preload="auto"></audio>`; dur=null; }
     else if(p.tipo==='video'){ el.classList.add('sl-video'); el.innerHTML=`<video src="${(cacheM.get(p.id)||{}).url||midia(p.caminho)}" playsinline preload="auto" ${p.thumb?`poster="${midia(p.thumb)}"`:''}></video>${by?`<div class="cap"><small>🎥 Recado de ${by}</small></div>`:''}`; dur=null; }
-    if(p._novo){ el.insertAdjacentHTML('afterbegin',`<div class="novo">${CORP(f)?'✨ Nova mensagem':'✨ Nova homenagem! ✨'}</div>`); if(!CORP(f)){ confete(); chars.festa(); } }
+    if(p.tipo==='texto' && /^💸/.test(p.texto||'')){ el.insertAdjacentHTML('afterbegin',`<div class="novo">🎁 Presente enviado! Obrigado${by?', '+by:''}!</div>`); if(!CORP(f)) confete(120); }
+    else if(p._novo){ el.insertAdjacentHTML('afterbegin',`<div class="novo">${CORP(f)?'✨ Nova mensagem':'✨ Nova homenagem! ✨'}</div>`); if(!CORP(f)){ confete(); chars.festa(); } }
     st.appendChild(el); tv.cur=p;
     if(p.tipo==='qr') qrInto($('tvQrBig'), url, 600);
+    if(p.tipo==='pix'){ const px=pixTv(); if(px) qrInto($('tvQrBig'), pixPayload(px), 600); }
     const m=el.querySelector('audio,video'); if(mus) mus.duck(!!m);
     if(m){ m.onended=()=>proxima(); m.onerror=()=>{ tv.timer=setTimeout(proxima,1500); }; m.play().catch(()=>{ tv.timer=setTimeout(proxima,3000); }); tv.timer=setTimeout(proxima, ((p.duracao||60)+6)*1000); }
     else tv.timer=setTimeout(proxima, dur);
@@ -2082,7 +2097,7 @@ async function telaTelao(){
       camada.innerHTML=`<div><div class="srt-t" style="font-size:clamp(36px,5vw,80px)">🎲 Sorteando…</div>${g.premio?`<div class="srt-p">Prêmio: <b>${esc(g.premio)}</b></div>`:''}<div class="srt-roda" id="srtR"></div><div class="srt-ok" id="srtOk"></div></div>`;
       const nomes=(s.nomes&&s.nomes.length?s.nomes:[g.nome.split(' ')[0]]); let i=0, d=60; const fim=Date.now()+5200;
       const girar=()=>{ const el=$('srtR'); if(!el){ srtRodando=false; return; } if(Date.now()<fim){ el.textContent=nomes[i++%nomes.length]; d=Math.min(420,d*1.09); setTimeout(girar,d); return; }
-        el.textContent=g.nome; el.classList.add('win'); const tt=camada.querySelector('.srt-t'); if(tt) tt.textContent='🏆 Sorteado!'; $('srtOk').innerHTML='🎉 Parabéns! Procure o anfitrião 🎉'; confete(140); if(chars&&chars.festa) chars.festa(); srtRodando=false; };
+        el.textContent=g.nome; el.classList.add('win'); const tt=camada.querySelector('.srt-t'); if(tt) tt.textContent='🏆 Sorteado!'; $('srtOk').innerHTML=CORP(f)?'Parabéns! Procure a organização':'🎉 Parabéns! Procure o anfitrião 🎉'; confete(140); if(chars&&chars.festa) chars.festa(); srtRodando=false; };
       girar(); return; }
     if(srtRodando) return;
     if(s.aberto || !g){ camada.innerHTML=`<div><div class="srt-t">🎲 Sorteio!</div>${s.premio?`<div class="srt-p">Prêmio: <b>${esc(s.premio)}</b></div>`:''}
@@ -2451,13 +2466,14 @@ function painelAdmin(){
      <button data-v="enquete" aria-pressed="false">📊 Enquetes</button>
      <button data-v="bingo" aria-pressed="false">🎱 Bingo</button>
      <button data-v="interacoes" aria-pressed="false">💬 Interações</button>
+     <button data-v="pix" aria-pressed="false">🎁 Pix e presentes</button>
      <button data-v="recordacoes" aria-pressed="false">📖 Álbum</button>
    </div>
    <div id="vw"></div></div>`;
   (()=>{ const a=$('abasTop'), v=$('vw'); if(a && v && !a.parentNode.classList.contains('adm-grid')){ const g=document.createElement('div'); g.className='adm-grid'; a.parentNode.insertBefore(g,a); g.appendChild(a); g.appendChild(v); } })();
   $('sair').onclick=()=>{ store.sset('mf_pin_'+SLUG,null); store.set('mf_pin_'+SLUG,null); location.reload(); };
   const abas=$('abasTop');
-  abas.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; abas.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed', x===b)); if(b.dataset.v==='meutema' && $('seuCta')) $('seuCta').remove(); ({moderar:vModerar, festa:vFesta, meutema:vMeuTema, compartilhar:vCompartilhar, recordacoes:vRecordacoes, cardapio:vCardapio, apresentacao:vApresentacao, sorteio:vSorteio, quiz:vQuiz, enquete:vEnquete, bingo:vBingo, interacoes:vInteracoes, evento:vEvento})[b.dataset.v](); };
+  abas.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; abas.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed', x===b)); if(b.dataset.v==='meutema' && $('seuCta')) $('seuCta').remove(); ({pix:vPix, moderar:vModerar, festa:vFesta, meutema:vMeuTema, compartilhar:vCompartilhar, recordacoes:vRecordacoes, cardapio:vCardapio, apresentacao:vApresentacao, sorteio:vSorteio, quiz:vQuiz, enquete:vEnquete, bingo:vBingo, interacoes:vInteracoes, evento:vEvento})[b.dataset.v](); };
   const ir=v=>{ const b=abas.querySelector(`[data-v="${v}"]`); if(b) b.click(); };
   document.querySelectorAll('[data-ir]').forEach(b=>b.onclick=()=>ir(b.dataset.ir));
   if($('psOk')) $('psOk').onclick=()=>{ store.set('mf_novo_'+f.slug,null); $('passos').remove(); };
@@ -2468,7 +2484,7 @@ function painelAdmin(){
   else if(pidS && /^[0-9a-f-]{36}$/.test(pidS) && f.plano==='teste') fetch(FN_PAG,{method:'POST',headers:{'Content-Type':'application/json',apikey:SUPABASE_KEY},body:JSON.stringify({acao:'conferir',pagamento:pidS})}).then(r=>r.json()).then(async j=>{ if(j.status==='approved'){ FESTA=await carregarFesta(SLUG); store.set('mf_pag_'+f.slug,null); toast('Pagamento confirmado! Festa liberada 🎉',4000); painelAdmin(); } }).catch(()=>{});
   if($('seuGo')) $('seuGo').onclick=()=>{ ir('meutema'); $('vw').scrollIntoView({behavior:'smooth'}); };
   const abaIni = Q.get('aba') || (CORP(f) ? 'evento' : !f.custom ? 'meutema' : 'moderar');
-  ir(['meutema','moderar','festa','compartilhar','recordacoes','cardapio','apresentacao','sorteio','quiz','interacoes','evento'].includes(abaIni) ? abaIni : 'moderar'); if(ADM.view!=='moderar') carregarAdmPosts();
+  ir(['pix','meutema','moderar','festa','compartilhar','recordacoes','cardapio','apresentacao','sorteio','quiz','interacoes','evento'].includes(abaIni) ? abaIni : 'moderar'); if(ADM.view!=='moderar') carregarAdmPosts();
   setInterval(()=>{ if(!document.hidden && ADM.view==='moderar') carregarAdmPosts(); }, 12000);
 }
 function ativarFesta(){
@@ -3243,14 +3259,15 @@ function vRecordacoes(){
    <div class="card" style="padding:18px"><div style="font-size:44px">📖</div><h3 style="margin:4px 0">Álbum de recordações (PDF)</h3><p class="muted">Capa no tema da festa, fotos em polaroid, recados escritos à mão e um QR Code em cada áudio e vídeo para ouvir de novo pelo celular. Entra só o que foi aprovado.</p>
      <p style="font-weight:600">${c.foto} fotos · ${c.texto} recados · ${c.audio} áudios · ${c.video} vídeos</p><button class="btn" id="rcBook">📖 Baixar álbum</button><div class="msg" id="rcM1"></div></div>
    <div class="card" style="padding:18px"><div style="font-size:44px">🗂️</div><h3 style="margin:4px 0">Baixar tudo (.zip)</h3><p class="muted">Todas as fotos, áudios e vídeos originais aprovados, mais um arquivo com todos os recados escritos. Para guardar para sempre.</p><button class="btn alt" id="rcZip">⬇️ Baixar tudo</button><div class="msg" id="rcM2"></div></div>
-   <div class="card rs-card" style="padding:18px" id="rsBox"></div></div>`;
-  vResumo($('rsBox'));
+   <div class="card rs-card" style="padding:18px" id="rsBox"></div>
+   <div class="card rs-card" style="padding:18px" id="rmBox"></div></div>`;
+  vResumo($('rsBox')); blocoRevelaMomentos($('rmBox'));
   $('rcBook').onclick=async()=>{ const b=$('rcBook'); b.disabled=true; try{ const r=await pdfAlbum(FESTA, ap, t=>{ $('rcM1').className='msg'; $('rcM1').innerHTML=`<span class="spin"></span> ${t}`; }); baixar(r.blob, `Album_${FESTA.slug}.pdf`); $('rcM1').className='msg ok'; $('rcM1').textContent=`Álbum pronto: ${r.paginas} páginas! 💛`; }catch(e){ console.error(e); $('rcM1').className='msg err'; $('rcM1').textContent='Não consegui montar o álbum agora. Tente de novo.'; } b.disabled=false; };
   $('rcZip').onclick=async()=>{ if(FESTA.plano==='teste'){ $('rcM2').className='msg err'; $('rcM2').textContent='Baixar todos os arquivos é liberado depois de ativar a festa.'; return; } const b=$('rcZip'); b.disabled=true; try{ const blob=await zipTudo(FESTA, ap, t=>{ $('rcM2').className='msg'; $('rcM2').innerHTML=`<span class="spin"></span> ${t}`; }); baixar(blob, `Recordacoes_${FESTA.slug}.zip`); $('rcM2').className='msg ok'; $('rcM2').textContent='Arquivo pronto! 🗂️'; }catch(e){ $('rcM2').className='msg err'; $('rcM2').textContent='Não consegui montar o arquivo agora.'; } b.disabled=false; };
 }
 async function zipTudo(f, posts, prog){
   const z=new JSZip(); const pastas={foto:'Fotos',audio:'Audios',video:'Videos'}; let i=0; const media=posts.filter(p=>p.caminho);
-  for(const p of media){ i++; prog(`Juntando arquivo ${i} de ${media.length}…`); try{ const b=await fetch(midia(p.caminho)).then(r=>r.blob()); const ext=p.caminho.split('.').pop(); const nome=`${String(i).padStart(3,'0')}_${(p.autor||'convidado').replace(/[^\wÀ-ú ]+/g,'').trim().replace(/\s+/g,'_')||'convidado'}.${ext}`; z.folder(pastas[p.tipo]).file(nome,b); }catch(e){} }
+  for(const p of media){ i++; prog(`Juntando arquivo ${i} de ${media.length}…`); try{ const b=await fetch(midia(p.caminho)).then(r=>r.blob()); const ext=p.caminho.split('.').pop(); const nome=`${String(i).padStart(3,'0')}_${(p.autor||'convidado').replace(/[^\wÀ-ú ]+/g,'').trim().replace(/\s+/g,'_')||'convidado'}.${ext}`; const mo=momentoDe(p,f); z.folder(mo?`${mo.replace(/[\\/:*?"<>|]+/g,'')}/${pastas[p.tipo]}`:pastas[p.tipo]).file(nome,b); }catch(e){} }
   const rec=posts.filter(p=>p.tipo==='texto'||p.texto).map(p=>`${new Date(p.criado_em).toLocaleString('pt-BR')} — ${p.autor||'Convidado'}${p.tipo==='foto'?' (legenda de foto)':''}\n${p.texto}\n`).join('\n');
   z.file('Recados.txt', `${f.titulo}\n${f.homenageado||''}\n\n${rec}`);
   prog('Compactando…'); return await z.generateAsync({type:'blob'});
@@ -3363,6 +3380,92 @@ async function vResumo(box){
   $('rsDown').onclick=async()=>{ const fs=await arquivos(); for(const fl of fs){ baixar(fl, fl.name); await new Promise(r=>setTimeout(r,500)); } $('rsM').className='msg ok'; $('rsM').textContent='Imagens salvas! Poste uma por vez nos Stories 💛'; };
   $('rsShare').onclick=async()=>{ const fs=await arquivos(); if(navigator.canShare && navigator.canShare({files:fs})){ try{ await navigator.share({files:fs, title:'Resumo da festa'}); }catch(e){} } else { for(const fl of fs){ baixar(fl, fl.name); await new Promise(r=>setTimeout(r,500)); } $('rsM').className='msg'; $('rsM').textContent='Seu navegador não compartilha direto: baixei as imagens para você postar.'; } };
   $('rsWa').onclick=()=>window.open('https://wa.me/?text='+encodeURIComponent(resumoMsgWhats(f)),'_blank','noopener');
+}
+
+// =====================================================================
+// PIX (presentes sem taxa) — QR "copia e cola" padrão Banco Central, gerado no navegador
+// =====================================================================
+function pixLimpa(s, max){ return String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^A-Za-z0-9 .,-]/g,'').trim().slice(0,max).toUpperCase(); }
+function pixChave(k){ k=String(k||'').trim(); const dig=k.replace(/\D/g,'');
+  if(/@/.test(k)) return k.toLowerCase();
+  if(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(k)) return k.toLowerCase();
+  if(/^\+/.test(k)) return '+'+dig;
+  if(dig.length===11 && !/[.\-]/.test(k) && /^\(?\d{2}\)?\s?9/.test(k)) return '+55'+dig;   // celular digitado sem +55
+  if(dig.length===11 || dig.length===14) return dig;                                         // CPF / CNPJ
+  if(dig.length===13 && dig.startsWith('55')) return '+'+dig;
+  return k; }
+function pixCRC(s){ let c=0xFFFF; for(let i=0;i<s.length;i++){ c^=s.charCodeAt(i)<<8; for(let j=0;j<8;j++) c=(c&0x8000)?((c<<1)^0x1021)&0xFFFF:(c<<1)&0xFFFF; } return c.toString(16).toUpperCase().padStart(4,'0'); }
+function pixPayload(p){ const tlv=(id,v)=>id+String(v.length).padStart(2,'0')+v;
+  const conta=tlv('00','br.gov.bcb.pix')+tlv('01',pixChave(p.chave));
+  let s=tlv('00','01')+tlv('26',conta)+tlv('52','0000')+tlv('53','986')+tlv('58','BR')+tlv('59',pixLimpa(p.nome,25)||'PRESENTE')+tlv('60',pixLimpa(p.cidade,15)||'BRASIL')+tlv('62',tlv('05','***'))+'6304';
+  return s+pixCRC(s); }
+const PIX = f => { const p=EXT(f).pix; return p && p.chave ? p : null; };
+const PIX_FRASE = f => (PIX(f)&&PIX(f).frase) || (f.categoria==='casamento'?'Ajude na nossa lua de mel 💛':'Mande um presentinho pelo Pix 💛');
+function ligarPix(){
+  const box=$('pixC'); if(!box) return; const f=FESTA, p=PIX(f); if(!p) return; const cod=pixPayload(p);
+  box.innerHTML=`<h2 class="sec" style="justify-content:center">🎁 ${esc(PIX_FRASE(f))}</h2>
+    <p class="sub">Sem taxa: o Pix vai direto para ${esc(p.nome||'o anfitrião')}.</p>
+    <div class="pix-qr" id="pixQr"></div>
+    <div class="row" style="justify-content:center;gap:8px;flex-wrap:wrap"><button class="btn" type="button" id="pixCp">📋 Copiar código Pix</button><button class="btn ghost" type="button" id="pixFiz">💛 Já fiz meu Pix</button></div>
+    <p class="muted" style="font-size:13px;margin:10px 0 0">No app do banco: escolha Pix Copia e Cola ou escaneie o QR Code.</p>`;
+  qrInto($('pixQr'), cod, 260);
+  $('pixCp').onclick=()=>copiar(cod,'Código Pix copiado! Cole no app do seu banco 💛');
+  $('pixFiz').onclick=()=>{ abrirEnvio('texto'); setTimeout(()=>{ const ta=document.querySelector('#sheet textarea'); if(ta){ ta.value='💸 Mandei meu presente no Pix! '; ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); } },120); };
+}
+async function vPix(){
+  ADM.view='pix'; const f=FESTA, p=EXT(f).pix||{};
+  $('vw').innerHTML=`<div class="card" style="padding:18px"><h3 style="margin:0 0 4px">🎁 Presentes por Pix <span class="muted" style="font-size:14px;font-weight:500">(opcional, sem taxa)</span></h3>
+    <p class="muted" style="margin:0 0 14px">Os ${CORP(f)?'participantes':'convidados'} veem um QR Code do Pix na página da festa${p.telao!==false?' e, de tempos em tempos, no telão':''}. O dinheiro cai direto na sua conta, o Mural não cobra nada e não passa pelo valor. Quem fizer o Pix pode deixar um recado, que aparece no telão com festa.</p>
+    <div class="grid2"><div>
+      <label class="f">Sua chave Pix<input class="in" id="pxK" maxlength="77" placeholder="CPF, celular, e-mail ou chave aleatória" value="${esc(p.chave||'')}"></label>
+      <label class="f">Nome que aparece no banco<input class="in" id="pxN" maxlength="25" placeholder="Ex.: Mariana Souza" value="${esc(p.nome||'')}"></label>
+      <label class="f">Cidade<input class="in" id="pxC" maxlength="15" placeholder="Ex.: Recife" value="${esc(p.cidade||'')}"></label>
+      <label class="f">Frase do convite<input class="in" id="pxF" maxlength="60" placeholder="${esc(PIX_FRASE({categoria:f.categoria,extras:{}}))}" value="${esc(p.frase||'')}"></label>
+      <label class="f" style="flex-direction:row;align-items:center;gap:8px"><input type="checkbox" id="pxT" ${p.telao!==false?'checked':''}> Mostrar o QR do Pix no telão a cada 4 minutos</label>
+      <div class="row" style="gap:8px;margin-top:6px"><button class="btn" type="button" id="pxOk">💾 Salvar Pix</button>${p.chave?'<button class="btn ghost" type="button" id="pxX">Desligar</button>':''}</div><div class="msg" id="pxM"></div>
+    </div><div style="text-align:center"><div class="pix-qr" id="pxQ" style="max-width:240px;margin:0 auto"></div><p class="muted" id="pxP" style="font-size:13px">A prévia do QR aparece aqui. Teste com o app do seu banco antes da festa.</p></div></div></div>`;
+  const ler=()=>({chave:$('pxK').value.trim(), nome:$('pxN').value.trim(), cidade:$('pxC').value.trim(), frase:$('pxF').value.trim(), telao:$('pxT').checked});
+  const prev=()=>{ const d=ler(); if(d.chave.length>=5){ qrInto($('pxQ'), pixPayload(d), 240); $('pxP').textContent='Abra o app do banco e leia este QR: deve aparecer o seu nome.'; } else { $('pxQ').innerHTML=''; } };
+  ['pxK','pxN','pxC'].forEach(id=>$(id).addEventListener('input', prev)); prev();
+  const M=$('pxM');
+  $('pxOk').onclick=async()=>{ const d=ler(); if(d.chave.length<5){ M.className='msg err'; M.textContent='Digite a sua chave Pix.'; return; } if(d.nome.length<2){ M.className='msg err'; M.textContent='Digite o nome que aparece no banco.'; return; }
+    try{ await extrasSet('pix', d); M.className='msg ok'; M.textContent='Pix salvo! Já aparece na página da festa'+(d.telao?' e no telão.':'.'); }catch(e){ M.className='msg err'; M.textContent=ERR(e); } };
+  if($('pxX')) $('pxX').onclick=async()=>{ try{ await extrasSet('pix', null); toast('Pix desligado.'); vPix(); }catch(e){ M.className='msg err'; M.textContent=ERR(e); } };
+}
+
+// =====================================================================
+// MODO REVELAÇÃO e MOMENTOS DA FESTA
+// =====================================================================
+const REVELA = f => { const r=EXT(f).revelacao; if(!r||!r.em) return null; const t=new Date(r.em).getTime(); return t>Date.now()?t:null; };
+const MOMENTOS_SUG = f => CORP(f) ? [['Credenciamento','18:00'],['Abertura','19:00'],['Palestras','19:30'],['Premiação','21:00'],['Confraternização','22:00']]
+  : f.categoria==='casamento' ? [['Chegada','18:00'],['Cerimônia','19:00'],['Entrada dos noivos','20:30'],['Bolo','22:30'],['Pista','23:00']]
+  : f.categoria==='quinze' ? [['Chegada','19:00'],['Entrada','20:30'],['Valsa','21:00'],['Bolo','22:30'],['Pista','23:00']]
+  : [['Chegada','16:00'],['Brincadeiras','17:00'],['Parabéns','19:00'],['Pista','20:00']];
+function momentoDe(p, f){ const L=(EXT(f).momentos||[]).filter(m=>m&&m.n&&m.h); if(!L.length||!p.criado_em) return null; const d=new Date(p.criado_em); let min=d.getHours()*60+d.getMinutes(); if(min<6*60) min+=24*60;
+  const ms=L.map(m=>{ const [h,mm]=m.h.split(':').map(Number); let v=h*60+(mm||0); if(v<6*60) v+=24*60; return {n:m.n,v}; }).sort((a,b)=>a.v-b.v);
+  let r=ms[0].n; for(const m of ms) if(min>=m.v) r=m.n; return r; }
+function blocoRevelaMomentos(box){
+  const f=FESTA, r=EXT(f).revelacao||{}, ms=EXT(f).momentos||[];
+  const dIni = r.em ? new Date(new Date(r.em).getTime()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,16) : (f.data ? new Date(new Date(f.data+'T12:00').getTime()+864e5).toLocaleDateString('sv')+'T12:00' : '');
+  box.innerHTML=`<div class="grid2"><div>
+    <div style="font-size:36px">🔒</div><h3 style="margin:4px 0">Modo revelação</h3>
+    <p class="muted">O telão exibe ${CORP(f)?'as mensagens':'as homenagens'} ao vivo, mas o mural no celular dos ${CORP(f)?'participantes':'convidados'} só abre no horário programado. Todo mundo volta ao link para ver o resultado.</p>
+    <label class="f">O mural abre em<input class="in" type="datetime-local" id="rvEm" value="${esc(dIni)}"></label>
+    <div class="row" style="gap:8px"><button class="btn" type="button" id="rvOk">${r.em?'💾 Mudar horário':'🔒 Ligar revelação'}</button>${r.em?'<button class="btn ghost" type="button" id="rvX">Abrir o mural agora</button>':''}</div><div class="msg" id="rvM"></div>
+  </div><div>
+    <div style="font-size:36px">🕰️</div><h3 style="margin:4px 0">Momentos ${CORP(f)?'do evento':'da festa'}</h3>
+    <p class="muted">Diga a hora de cada momento: o mural ganha filtros (${MOMENTOS_SUG(f).slice(0,3).map(m=>m[0]).join(', ')}…) e o arquivo .zip sai organizado em pastas.</p>
+    <div id="mmL"></div><div class="row" style="gap:8px;margin-top:6px"><button class="btn ghost sm" type="button" id="mmAdd">+ Momento</button><button class="btn" type="button" id="mmOk">💾 Salvar momentos</button></div><div class="msg" id="mmM"></div>
+  </div></div>`;
+  let L = ms.length ? ms.map(m=>({...m})) : MOMENTOS_SUG(f).map(([n,h])=>({n,h}));
+  const pinta=()=>{ $('mmL').innerHTML=L.map((m,i)=>`<div class="row" style="gap:6px;margin-bottom:6px"><input class="in" data-mn="${i}" maxlength="24" value="${esc(m.n)}" style="flex:1"><input class="in" type="time" data-mh="${i}" value="${esc(m.h)}" style="width:130px"><button class="btn ghost sm" type="button" data-mx="${i}" aria-label="Tirar">✕</button></div>`).join('');
+    $('mmL').querySelectorAll('[data-mn]').forEach(e=>e.oninput=()=>L[+e.dataset.mn].n=e.value); $('mmL').querySelectorAll('[data-mh]').forEach(e=>e.oninput=()=>L[+e.dataset.mh].h=e.value);
+    $('mmL').querySelectorAll('[data-mx]').forEach(b=>b.onclick=()=>{ L.splice(+b.dataset.mx,1); pinta(); }); };
+  pinta(); $('mmAdd').onclick=()=>{ if(L.length<8){ L.push({n:'',h:''}); pinta(); } };
+  $('mmOk').onclick=async()=>{ const ok=L.filter(m=>m.n.trim()&&/^\d{2}:\d{2}$/.test(m.h)).map(m=>({n:m.n.trim().slice(0,24),h:m.h})); try{ await extrasSet('momentos', ok.length?ok:null); $('mmM').className='msg ok'; $('mmM').textContent=ok.length?'Momentos salvos!':'Momentos desligados.'; }catch(e){ $('mmM').className='msg err'; $('mmM').textContent=ERR(e); } };
+  $('rvOk').onclick=async()=>{ const v=$('rvEm').value; if(!v){ $('rvM').className='msg err'; $('rvM').textContent='Escolha o dia e a hora.'; return; } const iso=new Date(v).toISOString(); if(new Date(iso)<=new Date()){ $('rvM').className='msg err'; $('rvM').textContent='Escolha um horário no futuro.'; return; }
+    try{ await extrasSet('revelacao',{em:iso}); $('rvM').className='msg ok'; $('rvM').textContent='Revelação ligada: o mural abre '+new Date(iso).toLocaleString('pt-BR',{weekday:'long',day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'})+'.'; blocoRevelaMomentos(box); }catch(e){ $('rvM').className='msg err'; $('rvM').textContent=ERR(e); } };
+  if($('rvX')) $('rvX').onclick=async()=>{ try{ await extrasSet('revelacao',null); toast('Mural aberto para todos!'); blocoRevelaMomentos(box); }catch(e){ $('rvM').className='msg err'; $('rvM').textContent=ERR(e); } };
 }
 
 // =====================================================================
@@ -3593,7 +3696,7 @@ function ligarDesafios(){
   r();
 }
 // --- telão: faixa de aviso e contagem em tela cheia ---
-function tvExtras(ex, agora){ ex=ex||{}; const off=agora?new Date(agora).getTime()-Date.now():0;
+function tvExtras(ex, agora){ ex=ex||{}; window.__tvEx=ex; const off=agora?new Date(agora).getTime()-Date.now():0;
   document.body.classList.toggle('com-aviso',!!ex.aviso); let av=$('tvAviso'); if(ex.aviso){ if(!av){ av=document.createElement('div'); av.id='tvAviso'; av.className='tv-aviso'; document.body.appendChild(av); } if(av.dataset.t!==ex.aviso){ av.dataset.t=ex.aviso; av.innerHTML=`<span aria-hidden="true">📌</span><span>${esc(ex.aviso)}</span>`; } } else if(av) av.remove();
   const c=ex.contagem, fim=c&&c.ate?new Date(c.ate).getTime():0; let cd=$('tvCont');
   if(fim && fim-(Date.now()+off) > -15000){ if(!cd){ cd=document.createElement('div'); cd.id='tvCont'; cd.className='tv-cont'; document.body.appendChild(cd); }

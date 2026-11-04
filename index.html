@@ -602,7 +602,14 @@ h2.sec .muted{font-family:var(--body)}
 @media (min-width:640px){.ctrl{grid-template-columns:repeat(5,1fr)}}
 .ctrl .btn{padding:14px 10px}
 .tv-apr{position:fixed;inset:0;z-index:30;background:#000;display:grid;place-items:center}
-.tv-apr img{max-width:100vw;max-height:100vh;object-fit:contain;animation:fadein .4s ease both}
+.tv-apr img,.tv-apr video{max-width:100vw;max-height:100vh;object-fit:contain;animation:fadein .4s ease both}
+.apr-it{display:flex;flex-direction:column;gap:4px}
+.apr-grid .apr-it>button{width:100%}
+.apr-grid button video{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none}
+.apr-v{position:absolute;right:6px;top:6px;background:rgba(0,0,0,.65);color:#fff;font-size:11px;border-radius:6px;padding:1px 6px}
+.apr-mv{display:flex;gap:4px;justify-content:center}
+.apr-grid .apr-mv button{aspect-ratio:auto;background:var(--surface,#fff);color:var(--ink,#2b2230);border:1px solid rgba(0,0,0,.15);border-radius:8px;padding:2px 10px;font-size:13px}
+.apr-grid .apr-mv button:disabled{opacity:.35;cursor:default}
 .tv-pausa{position:fixed;inset:0;z-index:30;display:grid;place-items:center;text-align:center;background:color-mix(in srgb,var(--bg) 92%, transparent)}
 .tv-pausa .who{font-family:var(--display);color:var(--accent);font-size:clamp(48px,9vw,140px);line-height:1}
 .tv-pausa p{font-family:var(--serif);font-style:italic;font-size:clamp(20px,3vw,40px);color:var(--muted);margin:14px 0 0}
@@ -2015,8 +2022,9 @@ async function telaTelao(){
   const aplicarCtl=e=>{
     const modo=(e&&e.modo)||'mural', sl=(e&&e.slides)||[];
     document.body.classList.toggle('sem-qr', !!e && e.qr===false);
-    if(sl.join()!==slidesCache.join()){ slidesCache=sl; sl.forEach(p=>{ const im=new Image(); im.src=midia(p); }); }
-    if(modo==='apresentacao' && sl.length){ camada.className='tv-apr'; camada.hidden=false; const src=midia(sl[Math.min(e.slide||0,sl.length-1)]); const img=camada.querySelector('img'); if(!img || img.dataset.src!==src) camada.innerHTML=`<img data-src="${src}" src="${src}" alt="">`; }
+    if(sl.join()!==slidesCache.join()){ slidesCache=sl; sl.forEach(p=>{ if(!EH_VIDEO(p)){ const im=new Image(); im.src=midia(p); } }); }
+    if(modo==='apresentacao' && sl.length){ camada.className='tv-apr'; camada.hidden=false; const cam=sl[Math.min(e.slide||0,sl.length-1)], src=midia(cam), atual=camada.querySelector('[data-src]');
+      if(!atual || atual.dataset.src!==src){ if(EH_VIDEO(cam)){ camada.innerHTML=`<video data-src="${src}" src="${src}" playsinline autoplay preload="auto"></video>`; const v=camada.querySelector('video'); v.play().catch(()=>{ v.muted=true; v.play().catch(()=>{}); }); } else camada.innerHTML=`<img data-src="${src}" src="${src}" alt="">`; } else { const v=camada.querySelector('video'); if(v && v.paused && !v.ended) v.play().catch(()=>{}); } }
     else if(modo==='sorteio'){ telaoSorteio(e.sorteio||{}); }
     else if(modo==='quiz'){ telaoQuiz(e.quiz||{}); }
     else if(modo==='enquete' && e.enquete){ telaoEnquete(e.enquete); }
@@ -2026,6 +2034,7 @@ async function telaTelao(){
     else if(modo==='pausa'){ camada.className='tv-pausa'; camada.hidden=false; if(!camada.querySelector('.who')) camada.innerHTML=`<div><div class="who">${esc(nome)}</div><p>Já voltamos 💛</p></div>`; }
     else { camada.hidden=true; camada.innerHTML=''; }
     const parar = modo!=='mural' && (modo==='pausa' || modo==='sorteio' || modo==='quiz' || modo==='pergunta' || modo==='enquete' || modo==='bingo' || sl.length);
+    if(modo!=='apresentacao'){ const v=camada.querySelector('.tv-apr video, video[data-src]'); if(v){ try{ v.pause(); }catch(_){} } }
     if(modo!=='enquete') delete camada.dataset.eid;
     if(modo!=='bingo'){ delete camada.dataset.bk; bgFesta=null; }
     if(modo!=='quiz'){ clearInterval(qzTick); qzChave=''; }
@@ -2919,12 +2928,14 @@ async function vCardapio(){
 // ---------- apresentação no telão ----------
 let _pdfjs=null;
 function carregarPdfJs(){ return _pdfjs || (_pdfjs=new Promise((res,rej)=>{ const sc=document.createElement('script'); sc.src='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js'; sc.onload=()=>{ window.pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'; res(window.pdfjsLib); }; sc.onerror=()=>{ _pdfjs=null; rej(new Error('pdfjs')); }; document.head.appendChild(sc); })); }
+const EH_VIDEO = p => /\.(mp4|webm|mov|m4v)$/i.test(String(p||''));
 async function vApresentacao(){
   ADM.view='apresentacao'; const f=FESTA; let est={}; try{ est=await rpc('fe_tv_estado',{p_festa:f.id})||{}; }catch(e){}
   const slides=est.slides||[];
   $('vw').innerHTML=`<div class="card" style="padding:18px"><h3 style="margin:0 0 4px">🎤 Apresentação no telão <span class="muted" style="font-size:14px;font-weight:500">(opcional)</span></h3>
-      <p class="muted" style="margin:0 0 12px">Envie os slides (PDF exportado do PowerPoint, ou imagens). Durante o evento, controle o telão por aqui: mostrar a apresentação, passar os slides, pausar e voltar ao mural.</p>
-      <div class="row"><label class="btn" style="position:relative">📄 Enviar PDF ou imagens<input type="file" id="apF" accept="application/pdf,image/*" multiple style="position:absolute;inset:0;opacity:0;cursor:pointer"></label>${slides.length?'<button class="btn ghost sm" id="apLimpa">Tirar apresentação</button>':''}<span class="msg" id="apM"></span></div></div>
+      <p class="muted" style="margin:0 0 12px">Envie slides (PDF ou imagens) e vídeos para reproduzir no telão. Reordene os itens pelas setas e controle a exibição ao vivo por aqui.</p>
+      <details style="margin:0 0 12px"><summary style="cursor:pointer;font-weight:600">Quer PowerPoint animado? Exporte como vídeo</summary><p class="muted" style="margin:8px 0 0">No PowerPoint: <b>Arquivo › Exportar › Criar um Vídeo</b>, qualidade <b>Full HD (1080p)</b>, escolha os segundos por slide e clique em <b>Criar Vídeo</b>. Envie o arquivo MP4 aqui: animações, transições e vídeos do PowerPoint aparecem no telão. Cada vídeo pode ter até 50 MB.</p></details>
+      <div class="row"><label class="btn" style="position:relative">📄 Enviar slides (PDF/imagens)<input type="file" id="apF" accept="application/pdf,image/*" multiple style="position:absolute;inset:0;opacity:0;cursor:pointer"></label><label class="btn alt" style="position:relative">🎬 Enviar vídeo<input type="file" id="apV" accept="video/mp4,video/webm,video/quicktime,.mp4,.mov,.webm,.m4v" style="position:absolute;inset:0;opacity:0;cursor:pointer"></label>${slides.length?'<button class="btn ghost sm" id="apLimpa">Tirar apresentação</button>':''}<span class="msg" id="apM"></span></div></div>
     <div class="card" style="padding:18px;margin-top:12px"><div class="row" style="justify-content:space-between"><h3 style="margin:0">📺 Controle do telão</h3><span class="muted" id="apEst"></span></div>
       <div class="ctrl" style="margin-top:12px">
         <button class="btn" data-m="apresentacao" ${slides.length?'':'disabled'}>▶ Mostrar slides</button>
@@ -2933,14 +2944,23 @@ async function vApresentacao(){
         <button class="btn alt" data-m="pausa">⏸ Pausar telão</button>
         <button class="btn ok" data-m="mural">💌 Voltar ao mural</button></div>
       <label class="row" style="gap:8px;font-weight:600;margin-top:12px"><input type="checkbox" id="apQr" style="width:20px;height:20px" ${est.qr===false?'':'checked'}> Mostrar o QR Code de participação no telão</label>
-      ${slides.length?`<div class="apr-grid" id="apG">${slides.map((p,i)=>`<button data-i="${i}" aria-pressed="false"><img src="${midia(p)}" alt="Slide ${i+1}" loading="lazy"><span>${i+1}</span></button>`).join('')}</div>`:'<p class="muted" style="margin:12px 0 0">Sem slides ainda. Mesmo sem apresentação, dá para pausar o telão (por exemplo, durante um discurso).</p>'}</div>`;
-  const mostrarEst=e=>{ est=e||est; const nomes={mural:'💌 mostrando o mural',apresentacao:`🎤 slide ${(est.slide||0)+1} de ${slides.length}`,pausa:'⏸ telão pausado'}; $('apEst').textContent=nomes[est.modo]||''; document.querySelectorAll('#apG [data-i]').forEach(b=>b.setAttribute('aria-pressed', est.modo==='apresentacao' && +b.dataset.i===est.slide)); };
+      ${slides.length?`<div class="apr-grid" id="apG">${slides.map((p,i)=>`<div class="apr-it"><button data-i="${i}" aria-pressed="false">${EH_VIDEO(p)?`<video src="${midia(p)}#t=1" muted preload="metadata" playsinline></video><b class="apr-v">🎬 vídeo</b>`:`<img src="${midia(p)}" alt="Slide ${i+1}" loading="lazy">`}<span>${i+1}</span></button><div class="apr-mv"><button type="button" data-mv="${i}|-1" aria-label="Mover para trás" ${i?'':'disabled'}>◀</button><button type="button" data-mv="${i}|1" aria-label="Mover para frente" ${i<slides.length-1?'':'disabled'}>▶</button><button type="button" data-rm="${i}" aria-label="Tirar">✕</button></div></div>`).join('')}</div>`:'<p class="muted" style="margin:12px 0 0">Sem slides ainda. Mesmo sem apresentação, dá para pausar o telão (por exemplo, durante um discurso).</p>'}</div>`;
+  const salvarLista=async(L,msg)=>{ try{ await rpc('fe_admin_slides',{p_slug:SLUG,p_pin:PIN,p_slides:L}); if(msg) toast(msg); vApresentacao(); }catch(e){ toast(ERR(e)); } };
+  const mostrarEst=e=>{ est=e||est; const nomes={mural:'💌 mostrando o mural',apresentacao:`🎤 ${EH_VIDEO(slides[est.slide||0])?'vídeo':'slide'} ${(est.slide||0)+1} de ${slides.length}`,pausa:'⏸ telão pausado'}; $('apEst').textContent=nomes[est.modo]||''; document.querySelectorAll('#apG [data-i]').forEach(b=>b.setAttribute('aria-pressed', est.modo==='apresentacao' && +b.dataset.i===est.slide)); };
   mostrarEst(est);
   const mandar=async(modo, slide)=>{ try{ mostrarEst(await rpc('fe_admin_tv',{p_slug:SLUG,p_pin:PIN,p_modo:modo,p_slide:slide})); }catch(e){ toast(ERR(e)); } };
   document.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>mandar(b.dataset.m, est.slide||0));
   $('apQr').onchange=async ev=>{ try{ await rpc('fe_admin_tv_qr',{p_slug:SLUG,p_pin:PIN,p_on:ev.target.checked}); toast(ev.target.checked?'QR Code ligado no telão.':'QR Code escondido do telão.'); }catch(e){ ev.target.checked=!ev.target.checked; toast(ERR(e)); } };
   document.querySelectorAll('[data-nav]').forEach(b=>b.onclick=()=>mandar('apresentacao', Math.max(0,Math.min(slides.length-1,(est.slide||0)+(+b.dataset.nav)))));
   document.querySelectorAll('#apG [data-i]').forEach(b=>b.onclick=()=>mandar('apresentacao', +b.dataset.i));
+  document.querySelectorAll('#apG [data-mv]').forEach(b=>b.onclick=()=>{ const [i,d]=b.dataset.mv.split('|').map(Number), L=[...slides], j=i+d; if(j<0||j>=L.length) return; [L[i],L[j]]=[L[j],L[i]]; salvarLista(L); });
+  document.querySelectorAll('#apG [data-rm]').forEach(b=>b.onclick=()=>{ const L=[...slides]; L.splice(+b.dataset.rm,1); salvarLista(L, 'Item retirado da apresentação.'); });
+  $('apV').onchange=async e=>{ const file=e.target.files[0]; e.target.value=''; if(!file) return; const M=$('apM');
+    if(file.size>50*1024*1024){ M.className='msg err'; M.textContent='Esse vídeo passou de 50 MB. Exporte em 1080p ou divida em partes menores.'; return; }
+    if(slides.length>=80){ M.className='msg err'; M.textContent='Máximo de 80 itens na apresentação.'; return; }
+    const ext=((file.name.split('.').pop()||'mp4').toLowerCase().replace('m4v','mp4')), ct=file.type||(ext==='webm'?'video/webm':ext==='mov'?'video/quicktime':'video/mp4');
+    try{ M.className='msg'; M.innerHTML='<span class="spin"></span> Enviando o vídeo… (pode levar um minuto)'; const cam=await subir(file,'apresentacao/video',ext==='mov'?'mov':ext,ct); await salvarLista([...slides, cam], 'Vídeo adicionado no fim da apresentação 🎬'); }
+    catch(err){ M.className='msg err'; M.textContent='Não consegui enviar o vídeo. '+ERR(err); } };
   if($('apLimpa')) $('apLimpa').onclick=async()=>{ try{ await rpc('fe_admin_slides',{p_slug:SLUG,p_pin:PIN,p_slides:[]}); toast('Apresentação retirada.'); vApresentacao(); }catch(e){ toast(ERR(e)); } };
   $('apF').onchange=async e=>{ const fs=[...e.target.files]; e.target.value=''; if(!fs.length) return; const M=$('apM'); const caminhos=[];
     try{
@@ -2953,7 +2973,7 @@ async function vApresentacao(){
             const bl=await new Promise(r=>cv.toBlob(r,'image/jpeg',.88)); caminhos.push(await subir(bl,'apresentacao/slide','jpg','image/jpeg')); }
         } else { M.className='msg'; M.innerHTML=`<span class="spin"></span> Enviando imagem ${caminhos.length+1}…`; const bl=await encolher(file,1920,.88); caminhos.push(await subir(bl,'apresentacao/slide','jpg','image/jpeg')); }
       }
-      M.innerHTML='<span class="spin"></span> Salvando…'; await rpc('fe_admin_slides',{p_slug:SLUG,p_pin:PIN,p_slides:caminhos}); toast(`${caminhos.length} slide${caminhos.length>1?'s':''} pronto${caminhos.length>1?'s':''}! 🎤`); vApresentacao();
+      M.innerHTML='<span class="spin"></span> Salvando…'; if(slides.length+caminhos.length>80) throw new Error('Máximo de 80 slides'); await rpc('fe_admin_slides',{p_slug:SLUG,p_pin:PIN,p_slides:[...slides, ...caminhos]}); toast(`${caminhos.length} slide${caminhos.length>1?'s':''} pronto${caminhos.length>1?'s':''}! 🎤`); vApresentacao();
     }catch(err){ M.className='msg err'; M.textContent=/80 slides/.test(err.message||'')?'Máximo de 80 slides.':'Não consegui preparar os slides. '+ERR(err); } };
 }
 const QZ_COR=['#e21b3c','#1368ce','#d89e00','#26890c'], QZ_FORMA=['▲','◆','●','■'];

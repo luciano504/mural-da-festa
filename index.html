@@ -604,6 +604,14 @@ h2.sec .muted{font-family:var(--body)}
 .tv-apr{position:fixed;inset:0;z-index:30;background:#000;display:grid;place-items:center}
 .tv-apr img,.tv-apr video{max-width:100vw;max-height:100vh;object-fit:contain;animation:fadein .4s ease both}
 .apr-it{display:flex;flex-direction:column;gap:4px}
+.pal{max-width:560px;padding-bottom:40px}
+.pal-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:14px 0}
+.pal-st{font-size:13px;font-weight:700;border-radius:999px;padding:6px 12px;background:rgba(0,0,0,.06)}
+.pal-st.on{background:var(--accent);color:var(--on,#fff)}
+.pal-atual{position:relative;background:#000;border-radius:14px;overflow:hidden;aspect-ratio:16/9}
+.pal-atual img,.pal-atual video{width:100%;height:100%;object-fit:contain;display:block}
+.pal-nav{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:8px;margin-top:10px}
+.pal-nav .btn{padding:16px 10px;font-size:17px}
 .apr-grid .apr-it>button{width:100%}
 .apr-grid button video{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none}
 .apr-v{position:absolute;right:6px;top:6px;background:rgba(0,0,0,.65);color:#fff;font-size:11px;border-radius:6px;padding:1px 6px}
@@ -1018,7 +1026,7 @@ const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const Q = new URLSearchParams(location.search);
 const SLUG = (Q.get('f') || '').trim().toLowerCase();
-const MODE = Q.has('experimente') ? 'experimente' : Q.has('termos') ? 'termos' : Q.has('criar') ? 'criar' : Q.has('mestre') ? 'mestre' : SLUG ? (Q.has('telao') ? 'telao' : Q.has('portaria') ? 'portaria' : Q.has('pedidos') ? 'pedidos' : Q.has('valet') ? 'valet' : Q.has('admin') ? 'admin' : 'convidado') : 'inicio';
+const MODE = Q.has('experimente') ? 'experimente' : Q.has('termos') ? 'termos' : Q.has('criar') ? 'criar' : Q.has('mestre') ? 'mestre' : SLUG ? (Q.has('telao') ? 'telao' : Q.has('palestrante') ? 'palestrante' : Q.has('portaria') ? 'portaria' : Q.has('pedidos') ? 'pedidos' : Q.has('valet') ? 'valet' : Q.has('admin') ? 'admin' : 'convidado') : 'inicio';
 const BASE = location.origin + location.pathname.replace(/index\.html$/, '');
 const SITE = (location.host + location.pathname).replace(/index\.html$/,'').replace(/\/$/,'');
 const linkFesta = (slug, extra) => BASE + '?f=' + slug + (extra ? '&' + extra : '');
@@ -2943,9 +2951,12 @@ async function vApresentacao(){
         <button class="btn ghost" data-nav="1" ${slides.length?'':'disabled'}>Próximo ▶</button>
         <button class="btn alt" data-m="pausa">⏸ Pausar telão</button>
         <button class="btn ok" data-m="mural">💌 Voltar ao mural</button></div>
+      ${slides.some(EH_VIDEO)?`<div class="ctrl" style="margin-top:8px"><button class="btn alt" data-vd="play">▶ Tocar vídeo</button><button class="btn ghost" data-vd="pause">⏸ Pausar vídeo</button><button class="btn ghost" data-vd="inicio">⏮ Vídeo do início</button></div>`:''}
       <label class="row" style="gap:8px;font-weight:600;margin-top:12px"><input type="checkbox" id="apQr" style="width:20px;height:20px" ${est.qr===false?'':'checked'}> Mostrar o QR Code de participação no telão</label>
       ${slides.length?`<div class="apr-grid" id="apG">${slides.map((p,i)=>`<div class="apr-it"><button data-i="${i}" aria-pressed="false">${EH_VIDEO(p)?`<video src="${midia(p)}#t=1" muted preload="metadata" playsinline></video><b class="apr-v">🎬 vídeo</b>`:`<img src="${midia(p)}" alt="Slide ${i+1}" loading="lazy">`}<span>${i+1}</span></button><div class="apr-mv"><button type="button" data-mv="${i}|-1" aria-label="Mover para trás" ${i?'':'disabled'}>◀</button><button type="button" data-mv="${i}|1" aria-label="Mover para frente" ${i<slides.length-1?'':'disabled'}>▶</button><button type="button" data-rm="${i}" aria-label="Tirar">✕</button></div></div>`).join('')}</div>`:'<p class="muted" style="margin:12px 0 0">Sem slides ainda. Mesmo sem apresentação, dá para pausar o telão (por exemplo, durante um discurso).</p>'}</div>`;
+  document.querySelectorAll('[data-vd]').forEach(b=>b.onclick=async()=>{ try{ await extrasSet('apr',{v:b.dataset.vd, n:Date.now()/1000}); toast(b.dataset.vd==='pause'?'Vídeo pausado':b.dataset.vd==='inicio'?'Vídeo voltou ao início':'Vídeo tocando'); }catch(e){ toast(ERR(e)); } });
   const salvarLista=async(L,msg)=>{ try{ await rpc('fe_admin_slides',{p_slug:SLUG,p_pin:PIN,p_slides:L}); if(msg) toast(msg); vApresentacao(); }catch(e){ toast(ERR(e)); } };
+  $('vw').insertAdjacentHTML('beforeend','<div class="card" style="padding:18px;margin-top:12px" id="plBox"></div>'); blocoPalestrante($('plBox'));
   const mostrarEst=e=>{ est=e||est; const nomes={mural:'💌 mostrando o mural',apresentacao:`🎤 ${EH_VIDEO(slides[est.slide||0])?'vídeo':'slide'} ${(est.slide||0)+1} de ${slides.length}`,pausa:'⏸ telão pausado'}; $('apEst').textContent=nomes[est.modo]||''; document.querySelectorAll('#apG [data-i]').forEach(b=>b.setAttribute('aria-pressed', est.modo==='apresentacao' && +b.dataset.i===est.slide)); };
   mostrarEst(est);
   const mandar=async(modo, slide)=>{ try{ mostrarEst(await rpc('fe_admin_tv',{p_slug:SLUG,p_pin:PIN,p_modo:modo,p_slide:slide})); }catch(e){ toast(ERR(e)); } };
@@ -3489,6 +3500,60 @@ function blocoRevelaMomentos(box){
 }
 
 // =====================================================================
+// PALESTRANTE — controle da apresentação no celular de quem fala (código próprio)
+// =====================================================================
+async function telaPalestrante(){
+  FESTA = await carregarFesta(SLUG).catch(()=>null); if(!FESTA) return telaNaoAchou();
+  aplicarTema(temaDe(FESTA)); document.title='Palestrante · '+(FESTA.titulo||FESTA.homenageado);
+  const tentar=async cod=>{ try{ const e=await rpc('fe_palestrante_tv',{p_slug:SLUG,p_codigo:cod,p_modo:null,p_slide:null,p_video:null}); store.set('mf_pal_'+SLUG,cod); painelPalestrante(cod,e||{}); return true; }catch(err){ if(/incorreto/i.test(err.message||'')) return false; throw err; } };
+  const salvo=store.get('mf_pal_'+SLUG);
+  if(salvo && await tentar(salvo).catch(()=>false)) return;
+  telaLogin('🎙️ Palestrante', 'Controle da apresentação · '+esc(FESTA.titulo||FESTA.homenageado), tentar);
+  const lb=document.querySelector('#lg label.f'); if(lb && lb.firstChild) lb.firstChild.textContent='Código do palestrante';
+  const inp=$('lgP'); if(inp){ inp.type='text'; inp.inputMode='numeric'; inp.autocomplete='off'; }
+}
+function painelPalestrante(cod, est){
+  let e=est||{}; const L=()=>e.slides||[];
+  const pinta=()=>{ const sl=L(), i=e.slide||0, cur=sl[i], vid=EH_VIDEO(cur), noAr=e.modo==='apresentacao';
+    $('app').innerHTML=`<div class="wrap pal">
+      <div class="pal-top"><div><div class="muted" style="font-size:13px;font-weight:600">🎙️ Palestrante</div><b>${esc(FESTA.titulo||FESTA.homenageado)}</b></div><span class="pal-st ${noAr?'on':''}">${noAr?`No telão: ${vid?'vídeo':'slide'} ${i+1} de ${sl.length}`:e.modo==='pausa'?'Telão pausado':'Telão no mural'}</span></div>
+      ${sl.length?`<div class="pal-atual">${vid?`<video src="${midia(cur)}#t=1" muted preload="metadata" playsinline></video><b class="apr-v">🎬 vídeo</b>`:`<img src="${midia(cur)}" alt="Slide ${i+1}">`}</div>
+      <div class="pal-nav"><button class="btn ghost" data-nav="-1" ${i>0?'':'disabled'}>◀ Anterior</button><button class="btn" data-nav="1" ${i<sl.length-1?'':'disabled'}>Próximo ▶</button></div>
+      ${vid&&noAr?`<div class="pal-nav"><button class="btn alt" data-vd="play">▶ Tocar vídeo</button><button class="btn ghost" data-vd="pause">⏸ Pausar vídeo</button><button class="btn ghost" data-vd="inicio">⏮ Do início</button></div>`:''}
+      <div class="pal-nav">${noAr?'':`<button class="btn" data-m="apresentacao">▶ Mostrar no telão</button>`}<button class="btn ok" data-m="mural">💌 Voltar ao mural</button></div>
+      <div class="apr-grid">${sl.map((p,k)=>`<button data-i="${k}" aria-pressed="${noAr&&k===i}">${EH_VIDEO(p)?`<video src="${midia(p)}#t=1" muted preload="metadata" playsinline></video><b class="apr-v">🎬</b>`:`<img src="${midia(p)}" alt="Slide ${k+1}" loading="lazy">`}<span>${k+1}</span></button>`).join('')}</div>`
+      :'<p class="muted">A apresentação ainda não foi enviada. Peça ao organizador para enviar os slides na aba Apresentação.</p>'}
+      <p class="muted" style="font-size:13px;margin-top:16px">Você está no controle da apresentação. Caso necessário, a organização ${CORP(FESTA)?'do evento':'da festa'} também pode auxiliar no controle do telão.</p></div>`;
+    document.querySelectorAll('.pal [data-nav]').forEach(b=>b.onclick=()=>enviar('apresentacao', Math.max(0,Math.min(L().length-1,(e.slide||0)+(+b.dataset.nav))), null));
+    document.querySelectorAll('.pal [data-i]').forEach(b=>b.onclick=()=>enviar('apresentacao', +b.dataset.i, null));
+    document.querySelectorAll('.pal [data-m]').forEach(b=>b.onclick=()=>enviar(b.dataset.m, e.slide||0, null));
+    document.querySelectorAll('.pal [data-vd]').forEach(b=>b.onclick=()=>enviar(null, null, b.dataset.vd));
+  };
+  const enviar=async(modo, slide, video)=>{ try{ e=await rpc('fe_palestrante_tv',{p_slug:SLUG,p_codigo:cod,p_modo:modo,p_slide:slide,p_video:video})||e; if(navigator.vibrate) navigator.vibrate(20); if(video) toast(video==='pause'?'Vídeo pausado':video==='inicio'?'Vídeo voltou ao início':'Vídeo tocando'); pinta(); }
+    catch(err){ if(/incorreto/i.test(err.message||'')){ store.set('mf_pal_'+SLUG,null); toast('O código do palestrante mudou. Entre de novo.'); setTimeout(()=>location.reload(),1500); } else toast(ERR(err)); } };
+  pinta();
+  setInterval(async()=>{ if(document.hidden) return; try{ const n=await rpc('fe_tv_estado',{p_festa:FESTA.id}); if(n && (n.modo!==e.modo || n.slide!==e.slide || JSON.stringify(n.slides)!==JSON.stringify(e.slides))){ e=n; pinta(); } }catch(_){} }, 4000);
+}
+// admin: código do palestrante + botões de vídeo
+async function blocoPalestrante(box){
+  let cod=null; try{ const r=await rpc('fe_admin_palestrante_ver',{p_slug:SLUG,p_pin:PIN}); cod=r&&r.codigo||null; }catch(_){}
+  const link=linkFesta(FESTA.slug,'palestrante');
+  box.innerHTML=`<h3 style="margin:0 0 4px">🎙️ Controle do palestrante</h3>
+    <p class="muted" style="margin:0 0 12px">Compartilhe o link e o código com o palestrante para que ele controle os slides e vídeos direto do próprio celular no palco. Ele visualiza apenas a apresentação.</p>
+    ${cod?`<div class="grid2"><div><p style="margin:0 0 6px">Código atual: <b style="font-size:22px;letter-spacing:.12em">${esc(cod)}</b></p>
+      <div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn" type="button" id="plCp">📋 Copiar link e código</button><button class="btn ghost" type="button" id="plWa">💬 Mandar no WhatsApp</button><button class="btn ghost" type="button" id="plNovo">🔄 Trocar código</button><button class="btn ghost" type="button" id="plX">Desligar</button></div></div>
+      <div style="text-align:center"><div id="plQr" style="max-width:180px;margin:0 auto;background:#fff;padding:8px;border-radius:12px"></div><p class="muted" style="font-size:13px;margin:6px 0 0">O palestrante aponta a câmera aqui</p></div></div>`
+    :`<div class="row" style="gap:8px"><button class="btn" type="button" id="plNovo">🎙️ Criar código do palestrante</button></div>`}<div class="msg" id="plM"></div>`;
+  const novo=async()=>{ const c=String(Math.floor(1000+Math.random()*9000)); try{ await rpc('fe_admin_palestrante',{p_slug:SLUG,p_pin:PIN,p_codigo:c}); toast('Código do palestrante: '+c); blocoPalestrante(box); }catch(e){ $('plM').className='msg err'; $('plM').textContent=ERR(e); } };
+  $('plNovo').onclick=novo;
+  if(cod){ qrInto($('plQr'), link, 180); const txt=`🎙️ Controle da apresentação\n${link}\nCódigo do palestrante: ${cod}`;
+    $('plCp').onclick=()=>copiar(txt,'Link e código copiados!'); $('plWa').onclick=()=>window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank','noopener');
+    $('plX').onclick=async()=>{ try{ await rpc('fe_admin_palestrante',{p_slug:SLUG,p_pin:PIN,p_codigo:null}); toast('Controle do palestrante desligado.'); blocoPalestrante(box); }catch(e){ $('plM').className='msg err'; $('plM').textContent=ERR(e); } }; }
+}
+function tvVideoCtl(apr){ if(!apr || !apr.n) return; if(window.__aprN===undefined){ window.__aprN=apr.n; return; } if(apr.n===window.__aprN) return; window.__aprN=apr.n;
+  const v=document.querySelector('.tv-apr video'); if(!v) return; if(apr.v==='pause') v.pause(); else if(apr.v==='inicio'){ v.currentTime=0; v.play().catch(()=>{}); } else v.play().catch(()=>{}); }
+
+// =====================================================================
 // PDFs (álbum e cartões)
 // =====================================================================
 const PW=1240, PH=1754;
@@ -3716,7 +3781,7 @@ function ligarDesafios(){
   r();
 }
 // --- telão: faixa de aviso e contagem em tela cheia ---
-function tvExtras(ex, agora){ ex=ex||{}; window.__tvEx=ex; const off=agora?new Date(agora).getTime()-Date.now():0;
+function tvExtras(ex, agora){ ex=ex||{}; window.__tvEx=ex; try{ tvVideoCtl(ex.apr); }catch(_){} const off=agora?new Date(agora).getTime()-Date.now():0;
   document.body.classList.toggle('com-aviso',!!ex.aviso); let av=$('tvAviso'); if(ex.aviso){ if(!av){ av=document.createElement('div'); av.id='tvAviso'; av.className='tv-aviso'; document.body.appendChild(av); } if(av.dataset.t!==ex.aviso){ av.dataset.t=ex.aviso; av.innerHTML=`<span aria-hidden="true">📌</span><span>${esc(ex.aviso)}</span>`; } } else if(av) av.remove();
   const c=ex.contagem, fim=c&&c.ate?new Date(c.ate).getTime():0; let cd=$('tvCont');
   if(fim && fim-(Date.now()+off) > -15000){ if(!cd){ cd=document.createElement('div'); cd.id='tvCont'; cd.className='tv-cont'; document.body.appendChild(cd); }
@@ -4187,6 +4252,7 @@ function montarAjuda(){
   try{
     if(MODE==='convidado') await telaConvidado();
     else if(MODE==='telao') await telaTelao();
+    else if(MODE==='palestrante') await telaPalestrante();
     else if(MODE==='portaria') await telaPortaria();
     else if(MODE==='pedidos') await telaPedidos();
     else if(MODE==='valet') await telaValet();

@@ -522,6 +522,9 @@ h2.sec .muted{font-family:var(--body)}
 .pacoes{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-top:8px}
 .molbtn{border:0;background:none;color:var(--accent);font-weight:600;font-size:14px;cursor:pointer;padding:4px 2px}
 .rsvp{padding:22px 18px;text-align:center;margin-top:34px}
+.rs-card{grid-column:1/-1}
+.rs-prev{display:flex;gap:10px;overflow-x:auto;padding:4px 0}
+.rs-prev img{height:300px;width:auto;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,.18);flex:none}
 .rsvp h2.sec{margin:0 0 6px;justify-content:center}
 .rsvp .sub{color:var(--muted);margin:0 0 16px}
 .rsvp-op{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:420px;margin:0 auto}
@@ -1214,7 +1217,7 @@ async function postsAprovados(festaId){
   const {data,error}=await sb.from('fe_posts').select('id,tipo,autor,texto,caminho,thumb,duracao,criado_em,curtidas,reacoes,comentarios').eq('festa_id',festaId).order('criado_em',{ascending:true}).limit(1000);
   if(error) throw error; return data;
 }
-const ERR = e => { const m=(e&&e.message)||''; if(/Calma/.test(m)) return 'Calma! Espere uns segundinhos para mandar outra.'; if(/Limite do plano/.test(m)) return 'Esta festa chegou ao limite de homenagens do plano contratado. O anfitrião pode mudar para um plano maior.'; if(/Gravação maior/.test(m)) return 'A gravação passou do tempo permitido nesta festa.'; if(/Limite do teste/.test(m)) return 'Esta festa está em modo teste e já recebeu as 10 homenagens do teste. O anfitrião precisa ativar a festa para receber mais.'; if(/Código inválido/.test(m)) return 'Código inválido ou já usado. Confira as letras e os números.'; if(/Muitas festas/.test(m)) return m; if(/Informe|Aceite/.test(m)) return m+'.'; if(/Senha/.test(m)) return 'Senha incorreta.'; if(/row-level|policy/i.test(m)) return 'Esta festa não está aceitando homenagens agora.'; if(/size|large|exceed/i.test(m)) return 'Arquivo grande demais. Tente um menor.'; if(/mime|type/i.test(m)) return 'Tipo de arquivo não aceito.'; return 'Não deu certo agora. Confira a internet e tente de novo.'; };
+const ERR = e => { const m=(e&&e.message)||''; if(/Impróprio/.test(m)) return 'Opa! Essa mensagem tem palavras que não podem ir para o telão. Que tal escrever de outro jeito? 💛'; if(/Calma/.test(m)) return 'Calma! Espere uns segundinhos para mandar outra.'; if(/Limite do plano/.test(m)) return 'Esta festa chegou ao limite de homenagens do plano contratado. O anfitrião pode mudar para um plano maior.'; if(/Gravação maior/.test(m)) return 'A gravação passou do tempo permitido nesta festa.'; if(/Limite do teste/.test(m)) return 'Esta festa está em modo teste e já recebeu as 10 homenagens do teste. O anfitrião precisa ativar a festa para receber mais.'; if(/Código inválido/.test(m)) return 'Código inválido ou já usado. Confira as letras e os números.'; if(/Muitas festas/.test(m)) return m; if(/Informe|Aceite/.test(m)) return m+'.'; if(/Senha/.test(m)) return 'Senha incorreta.'; if(/row-level|policy/i.test(m)) return 'Esta festa não está aceitando homenagens agora.'; if(/size|large|exceed/i.test(m)) return 'Arquivo grande demais. Tente um menor.'; if(/mime|type/i.test(m)) return 'Tipo de arquivo não aceito.'; return 'Não deu certo agora. Confira a internet e tente de novo.'; };
 
 // ---------- imagens ----------
 // Fotos HEIC/HEIF (padrão de vários Samsung e iPhone) não abrem no navegador: convertemos para JPG
@@ -1709,7 +1712,11 @@ async function subir(blob, tipo, ext, contentType){
   const {error}=await sb.storage.from('fe-midia').upload(path, blob, {contentType, upsert:false, cacheControl:'31536000'});
   if(error) throw error; return path;
 }
-async function gravarPost(row){ const {error}=await sb.from('fe_posts').insert({festa_id:FESTA.id, autor:nomeAtual(), aparelho:deviceId(), ...row}); if(error) throw error; setTimeout(promoAposEnvio, 2600); }
+// moderação automática: barra palavrões e ofensas antes de chegar ao telão
+const PALAVRAS_BLOQ=['porra','caralho','buceta','boceta','puta','puto','putaria','fdp','vsf','vtnc','pqp','foda','fodase','foder','fodido','merda','bosta','cu','cuzao','arrombado','arrombada','viado','viadinho','sapatao','piranha','vagabunda','vagabundo','corno','corna','otario','otaria','babaca','escroto','escrota','desgraca','desgracado','desgracada','retardado','retardada','piroca','xoxota','xereca','punheta','siririca','safada','safado','nazista','prostituta','vadia','cacete','krl','crl','tnc','vai tomar','tomar no','filho da','filha da'];
+function textoImproprio(t){ if(!t) return false; const n=' '+String(t).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[0@]/g,'o').replace(/[1!]/g,'i').replace(/3/g,'e').replace(/4/g,'a').replace(/\$/g,'s').replace(/[^a-z ]+/g,' ').replace(/\s+/g,' ')+' ';
+  return PALAVRAS_BLOQ.some(w=>n.includes(' '+w+' ') || (w.includes(' ') && n.includes(' '+w))); }
+async function gravarPost(row){ if(textoImproprio(row.texto)||textoImproprio(nomeAtual())) throw new Error('Impróprio'); const {error}=await sb.from('fe_posts').insert({festa_id:FESTA.id, autor:nomeAtual(), aparelho:deviceId(), ...row}); if(error) throw error; setTimeout(promoAposEnvio, 2600); }
 // depois do 1º envio, uma vez por festa: convida o convidado a fazer o Mural da festa dele
 function promoAposEnvio(){ try{ if(!FESTA) return; const k='mf_promo_'+FESTA.slug; if(store.get(k)) return; store.set(k,'1');
   const corp=CORP(FESTA); const href=BASE+(corp?'?para=empresa&origem=convidado':'?experimente&origem=convidado');
@@ -2429,6 +2436,7 @@ function painelAdmin(){
      <li><button class="link" data-ir="compartilhar">Mande o convite com QR Code</button> no grupo da família e imprima os cartões de mesa.</li>
      <li>No dia, abra o <b>📺 telão</b> no notebook ligado na TV. Na aba <b>💌 Homenagens</b> você aprova o que aparece.</li>
      <li>Depois da festa, baixe o álbum em <button class="link" data-ir="recordacoes">📖 Recordações</button>.</li></ol></div>`:''}
+   ${f.data && f.data < new Date().toLocaleDateString('sv') ? `<div class="card seucta"><div><h2>✨ O resumo ${CORP(f)?'do seu evento':'da sua festa'} está pronto</h2><p>Stories com os números e o recado mais amado da noite, prontos para postar e mandar no WhatsApp.</p></div><button class="btn" data-ir="recordacoes" style="font-size:18px;padding:14px 24px">Ver o resumo →</button></div>`:''}
    ${!f.custom&&!CORP(f)?`<div class="card seucta" id="seuCta"><div><h2>🎨 Faça o seu tema</h2><p>Imagem de fundo, personagens, 8 a 12 fotos de ${esc(f.homenageado||'quem a gente ama')} e música no telão. Leva 5 minutos.</p></div><button class="btn" id="seuGo" style="font-size:18px;padding:14px 24px">Começar agora →</button></div>`:''}
    <div class="tabs" id="abasTop">
      ${CORP(f)?'<button data-v="evento" aria-pressed="false">🧭 Painel do evento</button>':''}
@@ -3234,7 +3242,9 @@ function vRecordacoes(){
   $('vw').innerHTML=`<div class="grid2">
    <div class="card" style="padding:18px"><div style="font-size:44px">📖</div><h3 style="margin:4px 0">Álbum de recordações (PDF)</h3><p class="muted">Capa no tema da festa, fotos em polaroid, recados escritos à mão e um QR Code em cada áudio e vídeo para ouvir de novo pelo celular. Entra só o que foi aprovado.</p>
      <p style="font-weight:600">${c.foto} fotos · ${c.texto} recados · ${c.audio} áudios · ${c.video} vídeos</p><button class="btn" id="rcBook">📖 Baixar álbum</button><div class="msg" id="rcM1"></div></div>
-   <div class="card" style="padding:18px"><div style="font-size:44px">🗂️</div><h3 style="margin:4px 0">Baixar tudo (.zip)</h3><p class="muted">Todas as fotos, áudios e vídeos originais aprovados, mais um arquivo com todos os recados escritos. Para guardar para sempre.</p><button class="btn alt" id="rcZip">⬇️ Baixar tudo</button><div class="msg" id="rcM2"></div></div></div>`;
+   <div class="card" style="padding:18px"><div style="font-size:44px">🗂️</div><h3 style="margin:4px 0">Baixar tudo (.zip)</h3><p class="muted">Todas as fotos, áudios e vídeos originais aprovados, mais um arquivo com todos os recados escritos. Para guardar para sempre.</p><button class="btn alt" id="rcZip">⬇️ Baixar tudo</button><div class="msg" id="rcM2"></div></div>
+   <div class="card rs-card" style="padding:18px" id="rsBox"></div></div>`;
+  vResumo($('rsBox'));
   $('rcBook').onclick=async()=>{ const b=$('rcBook'); b.disabled=true; try{ const r=await pdfAlbum(FESTA, ap, t=>{ $('rcM1').className='msg'; $('rcM1').innerHTML=`<span class="spin"></span> ${t}`; }); baixar(r.blob, `Album_${FESTA.slug}.pdf`); $('rcM1').className='msg ok'; $('rcM1').textContent=`Álbum pronto: ${r.paginas} páginas! 💛`; }catch(e){ console.error(e); $('rcM1').className='msg err'; $('rcM1').textContent='Não consegui montar o álbum agora. Tente de novo.'; } b.disabled=false; };
   $('rcZip').onclick=async()=>{ if(FESTA.plano==='teste'){ $('rcM2').className='msg err'; $('rcM2').textContent='Baixar todos os arquivos é liberado depois de ativar a festa.'; return; } const b=$('rcZip'); b.disabled=true; try{ const blob=await zipTudo(FESTA, ap, t=>{ $('rcM2').className='msg'; $('rcM2').innerHTML=`<span class="spin"></span> ${t}`; }); baixar(blob, `Recordacoes_${FESTA.slug}.zip`); $('rcM2').className='msg ok'; $('rcM2').textContent='Arquivo pronto! 🗂️'; }catch(e){ $('rcM2').className='msg err'; $('rcM2').textContent='Não consegui montar o arquivo agora.'; } b.disabled=false; };
 }
@@ -3244,6 +3254,115 @@ async function zipTudo(f, posts, prog){
   const rec=posts.filter(p=>p.tipo==='texto'||p.texto).map(p=>`${new Date(p.criado_em).toLocaleString('pt-BR')} — ${p.autor||'Convidado'}${p.tipo==='foto'?' (legenda de foto)':''}\n${p.texto}\n`).join('\n');
   z.file('Recados.txt', `${f.titulo}\n${f.homenageado||''}\n\n${rec}`);
   prog('Compactando…'); return await z.generateAsync({type:'blob'});
+}
+
+// =====================================================================
+// RESUMO PÓS-FESTA (stories 1080x1920) — ficha de produção do Gemini
+// =====================================================================
+const RS_W=1080, RS_H=1920;
+function resumoDados(f, posts){
+  const ap=posts.filter(p=>!p.status || p.status==='aprovado');
+  const n={foto:0,texto:0,audio:0,video:0}; let seg=0; const pessoas=new Set(); const horas={};
+  ap.forEach(p=>{ n[p.tipo]=(n[p.tipo]||0)+1; if(p.tipo==='audio') seg+=(+p.duracao||0);
+    const a=String(p.autor||'').trim().toLowerCase(); pessoas.add(a||('ap:'+(p.aparelho||p.id)));
+    const h=new Date(p.criado_em).getHours(); horas[h]=(horas[h]||0)+1; });
+  const pico=Object.entries(horas).sort((a,b)=>b[1]-a[1])[0];
+  const nota=p=>(+p.curtidas||0)+Object.values(p.reacoes||{}).reduce((s,v)=>s+(+v||0),0);
+  const comTexto=ap.filter(p=>p.texto && String(p.texto).trim().length>=8 && (p.tipo==='texto'||p.tipo==='foto'));
+  const top=(comTexto.length?comTexto:ap.filter(p=>p.tipo==='foto')).slice().sort((a,b)=>nota(b)-nota(a)||String(b.texto||'').length-String(a.texto||'').length)[0]||null;
+  const capa=ap.filter(p=>p.tipo==='foto').slice().sort((a,b)=>nota(b)-nota(a))[0]||null;
+  return {ap, n, min:Math.max(seg?1:0, Math.round(seg/60)), pessoas:pessoas.size, pico:pico?+pico[0]:null, top, topNota:top?nota(top):0, capa};
+}
+function rsFundo(c, cor, brilho){
+  c.fillStyle=cor; c.fillRect(0,0,RS_W,RS_H);
+  if(brilho){ const g=c.createRadialGradient(RS_W/2,RS_H*.42,40,RS_W/2,RS_H*.42,RS_W*.95); g.addColorStop(0,brilho); g.addColorStop(1,'rgba(0,0,0,0)'); c.fillStyle=g; c.fillRect(0,0,RS_W,RS_H); }
+}
+function rsTxt(c, txt, x, y, font, cor, {align='center', track=0, max=0}={}){
+  c.font=font; c.fillStyle=cor; c.textAlign=align; c.textBaseline='alphabetic';
+  if('letterSpacing' in c) c.letterSpacing=track+'px';
+  let t=String(txt);
+  if(max){ const m=font.match(/(\d+)px/); let px=m?+m[1]:0; const min=Math.round(px*.62); while(px>min && c.measureText(t).width>max){ px-=2; c.font=font.replace(/\d+px/, px+'px'); } while(c.measureText(t).width>max && t.length>4) t=t.slice(0,-2).trimEnd()+'…'; }
+  c.fillText(t, x, y); if('letterSpacing' in c) c.letterSpacing='0px';
+}
+function rsLinhas(c, txt, x, y, font, cor, maxW, lh, maxL, align='center'){
+  c.font=font; let L=wrap(c, txt, maxW); if(L.length>maxL){ L=L.slice(0,maxL); L[maxL-1]=L[maxL-1].replace(/\s*\S*$/,'')+'…'; }
+  c.fillStyle=cor; c.textAlign=align; L.forEach((l,i)=>c.fillText(l, x, y+i*lh)); return y+L.length*lh;
+}
+function rsRodape(c, txt, P){ c.fillStyle=P.acc; c.fillRect(0,RS_H-150,RS_W,150); rsTxt(c, txt, RS_W/2, RS_H-62, '600 30px Figtree', P.cre, {max:RS_W-100}); }
+function rsCapa(c, img, x, y, w, h, r){ c.save(); rr(c,x,y,w,h,r); c.clip(); const k=Math.max(w/img.width,h/img.height); const iw=img.width*k, ih=img.height*k; c.drawImage(img, x+(w-iw)/2, y+(h-ih)/2, iw, ih); c.restore(); }
+async function resumoTelas(f, posts){
+  await Promise.all(['700 40px Figtree','600 30px Figtree','500 30px Figtree','italic 400 80px Fraunces','400 60px Fraunces','700 80px Fraunces','700 50px Caveat'].map(x=>document.fonts.load(x).catch(()=>{})));
+  const D=resumoDados(f, posts), corp=CORP(f), marca=!(corp && f.plano!=='teste');
+  const P = corp ? {bg:'#0f1b33', acc:'#d4af37', hi:'#d4af37', cre:'#f6f1f4', ink:'#0f1b33', glow:'rgba(212,175,55,.16)', fim:'#0f1b33'}
+                 : {bg:'#2b2230', acc:'#963c5f', hi:'#e9b8a3', cre:'#f6f1f4', ink:'#2b2230', glow:'rgba(150,60,95,.45)', fim:'#963c5f'};
+  const nome = f.homenageado || f.titulo || 'a festa';
+  const site = SITE;
+  const telas=[];
+  // ---------- TELA 1: números ----------
+  { const cv=document.createElement('canvas'); cv.width=RS_W; cv.height=RS_H; const c=cv.getContext('2d'); rsFundo(c, P.bg, P.glow);
+    rsTxt(c, (corp?'Balanço de engajamento do evento':(f.titulo||nome)).toUpperCase(), RS_W/2, 330, '700 30px Figtree', P.hi, {track:4, max:RS_W-140});
+    rsTxt(c, corp?'Engajamento em tempo real!':'Foi inesquecível!', RS_W/2, 460, 'italic 400 96px Fraunces', P.cre, {max:RS_W-120});
+    const cards = corp
+      ? [[D.n.foto,'fotos no telão'],[D.n.texto,'mensagens enviadas'],[D.n.video+D.n.audio,'vídeos e áudios'],[D.pessoas,'participantes interagindo']]
+      : [[D.n.foto,'fotos no telão'],[D.n.texto,'mensagens de carinho'],[D.n.audio, D.min?`áudios · ${D.min} min gravados`:'áudios gravados'],[D.pessoas,'convidados interagindo']];
+    const gx=90, gy=560, cw=(RS_W-gx*2-40)/2, ch=380;
+    cards.forEach(([v,l],i)=>{ const x=gx+(i%2)*(cw+40), y=gy+Math.floor(i/2)*(ch+40);
+      c.fillStyle='rgba(246,241,244,.07)'; rr(c,x,y,cw,ch,28); c.fill();
+      rsTxt(c, String(v||0), x+cw/2, y+200, '700 132px Fraunces', P.hi);
+      rsLinhas(c, l, x+cw/2, y+275, '600 36px Figtree', P.cre, cw-60, 44, 2); });
+    if(D.pico!=null) rsTxt(c, `O momento mais agitado foi às ${D.pico}h!`, RS_W/2, gy+2*ch+40+120, '700 58px Caveat', P.hi, {max:RS_W-120});
+    if(marca) rsRodape(c, `Mural da Festa  •  ${site}`, P);
+    telas.push(cv); }
+  // ---------- TELA 2: recado campeão ----------
+  if(D.top){ const cv=document.createElement('canvas'); cv.width=RS_W; cv.height=RS_H; const c=cv.getContext('2d'); rsFundo(c, P.bg, P.glow);
+    rsTxt(c, corp?'A mensagem mais curtida da equipe':'A mensagem mais amada da noite', RS_W/2, 300, '700 30px Figtree', P.hi, {track:3, max:RS_W-120});
+    const x=90, w=RS_W-180; const img = D.top.tipo==='foto' && D.top.caminho ? await carregarImg(D.top.caminho, 1200) : null;
+    const temTxt = !!(D.top.texto && String(D.top.texto).trim());
+    c.font='italic 400 58px Fraunces'; const L=temTxt?wrap(c, `“${String(D.top.texto).trim()}”`, w-120):[];
+    const nl=Math.min(L.length, img?5:9), ih=img?(temTxt?640:980):0;
+    const h=60+ih+(img&&temTxt?50:0)+nl*74+(temTxt?40:0)+120; let y=Math.max(380, (RS_H-150-h)/2+60);
+    c.save(); c.shadowColor='rgba(0,0,0,.35)'; c.shadowBlur=60; c.shadowOffsetY=24; c.fillStyle=P.cre; rr(c,x,y,w,h,40); c.fill(); c.restore();
+    c.fillStyle=P.cre; c.beginPath(); c.moveTo(x+120,y+h-2); c.lineTo(x+90,y+h+60); c.lineTo(x+210,y+h-2); c.closePath(); c.fill();
+    let cy=y+60; if(img){ rsCapa(c, img, x+50, cy, w-100, ih, 24); cy+=ih+(temTxt?80:40); }
+    if(temTxt){ cy=rsLinhas(c, `“${String(D.top.texto).trim()}”`, RS_W/2, cy+40, 'italic 400 58px Fraunces', P.ink, w-120, 74, nl); }
+    rsTxt(c, '— '+(D.top.autor||'Convidado'), x+w-60, cy+60, '700 54px Caveat', corp?'#0f1b33':'#963c5f', {align:'right', max:w-120});
+    if(D.topNota>0) rsTxt(c, `♥ ${D.topNota} ${D.topNota==1?'reação':'reações'} no telão`, RS_W/2, Math.min(RS_H-210, y+h+150), '600 36px Figtree', P.hi);
+    if(marca) rsRodape(c, `Memórias guardadas para sempre  •  ${site}`, P);
+    telas.push(cv); }
+  // ---------- TELA 3: álbum + chamada ----------
+  { const cv=document.createElement('canvas'); cv.width=RS_W; cv.height=RS_H; const c=cv.getContext('2d'); rsFundo(c, P.fim, corp?'rgba(212,175,55,.12)':'rgba(233,184,163,.18)');
+    rsTxt(c, corp?'Relatório e mídias do evento':'Álbum digital oficial', RS_W/2, 250, '700 30px Figtree', P.hi, {track:4});
+    c.font='400 76px Fraunces'; c.fillStyle=P.cre; c.textAlign='center';
+    if(corp){ rsLinhas(c, nome, RS_W/2, 360, '400 76px Fraunces', P.cre, RS_W-160, 88, 2); }
+    else { c.fillText('Todas as memórias', RS_W/2, 360); c.fillText('guardadas', RS_W/2, 448); rsTxt(c,'para sempre.', RS_W/2, 536, 'italic 400 80px Fraunces', P.hi); }
+    const cx=150, cw=RS_W-300, cyy=marca?620:720, chh=820; c.save(); c.shadowColor='rgba(0,0,0,.35)'; c.shadowBlur=50; c.shadowOffsetY=20; c.fillStyle=P.cre; rr(c,cx,cyy,cw,chh,34); c.fill(); c.restore();
+    const capa = D.capa && D.capa.caminho ? await carregarImg(D.capa.caminho, 1100) : null;
+    if(capa) rsCapa(c, capa, cx+36, cyy+36, cw-72, 450, 22); else { c.fillStyle=P.hi; rr(c,cx+36,cyy+36,cw-72,450,22); c.fill(); rsTxt(c, nome, RS_W/2, cyy+290, 'italic 400 70px Fraunces', P.ink, {max:cw-140}); }
+    const q=qrCanvas(linkFesta(f.slug), 240); c.drawImage(q, cx+50, cyy+520, 240, 240);
+    rsLinhas(c, corp?`Escaneie para rever as mensagens de ${nome}`:`Escaneie para rever o mural de ${nome}`, cx+330, cyy+600, '600 40px Figtree', P.ink, cw-380, 50, 4, 'left');
+    if(marca){
+      rsLinhas(c, 'Quer as fotos e recados dos seus convidados ao vivo no telão da sua festa?', RS_W/2, 1540, '500 38px Figtree', P.cre, RS_W-200, 50, 2);
+      const bw=760, bx=(RS_W-bw)/2; c.fillStyle=P.cre; rr(c,bx,1640,bw,110,55); c.fill(); rsTxt(c, 'Teste grátis agora no seu celular', RS_W/2, 1712, '700 40px Figtree', corp?'#0f1b33':'#963c5f');
+      rsTxt(c, site, RS_W/2, 1850, '700 32px Figtree', P.hi, {max:RS_W-100});
+    }
+    telas.push(cv); }
+  return telas;
+}
+function resumoMsgWhats(f){ return `A festa foi um sucesso e os convidados deixaram homenagens incríveis! 🎉\n\nVeja o mural com todos os recados, fotos e áudios:\n${linkFesta(f.slug)}`; }
+async function vResumo(box){
+  const f=FESTA; const ap=ADM.posts.filter(p=>p.status==='aprovado');
+  box.innerHTML=`<div style="font-size:44px">✨</div><h3 style="margin:4px 0">Stories do evento (resumo)</h3>
+    <p class="muted">Imagens prontas no formato Story com os números e o recado mais amado da ${CORP(f)?'equipe':'festa'}, para postar no Instagram e mandar no WhatsApp.</p>
+    ${ap.length<3?`<p class="msg">Assim que chegarem algumas ${CORP(f)?'mensagens':'homenagens'} aprovadas, o resumo fica pronto aqui.</p>`:`
+    <div class="rs-prev" id="rsPrev"><span class="spin"></span> Montando…</div>
+    <div class="row" style="gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn" id="rsShare" type="button">📲 Compartilhar</button><button class="btn alt" id="rsDown" type="button">⬇️ Baixar as imagens</button><button class="btn ghost" id="rsWa" type="button">💬 Mandar o mural no WhatsApp</button></div><div class="msg" id="rsM"></div>`}`;
+  if(ap.length<3) return;
+  let telas=[]; try{ telas=await resumoTelas(f, ap); }catch(e){ console.error(e); $('rsPrev').textContent='Não consegui montar agora. Tente de novo.'; return; }
+  $('rsPrev').innerHTML=telas.map((cv,i)=>`<img alt="Story ${i+1}" src="${cv.toDataURL('image/jpeg',.7)}">`).join('');
+  const arquivos=async()=>Promise.all(telas.map((cv,i)=>new Promise(r=>cv.toBlob(b=>r(new File([b],`Resumo_${f.slug}_${i+1}.png`,{type:'image/png'})),'image/png'))));
+  $('rsDown').onclick=async()=>{ const fs=await arquivos(); for(const fl of fs){ baixar(fl, fl.name); await new Promise(r=>setTimeout(r,500)); } $('rsM').className='msg ok'; $('rsM').textContent='Imagens salvas! Poste uma por vez nos Stories 💛'; };
+  $('rsShare').onclick=async()=>{ const fs=await arquivos(); if(navigator.canShare && navigator.canShare({files:fs})){ try{ await navigator.share({files:fs, title:'Resumo da festa'}); }catch(e){} } else { for(const fl of fs){ baixar(fl, fl.name); await new Promise(r=>setTimeout(r,500)); } $('rsM').className='msg'; $('rsM').textContent='Seu navegador não compartilha direto: baixei as imagens para você postar.'; } };
+  $('rsWa').onclick=()=>window.open('https://wa.me/?text='+encodeURIComponent(resumoMsgWhats(f)),'_blank','noopener');
 }
 
 // =====================================================================

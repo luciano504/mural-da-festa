@@ -1136,6 +1136,12 @@ body.tv-quieto .novo{background:var(--surface,#fff);color:var(--accent);box-shad
 
 .mic .emi{width:1em;height:1em;color:var(--accent);stroke-width:1.6}
 .tv .emi,.stage .emi{stroke-width:1.7}
+
+body.tv-serif .sl-texto .q, body.tv-serif .sl-correio .q{font-family:'Cormorant Garamond','Playfair Display',Georgia,serif;font-weight:600;letter-spacing:0}
+.conf i{opacity:.8}
+
+body.tv-quieto .sl-intro.quieto .nm{font-size:clamp(56px,9vw,160px);line-height:1.08}
+.sl-texto .q,.sl-correio .q{text-wrap:balance}
 </style>
 </head>
 <body>
@@ -1293,6 +1299,7 @@ const CATS = {
 // ícones de linha das categorias (no lugar dos emojis)
 const SVGI = d => `<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
 const CAT_ICO = {
+  religioso: SVGI('<path d="M12 3v18M7 8h10"/>'),
   infantil: SVGI('<path d="M12 15.5c-3.3 0-6-3.1-6-7a6 6 0 0 1 12 0c0 3.9-2.7 7-6 7z"/><path d="M11 17.5h2l-1-2z"/><path d="M12 17.5c0 2-2 2.2-2 4.5"/>'),
   menino: SVGI('<path d="M4.5 16.5c-1.5 1.3-2 5-2 5s3.7-.5 5-2c.7-.8.7-2.1-.1-2.9a2.2 2.2 0 0 0-2.9-.1z"/><path d="m12 15-3-3a22 22 0 0 1 2-4A12.9 12.9 0 0 1 22 2c0 2.7-.8 7.5-6 11a22.4 22.4 0 0 1-4 2z"/><path d="M9 12H4s.6-3 2-4c1.6-1.1 5 0 5 0"/><path d="M12 15v5s3-.6 4-2c1.1-1.6 0-5 0-5"/>'),
   menina: SVGI('<path d="M3 7l3.5 10h11L21 7l-5 4-4-6-4 6z"/><path d="M6 20h12"/>'),
@@ -1307,27 +1314,27 @@ const CAT_ICO = {
 };
 const TEMAS = {
   executivo:{n:'Executivo',e:'💼',cats:['corporativo','formatura','outra'],bg:'#f4f6fa',bg2:'#e2e8f2',surface:'#ffffff',ink:'#16213a',muted:'#5d6b82',accent:'#1f4fd1',accent2:'#19b39a',on:'#ffffff',font:"'Fraunces'",pat:'nenhum',pal:['#1f4fd1','#19b39a','#9db4e8'],deco:['💼','📊','✨'],paper:'#f8fafc'},
-  baloes:{n:'Balões Coloridos',e:'🎈',cats:['infantil','aniversario','menino','menina'],bg:'#fff7e8',bg2:'#ffe3c2',surface:'#ffffff',ink:'#2b2d42',muted:'#6b6f86',accent:'#d93a40',accent2:'#2ec4b6',on:'#ffffff',font:"'Fredoka'",pat:'baloes',pal:['#ff5a5f','#2ec4b6','#ffbe0b','#8338ec','#3a86ff'],deco:['🎈','🎉','🎁'],paper:'#fffaf0'},
+  baloes:{n:'Balões Coloridos',e:'🎈',cats:['infantil','aniversario','menino','menina'],bg:'#fff7e8',bg2:'#ffe3c2',surface:'#ffffff',ink:'#2b2d42',muted:'#6b6f86',accent:'#c32a31',accent2:'#2ec4b6',on:'#ffffff',font:"'Fredoka'",pat:'baloes',pal:['#ff5a5f','#2ec4b6','#ffbe0b','#8338ec','#3a86ff'],deco:['🎈','🎉','🎁'],paper:'#fffaf0'},
   circo:{n:'Circo Mágico',e:'🎪',cats:['infantil','menino','menina'],bg:'#fff3e6',bg2:'#ffd6d6',surface:'#ffffff',ink:'#3d1d1d',muted:'#7a5555',accent:'#d62828',accent2:'#f4a261',on:'#ffffff',font:"'Fredoka'",pat:'confete',pal:['#d62828','#f4a261','#2a9d8f','#e9c46a'],deco:['🎪','🤹','🍿'],paper:'#fff8ef'},
   espaco:{n:'Viagem ao Espaço',e:'🚀',cats:['menino','infantil','aniversario'],bg:'#0b1026',bg2:'#1f2560',surface:'#161c45',ink:'#eef2ff',muted:'#a8b2e0',accent:'#ffb703',accent2:'#4cc9f0',on:'#1b1300',font:"'Bungee'",pat:'estrelas',pal:['#ffffff','#ffe8a3','#a5e9ff'],deco:['🚀','🪐','⭐'],paper:'#f2f4ff',dark:1},
   herois:{n:'Super-heróis',e:'⚡',cats:['menino','infantil'],bg:'#f2f6ff',bg2:'#dde8ff',surface:'#ffffff',ink:'#0d1b3d',muted:'#4d5d82',accent:'#d62839',accent2:'#1d4ed8',on:'#ffffff',font:"'Fredoka'",pat:'confete',pal:['#e63946','#1d4ed8','#ffd60a'],deco:['⚡','💥','🦸'],paper:'#f5f8ff'},
   dinos:{n:'Dinossauros',e:'🦖',cats:['menino','infantil'],bg:'#eef7e4',bg2:'#d3ebc0',surface:'#ffffff',ink:'#1f3b2c',muted:'#52755f',accent:'#2d6a4f',accent2:'#f77f00',on:'#ffffff',font:"'Fredoka'",pat:'petalas',pal:['#52b788','#95d5b2','#f77f00'],deco:['🦖','🦕','🌋'],paper:'#f6fbef'},
-  reino:{n:'Reino Encantado',e:'👑',cats:['menina','infantil'],bg:'#fff0f7',bg2:'#f3dcff',surface:'#ffffff',ink:'#4a1d3f',muted:'#8a5c7e',accent:'#d63384',accent2:'#9b5de5',on:'#ffffff',font:"'Cinzel'",pat:'brilho',pal:['#f9c74f','#ff8fc7','#c8b6ff'],deco:['👑','🏰','✨'],paper:'#fff6fa'},
-  jardim:{n:'Jardim das Borboletas',e:'🦋',cats:['menina','infantil','cha_bebe','aniversario'],bg:'#f2fbf4',bg2:'#ffe3ef',surface:'#ffffff',ink:'#2f3e2f',muted:'#647664',accent:'#d1386e',accent2:'#52b788',on:'#ffffff',font:"'Cormorant Garamond'",pat:'petalas',pal:['#ff9ec7','#ffd166','#b8e0c2'],deco:['🦋','🌸','🌼'],paper:'#f8fdf8'},
+  reino:{n:'Reino Encantado',e:'👑',cats:['menina','infantil'],bg:'#fff0f7',bg2:'#f3dcff',surface:'#ffffff',ink:'#4a1d3f',muted:'#8a5c7e',accent:'#b8266e',accent2:'#9b5de5',on:'#ffffff',font:"'Cinzel'",pat:'brilho',pal:['#f9c74f','#ff8fc7','#c8b6ff'],deco:['👑','🏰','✨'],paper:'#fff6fa'},
+  jardim:{n:'Jardim das Borboletas',e:'🦋',cats:['menina','infantil','cha_bebe','aniversario'],bg:'#f2fbf4',bg2:'#ffe3ef',surface:'#ffffff',ink:'#2f3e2f',muted:'#647664',accent:'#b02a5b',accent2:'#52b788',on:'#ffffff',font:"'Cormorant Garamond'",pat:'petalas',pal:['#ff9ec7','#ffd166','#b8e0c2'],deco:['🦋','🌸','🌼'],paper:'#f8fdf8'},
   mar:{n:'Fundo do Mar',e:'🐠',cats:['infantil','menina','menino'],bg:'#e6f8fb',bg2:'#bde9f2',surface:'#ffffff',ink:'#063b4c',muted:'#3f6f7d',accent:'#0077a8',accent2:'#00b4d8',on:'#ffffff',font:"'Fredoka'",pat:'bolhas',pal:['#ffffff','#90e0ef','#caf0f8'],deco:['🐠','🐚','🐙'],paper:'#f2fbfd'},
   neon:{n:'Glamour Neon',e:'💜',cats:['quinze','aniversario','formatura'],bg:'#14001f',bg2:'#3a0758',surface:'#24063a',ink:'#ffffff',muted:'#cdb4e6',accent:'#ff2fd0',accent2:'#00f5d4',on:'#14001f',font:"'Bungee'",pat:'brilho',pal:['#ff2fd0','#00f5d4','#fee440'],deco:['✨','💜','🎶'],paper:'#fbf5ff',dark:1},
-  rosegold:{n:'Rose Gold',e:'🌹',cats:['quinze','casamento','aniversario','bodas'],bg:'#fbefea',bg2:'#f4d9cf',surface:'#fffaf8',ink:'#4b2c2c',muted:'#8c6660',accent:'#a65463',accent2:'#c9a27e',on:'#ffffff',font:"'Great Vibes'",pat:'brilho',pal:['#e8b4a8','#d4a373','#ffffff'],deco:['🌹','✨','🥂'],paper:'#fff8f5'},
-  ouro:{n:'Bodas de Ouro',e:'💍',cats:['bodas','casamento','formatura'],bg:'#fbf6e9',bg2:'#f1e2b8',surface:'#fffdf6',ink:'#3a2e12',muted:'#7d6a3f',accent:'#9a7210',accent2:'#d4af37',on:'#ffffff',font:"'Great Vibes'",pat:'brilho',pal:['#d4af37','#f3e5ab','#b8860b'],deco:['💍','🥂','🌹'],paper:'#fffcf3'},
-  prata:{n:'Bodas de Prata',e:'🤍',cats:['bodas','casamento'],bg:'#f3f5f8',bg2:'#dde3ea',surface:'#ffffff',ink:'#2b3440',muted:'#66717f',accent:'#5f7390',accent2:'#a3b1c4',on:'#ffffff',font:"'Great Vibes'",pat:'brilho',pal:['#c0c8d4','#ffffff','#9aa8ba'],deco:['💍','🕊️','🤍'],paper:'#f8fafc'},
-  classico:{n:'Clássico Elegante',e:'🥂',cats:['casamento','aniversario','formatura','bodas','outra'],bg:'#0f1b2d',bg2:'#21375a',surface:'#16243b',ink:'#f6efe0',muted:'#c9bda4',accent:'#d4af37',accent2:'#e8d9a8',on:'#1a1300',font:"'Playfair Display'",pat:'brilho',pal:['#c9a227','#f6efe0'],deco:['🥂','✨','🎶'],paper:'#fbf8f1',dark:1},
+  rosegold:{n:'Rose Gold',serif:true,sobrio:true,e:'🌹',cats:['quinze','casamento','aniversario','bodas'],bg:'#fbefea',bg2:'#f4d9cf',surface:'#fffaf8',ink:'#4b2c2c',muted:'#74524d',accent:'#8a3f4e',accent2:'#c9a27e',on:'#ffffff',font:"'Great Vibes'",pat:'brilho',pal:['#e8b4a8','#d4a373','#ffffff'],deco:['🌹','✨','🥂'],paper:'#fff8f5'},
+  ouro:{n:'Bodas de Ouro',serif:true,sobrio:true,e:'💍',cats:['bodas','casamento','formatura'],bg:'#fbf6e9',bg2:'#f1e2b8',surface:'#fffdf6',ink:'#3a2e12',muted:'#7d6a3f',accent:'#7a5a0c',accent2:'#d4af37',on:'#ffffff',font:"'Great Vibes'",pat:'brilho',pal:['#d4af37','#f3e5ab','#b8860b'],deco:['💍','🥂','🌹'],paper:'#fffcf3'},
+  prata:{n:'Bodas de Prata',serif:true,sobrio:true,e:'🤍',cats:['bodas','casamento'],bg:'#f3f5f8',bg2:'#dde3ea',surface:'#ffffff',ink:'#2b3440',muted:'#4f5966',accent:'#3f5270',accent2:'#a3b1c4',on:'#ffffff',font:"'Great Vibes'",pat:'brilho',pal:['#c0c8d4','#ffffff','#9aa8ba'],deco:['💍','🕊️','🤍'],paper:'#f8fafc'},
+  classico:{n:'Clássico Elegante',serif:true,sobrio:true,e:'🥂',cats:['casamento','aniversario','formatura','bodas','outra'],bg:'#0f1b2d',bg2:'#21375a',surface:'#16243b',ink:'#f6efe0',muted:'#c9bda4',accent:'#d4af37',accent2:'#e8d9a8',on:'#1a1300',font:"'Playfair Display'",pat:'brilho',pal:['#c9a227','#f6efe0'],deco:['🥂','✨','🎶'],paper:'#fbf8f1',dark:1},
   nuvens:{n:'Nuvem de Algodão',e:'☁️',cats:['cha_bebe','infantil'],bg:'#eef6ff',bg2:'#ffe8f0',surface:'#ffffff',ink:'#2d3a55',muted:'#636f88',accent:'#2f6ae0',accent2:'#ff8fab',on:'#ffffff',font:"'Fredoka'",pat:'bolhas',pal:['#ffffff','#cfe2ff','#ffd6e5'],deco:['☁️','🍼','🧸'],paper:'#f7fbff'},
   formatura:{n:'Formatura',e:'🎓',cats:['formatura','outra'],bg:'#14213d',bg2:'#2a3f6e',surface:'#1b2b4f',ink:'#ffffff',muted:'#b9c3dc',accent:'#fca311',accent2:'#e5e5e5',on:'#1a1000',font:"'Cinzel'",pat:'confete',pal:['#fca311','#ffffff','#e5e5e5'],deco:['🎓','📜','🎉'],paper:'#f7f8fb',dark:1},
-  boho:{n:'Boho Chique',e:'🌾',cats:['casamento','bodas'],bg:'#faf7f2',bg2:'#efe9df',surface:'#ffffff',ink:'#2c2420',muted:'#6e635b',accent:'#9c6447',accent2:'#d4a373',on:'#ffffff',font:"'Cormorant Garamond'",pat:'petalas',pal:['#a66e4e','#d4a373','#e29578'],deco:['🌾','🌿','🤍'],paper:'#fdfbf8'},
+  boho:{n:'Boho Chique',serif:true,sobrio:true,e:'🌾',cats:['casamento','bodas'],bg:'#faf7f2',bg2:'#efe9df',surface:'#ffffff',ink:'#2c2420',muted:'#6e635b',accent:'#9c6447',accent2:'#d4a373',on:'#ffffff',font:"'Cormorant Garamond'",pat:'petalas',pal:['#a66e4e','#d4a373','#e29578'],deco:['🌾','🌿','🤍'],paper:'#fdfbf8'},
   tropical:{n:'Pôr do Sol Tropical',e:'🌴',cats:['aniversario','outra','corporativo'],bg:'#fffdf5',bg2:'#ffeecb',surface:'#ffffff',ink:'#1c2a27',muted:'#526863',accent:'#c94a39',accent2:'#2a9d8f',on:'#ffffff',font:"'Outfit'",pat:'nenhum',pal:['#e05a47','#f4a261','#2a9d8f'],deco:['🌴','🌺','🍹'],paper:'#fffef8'},
   revelacao:{n:'Chá Revelação',e:'🎀',cats:['cha_bebe'],bg:'#faf8ff',bg2:'#efe8fc',surface:'#ffffff',ink:'#26203a',muted:'#62597c',accent:'#6d4cf0',accent2:'#f472b6',on:'#ffffff',font:"'Fredoka'",pat:'bolhas',pal:['#7c5cfc','#f472b6','#60a5fa'],deco:['🎀','💙','🩷'],paper:'#fcfbff'},
   arraia:{n:'Arraiá',e:'🌽',cats:['aniversario','outra','corporativo','infantil'],bg:'#fffdf5',bg2:'#fde8cd',surface:'#ffffff',ink:'#2b1810',muted:'#6b4e3d',accent:'#d9381e',accent2:'#2a9d8f',on:'#ffffff',font:"'Rye'",pat:'confete',pal:['#d9381e','#f4a261','#2a9d8f'],deco:['🌽','🔥','🎉'],paper:'#fffef8'},
-  minimal:{n:'Minimalista Moderno',sobrio:true,e:'◾',cats:['aniversario','corporativo','formatura'],bg:'#f8fafc',bg2:'#e2e8f0',surface:'#ffffff',ink:'#0f172a',muted:'#475569',accent:'#0f172a',accent2:'#94a3b8',on:'#ffffff',font:"'Space Grotesk'",pat:'nenhum',pal:['#0f172a','#64748b','#94a3b8'],deco:['✨','🥂','🎶'],paper:'#ffffff'},
-  sacramental:{n:'Batizado e Comunhão',e:'🕊️',sobrio:true,cats:['cha_bebe','infantil','outra'],bg:'#faf9f6',bg2:'#eceae4',surface:'#ffffff',ink:'#22252a',muted:'#5d636e',accent:'#5a6b5c',accent2:'#c5a059',on:'#ffffff',font:"'Playfair Display'",pat:'brilho',pal:['#5a6b5c','#c5a059','#d4af37'],deco:['🕊️','🤍','✨'],paper:'#fdfcfa'},
+  minimal:{n:'Minimalista Moderno',sobrio:true,e:'◾',cats:['aniversario','corporativo','formatura'],bg:'#f6f5f1',bg2:'#e2e8f0',surface:'#ffffff',ink:'#0f172a',muted:'#475569',accent:'#0f172a',accent2:'#94a3b8',on:'#ffffff',font:"'Space Grotesk'",pat:'nenhum',pal:['#0f172a','#64748b','#94a3b8'],deco:['✨','🥂','🎶'],paper:'#ffffff'},
+  sacramental:{n:'Batizado e Comunhão',serif:true,e:'🕊️',sobrio:true,cats:['outra','cha_bebe','infantil'],bg:'#faf9f6',bg2:'#eceae4',surface:'#ffffff',ink:'#22252a',muted:'#5d636e',accent:'#5a6b5c',accent2:'#c5a059',on:'#ffffff',font:"'Playfair Display'",pat:'brilho',pal:['#5a6b5c','#c5a059','#d4af37'],deco:['🕊️','🤍','✨'],paper:'#fdfcfa'},
   confete:{n:'Festa de Confete',e:'🎉',cats:['aniversario','outra','infantil','quinze'],bg:'#fffdf7',bg2:'#f3e8ff',surface:'#ffffff',ink:'#2a1745',muted:'#6d5c86',accent:'#7b2cbf',accent2:'#ff9f1c',on:'#ffffff',font:"'Fredoka'",pat:'confete',pal:['#7b2cbf','#ff9f1c','#2ec4b6','#ff5a5f'],deco:['🎉','🎂','🥳'],paper:'#fffdf8'}
 };
 const BODAS = [[1,'Papel'],[2,'Algodão'],[3,'Couro'],[4,'Flores'],[5,'Madeira'],[6,'Açúcar'],[7,'Lã'],[8,'Barro'],[9,'Cerâmica'],[10,'Estanho'],[11,'Aço'],[12,'Seda'],[13,'Renda'],[14,'Marfim'],[15,'Cristal'],[20,'Porcelana'],[25,'Prata'],[30,'Pérola'],[35,'Coral'],[40,'Esmeralda'],[45,'Rubi'],[50,'Ouro'],[55,'Ametista'],[60,'Diamante'],[65,'Platina'],[70,'Vinho'],[75,'Brilhante']];
@@ -1568,7 +1575,7 @@ async function telaConvidado(){
         <button class="act" data-k="audio"><span class="ic">${ICO.audio}</span>Áudio<small>a sua voz, gravada aqui</small></button>
         <button class="act" data-k="video"><span class="ic">${ICO.video}</span>Vídeo<small>${CORP(f)?'um depoimento curto':'um recado olhando nos olhos'}</small></button>
       </div>
-      <div class="namebar"><input class="in" id="nome" maxlength="40" placeholder="Seu nome, para assinar" aria-label="Seu nome" value="${esc(store.get('mf_nome')||'')}"></div>
+      <div class="namebar"><input class="in" id="nome" maxlength="40" placeholder="Seu nome (assina o que você mandar)" aria-label="Seu nome" value="${esc(store.get('mf_nome')||'')}"></div>
       ${f.moderacao?`<p class="nota">${CORP(f)?'As mensagens aparecem no telão depois da aprovação da organização.':'As homenagens aparecem no telão depois que o anfitrião aprova 💛'}</p>`:''}
     </section>
     ` : `<div class="closed">As homenagens desta festa foram encerradas. Obrigado por fazer parte.</div>`}
@@ -1939,7 +1946,14 @@ $('ov').addEventListener('click', e=>{ if(e.target.id==='ov' && !(recState&&recS
 document.addEventListener('keydown', e=>{ if(e.key==='Escape' && !$('ov').hidden) fecharFolha(); });
 function nomeAtual(){ const n=$('nome'); const v=(n?n.value:store.get('mf_nome')||'').trim().slice(0,40); if(v) store.set('mf_nome',v); return v||null; }
 
+function pedirNome(cb){
+  abrirFolha(`<h3>Como você quer assinar?</h3><p class="muted" style="margin:0 0 12px">Seu nome aparece junto ${CORP(FESTA)?'da sua mensagem':'da sua homenagem'} no telão e no álbum.</p><input class="in" id="pnN" maxlength="40" placeholder="${CORP(FESTA)?'Ex.: Ana Souza, Comercial':'Ex.: Tia Lúcia'}" autocomplete="name" enterkeyhint="go"><button class="btn big" id="pnOk" type="button" style="width:100%;margin-top:12px">Continuar</button>`);
+  const i=$('pnN'); setTimeout(()=>i.focus(),150);
+  const ok=()=>{ const v=i.value.trim().slice(0,40); if(v.length<2){ i.focus(); toast('Escreva seu nome para assinar'); return; } store.set('mf_nome',v); if($('nome')) $('nome').value=v; fecharFolha(); setTimeout(cb,250); };
+  $('pnOk').onclick=ok; i.addEventListener('keydown',e=>{ if(e.key==='Enter') ok(); });
+}
 function abrirEnvio(k){
+  if(!nomeAtual()) return pedirNome(()=>abrirEnvio(k));
   if(k==='foto') return folhaFoto(null);
   if(k==='texto') return folhaTexto();
   return folhaGravar(k);
@@ -2148,7 +2162,7 @@ async function telaTelao(){
   FESTA = await carregarFesta(SLUG).catch(()=>null);
   if(!FESTA) return telaNaoAchou();
   const f=FESTA, t=temaDe(f), url=linkFesta(f.slug), nome=DESTAQUE(f); aplicarTema(t, .62); document.title='Telão · '+nome;
-  const QUIET = CORP(f) || !!t.sobrio || !!tema(f.tema||'').sobrio; document.body.classList.toggle('tv-quieto', QUIET);
+  const QUIET = CORP(f) || !!t.sobrio || !!tema(f.tema||'').sobrio; document.body.classList.toggle('tv-quieto', QUIET); document.body.classList.toggle('tv-serif', !!t.serif || !!tema(f.tema||'').serif);
   $('app').innerHTML = `
    <div class="tv">
      <div class="tv-top"><div class="t">${EXT(f).logo?`<img class="tv-logo" src="${midia(EXT(f).logo)}" alt="">`:''}${esc(nome)}</div><div class="n" id="tvN"></div></div>
@@ -2175,7 +2189,7 @@ async function telaTelao(){
   // ---- personagens que entram e saem da tela ----
   const chars = (()=>{
     const lay=document.createElement('div'); lay.className='chars'; document.body.appendChild(lay);
-    const srcs = (t.enfeites||[]).length ? t.enfeites.map(p=>({img:midia(p)})) : (['infantil','menino','menina','cha_bebe'].includes(f.categoria) ? t.deco.map(e=>({emo:e})) : []);
+    const srcs = (t.enfeites||[]).length ? t.enfeites.map(p=>({img:midia(p)})) : [];
     srcs.forEach(s=>{ if(!s.img) return; const im=new Image(); im.crossOrigin='anonymous';
       im.onload=()=>{ try{ const c=document.createElement('canvas'); c.width=c.height=24; const x=c.getContext('2d'); x.drawImage(im,0,0,24,24); const d=x.getImageData(0,0,24,24).data; s.trans=[0,23,552,575].some(i=>d[i*4+3]<200); }catch(e){ s.trans=false; } };
       im.onerror=()=>{ s.trans=false; }; im.src=s.img; });
@@ -2186,7 +2200,7 @@ async function telaTelao(){
       lay.appendChild(el); setTimeout(()=>el.remove(), 7000); }
     return { start(){ um(); timer=setInterval(()=>um(), 6500); }, festa(){ um('pk-l'); setTimeout(()=>um('pk-r'),400); } };
   })();
-  function confete(n=90){ const box=document.createElement('div'); box.className='conf'; const cores=t.pal&&t.pal.length?t.pal:['#ff5a5f','#ffc300','#2ec4b6','#7b2cbf'];
+  function confete(n=50){ const box=document.createElement('div'); box.className='conf'; const cores=t.pal&&t.pal.length?t.pal:['#ff5a5f','#ffc300','#2ec4b6','#7b2cbf'];
     for(let i=0;i<n;i++){ const s=document.createElement('i'); s.style.left=(Math.random()*100)+'vw'; s.style.background=cores[i%cores.length]; s.style.animationDelay=(Math.random()*.7).toFixed(2)+'s'; s.style.animationDuration=(2.2+Math.random()*1.8).toFixed(2)+'s'; s.style.setProperty('--x',(Math.random()*30-15).toFixed(1)+'vw'); s.style.setProperty('--g',(Math.random()*900-450).toFixed(0)+'deg'); box.appendChild(s); }
     document.body.appendChild(box); setTimeout(()=>box.remove(),5000); }
 
@@ -2249,7 +2263,7 @@ async function telaTelao(){
     let dur=8000;
     if(p.tipo==='hist'){ el.classList.add('sl-hist'); el.innerHTML=`<div class="pol" style="--r:${giro()}"><img src="${midia(p.caminho)}" alt=""></div><div class="cap">📖 A história de ${esc(nome)}</div>`; dur=6500; }
     else if(p.tipo==='col'){ el.classList.add('sl-col'); el.innerHTML=p.fotos.map((c,i)=>`<div class="pol c${i+1}" style="--r:${[-9,4,10][i]}deg;animation-delay:${i*.45}s"><img src="${midia(c)}" alt=""></div>`).join('')+`<div class="cap">📖 A história de ${esc(nome)}</div>`; dur=8500; }
-    else if(p.tipo==='intro'){ el.className='sl sl-intro '+(QUIET?'quieto e-calma':'e-zoom'); el.innerHTML=`<div class="hey">${CORP(f)?'Bem-vindos':QUIET?'Sejam bem-vindos':'Bem-vindos à festa'}</div><div class="nm">${QUIET?esc(nome):(()=>{ let i=0; return nome.split(' ').map(w=>`<span class="w" style="display:inline-block;white-space:nowrap">${[...w].map(ch=>`<span style="animation-delay:${(i++*.08).toFixed(2)}s">${esc(ch)}</span>`).join('')}</span>`).join(' '); })()}</div><div class="sub">${esc(subtitulo(f))}</div><div class="cta">${CORP(f)?'Participe pelo QR Code aqui embaixo':QUIET?'Deixe sua homenagem pelo QR Code aqui embaixo':'Mande foto, recado, áudio ou vídeo pelo QR Code aqui embaixo'}</div>`; dur=7500; if(!QUIET){ confete(60); chars.festa(); } }
+    else if(p.tipo==='intro'){ el.className='sl sl-intro '+(QUIET?'quieto e-calma':'e-zoom'); el.innerHTML=`<div class="hey">${CORP(f)?'Bem-vindos':QUIET?'Sejam bem-vindos':'Bem-vindos à festa'}</div><div class="nm">${QUIET?esc(nome):(()=>{ let i=0; return nome.split(' ').map(w=>`<span class="w" style="display:inline-block;white-space:nowrap">${[...w].map(ch=>`<span style="animation-delay:${(i++*.08).toFixed(2)}s">${esc(ch)}</span>`).join('')}</span>`).join(' '); })()}</div><div class="sub">${esc(subtitulo(f))}</div><div class="cta">${CORP(f)?'Participe pelo QR Code aqui embaixo':QUIET?'Deixe sua homenagem pelo QR Code aqui embaixo':'Mande foto, recado, áudio ou vídeo pelo QR Code aqui embaixo'}</div>`; dur=7500; if(!QUIET){ confete(36); chars.festa(); } }
     else if(p.tipo==='pix'){ const px=pixTv(); el.className='sl tv-empty e-zoom'; el.innerHTML=`<div class="qr" id="tvQrBig"></div><h2>🎁 ${esc(px&&px.frase||PIX_FRASE(f))}</h2><p>${px&&Array.isArray(px.lista)&&px.lista.length?`Aponte a câmera e escolha o seu presente · Pix sem taxa, direto para ${esc(px.nome||'o anfitrião')}`:`No app do banco: Pix › Pagar com QR Code · sem taxa, direto para ${esc(px&&px.nome||'o anfitrião')}`}</p>`; dur=9000; }
     else if(p.tipo==='qr'){ el.className='sl tv-empty e-zoom'; el.innerHTML=`<div class="qr" id="tvQrBig"></div><h2>${tv.list.length?'Deixe a sua homenagem também!':'Mande a primeira homenagem!'}</h2><p>Aponte a câmera do celular para o código</p>`; dur=7000; }
     else if(p.tipo==='foto'){ el.classList.add('sl-foto'); el.innerHTML=`<img class="ph" style="--r:${giro()}" src="${midia(p.caminho)}" alt="">${(p.texto||by||p.curtidas)?`<div class="cap">${esc(p.texto||'')}${p.curtidas?`<span class="tvlike">♥ ${p.curtidas}</span>`:''}${Object.entries(p.reacoes||{}).map(([e,n])=>`<span class="tvreac">${e} ${n}</span>`).join('')}${by?`<small>📸 ${by}</small>`:''}</div>`:''}`; dur=8000; }

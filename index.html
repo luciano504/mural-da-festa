@@ -524,6 +524,23 @@ h2.sec .muted{font-family:var(--body)}
 .rsvp{padding:22px 18px;text-align:center;margin-top:34px}
 .rs-card{grid-column:1/-1}
 .pix-qr{max-width:240px;margin:8px auto 14px;background:#fff;padding:12px;border-radius:16px}
+.lp-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:6px;text-align:center}
+.lp-it{display:flex;flex-direction:column;align-items:center;gap:3px;padding:14px 8px;border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--ink);font:inherit;cursor:pointer;transition:border-color .15s,transform .12s}
+.lp-it:hover{border-color:var(--accent);transform:translateY(-1px)}
+.lp-it .lp-e{font-size:30px;line-height:1.1}
+.lp-it b{font-size:15px;line-height:1.25}
+.lp-it .lp-v{font-weight:700;color:var(--accent);font-size:16px}
+.lp-it small{color:var(--muted);font-size:12px}
+.lp-livre{border-style:dashed}
+.lp-sh{position:relative;text-align:center;padding-top:6px}
+.lp-sh .x{position:absolute;top:-6px;right:-4px;width:36px;height:36px;border:0;border-radius:50%;background:transparent;color:var(--muted);font-size:20px;cursor:pointer}
+.lp-tot{font-size:26px;font-weight:800;color:var(--accent);margin:6px 0 0}
+#lpSug{display:flex;flex-wrap:wrap;gap:6px} #lpSug .chip{cursor:pointer;font:inherit;font-size:13px}
+.lp-adm{margin:14px 0 8px;padding:12px;border:1px dashed var(--line);border-radius:12px}
+.lp-row{display:grid;grid-template-columns:52px minmax(0,1fr) 88px 124px 40px;gap:6px;margin-bottom:6px;align-items:center}
+.lp-row .in{padding:8px 10px;min-width:0}
+.lp-row .lp-ie{text-align:center;padding:8px 4px}
+@media (max-width:560px){.lp-row{grid-template-columns:46px minmax(0,1fr) 84px 40px}.lp-row .lp-ic{grid-column:2/4}}
 .mm-chips{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px}
 .mm-chips .chip{border:0;cursor:pointer;font:inherit}
 .mm-chips .chip.on{background:var(--accent);color:#fff}
@@ -2048,18 +2065,18 @@ async function telaTelao(){
     if(p.tipo==='hist'){ el.classList.add('sl-hist'); el.innerHTML=`<div class="pol" style="--r:${giro()}"><img src="${midia(p.caminho)}" alt=""></div><div class="cap">📖 A história de ${esc(nome)}</div>`; dur=6500; }
     else if(p.tipo==='col'){ el.classList.add('sl-col'); el.innerHTML=p.fotos.map((c,i)=>`<div class="pol c${i+1}" style="--r:${[-9,4,10][i]}deg;animation-delay:${i*.45}s"><img src="${midia(c)}" alt=""></div>`).join('')+`<div class="cap">📖 A história de ${esc(nome)}</div>`; dur=8500; }
     else if(p.tipo==='intro'){ el.className='sl sl-intro '+(CORP(f)?'quieto e-calma':'e-zoom'); el.innerHTML=`<div class="hey">${CORP(f)?'Bem-vindos':'✨ Bem-vindos à festa ✨'}</div><div class="nm">${CORP(f)?esc(nome):(()=>{ let i=0; return nome.split(' ').map(w=>`<span class="w" style="display:inline-block;white-space:nowrap">${[...w].map(ch=>`<span style="animation-delay:${(i++*.08).toFixed(2)}s">${esc(ch)}</span>`).join('')}</span>`).join(' '); })()}</div><div class="sub">${esc(subtitulo(f))}</div><div class="cta">${CORP(f)?'Participe pelo QR Code aqui embaixo':'📸 ✍️ 🎤 🎥 Mande sua homenagem pelo QR Code aqui embaixo!'}</div>`; dur=7500; if(!CORP(f)){ confete(60); chars.festa(); } }
-    else if(p.tipo==='pix'){ const px=pixTv(); el.className='sl tv-empty e-zoom'; el.innerHTML=`<div class="qr" id="tvQrBig"></div><h2>🎁 ${esc(px&&px.frase||PIX_FRASE(f))}</h2><p>No app do banco: Pix › Pagar com QR Code · sem taxa, direto para ${esc(px&&px.nome||'o anfitrião')}</p>`; dur=9000; }
+    else if(p.tipo==='pix'){ const px=pixTv(); el.className='sl tv-empty e-zoom'; el.innerHTML=`<div class="qr" id="tvQrBig"></div><h2>🎁 ${esc(px&&px.frase||PIX_FRASE(f))}</h2><p>${px&&Array.isArray(px.lista)&&px.lista.length?`Aponte a câmera e escolha o seu presente · Pix sem taxa, direto para ${esc(px.nome||'o anfitrião')}`:`No app do banco: Pix › Pagar com QR Code · sem taxa, direto para ${esc(px&&px.nome||'o anfitrião')}`}</p>`; dur=9000; }
     else if(p.tipo==='qr'){ el.className='sl tv-empty e-zoom'; el.innerHTML=`<div class="qr" id="tvQrBig"></div><h2>${tv.list.length?'Deixe a sua homenagem também!':'Mande a primeira homenagem!'}</h2><p>Aponte a câmera do celular para o código</p>`; dur=7000; }
     else if(p.tipo==='foto'){ el.classList.add('sl-foto'); el.innerHTML=`<img class="ph" style="--r:${giro()}" src="${midia(p.caminho)}" alt="">${(p.texto||by||p.curtidas)?`<div class="cap">${esc(p.texto||'')}${p.curtidas?`<span class="tvlike">♥ ${p.curtidas}</span>`:''}${Object.entries(p.reacoes||{}).map(([e,n])=>`<span class="tvreac">${e} ${n}</span>`).join('')}${by?`<small>📸 ${by}</small>`:''}</div>`:''}`; dur=8000; }
     else if(p.tipo==='correio'){ el.classList.add('sl-texto','sl-correio'); const L=(p.texto||'').length; const fs=L<60?6:L<140?4.6:3.6; el.innerHTML=`<div><div class="env">${CORP(f)?'💬 Recado para um colega':'💌 Correio elegante'}</div><div class="pa">Para: ${esc(p.para)}</div><div class="q${t.fundo?' card-on':''}" style="font-size:${fs}vw">${esc(p.texto)}</div><div class="by">${p.de?'— '+esc(p.de):(CORP(f)?'— um colega':'🤫 De: alguém especial')}</div></div>`; dur=Math.min(16000, 8000+L*40); }
     else if(p.tipo==='texto'){ el.classList.add('sl-texto'); const L=(p.texto||'').length; const fs = L<40?9:L<90?7:L<180?5.4:L<320?4.2:3.4; el.innerHTML=`<div class="q${t.fundo?' card-on':''}" style="font-size:${fs}vw">${esc(p.texto)}</div>${by||p.curtidas?`<div class="by">${by?'— '+by:''}${p.curtidas?`<span class="tvlike">♥ ${p.curtidas}</span>`:''}</div>`:''}`; dur=Math.min(18000, 7000+L*45); }
     else if(p.tipo==='audio'){ el.classList.add('sl-audio'); el.innerHTML=`<div class="mic">🎤</div><div class="eq">${'<i></i>'.repeat(12)}</div><div class="cap">Recado de ${by||'um convidado'}</div><audio src="${(cacheM.get(p.id)||{}).url||midia(p.caminho)}" preload="auto"></audio>`; dur=null; }
     else if(p.tipo==='video'){ el.classList.add('sl-video'); el.innerHTML=`<video src="${(cacheM.get(p.id)||{}).url||midia(p.caminho)}" playsinline preload="auto" ${p.thumb?`poster="${midia(p.thumb)}"`:''}></video>${by?`<div class="cap"><small>🎥 Recado de ${by}</small></div>`:''}`; dur=null; }
-    if(p.tipo==='texto' && /^💸/.test(p.texto||'')){ el.insertAdjacentHTML('afterbegin',`<div class="novo">🎁 Presente enviado! Obrigado${by?', '+by:''}!</div>`); if(!CORP(f)) confete(120); }
+    if(p.tipo==='texto' && /^💸/.test(p.texto||'')){ const gm=(p.texto||'').match(/^💸\s*Presenteei:\s*([^!\n]{1,40})!/); el.insertAdjacentHTML('afterbegin',`<div class="novo">🎁 ${gm?esc(gm[1].trim())+'!':'Presente enviado!'} Obrigado${by?', '+by:''}!</div>`); if(!CORP(f)) confete(120); }
     else if(p._novo){ el.insertAdjacentHTML('afterbegin',`<div class="novo">${CORP(f)?'✨ Nova mensagem':'✨ Nova homenagem! ✨'}</div>`); if(!CORP(f)){ confete(); chars.festa(); } }
     st.appendChild(el); tv.cur=p;
     if(p.tipo==='qr') qrInto($('tvQrBig'), url, 600);
-    if(p.tipo==='pix'){ const px=pixTv(); if(px) qrInto($('tvQrBig'), pixPayload(px), 600); }
+    if(p.tipo==='pix'){ const px=pixTv(); if(px) qrInto($('tvQrBig'), Array.isArray(px.lista)&&px.lista.length ? url : pixPayload(px), 600); }
     const m=el.querySelector('audio,video'); if(mus) mus.duck(!!m);
     if(m){ m.onended=()=>proxima(); m.onerror=()=>{ tv.timer=setTimeout(proxima,1500); }; m.play().catch(()=>{ tv.timer=setTimeout(proxima,3000); }); tv.timer=setTimeout(proxima, ((p.duracao||60)+6)*1000); }
     else tv.timer=setTimeout(proxima, dur);
@@ -3483,22 +3500,54 @@ function pixChave(k){ k=String(k||'').trim(); const dig=k.replace(/\D/g,'');
   if(dig.length===13 && dig.startsWith('55')) return '+'+dig;
   return k; }
 function pixCRC(s){ let c=0xFFFF; for(let i=0;i<s.length;i++){ c^=s.charCodeAt(i)<<8; for(let j=0;j<8;j++) c=(c&0x8000)?((c<<1)^0x1021)&0xFFFF:(c<<1)&0xFFFF; } return c.toString(16).toUpperCase().padStart(4,'0'); }
-function pixPayload(p){ const tlv=(id,v)=>id+String(v.length).padStart(2,'0')+v;
+function pixPayload(p, valor){ const tlv=(id,v)=>id+String(v.length).padStart(2,'0')+v;
   const conta=tlv('00','br.gov.bcb.pix')+tlv('01',pixChave(p.chave));
-  let s=tlv('00','01')+tlv('26',conta)+tlv('52','0000')+tlv('53','986')+tlv('58','BR')+tlv('59',pixLimpa(p.nome,25)||'PRESENTE')+tlv('60',pixLimpa(p.cidade,15)||'BRASIL')+tlv('62',tlv('05','***'))+'6304';
+  const val=Number(valor)>0 ? tlv('54', Number(valor).toFixed(2)) : '';
+  let s=tlv('00','01')+tlv('26',conta)+tlv('52','0000')+tlv('53','986')+val+tlv('58','BR')+tlv('59',pixLimpa(p.nome,25)||'PRESENTE')+tlv('60',pixLimpa(p.cidade,15)||'BRASIL')+tlv('62',tlv('05','***'))+'6304';
   return s+pixCRC(s); }
 const PIX = f => { const p=EXT(f).pix; return p && p.chave ? p : null; };
 const PIX_FRASE = f => (PIX(f)&&PIX(f).frase) || (f.categoria==='casamento'?'Ajude na nossa lua de mel 💛':'Mande um presentinho pelo Pix 💛');
+// lista de presentes e experiências: cada item tem valor (e, se quiser, cotas); o convidado paga no Pix com o valor já preenchido
+const PIX_LISTA = f => { const p=PIX(f); return (p && Array.isArray(p.lista)) ? p.lista.filter(x=>x && x.n && Number(x.v)>0) : []; };
+const LISTA_SUG = f => {
+  const c=f.categoria;
+  if(c==='casamento'||c==='bodas') return [['🛥️','Passeio de lancha',400,'exp',4],['🍷','Jantar romântico',250,'exp',0],['🏨','Diária na pousada',600,'exp',3],['💆','Spa do casal',350,'exp',0],['✈️','Cota da lua de mel',150,'exp',0],['📦','Micro-ondas',350,'pre',0],['🍳','Air fryer',400,'pre',2],['🍲','Jogo de panelas',300,'pre',0],['🛏️','Jogo de cama',200,'pre',0],['☕','Cafeteira',250,'pre',0]];
+  if(c==='quinze') return [['🎤','Ingresso para show',300,'exp',0],['💅','Dia de beleza',200,'exp',0],['🎧','Fone de ouvido',250,'pre',0],['📱','Cota do celular novo',200,'pre',0],['✈️','Cota da viagem',150,'exp',0],['👗','Look novo',250,'pre',0]];
+  if(c==='cha_bebe') return [['🛒','Carrinho de bebê',600,'pre',4],['🧷','Kit de fraldas',120,'pre',0],['🛁','Banheira',150,'pre',0],['📸','Ensaio newborn',500,'exp',2],['🧸','Enxoval',200,'pre',0]];
+  if(c==='infantil'||c==='menino'||c==='menina') return [['🧸','Brinquedo',120,'pre',0],['📚','Kit de livros',100,'pre',0],['🎢','Dia no parque',200,'exp',0],['🚲','Bicicleta',500,'pre',4],['🏊','Aulas de natação',180,'exp',0]];
+  if(c==='formatura') return [['✈️','Cota da viagem de formatura',200,'exp',0],['💻','Cota do notebook',250,'pre',0],['🍾','Jantar de comemoração',250,'exp',0],['📚','Curso de especialização',300,'exp',0]];
+  return [['🍷','Jantar especial',250,'exp',0],['🎤','Ingresso para show',300,'exp',0],['💆','Dia de spa',300,'exp',0],['✈️','Cota da viagem',150,'exp',0],['🎁','Presente surpresa',150,'pre',0]];
+};
 function ligarPix(){
-  const box=$('pixC'); if(!box) return; const f=FESTA, p=PIX(f); if(!p) return; const cod=pixPayload(p);
+  const box=$('pixC'); if(!box) return; const f=FESTA, p=PIX(f); if(!p) return; const lista=PIX_LISTA(f);
+  const cartao=(x,k)=>{ const ct=Number(x.c)>1 ? Number(x.c) : 0;
+    return `<button type="button" class="lp-it" data-k="${k}"><span class="lp-e">${esc(x.e||'🎁')}</span><b>${esc(x.n)}</b><span class="lp-v">${brl(x.v)}</span>${ct?`<small>ou cota de ${brl(x.v/ct)}</small>`:x.t==='exp'?'<small>experiência</small>':''}</button>`; };
   box.innerHTML=`<h2 class="sec" style="justify-content:center">🎁 ${esc(PIX_FRASE(f))}</h2>
-    <p class="sub">Sem taxa: o Pix vai direto para ${esc(p.nome||'o anfitrião')}.</p>
-    <div class="pix-qr" id="pixQr"></div>
+    <p class="sub">${lista.length?'Escolha um presente ou uma experiência. ':''}Sem taxa: o Pix vai direto para ${esc(p.nome||'o anfitrião')}.</p>
+    ${lista.length?`<div class="lp-grid">${lista.map(cartao).join('')}<button type="button" class="lp-it lp-livre" data-k="-1"><span class="lp-e">💛</span><b>Outro valor</b><span class="lp-v">Você escolhe</span></button></div>`
+      :`<div class="pix-qr" id="pixQr"></div>
     <div class="row" style="justify-content:center;gap:8px;flex-wrap:wrap"><button class="btn" type="button" id="pixCp">📋 Copiar código Pix</button><button class="btn ghost" type="button" id="pixFiz">💛 Já fiz meu Pix</button></div>
-    <p class="muted" style="font-size:13px;margin:10px 0 0">No app do banco: escolha Pix Copia e Cola ou escaneie o QR Code.</p>`;
-  qrInto($('pixQr'), cod, 260);
-  $('pixCp').onclick=()=>copiar(cod,'Código Pix copiado! Cole no app do seu banco 💛');
-  $('pixFiz').onclick=()=>{ abrirEnvio('texto'); setTimeout(()=>{ const ta=document.querySelector('#sheet textarea'); if(ta){ ta.value='💸 Mandei meu presente no Pix! '; ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); } },120); };
+    <p class="muted" style="font-size:13px;margin:10px 0 0">No app do banco: escolha Pix Copia e Cola ou escaneie o QR Code.</p>`}`;
+  const recado=txt=>{ fecharFolha(); abrirEnvio('texto'); setTimeout(()=>{ const ta=document.querySelector('#sheet textarea'); if(ta){ ta.value=txt; ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); } },140); };
+  if(!lista.length){ const cod=pixPayload(p); qrInto($('pixQr'), cod, 260);
+    $('pixCp').onclick=()=>copiar(cod,'Código Pix copiado! Cole no app do seu banco 💛');
+    $('pixFiz').onclick=()=>recado('💸 Mandei meu presente no Pix! '); return; }
+  const abrir=k=>{ const x=k>=0?lista[k]:null, ct=x&&Number(x.c)>1?Number(x.c):0;
+    const pinta=valor=>{ const cod=pixPayload(p, valor);
+      abrirFolha(`<div class="lp-sh"><button class="x" type="button" id="lpX" aria-label="Fechar">✕</button>
+        <div class="lp-e" style="font-size:44px">${esc(x?x.e||'🎁':'💛')}</div><h3 style="margin:4px 0 2px;text-align:center">${esc(x?x.n:'Presente no valor que você quiser')}</h3>
+        ${ct?`<div class="row lp-opc" style="justify-content:center;gap:8px;margin:10px 0"><button type="button" class="btn ${valor==x.v?'':'ghost'}" data-val="${x.v}">Inteiro · ${brl(x.v)}</button><button type="button" class="btn ${valor!=x.v?'':'ghost'}" data-val="${(x.v/ct).toFixed(2)}">1 cota · ${brl(x.v/ct)}</button></div>`:''}
+        <p class="lp-tot">${valor?brl(valor):'Digite o valor no app do banco'}</p>
+        <div class="pix-qr" id="lpQr"></div>
+        <div class="row" style="justify-content:center;gap:8px;flex-wrap:wrap"><button class="btn" type="button" id="lpCp">📋 Copiar código Pix</button><button class="btn ghost" type="button" id="lpFiz">💛 Já presenteei</button></div>
+        <p class="muted" style="font-size:13px;margin:10px 0 0">No app do banco: Pix › Pix Copia e Cola, ou leia o QR Code${valor?'. O valor já vem preenchido':''}. Vai direto para ${esc(p.nome||'o anfitrião')}, sem taxa.</p></div>`);
+      qrInto($('lpQr'), cod, 240);
+      $('lpX').onclick=fecharFolha;
+      $('lpCp').onclick=()=>copiar(cod,'Código Pix copiado! Cole no app do seu banco 💛');
+      $('lpFiz').onclick=()=>recado(x?`💸 Presenteei: ${x.n}! `:'💸 Mandei meu presente no Pix! ');
+      document.querySelectorAll('.lp-opc [data-val]').forEach(b=>b.onclick=()=>pinta(Number(b.dataset.val))); };
+    pinta(x ? Number(x.v) : 0); };
+  box.querySelectorAll('.lp-it').forEach(b=>b.onclick=()=>abrir(+b.dataset.k));
 }
 async function vPix(){
   ADM.view='pix'; const f=FESTA, p=EXT(f).pix||{};
@@ -3510,14 +3559,32 @@ async function vPix(){
       <label class="f">Cidade<input class="in" id="pxC" maxlength="15" placeholder="Ex.: Recife" value="${esc(p.cidade||'')}"></label>
       <label class="f">Frase do convite<input class="in" id="pxF" maxlength="60" placeholder="${esc(PIX_FRASE({categoria:f.categoria,extras:{}}))}" value="${esc(p.frase||'')}"></label>
       <label class="f" style="flex-direction:row;align-items:center;gap:8px"><input type="checkbox" id="pxT" ${p.telao!==false?'checked':''}> Mostrar o QR do Pix no telão a cada 4 minutos</label>
+      <div class="lp-adm"><b>🎁 Lista de presentes e experiências</b> <span class="muted" style="font-size:13px">(opcional)</span>
+        <p class="muted" style="font-size:13px;margin:4px 0 8px">Cada item vira um cartão para o ${CORP(f)?'participante':'convidado'}: ele toca, o Pix já abre com o valor certo. Use cotas para dividir um presente caro (ex.: lancha de R$ 400 em 4 cotas de R$ 100).</p>
+        <div id="lpL"></div>
+        <div class="row" style="gap:8px;flex-wrap:wrap;margin-top:6px"><button class="btn ghost" type="button" id="lpAdd">＋ Adicionar item</button></div>
+        <p class="muted" style="font-size:13px;margin:10px 0 4px">Sugestões (toque para incluir):</p><div class="chips" id="lpSug"></div></div>
       <div class="row" style="gap:8px;margin-top:6px"><button class="btn" type="button" id="pxOk">💾 Salvar Pix</button>${p.chave?'<button class="btn ghost" type="button" id="pxX">Desligar</button>':''}</div><div class="msg" id="pxM"></div>
     </div><div style="text-align:center"><div class="pix-qr" id="pxQ" style="max-width:240px;margin:0 auto"></div><p class="muted" id="pxP" style="font-size:13px">A prévia do QR aparece aqui. Teste com o app do seu banco antes da festa.</p></div></div></div>`;
-  const ler=()=>({chave:$('pxK').value.trim(), nome:$('pxN').value.trim(), cidade:$('pxC').value.trim(), frase:$('pxF').value.trim(), telao:$('pxT').checked});
+  let lista=(Array.isArray(p.lista)?p.lista:[]).map(x=>({...x}));
+  const pintaL=()=>{ $('lpL').innerHTML=lista.length?lista.map((x,k)=>`<div class="lp-row" data-k="${k}"><input class="in lp-ie" maxlength="4" value="${esc(x.e||'🎁')}" aria-label="Ícone"><input class="in lp-in" maxlength="40" placeholder="Ex.: Passeio de lancha" value="${esc(x.n||'')}" aria-label="Nome"><input class="in lp-iv" type="number" min="1" step="1" inputmode="decimal" placeholder="R$" value="${x.v||''}" aria-label="Valor em reais"><select class="in lp-ic" aria-label="Cotas"><option value="0">Sem cotas</option>${[2,3,4,5,6,8,10].map(n=>`<option value="${n}" ${Number(x.c)===n?'selected':''}>${n} cotas</option>`).join('')}</select><button class="btn ghost lp-rm" type="button" aria-label="Remover">✕</button></div>`).join('')
+      :'<p class="muted" style="font-size:13px;margin:0">Sem itens: o convidado vê só o QR Code com valor livre.</p>';
+    $('lpL').querySelectorAll('.lp-row').forEach(r=>{ const k=+r.dataset.k, x=lista[k];
+      r.querySelector('.lp-ie').oninput=e=>x.e=e.target.value.trim(); r.querySelector('.lp-in').oninput=e=>x.n=e.target.value.trim();
+      r.querySelector('.lp-iv').oninput=e=>x.v=Number(e.target.value)||0; r.querySelector('.lp-ic').onchange=e=>x.c=Number(e.target.value)||0;
+      r.querySelector('.lp-rm').onclick=()=>{ lista.splice(k,1); pintaL(); pintaS(); }; }); };
+  const pintaS=()=>{ const tem=new Set(lista.map(x=>x.n)); $('lpSug').innerHTML=LISTA_SUG(f).filter(z=>!tem.has(z[1])).map((z,k)=>`<button type="button" class="chip" data-s="${k}">${z[0]} ${esc(z[1])} · ${brl(z[2])}</button>`).join('');
+    $('lpSug').querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{ const z=LISTA_SUG(f).filter(z=>!tem.has(z[1]))[+b.dataset.s]; lista.push({e:z[0],n:z[1],v:z[2],t:z[3],c:z[4]}); pintaL(); pintaS(); }); };
+  $('lpAdd').onclick=()=>{ lista.push({e:'🎁',n:'',v:0,t:'pre',c:0}); pintaL(); const r=$('lpL').lastElementChild; r&&r.querySelector('.lp-in').focus(); };
+  pintaL(); pintaS();
+  const ler=()=>({chave:$('pxK').value.trim(), nome:$('pxN').value.trim(), cidade:$('pxC').value.trim(), frase:$('pxF').value.trim(), telao:$('pxT').checked,
+    lista: lista.filter(x=>x.n && Number(x.v)>0).slice(0,40).map(x=>({e:(x.e||'🎁').slice(0,4), n:x.n.slice(0,40), v:Math.round(Number(x.v)*100)/100, t:x.t==='exp'?'exp':'pre', c:Number(x.c)>1?Number(x.c):0}))});
   const prev=()=>{ const d=ler(); if(d.chave.length>=5){ qrInto($('pxQ'), pixPayload(d), 240); $('pxP').textContent='Abra o app do banco e leia este QR: deve aparecer o seu nome.'; } else { $('pxQ').innerHTML=''; } };
   ['pxK','pxN','pxC'].forEach(id=>$(id).addEventListener('input', prev)); prev();
   const M=$('pxM');
   $('pxOk').onclick=async()=>{ const d=ler(); if(d.chave.length<5){ M.className='msg err'; M.textContent='Digite a sua chave Pix.'; return; } if(d.nome.length<2){ M.className='msg err'; M.textContent='Digite o nome que aparece no banco.'; return; }
-    try{ await extrasSet('pix', d); M.className='msg ok'; M.textContent='Pix salvo! Já aparece na página da festa'+(d.telao?' e no telão.':'.'); }catch(e){ M.className='msg err'; M.textContent=ERR(e); } };
+    const inc=lista.filter(x=>(x.n&&!(Number(x.v)>0))||(!x.n&&Number(x.v)>0)); if(inc.length){ M.className='msg err'; M.textContent='Complete nome e valor de todos os itens da lista (ou remova os vazios).'; return; }
+    try{ await extrasSet('pix', d); M.className='msg ok'; M.textContent='Pix salvo! Já aparece na página da festa'+(d.lista.length?` com ${d.lista.length} ${d.lista.length>1?'presentes':'presente'} na lista`:'')+(d.telao?' e no telão.':'.'); }catch(e){ M.className='msg err'; M.textContent=ERR(e); } };
   if($('pxX')) $('pxX').onclick=async()=>{ try{ await extrasSet('pix', null); toast('Pix desligado.'); vPix(); }catch(e){ M.className='msg err'; M.textContent=ERR(e); } };
 }
 

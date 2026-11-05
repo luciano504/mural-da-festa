@@ -522,6 +522,13 @@ h2.sec .muted{font-family:var(--body)}
 .pacoes{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-top:8px}
 .molbtn{border:0;background:none;color:var(--accent);font-weight:600;font-size:14px;cursor:pointer;padding:4px 2px}
 .rsvp{padding:22px 18px;text-align:center;margin-top:34px}
+.rs-card{grid-column:1/-1}
+.pix-qr{max-width:240px;margin:8px auto 14px;background:#fff;padding:12px;border-radius:16px}
+.mm-chips{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px}
+.mm-chips .chip{border:0;cursor:pointer;font:inherit}
+.mm-chips .chip.on{background:var(--accent);color:#fff}
+.rs-prev{display:flex;gap:10px;overflow-x:auto;padding:4px 0}
+.rs-prev img{height:300px;width:auto;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,.18);flex:none}
 .rsvp h2.sec{margin:0 0 6px;justify-content:center}
 .rsvp .sub{color:var(--muted);margin:0 0 16px}
 .rsvp-op{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:420px;margin:0 auto}
@@ -595,7 +602,22 @@ h2.sec .muted{font-family:var(--body)}
 @media (min-width:640px){.ctrl{grid-template-columns:repeat(5,1fr)}}
 .ctrl .btn{padding:14px 10px}
 .tv-apr{position:fixed;inset:0;z-index:30;background:#000;display:grid;place-items:center}
-.tv-apr img{max-width:100vw;max-height:100vh;object-fit:contain;animation:fadein .4s ease both}
+.tv-apr img,.tv-apr video{max-width:100vw;max-height:100vh;object-fit:contain;animation:fadein .4s ease both}
+.apr-it{display:flex;flex-direction:column;gap:4px}
+.pal{max-width:560px;padding-bottom:40px}
+.pal-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:14px 0}
+.pal-st{font-size:13px;font-weight:700;border-radius:999px;padding:6px 12px;background:rgba(0,0,0,.06)}
+.pal-st.on{background:var(--accent);color:var(--on,#fff)}
+.pal-atual{position:relative;background:#000;border-radius:14px;overflow:hidden;aspect-ratio:16/9}
+.pal-atual img,.pal-atual video{width:100%;height:100%;object-fit:contain;display:block}
+.pal-nav{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:8px;margin-top:10px}
+.pal-nav .btn{padding:16px 10px;font-size:17px}
+.apr-grid .apr-it>button{width:100%}
+.apr-grid button video{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none}
+.apr-v{position:absolute;right:6px;top:6px;background:rgba(0,0,0,.65);color:#fff;font-size:11px;border-radius:6px;padding:1px 6px}
+.apr-mv{display:flex;gap:4px;justify-content:center}
+.apr-grid .apr-mv button{aspect-ratio:auto;background:var(--surface,#fff);color:var(--ink,#2b2230);border:1px solid rgba(0,0,0,.15);border-radius:8px;padding:2px 10px;font-size:13px}
+.apr-grid .apr-mv button:disabled{opacity:.35;cursor:default}
 .tv-pausa{position:fixed;inset:0;z-index:30;display:grid;place-items:center;text-align:center;background:color-mix(in srgb,var(--bg) 92%, transparent)}
 .tv-pausa .who{font-family:var(--display);color:var(--accent);font-size:clamp(48px,9vw,140px);line-height:1}
 .tv-pausa p{font-family:var(--serif);font-style:italic;font-size:clamp(20px,3vw,40px);color:var(--muted);margin:14px 0 0}
@@ -951,6 +973,34 @@ body.com-aviso .tv-top{margin-top:5.5vh}
 .bg-banner{margin:-22px -18px 14px;height:150px;background:url("fotos/bingo.jpg") 30% 55%/cover;border-radius:var(--r-lg) var(--r-lg) 0 0}
 .bg-bateu{background:radial-gradient(circle at 50% 45%,color-mix(in srgb,var(--bg) 70%, transparent),color-mix(in srgb,var(--bg) 92%, transparent) 70%),url("fotos/bingo.jpg") center/cover !important}
 
+/* ===== divulgação (Instagram / boca a boca) ===== */
+.tv-promo{margin-left:auto;text-align:right;font-weight:600;font-size:clamp(11px,1.05vw,19px);line-height:1.3;color:var(--muted);opacity:.9;max-width:30vw}
+.tv-promo b{display:inline!important;font-size:inherit!important;font-family:inherit!important;color:var(--accent)}
+.promo-card{position:fixed;left:50%;bottom:16px;transform:translate(-50%,140%);z-index:60;width:min(440px,calc(100% - 32px));background:var(--surface);color:var(--ink);border-radius:18px;box-shadow:0 14px 40px rgba(0,0,0,.22);padding:16px 44px 16px 16px;transition:transform .45s cubic-bezier(.2,.9,.3,1.2)}
+.promo-card.on{transform:translate(-50%,0)}
+.promo-card p{margin:0 0 10px;font-size:15px;line-height:1.4}
+.promo-card .x{position:absolute;top:8px;right:8px;width:32px;height:32px;border:0;border-radius:50%;background:transparent;color:var(--muted);font-size:20px;cursor:pointer}
+.xp{max-width:560px;margin:0 auto;padding:20px 16px 48px}
+.xp h1{font-family:var(--serif,'Fraunces');font-weight:400;font-size:clamp(30px,7vw,44px);line-height:1.08;margin:6px 0 10px;letter-spacing:-.02em}
+.xp .lead{color:var(--muted);margin:0 0 18px;font-size:16px}
+.xp-tv{position:relative;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#17111a;border:8px solid #2a2430;box-shadow:0 18px 40px rgba(0,0,0,.25)}
+.xp-tv::after{content:"";position:absolute;left:50%;bottom:-20px;width:30%;height:10px;transform:translateX(-50%);background:#2a2430;border-radius:0 0 8px 8px}
+.xp-sl{position:absolute;inset:0;display:grid;place-items:center;padding:6%;color:#fff;text-align:center;opacity:0;transition:opacity .6s}
+.xp-sl.on{opacity:1}
+.xp-sl img{max-width:70%;max-height:70%;border-radius:6px;border:6px solid #fff;box-shadow:0 8px 20px rgba(0,0,0,.4);transform:rotate(-2deg);object-fit:cover}
+.xp-sl .q{font-family:'Caveat',cursive;font-size:clamp(20px,5.4vw,34px);line-height:1.15;max-width:90%}
+.xp-sl .a{display:block;margin-top:6px;font-family:'Figtree',sans-serif;font-weight:700;font-size:clamp(11px,2.6vw,15px);opacity:.85}
+.xp-novo{position:absolute;top:8px;left:50%;transform:translateX(-50%);background:#e9b8a3;color:#2b2230;font-weight:700;font-size:12px;padding:4px 10px;border-radius:999px;opacity:0;transition:opacity .3s;z-index:2}
+.xp-novo.on{opacity:1}
+.xp-conf{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:3}
+.xp-conf i{position:absolute;top:-10px;width:8px;height:5px;border-radius:1px;animation:xpcf 2.4s ease-in both}
+@keyframes xpcf{to{transform:translate(var(--x),120vh) rotate(var(--g))}}
+.xp-form{margin-top:34px;background:var(--surface);border-radius:18px;padding:18px;box-shadow:0 6px 20px rgba(0,0,0,.06)}
+.xp-form h2{margin:0 0 4px;font-size:20px}
+.xp-form .in{width:100%}
+.xp-fim{margin-top:22px;text-align:center}
+.xp-fim .btn{width:100%;max-width:360px}
+.xp small.muted{display:block;margin-top:8px}
 /* acabamento profissional (revisão de design: Gemini sugeriu, Claude validou) */
 body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 body.app-neutro{--bg:#F6F7FB;--bg2:#EEF1F6;background:#F6F7FB}
@@ -1012,8 +1062,9 @@ const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const Q = new URLSearchParams(location.search);
 const SLUG = (Q.get('f') || '').trim().toLowerCase();
-const MODE = Q.has('termos') ? 'termos' : Q.has('criar') ? 'criar' : Q.has('mestre') ? 'mestre' : SLUG ? (Q.has('telao') ? 'telao' : Q.has('portaria') ? 'portaria' : Q.has('pedidos') ? 'pedidos' : Q.has('valet') ? 'valet' : Q.has('admin') ? 'admin' : 'convidado') : 'inicio';
+const MODE = Q.has('experimente') ? 'experimente' : Q.has('termos') ? 'termos' : Q.has('criar') ? 'criar' : Q.has('mestre') ? 'mestre' : SLUG ? (Q.has('telao') ? 'telao' : Q.has('palestrante') ? 'palestrante' : Q.has('portaria') ? 'portaria' : Q.has('pedidos') ? 'pedidos' : Q.has('valet') ? 'valet' : Q.has('admin') ? 'admin' : 'convidado') : 'inicio';
 const BASE = location.origin + location.pathname.replace(/index\.html$/, '');
+const SITE = (location.host + location.pathname).replace(/index\.html$/,'').replace(/\/$/,'');
 const linkFesta = (slug, extra) => BASE + '?f=' + slug + (extra ? '&' + extra : '');
 const midia = p => !p ? '' : /^(blob:|data:|https?:)/.test(p) ? p : `${SUPABASE_URL}/storage/v1/object/public/fe-midia/${p.split('/').map(encodeURIComponent).join('/')}`;
 const store = {
@@ -1242,7 +1293,7 @@ async function postsAprovados(festaId){
   const {data,error}=await sb.from('fe_posts').select('id,tipo,autor,texto,caminho,thumb,duracao,criado_em,curtidas,reacoes,comentarios').eq('festa_id',festaId).order('criado_em',{ascending:true}).limit(1000);
   if(error) throw error; return data;
 }
-const ERR = e => { const m=(e&&e.message)||''; if(/Calma/.test(m)) return 'Calma! Espere uns segundinhos para mandar outra.'; if(/Limite do plano/.test(m)) return 'Esta festa chegou ao limite de homenagens do plano contratado. O anfitrião pode mudar para um plano maior.'; if(/Gravação maior/.test(m)) return 'A gravação passou do tempo permitido nesta festa.'; if(/Limite do teste/.test(m)) return 'Esta festa está em modo teste e já recebeu as 10 homenagens do teste. O anfitrião precisa ativar a festa para receber mais.'; if(/Código inválido/.test(m)) return 'Código inválido ou já usado. Confira as letras e os números.'; if(/Muitas festas/.test(m)) return m; if(/Informe|Aceite/.test(m)) return m+'.'; if(/Senha/.test(m)) return 'Senha incorreta.'; if(/row-level|policy/i.test(m)) return 'Esta festa não está aceitando homenagens agora.'; if(/size|large|exceed/i.test(m)) return 'Arquivo grande demais. Tente um menor.'; if(/mime|type/i.test(m)) return 'Tipo de arquivo não aceito.'; return 'Não deu certo agora. Confira a internet e tente de novo.'; };
+const ERR = e => { const m=(e&&e.message)||''; if(/Impróprio/.test(m)) return 'Opa! Essa mensagem tem palavras que não podem ir para o telão. Que tal escrever de outro jeito? 💛'; if(/Calma/.test(m)) return 'Calma! Espere uns segundinhos para mandar outra.'; if(/Limite do plano/.test(m)) return 'Esta festa chegou ao limite de homenagens do plano contratado. O anfitrião pode mudar para um plano maior.'; if(/Gravação maior/.test(m)) return 'A gravação passou do tempo permitido nesta festa.'; if(/Limite do teste/.test(m)) return 'Esta festa está em modo teste e já recebeu as 10 homenagens do teste. O anfitrião precisa ativar a festa para receber mais.'; if(/Código inválido/.test(m)) return 'Código inválido ou já usado. Confira as letras e os números.'; if(/Muitas festas/.test(m)) return m; if(/Informe|Aceite/.test(m)) return m+'.'; if(/Senha/.test(m)) return 'Senha incorreta.'; if(/row-level|policy/i.test(m)) return 'Esta festa não está aceitando homenagens agora.'; if(/size|large|exceed/i.test(m)) return 'Arquivo grande demais. Tente um menor.'; if(/mime|type/i.test(m)) return 'Tipo de arquivo não aceito.'; return 'Não deu certo agora. Confira a internet e tente de novo.'; };
 
 // ---------- imagens ----------
 // Fotos HEIC/HEIF (padrão de vários Samsung e iPhone) não abrem no navegador: convertemos para JPG
@@ -1325,11 +1376,13 @@ async function telaConvidado(){
       ${f.moderacao?`<p class="nota">${CORP(f)?'As mensagens aparecem no telão depois da aprovação da organização.':'As homenagens aparecem no telão depois que o anfitrião aprova 💛'}</p>`:''}
     </section>
     ` : `<div class="closed">As homenagens desta festa foram encerradas. Obrigado por fazer parte.</div>`}
+    ${f.ativo && PIX(f) ? '<section class="card rsvp" id="pixC"></section>' : ''}
     ${f.ativo && (EXT(f).desafios||[]).length ? '<section class="card rsvp" id="dsf"></section>' : ''}
     ${f.ativo && f.tem_cardapio && !MESA ? '<section class="card rsvp" id="cdp"></section>' : ''}
     ${f.ativo && f.correio_ativo!==false ? '<section class="card rsvp" id="crr"></section>' : ''}
     ${(t.fotos||[]).length ? `<h2 class="sec">📖 A história de ${esc(f.homenageado||'quem a gente ama')}</h2><div class="hist">${t.fotos.map(p=>`<figure><img loading="lazy" src="${midia(p)}" alt=""></figure>`).join('')}</div>` : ''}
     <h2 class="sec">🖼️ Mural <span class="muted" id="muralN" style="font-size:16px;font-weight:500"></span></h2>
+    <div class="mm-chips" id="mmC"></div>
     <div class="mural" id="mural"></div>
     <p class="rod">Ao enviar ${CORP(f)?'uma mensagem':'uma homenagem'}, você concorda com os <a href="${BASE}?termos" target="_blank" rel="noopener">Termos de uso e Privacidade</a>.</p>
   </div>`;
@@ -1337,14 +1390,19 @@ async function telaConvidado(){
   document.querySelectorAll('.capa .enfc').forEach(im=>{ const t2=new Image(); t2.crossOrigin='anonymous'; t2.onload=()=>{ try{ const c=document.createElement('canvas'); c.width=c.height=16; const x=c.getContext('2d'); x.drawImage(t2,0,0,16,16); const d=x.getImageData(0,0,16,16).data; if(![0,15,240,255].some(k=>d[k*4+3]<200)) im.classList.add('sticker'); }catch(e){ im.classList.add('sticker'); } }; t2.src=im.src; });
   const nome=$('nome'); if(nome) nome.addEventListener('change',()=>store.set('mf_nome',nome.value.trim().slice(0,40)));
   $('mural').addEventListener('click', e=>{ const l=e.target.closest('[data-like]'); if(l) return curtir(l); const rc=e.target.closest('[data-reac]'); if(rc) return reagir(rc); const cm=e.target.closest('[data-com]'); if(cm) return abrirComentarios(+cm.dataset.com); const m=e.target.closest('[data-mol]'); if(m){ const p=POSTS.find(x=>x.id===+m.dataset.mol); if(p) abrirMoldura(midia(p.caminho), p.autor); } });
-  ligarConvite(); ligarPresenca(); ligarCardapio(MESA); ligarValet(); ligarSorteio(); ligarQuiz(); ligarEnquete(); ligarCorreio(); ligarPerguntas(MESA); ligarAvisoConvidado(); ligarDesafios(); ligarBingo();
+  ligarConvite(); ligarPresenca(); ligarCardapio(MESA); ligarValet(); ligarSorteio(); ligarQuiz(); ligarEnquete(); ligarCorreio(); ligarPerguntas(MESA); ligarAvisoConvidado(); ligarDesafios(); ligarBingo(); ligarPix();
   await atualizarMural(); setInterval(()=>{ if(!document.hidden) atualizarMural(); }, 20000);
 }
 async function atualizarMural(){
   try{ POSTS = await postsAprovados(FESTA.id); }catch(e){ return; }
-  const key=POSTS.map(p=>p.id+':'+(p.curtidas||0)+':'+JSON.stringify(p.reacoes||{})+':'+(p.comentarios||0)).join(','); if(key===muralKey) return; muralKey=key;
+  const rv=REVELA(FESTA), sel=window.MURAL_MM||'';
+  const key=(rv?'rv'+rv:'')+'|'+sel+'|'+POSTS.map(p=>p.id+':'+(p.curtidas||0)+':'+JSON.stringify(p.reacoes||{})+':'+(p.comentarios||0)).join(','); if(key===muralKey) return; muralKey=key;
   $('muralN').textContent = POSTS.length ? `(${POSTS.length})` : '';
-  const m=$('mural'); const list=[...POSTS].reverse();
+  if(rv){ $('mmC').innerHTML=''; $('mural').innerHTML=`<div class="empty">🔒 <b>O mural abre ${esc(new Date(rv).toLocaleString('pt-BR',{weekday:'long',day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'}))}.</b><br>${CORP(FESTA)?'As mensagens já estão passando no telão. Volte aqui para rever tudo.':'As homenagens já estão passando no telão. Guarde este link e volte para rever tudo 💛'}</div>`; return; }
+  const nomesM=[...new Set(POSTS.map(p=>momentoDe(p,FESTA)).filter(Boolean))];
+  $('mmC').innerHTML = nomesM.length>1 ? ['',...nomesM].map(n=>`<button type="button" class="chip${n===sel?' on':''}" data-mm="${esc(n)}">${n?esc(n):'Todos'}</button>`).join('') : '';
+  $('mmC').querySelectorAll('[data-mm]').forEach(b=>b.onclick=()=>{ window.MURAL_MM=b.dataset.mm; muralKey=null; atualizarMural(); });
+  const m=$('mural'); const list=[...POSTS].filter(p=>!sel||momentoDe(p,FESTA)===sel).reverse();
   m.innerHTML = list.length ? list.map(cardPost).join('') : `<div class="empty">${CORP(FESTA)?'Ainda não há mensagens. A primeira pode ser a sua.':'Ainda não chegou nenhuma homenagem. A primeira pode ser a sua ✨'}</div>`;
 }
 const curtidasMinhas = () => { try{ return new Set(JSON.parse(store.get('mf_curt_'+(FESTA&&FESTA.id))||'[]')); }catch(e){ return new Set(); } };
@@ -1737,7 +1795,19 @@ async function subir(blob, tipo, ext, contentType){
   const {error}=await sb.storage.from('fe-midia').upload(path, blob, {contentType, upsert:false, cacheControl:'31536000'});
   if(error) throw error; return path;
 }
-async function gravarPost(row){ const {error}=await sb.from('fe_posts').insert({festa_id:FESTA.id, autor:nomeAtual(), aparelho:deviceId(), ...row}); if(error) throw error; }
+// moderação automática: barra palavrões e ofensas antes de chegar ao telão
+const PALAVRAS_BLOQ=['porra','caralho','buceta','boceta','puta','puto','putaria','fdp','vsf','vtnc','pqp','foda','fodase','foder','fodido','merda','bosta','cu','cuzao','arrombado','arrombada','viado','viadinho','sapatao','piranha','vagabunda','vagabundo','corno','corna','otario','otaria','babaca','escroto','escrota','desgraca','desgracado','desgracada','retardado','retardada','piroca','xoxota','xereca','punheta','siririca','safada','safado','nazista','prostituta','vadia','cacete','krl','crl','tnc','vai tomar','tomar no','filho da','filha da'];
+function textoImproprio(t){ if(!t) return false; const n=' '+String(t).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[0@]/g,'o').replace(/[1!]/g,'i').replace(/3/g,'e').replace(/4/g,'a').replace(/\$/g,'s').replace(/[^a-z ]+/g,' ').replace(/\s+/g,' ')+' ';
+  return PALAVRAS_BLOQ.some(w=>n.includes(' '+w+' ') || (w.includes(' ') && n.includes(' '+w))); }
+async function gravarPost(row){ if(textoImproprio(row.texto)||textoImproprio(nomeAtual())) throw new Error('Impróprio'); const {error}=await sb.from('fe_posts').insert({festa_id:FESTA.id, autor:nomeAtual(), aparelho:deviceId(), ...row}); if(error) throw error; setTimeout(promoAposEnvio, 2600); }
+// depois do 1º envio, uma vez por festa: convida o convidado a fazer o Mural da festa dele
+function promoAposEnvio(){ try{ if(!FESTA) return; const k='mf_promo_'+FESTA.slug; if(store.get(k)) return; store.set(k,'1');
+  const corp=CORP(FESTA); const href=BASE+(corp?'?para=empresa&origem=convidado':'?experimente&origem=convidado');
+  const el=document.createElement('div'); el.className='promo-card'; el.setAttribute('role','status');
+  el.innerHTML=`<button class="x" type="button" aria-label="Fechar">×</button><p><b>${corp?'Gostou? Leve o Mural para o evento da sua empresa.':'Gostou? Faça o Mural da sua festa também 💌'}</b><br>${corp?'Teste grátis antes de contratar.':'Veja funcionando em 30 segundos e teste grátis.'}</p><a class="btn sm" href="${href}" target="_blank" rel="noopener">${corp?'Conhecer o Mural':'Quero ver como funciona'}</a>`;
+  document.body.appendChild(el); void el.offsetWidth; el.classList.add('on');
+  const fechar=()=>{ el.classList.remove('on'); setTimeout(()=>el.remove(),500); }; el.querySelector('.x').onclick=fechar; setTimeout(fechar, 15000);
+}catch(e){} }
 
 function folhaFoto(desafio, aoEnviar){
   abrirFolha(`<h3>${desafio?'📸 Desafio: '+esc(desafio):'📸 Fotos da festa'}</h3>
@@ -1883,7 +1953,7 @@ async function telaTelao(){
      <div class="tv-top"><div class="t">${EXT(f).logo?`<img class="tv-logo" src="${midia(EXT(f).logo)}" alt="">`:''}${esc(nome)}</div><div class="n" id="tvN"></div></div>
      <div class="stage" id="stage"></div>
      ${f.plano==='teste'?'<div class="demo" id="tvDemo">🎈 Modo grátis <small>· faça o upgrade para mais diversão</small></div>':''}
-     <div class="tv-bar"><div class="qr" id="tvQr"></div><div><b>${CORP(f)?'Participe!':'Deixe sua homenagem!'}</b><span>${CORP(f)?'Aponte a câmera do celular para o código · mensagens, perguntas e mais':'Aponte a câmera do celular para o código · foto, recado, áudio ou vídeo'}</span></div></div>
+     <div class="tv-bar"><div class="qr" id="tvQr"></div><div><b>${CORP(f)?'Participe!':'Deixe sua homenagem!'}</b><span>${CORP(f)?'Aponte a câmera do celular para o código · mensagens, perguntas e mais':'Aponte a câmera do celular para o código · foto, recado, áudio ou vídeo'}</span></div>${f.plano==='teste'?`<div class="tv-promo">Quer um telão assim na sua festa?<br><b>Crie grátis: ${esc(SITE)}</b></div>`:CORP(f)?'':`<div class="tv-promo">feito com 💌 Mural da Festa<br>${esc(SITE)}</div>`}</div>
    </div>
    <div class="tv-start" id="tvStart"><div>${t.enfeite?`<img class="enf-big" src="${midia(t.enfeite)}" alt="">`:`<div style="font-size:64px">${t.deco[0]}</div>`}<div class="who">${esc(nome)}</div><p class="muted" style="font-size:20px;font-weight:600">${esc(subtitulo(f))}</p>
      <div class="row" style="justify-content:center"><button class="btn" id="tvGo" style="font-size:22px;padding:16px 30px">▶ Iniciar telão</button><button class="btn ghost" id="tvTeste">🧪 Testar o telão antes</button><button class="btn ghost" id="tvAj">❓ Ajuda</button></div><p class="muted" style="font-size:14px;margin-top:14px">Dica: conecte o notebook na TV. Teclas: → próxima · ← anterior · espaço pausa · F tela cheia${t.musica&&t.musica.tipo&&t.musica.tipo!=='nenhuma'?' · M música':''}</p></div></div>
@@ -1894,8 +1964,9 @@ async function telaTelao(){
   const medir=()=>{ const h=$('stage')?$('stage').clientHeight:0; if(h) document.documentElement.style.setProperty('--sh', h+'px'); const bb=document.querySelector('.tv-bar'); if(bb) document.documentElement.style.setProperty('--bh', bb.offsetHeight+'px'); }; medir(); addEventListener('resize', medir); setTimeout(medir,500);
   const tv = {list:[], known:new Set(), queue:[], loop:0, cur:null, timer:null, paused:false, hist:[], hi:0, pv:1, pm:0, since:0};
   const fotosH = t.fotos||[], mus = criarMusica(t.musica);
-  const PADRAO_VAZIO = fotosH.length>=3 ? ['intro','hist','hist','col','hist','hist','qr'] : fotosH.length ? ['intro','hist','hist','qr'] : ['intro','qr'];
-  const PADRAO_MIX   = fotosH.length>=3 ? ['hist','col','hist','intro','hist','qr'] : fotosH.length ? ['hist','intro','hist','qr'] : ['intro','qr'];
+  const PADRAO_VAZIO = fotosH.length>=3 ? ['intro','hist','hist','col','hist','pix','hist','qr'] : fotosH.length ? ['intro','hist','pix','hist','qr'] : ['intro','pix','qr'];
+  const PADRAO_MIX   = fotosH.length>=3 ? ['hist','col','pix','hist','intro','hist','qr'] : fotosH.length ? ['hist','pix','intro','hist','qr'] : ['intro','pix','qr'];
+  const pixTv = () => { const ex=window.__tvEx||EXT(f); return ex.pix && ex.pix.chave && ex.pix.telao!==false ? ex.pix : null; };
   const proxFoto = () => fotosH[(tv.hi++) % fotosH.length];
   const extra = k => k==='hist' ? {tipo:'hist', caminho:proxFoto()} : k==='col' ? {tipo:'col', fotos:[proxFoto(),proxFoto(),proxFoto()]} : {tipo:k};
 
@@ -1951,7 +2022,7 @@ async function telaTelao(){
   setInterval(baixador, 2000);
   // QR grande no telão só de vez em quando (o QR pequeno fica sempre no rodapé):
   // com mensagens no mural, no máximo a cada 10 min; mural vazio, a cada 2 min
-  function padrao(arr,k){ for(let n=0;n<arr.length;n++){ const t=arr[tv[k]++ % arr.length]; if(t!=='qr') return t; if(document.body.classList.contains('sem-qr')) continue;
+  function padrao(arr,k){ for(let n=0;n<arr.length;n++){ const t=arr[tv[k]++ % arr.length]; if(t==='pix'){ if(pixTv() && Date.now()-(tv.pixEm||0)>=240000){ tv.pixEm=Date.now(); return t; } continue; } if(t!=='qr') return t; if(document.body.classList.contains('sem-qr')) continue;
       const gap=tv.list.length?600000:120000; if(Date.now()-(tv.qrEm||0)>=gap){ tv.qrEm=Date.now(); return t; } } return 'intro'; }
   function proxima(back){
     clearTimeout(tv.timer); if(tv.paused) return;
@@ -1977,15 +2048,18 @@ async function telaTelao(){
     if(p.tipo==='hist'){ el.classList.add('sl-hist'); el.innerHTML=`<div class="pol" style="--r:${giro()}"><img src="${midia(p.caminho)}" alt=""></div><div class="cap">📖 A história de ${esc(nome)}</div>`; dur=6500; }
     else if(p.tipo==='col'){ el.classList.add('sl-col'); el.innerHTML=p.fotos.map((c,i)=>`<div class="pol c${i+1}" style="--r:${[-9,4,10][i]}deg;animation-delay:${i*.45}s"><img src="${midia(c)}" alt=""></div>`).join('')+`<div class="cap">📖 A história de ${esc(nome)}</div>`; dur=8500; }
     else if(p.tipo==='intro'){ el.className='sl sl-intro '+(CORP(f)?'quieto e-calma':'e-zoom'); el.innerHTML=`<div class="hey">${CORP(f)?'Bem-vindos':'✨ Bem-vindos à festa ✨'}</div><div class="nm">${CORP(f)?esc(nome):(()=>{ let i=0; return nome.split(' ').map(w=>`<span class="w" style="display:inline-block;white-space:nowrap">${[...w].map(ch=>`<span style="animation-delay:${(i++*.08).toFixed(2)}s">${esc(ch)}</span>`).join('')}</span>`).join(' '); })()}</div><div class="sub">${esc(subtitulo(f))}</div><div class="cta">${CORP(f)?'Participe pelo QR Code aqui embaixo':'📸 ✍️ 🎤 🎥 Mande sua homenagem pelo QR Code aqui embaixo!'}</div>`; dur=7500; if(!CORP(f)){ confete(60); chars.festa(); } }
+    else if(p.tipo==='pix'){ const px=pixTv(); el.className='sl tv-empty e-zoom'; el.innerHTML=`<div class="qr" id="tvQrBig"></div><h2>🎁 ${esc(px&&px.frase||PIX_FRASE(f))}</h2><p>No app do banco: Pix › Pagar com QR Code · sem taxa, direto para ${esc(px&&px.nome||'o anfitrião')}</p>`; dur=9000; }
     else if(p.tipo==='qr'){ el.className='sl tv-empty e-zoom'; el.innerHTML=`<div class="qr" id="tvQrBig"></div><h2>${tv.list.length?'Deixe a sua homenagem também!':'Mande a primeira homenagem!'}</h2><p>Aponte a câmera do celular para o código</p>`; dur=7000; }
     else if(p.tipo==='foto'){ el.classList.add('sl-foto'); el.innerHTML=`<img class="ph" style="--r:${giro()}" src="${midia(p.caminho)}" alt="">${(p.texto||by||p.curtidas)?`<div class="cap">${esc(p.texto||'')}${p.curtidas?`<span class="tvlike">♥ ${p.curtidas}</span>`:''}${Object.entries(p.reacoes||{}).map(([e,n])=>`<span class="tvreac">${e} ${n}</span>`).join('')}${by?`<small>📸 ${by}</small>`:''}</div>`:''}`; dur=8000; }
     else if(p.tipo==='correio'){ el.classList.add('sl-texto','sl-correio'); const L=(p.texto||'').length; const fs=L<60?6:L<140?4.6:3.6; el.innerHTML=`<div><div class="env">${CORP(f)?'💬 Recado para um colega':'💌 Correio elegante'}</div><div class="pa">Para: ${esc(p.para)}</div><div class="q${t.fundo?' card-on':''}" style="font-size:${fs}vw">${esc(p.texto)}</div><div class="by">${p.de?'— '+esc(p.de):(CORP(f)?'— um colega':'🤫 De: alguém especial')}</div></div>`; dur=Math.min(16000, 8000+L*40); }
     else if(p.tipo==='texto'){ el.classList.add('sl-texto'); const L=(p.texto||'').length; const fs = L<40?9:L<90?7:L<180?5.4:L<320?4.2:3.4; el.innerHTML=`<div class="q${t.fundo?' card-on':''}" style="font-size:${fs}vw">${esc(p.texto)}</div>${by||p.curtidas?`<div class="by">${by?'— '+by:''}${p.curtidas?`<span class="tvlike">♥ ${p.curtidas}</span>`:''}</div>`:''}`; dur=Math.min(18000, 7000+L*45); }
     else if(p.tipo==='audio'){ el.classList.add('sl-audio'); el.innerHTML=`<div class="mic">🎤</div><div class="eq">${'<i></i>'.repeat(12)}</div><div class="cap">Recado de ${by||'um convidado'}</div><audio src="${(cacheM.get(p.id)||{}).url||midia(p.caminho)}" preload="auto"></audio>`; dur=null; }
     else if(p.tipo==='video'){ el.classList.add('sl-video'); el.innerHTML=`<video src="${(cacheM.get(p.id)||{}).url||midia(p.caminho)}" playsinline preload="auto" ${p.thumb?`poster="${midia(p.thumb)}"`:''}></video>${by?`<div class="cap"><small>🎥 Recado de ${by}</small></div>`:''}`; dur=null; }
-    if(p._novo){ el.insertAdjacentHTML('afterbegin',`<div class="novo">${CORP(f)?'✨ Nova mensagem':'✨ Nova homenagem! ✨'}</div>`); if(!CORP(f)){ confete(); chars.festa(); } }
+    if(p.tipo==='texto' && /^💸/.test(p.texto||'')){ el.insertAdjacentHTML('afterbegin',`<div class="novo">🎁 Presente enviado! Obrigado${by?', '+by:''}!</div>`); if(!CORP(f)) confete(120); }
+    else if(p._novo){ el.insertAdjacentHTML('afterbegin',`<div class="novo">${CORP(f)?'✨ Nova mensagem':'✨ Nova homenagem! ✨'}</div>`); if(!CORP(f)){ confete(); chars.festa(); } }
     st.appendChild(el); tv.cur=p;
     if(p.tipo==='qr') qrInto($('tvQrBig'), url, 600);
+    if(p.tipo==='pix'){ const px=pixTv(); if(px) qrInto($('tvQrBig'), pixPayload(px), 600); }
     const m=el.querySelector('audio,video'); if(mus) mus.duck(!!m);
     if(m){ m.onended=()=>proxima(); m.onerror=()=>{ tv.timer=setTimeout(proxima,1500); }; m.play().catch(()=>{ tv.timer=setTimeout(proxima,3000); }); tv.timer=setTimeout(proxima, ((p.duracao||60)+6)*1000); }
     else tv.timer=setTimeout(proxima, dur);
@@ -2013,8 +2087,9 @@ async function telaTelao(){
   const aplicarCtl=e=>{
     const modo=(e&&e.modo)||'mural', sl=(e&&e.slides)||[];
     document.body.classList.toggle('sem-qr', !!e && e.qr===false);
-    if(sl.join()!==slidesCache.join()){ slidesCache=sl; sl.forEach(p=>{ const im=new Image(); im.src=midia(p); }); }
-    if(modo==='apresentacao' && sl.length){ camada.className='tv-apr'; camada.hidden=false; const src=midia(sl[Math.min(e.slide||0,sl.length-1)]); const img=camada.querySelector('img'); if(!img || img.dataset.src!==src) camada.innerHTML=`<img data-src="${src}" src="${src}" alt="">`; }
+    if(sl.join()!==slidesCache.join()){ slidesCache=sl; sl.forEach(p=>{ if(!EH_VIDEO(p)){ const im=new Image(); im.src=midia(p); } }); }
+    if(modo==='apresentacao' && sl.length){ camada.className='tv-apr'; camada.hidden=false; const cam=sl[Math.min(e.slide||0,sl.length-1)], src=midia(cam), atual=camada.querySelector('[data-src]');
+      if(!atual || atual.dataset.src!==src){ if(EH_VIDEO(cam)){ camada.innerHTML=`<video data-src="${src}" src="${src}" playsinline autoplay preload="auto"></video>`; const v=camada.querySelector('video'); v.play().catch(()=>{ v.muted=true; v.play().catch(()=>{}); }); } else camada.innerHTML=`<img data-src="${src}" src="${src}" alt="">`; } else { const v=camada.querySelector('video'); if(v && v.paused && !v.ended) v.play().catch(()=>{}); } }
     else if(modo==='sorteio'){ telaoSorteio(e.sorteio||{}); }
     else if(modo==='quiz'){ telaoQuiz(e.quiz||{}); }
     else if(modo==='enquete' && e.enquete){ telaoEnquete(e.enquete); }
@@ -2024,6 +2099,7 @@ async function telaTelao(){
     else if(modo==='pausa'){ camada.className='tv-pausa'; camada.hidden=false; if(!camada.querySelector('.who')) camada.innerHTML=`<div><div class="who">${esc(nome)}</div><p>Já voltamos 💛</p></div>`; }
     else { camada.hidden=true; camada.innerHTML=''; }
     const parar = modo!=='mural' && (modo==='pausa' || modo==='sorteio' || modo==='quiz' || modo==='pergunta' || modo==='enquete' || modo==='bingo' || sl.length);
+    if(modo!=='apresentacao'){ const v=camada.querySelector('.tv-apr video, video[data-src]'); if(v){ try{ v.pause(); }catch(_){} } }
     if(modo!=='enquete') delete camada.dataset.eid;
     if(modo!=='bingo'){ delete camada.dataset.bk; bgFesta=null; }
     if(modo!=='quiz'){ clearInterval(qzTick); qzChave=''; }
@@ -2095,7 +2171,7 @@ async function telaTelao(){
       camada.innerHTML=`<div><div class="srt-t" style="font-size:clamp(36px,5vw,80px)">🎲 Sorteando…</div>${g.premio?`<div class="srt-p">Prêmio: <b>${esc(g.premio)}</b></div>`:''}<div class="srt-roda" id="srtR"></div><div class="srt-ok" id="srtOk"></div></div>`;
       const nomes=(s.nomes&&s.nomes.length?s.nomes:[g.nome.split(' ')[0]]); let i=0, d=60; const fim=Date.now()+5200;
       const girar=()=>{ const el=$('srtR'); if(!el){ srtRodando=false; return; } if(Date.now()<fim){ el.textContent=nomes[i++%nomes.length]; d=Math.min(420,d*1.09); setTimeout(girar,d); return; }
-        el.textContent=g.nome; el.classList.add('win'); const tt=camada.querySelector('.srt-t'); if(tt) tt.textContent='🏆 Sorteado!'; $('srtOk').innerHTML='🎉 Parabéns! Procure o anfitrião 🎉'; confete(140); if(chars&&chars.festa) chars.festa(); srtRodando=false; };
+        el.textContent=g.nome; el.classList.add('win'); const tt=camada.querySelector('.srt-t'); if(tt) tt.textContent='🏆 Sorteado!'; $('srtOk').innerHTML=CORP(f)?'Parabéns! Procure a organização':'🎉 Parabéns! Procure o anfitrião 🎉'; confete(140); if(chars&&chars.festa) chars.festa(); srtRodando=false; };
       girar(); return; }
     if(srtRodando) return;
     if(s.aberto || !g){ camada.innerHTML=`<div><div class="srt-t">🎲 Sorteio!</div>${s.premio?`<div class="srt-p">Prêmio: <b>${esc(s.premio)}</b></div>`:''}
@@ -2449,6 +2525,7 @@ function painelAdmin(){
      <li><button class="link" data-ir="compartilhar">Mande o convite com QR Code</button> no grupo da família e imprima os cartões de mesa.</li>
      <li>No dia, abra o <b>📺 telão</b> no notebook ligado na TV. Na aba <b>💌 Homenagens</b> você aprova o que aparece.</li>
      <li>Depois da festa, baixe o álbum em <button class="link" data-ir="recordacoes">📖 Recordações</button>.</li></ol></div>`:''}
+   ${f.data && f.data < new Date().toLocaleDateString('sv') ? `<div class="card seucta"><div><h2>✨ O resumo ${CORP(f)?'do seu evento':'da sua festa'} está pronto</h2><p>Stories com os números e o recado mais amado da noite, prontos para postar e mandar no WhatsApp.</p></div><button class="btn" data-ir="recordacoes" style="font-size:18px;padding:14px 24px">Ver o resumo →</button></div>`:''}
    ${!f.custom&&!CORP(f)?`<div class="card seucta" id="seuCta"><div><h2>🎨 Faça o seu tema</h2><p>Imagem de fundo, personagens, 8 a 12 fotos de ${esc(f.homenageado||'quem a gente ama')} e música no telão. Leva 5 minutos.</p></div><button class="btn" id="seuGo" style="font-size:18px;padding:14px 24px">Começar agora →</button></div>`:''}
    <div class="tabs" id="abasTop">
      ${CORP(f)?'<button data-v="evento" aria-pressed="false">🧭 Painel do evento</button>':''}
@@ -2463,13 +2540,14 @@ function painelAdmin(){
      <button data-v="enquete" aria-pressed="false">📊 Enquetes</button>
      <button data-v="bingo" aria-pressed="false">🎱 Bingo</button>
      <button data-v="interacoes" aria-pressed="false">💬 Interações</button>
+     <button data-v="pix" aria-pressed="false">🎁 Pix e presentes</button>
      <button data-v="recordacoes" aria-pressed="false">📖 Álbum</button>
    </div>
    <div id="vw"></div></div>`;
   (()=>{ const a=$('abasTop'), v=$('vw'); if(a && v && !a.parentNode.classList.contains('adm-grid')){ const g=document.createElement('div'); g.className='adm-grid'; a.parentNode.insertBefore(g,a); g.appendChild(a); g.appendChild(v); } })();
   $('sair').onclick=()=>{ store.sset('mf_pin_'+SLUG,null); store.set('mf_pin_'+SLUG,null); location.reload(); };
   const abas=$('abasTop');
-  abas.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; abas.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed', x===b)); if(b.dataset.v==='meutema' && $('seuCta')) $('seuCta').remove(); ({moderar:vModerar, festa:vFesta, meutema:vMeuTema, compartilhar:vCompartilhar, recordacoes:vRecordacoes, cardapio:vCardapio, apresentacao:vApresentacao, sorteio:vSorteio, quiz:vQuiz, enquete:vEnquete, bingo:vBingo, interacoes:vInteracoes, evento:vEvento})[b.dataset.v](); };
+  abas.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; abas.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed', x===b)); if(b.dataset.v==='meutema' && $('seuCta')) $('seuCta').remove(); ({pix:vPix, moderar:vModerar, festa:vFesta, meutema:vMeuTema, compartilhar:vCompartilhar, recordacoes:vRecordacoes, cardapio:vCardapio, apresentacao:vApresentacao, sorteio:vSorteio, quiz:vQuiz, enquete:vEnquete, bingo:vBingo, interacoes:vInteracoes, evento:vEvento})[b.dataset.v](); };
   const ir=v=>{ const b=abas.querySelector(`[data-v="${v}"]`); if(b) b.click(); };
   document.querySelectorAll('[data-ir]').forEach(b=>b.onclick=()=>ir(b.dataset.ir));
   if($('psOk')) $('psOk').onclick=()=>{ store.set('mf_novo_'+f.slug,null); $('passos').remove(); };
@@ -2480,7 +2558,7 @@ function painelAdmin(){
   else if(pidS && /^[0-9a-f-]{36}$/.test(pidS) && f.plano==='teste') fetch(FN_PAG,{method:'POST',headers:{'Content-Type':'application/json',apikey:SUPABASE_KEY},body:JSON.stringify({acao:'conferir',pagamento:pidS})}).then(r=>r.json()).then(async j=>{ if(j.status==='approved'){ FESTA=await carregarFesta(SLUG); store.set('mf_pag_'+f.slug,null); toast('Pagamento confirmado! Festa liberada 🎉',4000); painelAdmin(); } }).catch(()=>{});
   if($('seuGo')) $('seuGo').onclick=()=>{ ir('meutema'); $('vw').scrollIntoView({behavior:'smooth'}); };
   const abaIni = Q.get('aba') || (CORP(f) ? 'evento' : !f.custom ? 'meutema' : 'moderar');
-  ir(['meutema','moderar','festa','compartilhar','recordacoes','cardapio','apresentacao','sorteio','quiz','interacoes','evento'].includes(abaIni) ? abaIni : 'moderar'); if(ADM.view!=='moderar') carregarAdmPosts();
+  ir(['pix','meutema','moderar','festa','compartilhar','recordacoes','cardapio','apresentacao','sorteio','quiz','interacoes','evento'].includes(abaIni) ? abaIni : 'moderar'); if(ADM.view!=='moderar') carregarAdmPosts();
   setInterval(()=>{ if(!document.hidden && ADM.view==='moderar') carregarAdmPosts(); }, 12000);
 }
 function ativarFesta(){
@@ -2915,12 +2993,14 @@ async function vCardapio(){
 // ---------- apresentação no telão ----------
 let _pdfjs=null;
 function carregarPdfJs(){ return _pdfjs || (_pdfjs=new Promise((res,rej)=>{ const sc=document.createElement('script'); sc.src='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js'; sc.onload=()=>{ window.pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'; res(window.pdfjsLib); }; sc.onerror=()=>{ _pdfjs=null; rej(new Error('pdfjs')); }; document.head.appendChild(sc); })); }
+const EH_VIDEO = p => /\.(mp4|webm|mov|m4v)$/i.test(String(p||''));
 async function vApresentacao(){
   ADM.view='apresentacao'; const f=FESTA; let est={}; try{ est=await rpc('fe_tv_estado',{p_festa:f.id})||{}; }catch(e){}
   const slides=est.slides||[];
   $('vw').innerHTML=`<div class="card" style="padding:18px"><h3 style="margin:0 0 4px">🎤 Apresentação no telão <span class="muted" style="font-size:14px;font-weight:500">(opcional)</span></h3>
-      <p class="muted" style="margin:0 0 12px">Envie os slides (PDF exportado do PowerPoint, ou imagens). Durante o evento, controle o telão por aqui: mostrar a apresentação, passar os slides, pausar e voltar ao mural.</p>
-      <div class="row"><label class="btn" style="position:relative">📄 Enviar PDF ou imagens<input type="file" id="apF" accept="application/pdf,image/*" multiple style="position:absolute;inset:0;opacity:0;cursor:pointer"></label>${slides.length?'<button class="btn ghost sm" id="apLimpa">Tirar apresentação</button>':''}<span class="msg" id="apM"></span></div></div>
+      <p class="muted" style="margin:0 0 12px">Envie slides (PDF ou imagens) e vídeos para reproduzir no telão. Reordene os itens pelas setas e controle a exibição ao vivo por aqui.</p>
+      <details style="margin:0 0 12px"><summary style="cursor:pointer;font-weight:600">Quer PowerPoint animado? Exporte como vídeo</summary><p class="muted" style="margin:8px 0 0">No PowerPoint: <b>Arquivo › Exportar › Criar um Vídeo</b>, qualidade <b>Full HD (1080p)</b>, escolha os segundos por slide e clique em <b>Criar Vídeo</b>. Envie o arquivo MP4 aqui: animações, transições e vídeos do PowerPoint aparecem no telão. Cada vídeo pode ter até 50 MB.</p></details>
+      <div class="row"><label class="btn" style="position:relative">📄 Enviar slides (PDF/imagens)<input type="file" id="apF" accept="application/pdf,image/*" multiple style="position:absolute;inset:0;opacity:0;cursor:pointer"></label><label class="btn alt" style="position:relative">🎬 Enviar vídeo<input type="file" id="apV" accept="video/mp4,video/webm,video/quicktime,.mp4,.mov,.webm,.m4v" style="position:absolute;inset:0;opacity:0;cursor:pointer"></label>${slides.length?'<button class="btn ghost sm" id="apLimpa">Tirar apresentação</button>':''}<span class="msg" id="apM"></span></div></div>
     <div class="card" style="padding:18px;margin-top:12px"><div class="row" style="justify-content:space-between"><h3 style="margin:0">📺 Controle do telão</h3><span class="muted" id="apEst"></span></div>
       <div class="ctrl" style="margin-top:12px">
         <button class="btn" data-m="apresentacao" ${slides.length?'':'disabled'}>▶ Mostrar slides</button>
@@ -2928,15 +3008,27 @@ async function vApresentacao(){
         <button class="btn ghost" data-nav="1" ${slides.length?'':'disabled'}>Próximo ▶</button>
         <button class="btn alt" data-m="pausa">⏸ Pausar telão</button>
         <button class="btn ok" data-m="mural">💌 Voltar ao mural</button></div>
+      ${slides.some(EH_VIDEO)?`<div class="ctrl" style="margin-top:8px"><button class="btn alt" data-vd="play">▶ Tocar vídeo</button><button class="btn ghost" data-vd="pause">⏸ Pausar vídeo</button><button class="btn ghost" data-vd="inicio">⏮ Vídeo do início</button></div>`:''}
       <label class="row" style="gap:8px;font-weight:600;margin-top:12px"><input type="checkbox" id="apQr" style="width:20px;height:20px" ${est.qr===false?'':'checked'}> Mostrar o QR Code de participação no telão</label>
-      ${slides.length?`<div class="apr-grid" id="apG">${slides.map((p,i)=>`<button data-i="${i}" aria-pressed="false"><img src="${midia(p)}" alt="Slide ${i+1}" loading="lazy"><span>${i+1}</span></button>`).join('')}</div>`:'<p class="muted" style="margin:12px 0 0">Sem slides ainda. Mesmo sem apresentação, dá para pausar o telão (por exemplo, durante um discurso).</p>'}</div>`;
-  const mostrarEst=e=>{ est=e||est; const nomes={mural:'💌 mostrando o mural',apresentacao:`🎤 slide ${(est.slide||0)+1} de ${slides.length}`,pausa:'⏸ telão pausado'}; $('apEst').textContent=nomes[est.modo]||''; document.querySelectorAll('#apG [data-i]').forEach(b=>b.setAttribute('aria-pressed', est.modo==='apresentacao' && +b.dataset.i===est.slide)); };
+      ${slides.length?`<div class="apr-grid" id="apG">${slides.map((p,i)=>`<div class="apr-it"><button data-i="${i}" aria-pressed="false">${EH_VIDEO(p)?`<video src="${midia(p)}#t=1" muted preload="metadata" playsinline></video><b class="apr-v">🎬 vídeo</b>`:`<img src="${midia(p)}" alt="Slide ${i+1}" loading="lazy">`}<span>${i+1}</span></button><div class="apr-mv"><button type="button" data-mv="${i}|-1" aria-label="Mover para trás" ${i?'':'disabled'}>◀</button><button type="button" data-mv="${i}|1" aria-label="Mover para frente" ${i<slides.length-1?'':'disabled'}>▶</button><button type="button" data-rm="${i}" aria-label="Tirar">✕</button></div></div>`).join('')}</div>`:'<p class="muted" style="margin:12px 0 0">Sem slides ainda. Mesmo sem apresentação, dá para pausar o telão (por exemplo, durante um discurso).</p>'}</div>`;
+  document.querySelectorAll('[data-vd]').forEach(b=>b.onclick=async()=>{ try{ await extrasSet('apr',{v:b.dataset.vd, n:Date.now()/1000}); toast(b.dataset.vd==='pause'?'Vídeo pausado':b.dataset.vd==='inicio'?'Vídeo voltou ao início':'Vídeo tocando'); }catch(e){ toast(ERR(e)); } });
+  const salvarLista=async(L,msg)=>{ try{ await rpc('fe_admin_slides',{p_slug:SLUG,p_pin:PIN,p_slides:L}); if(msg) toast(msg); vApresentacao(); }catch(e){ toast(ERR(e)); } };
+  $('vw').insertAdjacentHTML('beforeend','<div class="card" style="padding:18px;margin-top:12px" id="plBox"></div>'); blocoPalestrante($('plBox'));
+  const mostrarEst=e=>{ est=e||est; const nomes={mural:'💌 mostrando o mural',apresentacao:`🎤 ${EH_VIDEO(slides[est.slide||0])?'vídeo':'slide'} ${(est.slide||0)+1} de ${slides.length}`,pausa:'⏸ telão pausado'}; $('apEst').textContent=nomes[est.modo]||''; document.querySelectorAll('#apG [data-i]').forEach(b=>b.setAttribute('aria-pressed', est.modo==='apresentacao' && +b.dataset.i===est.slide)); };
   mostrarEst(est);
   const mandar=async(modo, slide)=>{ try{ mostrarEst(await rpc('fe_admin_tv',{p_slug:SLUG,p_pin:PIN,p_modo:modo,p_slide:slide})); }catch(e){ toast(ERR(e)); } };
   document.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>mandar(b.dataset.m, est.slide||0));
   $('apQr').onchange=async ev=>{ try{ await rpc('fe_admin_tv_qr',{p_slug:SLUG,p_pin:PIN,p_on:ev.target.checked}); toast(ev.target.checked?'QR Code ligado no telão.':'QR Code escondido do telão.'); }catch(e){ ev.target.checked=!ev.target.checked; toast(ERR(e)); } };
   document.querySelectorAll('[data-nav]').forEach(b=>b.onclick=()=>mandar('apresentacao', Math.max(0,Math.min(slides.length-1,(est.slide||0)+(+b.dataset.nav)))));
   document.querySelectorAll('#apG [data-i]').forEach(b=>b.onclick=()=>mandar('apresentacao', +b.dataset.i));
+  document.querySelectorAll('#apG [data-mv]').forEach(b=>b.onclick=()=>{ const [i,d]=b.dataset.mv.split('|').map(Number), L=[...slides], j=i+d; if(j<0||j>=L.length) return; [L[i],L[j]]=[L[j],L[i]]; salvarLista(L); });
+  document.querySelectorAll('#apG [data-rm]').forEach(b=>b.onclick=()=>{ const L=[...slides]; L.splice(+b.dataset.rm,1); salvarLista(L, 'Item retirado da apresentação.'); });
+  $('apV').onchange=async e=>{ const file=e.target.files[0]; e.target.value=''; if(!file) return; const M=$('apM');
+    if(file.size>50*1024*1024){ M.className='msg err'; M.textContent='Esse vídeo passou de 50 MB. Exporte em 1080p ou divida em partes menores.'; return; }
+    if(slides.length>=80){ M.className='msg err'; M.textContent='Máximo de 80 itens na apresentação.'; return; }
+    const ext=((file.name.split('.').pop()||'mp4').toLowerCase().replace('m4v','mp4')), ct=file.type||(ext==='webm'?'video/webm':ext==='mov'?'video/quicktime':'video/mp4');
+    try{ M.className='msg'; M.innerHTML='<span class="spin"></span> Enviando o vídeo… (pode levar um minuto)'; const cam=await subir(file,'apresentacao/video',ext==='mov'?'mov':ext,ct); await salvarLista([...slides, cam], 'Vídeo adicionado no fim da apresentação 🎬'); }
+    catch(err){ M.className='msg err'; M.textContent='Não consegui enviar o vídeo. '+ERR(err); } };
   if($('apLimpa')) $('apLimpa').onclick=async()=>{ try{ await rpc('fe_admin_slides',{p_slug:SLUG,p_pin:PIN,p_slides:[]}); toast('Apresentação retirada.'); vApresentacao(); }catch(e){ toast(ERR(e)); } };
   $('apF').onchange=async e=>{ const fs=[...e.target.files]; e.target.value=''; if(!fs.length) return; const M=$('apM'); const caminhos=[];
     try{
@@ -2949,7 +3041,7 @@ async function vApresentacao(){
             const bl=await new Promise(r=>cv.toBlob(r,'image/jpeg',.88)); caminhos.push(await subir(bl,'apresentacao/slide','jpg','image/jpeg')); }
         } else { M.className='msg'; M.innerHTML=`<span class="spin"></span> Enviando imagem ${caminhos.length+1}…`; const bl=await encolher(file,1920,.88); caminhos.push(await subir(bl,'apresentacao/slide','jpg','image/jpeg')); }
       }
-      M.innerHTML='<span class="spin"></span> Salvando…'; await rpc('fe_admin_slides',{p_slug:SLUG,p_pin:PIN,p_slides:caminhos}); toast(`${caminhos.length} slide${caminhos.length>1?'s':''} pronto${caminhos.length>1?'s':''}! 🎤`); vApresentacao();
+      M.innerHTML='<span class="spin"></span> Salvando…'; if(slides.length+caminhos.length>80) throw new Error('Máximo de 80 slides'); await rpc('fe_admin_slides',{p_slug:SLUG,p_pin:PIN,p_slides:[...slides, ...caminhos]}); toast(`${caminhos.length} slide${caminhos.length>1?'s':''} pronto${caminhos.length>1?'s':''}! 🎤`); vApresentacao();
     }catch(err){ M.className='msg err'; M.textContent=/80 slides/.test(err.message||'')?'Máximo de 80 slides.':'Não consegui preparar os slides. '+ERR(err); } };
 }
 const QZ_COR=['#e21b3c','#1368ce','#d89e00','#26890c'], QZ_FORMA=['▲','◆','●','■'];
@@ -3254,17 +3346,269 @@ function vRecordacoes(){
   $('vw').innerHTML=`<div class="grid2">
    <div class="card" style="padding:18px"><div style="font-size:44px">📖</div><h3 style="margin:4px 0">Álbum de recordações (PDF)</h3><p class="muted">Capa no tema da festa, fotos em polaroid, recados escritos à mão e um QR Code em cada áudio e vídeo para ouvir de novo pelo celular. Entra só o que foi aprovado.</p>
      <p style="font-weight:600">${c.foto} fotos · ${c.texto} recados · ${c.audio} áudios · ${c.video} vídeos</p><button class="btn" id="rcBook">📖 Baixar álbum</button><div class="msg" id="rcM1"></div></div>
-   <div class="card" style="padding:18px"><div style="font-size:44px">🗂️</div><h3 style="margin:4px 0">Baixar tudo (.zip)</h3><p class="muted">Todas as fotos, áudios e vídeos originais aprovados, mais um arquivo com todos os recados escritos. Para guardar para sempre.</p><button class="btn alt" id="rcZip">⬇️ Baixar tudo</button><div class="msg" id="rcM2"></div></div></div>`;
+   <div class="card" style="padding:18px"><div style="font-size:44px">🗂️</div><h3 style="margin:4px 0">Baixar tudo (.zip)</h3><p class="muted">Todas as fotos, áudios e vídeos originais aprovados, mais um arquivo com todos os recados escritos. Para guardar para sempre.</p><button class="btn alt" id="rcZip">⬇️ Baixar tudo</button><div class="msg" id="rcM2"></div></div>
+   <div class="card rs-card" style="padding:18px" id="rsBox"></div>
+   <div class="card rs-card" style="padding:18px" id="rmBox"></div></div>`;
+  vResumo($('rsBox')); blocoRevelaMomentos($('rmBox'));
   $('rcBook').onclick=async()=>{ const b=$('rcBook'); b.disabled=true; try{ const r=await pdfAlbum(FESTA, ap, t=>{ $('rcM1').className='msg'; $('rcM1').innerHTML=`<span class="spin"></span> ${t}`; }); baixar(r.blob, `Album_${FESTA.slug}.pdf`); $('rcM1').className='msg ok'; $('rcM1').textContent=`Álbum pronto: ${r.paginas} páginas! 💛`; }catch(e){ console.error(e); $('rcM1').className='msg err'; $('rcM1').textContent='Não consegui montar o álbum agora. Tente de novo.'; } b.disabled=false; };
   $('rcZip').onclick=async()=>{ if(FESTA.plano==='teste'){ $('rcM2').className='msg err'; $('rcM2').textContent='Baixar todos os arquivos é liberado depois de ativar a festa.'; return; } const b=$('rcZip'); b.disabled=true; try{ const blob=await zipTudo(FESTA, ap, t=>{ $('rcM2').className='msg'; $('rcM2').innerHTML=`<span class="spin"></span> ${t}`; }); baixar(blob, `Recordacoes_${FESTA.slug}.zip`); $('rcM2').className='msg ok'; $('rcM2').textContent='Arquivo pronto! 🗂️'; }catch(e){ $('rcM2').className='msg err'; $('rcM2').textContent='Não consegui montar o arquivo agora.'; } b.disabled=false; };
 }
 async function zipTudo(f, posts, prog){
   const z=new JSZip(); const pastas={foto:'Fotos',audio:'Audios',video:'Videos'}; let i=0; const media=posts.filter(p=>p.caminho);
-  for(const p of media){ i++; prog(`Juntando arquivo ${i} de ${media.length}…`); try{ const b=await fetch(midia(p.caminho)).then(r=>r.blob()); const ext=p.caminho.split('.').pop(); const nome=`${String(i).padStart(3,'0')}_${(p.autor||'convidado').replace(/[^\wÀ-ú ]+/g,'').trim().replace(/\s+/g,'_')||'convidado'}.${ext}`; z.folder(pastas[p.tipo]).file(nome,b); }catch(e){} }
+  for(const p of media){ i++; prog(`Juntando arquivo ${i} de ${media.length}…`); try{ const b=await fetch(midia(p.caminho)).then(r=>r.blob()); const ext=p.caminho.split('.').pop(); const nome=`${String(i).padStart(3,'0')}_${(p.autor||'convidado').replace(/[^\wÀ-ú ]+/g,'').trim().replace(/\s+/g,'_')||'convidado'}.${ext}`; const mo=momentoDe(p,f); z.folder(mo?`${mo.replace(/[\\/:*?"<>|]+/g,'')}/${pastas[p.tipo]}`:pastas[p.tipo]).file(nome,b); }catch(e){} }
   const rec=posts.filter(p=>p.tipo==='texto'||p.texto).map(p=>`${new Date(p.criado_em).toLocaleString('pt-BR')} — ${p.autor||'Convidado'}${p.tipo==='foto'?' (legenda de foto)':''}\n${p.texto}\n`).join('\n');
   z.file('Recados.txt', `${f.titulo}\n${f.homenageado||''}\n\n${rec}`);
   prog('Compactando…'); return await z.generateAsync({type:'blob'});
 }
+
+// =====================================================================
+// RESUMO PÓS-FESTA (stories 1080x1920) — ficha de produção do Gemini
+// =====================================================================
+const RS_W=1080, RS_H=1920;
+function resumoDados(f, posts){
+  const ap=posts.filter(p=>!p.status || p.status==='aprovado');
+  const n={foto:0,texto:0,audio:0,video:0}; let seg=0; const pessoas=new Set(); const horas={};
+  ap.forEach(p=>{ n[p.tipo]=(n[p.tipo]||0)+1; if(p.tipo==='audio') seg+=(+p.duracao||0);
+    const a=String(p.autor||'').trim().toLowerCase(); pessoas.add(a||('ap:'+(p.aparelho||p.id)));
+    const h=new Date(p.criado_em).getHours(); horas[h]=(horas[h]||0)+1; });
+  const pico=Object.entries(horas).sort((a,b)=>b[1]-a[1])[0];
+  const nota=p=>(+p.curtidas||0)+Object.values(p.reacoes||{}).reduce((s,v)=>s+(+v||0),0);
+  const comTexto=ap.filter(p=>p.texto && String(p.texto).trim().length>=8 && (p.tipo==='texto'||p.tipo==='foto'));
+  const top=(comTexto.length?comTexto:ap.filter(p=>p.tipo==='foto')).slice().sort((a,b)=>nota(b)-nota(a)||String(b.texto||'').length-String(a.texto||'').length)[0]||null;
+  const capa=ap.filter(p=>p.tipo==='foto').slice().sort((a,b)=>nota(b)-nota(a))[0]||null;
+  return {ap, n, min:Math.max(seg?1:0, Math.round(seg/60)), pessoas:pessoas.size, pico:pico?+pico[0]:null, top, topNota:top?nota(top):0, capa};
+}
+function rsFundo(c, cor, brilho){
+  c.fillStyle=cor; c.fillRect(0,0,RS_W,RS_H);
+  if(brilho){ const g=c.createRadialGradient(RS_W/2,RS_H*.42,40,RS_W/2,RS_H*.42,RS_W*.95); g.addColorStop(0,brilho); g.addColorStop(1,'rgba(0,0,0,0)'); c.fillStyle=g; c.fillRect(0,0,RS_W,RS_H); }
+}
+function rsTxt(c, txt, x, y, font, cor, {align='center', track=0, max=0}={}){
+  c.font=font; c.fillStyle=cor; c.textAlign=align; c.textBaseline='alphabetic';
+  if('letterSpacing' in c) c.letterSpacing=track+'px';
+  let t=String(txt);
+  if(max){ const m=font.match(/(\d+)px/); let px=m?+m[1]:0; const min=Math.round(px*.62); while(px>min && c.measureText(t).width>max){ px-=2; c.font=font.replace(/\d+px/, px+'px'); } while(c.measureText(t).width>max && t.length>4) t=t.slice(0,-2).trimEnd()+'…'; }
+  c.fillText(t, x, y); if('letterSpacing' in c) c.letterSpacing='0px';
+}
+function rsLinhas(c, txt, x, y, font, cor, maxW, lh, maxL, align='center'){
+  c.font=font; let L=wrap(c, txt, maxW); if(L.length>maxL){ L=L.slice(0,maxL); L[maxL-1]=L[maxL-1].replace(/\s*\S*$/,'')+'…'; }
+  c.fillStyle=cor; c.textAlign=align; L.forEach((l,i)=>c.fillText(l, x, y+i*lh)); return y+L.length*lh;
+}
+function rsRodape(c, txt, P){ c.fillStyle=P.acc; c.fillRect(0,RS_H-150,RS_W,150); rsTxt(c, txt, RS_W/2, RS_H-62, '600 30px Figtree', P.cre, {max:RS_W-100}); }
+function rsCapa(c, img, x, y, w, h, r){ c.save(); rr(c,x,y,w,h,r); c.clip(); const k=Math.max(w/img.width,h/img.height); const iw=img.width*k, ih=img.height*k; c.drawImage(img, x+(w-iw)/2, y+(h-ih)/2, iw, ih); c.restore(); }
+async function resumoTelas(f, posts){
+  await Promise.all(['700 40px Figtree','600 30px Figtree','500 30px Figtree','italic 400 80px Fraunces','400 60px Fraunces','700 80px Fraunces','700 50px Caveat'].map(x=>document.fonts.load(x).catch(()=>{})));
+  const D=resumoDados(f, posts), corp=CORP(f), marca=!(corp && f.plano!=='teste');
+  const P = corp ? {bg:'#0f1b33', acc:'#d4af37', hi:'#d4af37', cre:'#f6f1f4', ink:'#0f1b33', glow:'rgba(212,175,55,.16)', fim:'#0f1b33'}
+                 : {bg:'#2b2230', acc:'#963c5f', hi:'#e9b8a3', cre:'#f6f1f4', ink:'#2b2230', glow:'rgba(150,60,95,.45)', fim:'#963c5f'};
+  const nome = f.homenageado || f.titulo || 'a festa';
+  const site = SITE;
+  const telas=[];
+  // ---------- TELA 1: números ----------
+  { const cv=document.createElement('canvas'); cv.width=RS_W; cv.height=RS_H; const c=cv.getContext('2d'); rsFundo(c, P.bg, P.glow);
+    rsTxt(c, (corp?'Balanço de engajamento do evento':(f.titulo||nome)).toUpperCase(), RS_W/2, 330, '700 30px Figtree', P.hi, {track:4, max:RS_W-140});
+    rsTxt(c, corp?'Engajamento em tempo real!':'Foi inesquecível!', RS_W/2, 460, 'italic 400 96px Fraunces', P.cre, {max:RS_W-120});
+    const cards = corp
+      ? [[D.n.foto,'fotos no telão'],[D.n.texto,'mensagens enviadas'],[D.n.video+D.n.audio,'vídeos e áudios'],[D.pessoas,'participantes interagindo']]
+      : [[D.n.foto,'fotos no telão'],[D.n.texto,'mensagens de carinho'],[D.n.audio, D.min?`áudios · ${D.min} min gravados`:'áudios gravados'],[D.pessoas,'convidados interagindo']];
+    const gx=90, gy=560, cw=(RS_W-gx*2-40)/2, ch=380;
+    cards.forEach(([v,l],i)=>{ const x=gx+(i%2)*(cw+40), y=gy+Math.floor(i/2)*(ch+40);
+      c.fillStyle='rgba(246,241,244,.07)'; rr(c,x,y,cw,ch,28); c.fill();
+      rsTxt(c, String(v||0), x+cw/2, y+200, '700 132px Fraunces', P.hi);
+      rsLinhas(c, l, x+cw/2, y+275, '600 36px Figtree', P.cre, cw-60, 44, 2); });
+    if(D.pico!=null) rsTxt(c, `O momento mais agitado foi às ${D.pico}h!`, RS_W/2, gy+2*ch+40+120, '700 58px Caveat', P.hi, {max:RS_W-120});
+    if(marca) rsRodape(c, `Mural da Festa  •  ${site}`, P);
+    telas.push(cv); }
+  // ---------- TELA 2: recado campeão ----------
+  if(D.top){ const cv=document.createElement('canvas'); cv.width=RS_W; cv.height=RS_H; const c=cv.getContext('2d'); rsFundo(c, P.bg, P.glow);
+    rsTxt(c, corp?'A mensagem mais curtida da equipe':'A mensagem mais amada da noite', RS_W/2, 300, '700 30px Figtree', P.hi, {track:3, max:RS_W-120});
+    const x=90, w=RS_W-180; const img = D.top.tipo==='foto' && D.top.caminho ? await carregarImg(D.top.caminho, 1200) : null;
+    const temTxt = !!(D.top.texto && String(D.top.texto).trim());
+    c.font='italic 400 58px Fraunces'; const L=temTxt?wrap(c, `“${String(D.top.texto).trim()}”`, w-120):[];
+    const nl=Math.min(L.length, img?5:9), ih=img?(temTxt?640:980):0;
+    const h=60+ih+(img&&temTxt?50:0)+nl*74+(temTxt?40:0)+120; let y=Math.max(380, (RS_H-150-h)/2+60);
+    c.save(); c.shadowColor='rgba(0,0,0,.35)'; c.shadowBlur=60; c.shadowOffsetY=24; c.fillStyle=P.cre; rr(c,x,y,w,h,40); c.fill(); c.restore();
+    c.fillStyle=P.cre; c.beginPath(); c.moveTo(x+120,y+h-2); c.lineTo(x+90,y+h+60); c.lineTo(x+210,y+h-2); c.closePath(); c.fill();
+    let cy=y+60; if(img){ rsCapa(c, img, x+50, cy, w-100, ih, 24); cy+=ih+(temTxt?80:40); }
+    if(temTxt){ cy=rsLinhas(c, `“${String(D.top.texto).trim()}”`, RS_W/2, cy+40, 'italic 400 58px Fraunces', P.ink, w-120, 74, nl); }
+    rsTxt(c, '— '+(D.top.autor||'Convidado'), x+w-60, cy+60, '700 54px Caveat', corp?'#0f1b33':'#963c5f', {align:'right', max:w-120});
+    if(D.topNota>0) rsTxt(c, `♥ ${D.topNota} ${D.topNota==1?'reação':'reações'} no telão`, RS_W/2, Math.min(RS_H-210, y+h+150), '600 36px Figtree', P.hi);
+    if(marca) rsRodape(c, `Memórias guardadas para sempre  •  ${site}`, P);
+    telas.push(cv); }
+  // ---------- TELA 3: álbum + chamada ----------
+  { const cv=document.createElement('canvas'); cv.width=RS_W; cv.height=RS_H; const c=cv.getContext('2d'); rsFundo(c, P.fim, corp?'rgba(212,175,55,.12)':'rgba(233,184,163,.18)');
+    rsTxt(c, corp?'Relatório e mídias do evento':'Álbum digital oficial', RS_W/2, 250, '700 30px Figtree', P.hi, {track:4});
+    c.font='400 76px Fraunces'; c.fillStyle=P.cre; c.textAlign='center';
+    if(corp){ rsLinhas(c, nome, RS_W/2, 360, '400 76px Fraunces', P.cre, RS_W-160, 88, 2); }
+    else { c.fillText('Todas as memórias', RS_W/2, 360); c.fillText('guardadas', RS_W/2, 448); rsTxt(c,'para sempre.', RS_W/2, 536, 'italic 400 80px Fraunces', P.hi); }
+    const cx=150, cw=RS_W-300, cyy=marca?620:720, chh=820; c.save(); c.shadowColor='rgba(0,0,0,.35)'; c.shadowBlur=50; c.shadowOffsetY=20; c.fillStyle=P.cre; rr(c,cx,cyy,cw,chh,34); c.fill(); c.restore();
+    const capa = D.capa && D.capa.caminho ? await carregarImg(D.capa.caminho, 1100) : null;
+    if(capa) rsCapa(c, capa, cx+36, cyy+36, cw-72, 450, 22); else { c.fillStyle=P.hi; rr(c,cx+36,cyy+36,cw-72,450,22); c.fill(); rsTxt(c, nome, RS_W/2, cyy+290, 'italic 400 70px Fraunces', P.ink, {max:cw-140}); }
+    const q=qrCanvas(linkFesta(f.slug), 240); c.drawImage(q, cx+50, cyy+520, 240, 240);
+    rsLinhas(c, corp?`Escaneie para rever as mensagens de ${nome}`:`Escaneie para rever o mural de ${nome}`, cx+330, cyy+600, '600 40px Figtree', P.ink, cw-380, 50, 4, 'left');
+    if(marca){
+      rsLinhas(c, 'Quer as fotos e recados dos seus convidados ao vivo no telão da sua festa?', RS_W/2, 1540, '500 38px Figtree', P.cre, RS_W-200, 50, 2);
+      const bw=760, bx=(RS_W-bw)/2; c.fillStyle=P.cre; rr(c,bx,1640,bw,110,55); c.fill(); rsTxt(c, 'Teste grátis agora no seu celular', RS_W/2, 1712, '700 40px Figtree', corp?'#0f1b33':'#963c5f');
+      rsTxt(c, site, RS_W/2, 1850, '700 32px Figtree', P.hi, {max:RS_W-100});
+    }
+    telas.push(cv); }
+  return telas;
+}
+function resumoMsgWhats(f){ return `A festa foi um sucesso e os convidados deixaram homenagens incríveis! 🎉\n\nVeja o mural com todos os recados, fotos e áudios:\n${linkFesta(f.slug)}`; }
+async function vResumo(box){
+  const f=FESTA; const ap=ADM.posts.filter(p=>p.status==='aprovado');
+  box.innerHTML=`<div style="font-size:44px">✨</div><h3 style="margin:4px 0">Stories do evento (resumo)</h3>
+    <p class="muted">Imagens prontas no formato Story com os números e o recado mais amado da ${CORP(f)?'equipe':'festa'}, para postar no Instagram e mandar no WhatsApp.</p>
+    ${ap.length<3?`<p class="msg">Assim que chegarem algumas ${CORP(f)?'mensagens':'homenagens'} aprovadas, o resumo fica pronto aqui.</p>`:`
+    <div class="rs-prev" id="rsPrev"><span class="spin"></span> Montando…</div>
+    <div class="row" style="gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn" id="rsShare" type="button">📲 Compartilhar</button><button class="btn alt" id="rsDown" type="button">⬇️ Baixar as imagens</button><button class="btn ghost" id="rsWa" type="button">💬 Mandar o mural no WhatsApp</button></div><div class="msg" id="rsM"></div>`}`;
+  if(ap.length<3) return;
+  let telas=[]; try{ telas=await resumoTelas(f, ap); }catch(e){ console.error(e); $('rsPrev').textContent='Não consegui montar agora. Tente de novo.'; return; }
+  $('rsPrev').innerHTML=telas.map((cv,i)=>`<img alt="Story ${i+1}" src="${cv.toDataURL('image/jpeg',.7)}">`).join('');
+  const arquivos=async()=>Promise.all(telas.map((cv,i)=>new Promise(r=>cv.toBlob(b=>r(new File([b],`Resumo_${f.slug}_${i+1}.png`,{type:'image/png'})),'image/png'))));
+  $('rsDown').onclick=async()=>{ const fs=await arquivos(); for(const fl of fs){ baixar(fl, fl.name); await new Promise(r=>setTimeout(r,500)); } $('rsM').className='msg ok'; $('rsM').textContent='Imagens salvas! Poste uma por vez nos Stories 💛'; };
+  $('rsShare').onclick=async()=>{ const fs=await arquivos(); if(navigator.canShare && navigator.canShare({files:fs})){ try{ await navigator.share({files:fs, title:'Resumo da festa'}); }catch(e){} } else { for(const fl of fs){ baixar(fl, fl.name); await new Promise(r=>setTimeout(r,500)); } $('rsM').className='msg'; $('rsM').textContent='Seu navegador não compartilha direto: baixei as imagens para você postar.'; } };
+  $('rsWa').onclick=()=>window.open('https://wa.me/?text='+encodeURIComponent(resumoMsgWhats(f)),'_blank','noopener');
+}
+
+// =====================================================================
+// PIX (presentes sem taxa) — QR "copia e cola" padrão Banco Central, gerado no navegador
+// =====================================================================
+function pixLimpa(s, max){ return String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^A-Za-z0-9 .,-]/g,'').trim().slice(0,max).toUpperCase(); }
+function pixChave(k){ k=String(k||'').trim(); const dig=k.replace(/\D/g,'');
+  if(/@/.test(k)) return k.toLowerCase();
+  if(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(k)) return k.toLowerCase();
+  if(/^\+/.test(k)) return '+'+dig;
+  if(dig.length===11 && !/[.\-]/.test(k) && /^\(?\d{2}\)?\s?9/.test(k)) return '+55'+dig;   // celular digitado sem +55
+  if(dig.length===11 || dig.length===14) return dig;                                         // CPF / CNPJ
+  if(dig.length===13 && dig.startsWith('55')) return '+'+dig;
+  return k; }
+function pixCRC(s){ let c=0xFFFF; for(let i=0;i<s.length;i++){ c^=s.charCodeAt(i)<<8; for(let j=0;j<8;j++) c=(c&0x8000)?((c<<1)^0x1021)&0xFFFF:(c<<1)&0xFFFF; } return c.toString(16).toUpperCase().padStart(4,'0'); }
+function pixPayload(p){ const tlv=(id,v)=>id+String(v.length).padStart(2,'0')+v;
+  const conta=tlv('00','br.gov.bcb.pix')+tlv('01',pixChave(p.chave));
+  let s=tlv('00','01')+tlv('26',conta)+tlv('52','0000')+tlv('53','986')+tlv('58','BR')+tlv('59',pixLimpa(p.nome,25)||'PRESENTE')+tlv('60',pixLimpa(p.cidade,15)||'BRASIL')+tlv('62',tlv('05','***'))+'6304';
+  return s+pixCRC(s); }
+const PIX = f => { const p=EXT(f).pix; return p && p.chave ? p : null; };
+const PIX_FRASE = f => (PIX(f)&&PIX(f).frase) || (f.categoria==='casamento'?'Ajude na nossa lua de mel 💛':'Mande um presentinho pelo Pix 💛');
+function ligarPix(){
+  const box=$('pixC'); if(!box) return; const f=FESTA, p=PIX(f); if(!p) return; const cod=pixPayload(p);
+  box.innerHTML=`<h2 class="sec" style="justify-content:center">🎁 ${esc(PIX_FRASE(f))}</h2>
+    <p class="sub">Sem taxa: o Pix vai direto para ${esc(p.nome||'o anfitrião')}.</p>
+    <div class="pix-qr" id="pixQr"></div>
+    <div class="row" style="justify-content:center;gap:8px;flex-wrap:wrap"><button class="btn" type="button" id="pixCp">📋 Copiar código Pix</button><button class="btn ghost" type="button" id="pixFiz">💛 Já fiz meu Pix</button></div>
+    <p class="muted" style="font-size:13px;margin:10px 0 0">No app do banco: escolha Pix Copia e Cola ou escaneie o QR Code.</p>`;
+  qrInto($('pixQr'), cod, 260);
+  $('pixCp').onclick=()=>copiar(cod,'Código Pix copiado! Cole no app do seu banco 💛');
+  $('pixFiz').onclick=()=>{ abrirEnvio('texto'); setTimeout(()=>{ const ta=document.querySelector('#sheet textarea'); if(ta){ ta.value='💸 Mandei meu presente no Pix! '; ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); } },120); };
+}
+async function vPix(){
+  ADM.view='pix'; const f=FESTA, p=EXT(f).pix||{};
+  $('vw').innerHTML=`<div class="card" style="padding:18px"><h3 style="margin:0 0 4px">🎁 Presentes por Pix <span class="muted" style="font-size:14px;font-weight:500">(opcional, sem taxa)</span></h3>
+    <p class="muted" style="margin:0 0 14px">Os ${CORP(f)?'participantes':'convidados'} veem um QR Code do Pix na página da festa${p.telao!==false?' e, de tempos em tempos, no telão':''}. O dinheiro cai direto na sua conta, o Mural não cobra nada e não passa pelo valor. Quem fizer o Pix pode deixar um recado, que aparece no telão com festa.</p>
+    <div class="grid2"><div>
+      <label class="f">Sua chave Pix<input class="in" id="pxK" maxlength="77" placeholder="CPF, celular, e-mail ou chave aleatória" value="${esc(p.chave||'')}"></label>
+      <label class="f">Nome que aparece no banco<input class="in" id="pxN" maxlength="25" placeholder="Ex.: Mariana Souza" value="${esc(p.nome||'')}"></label>
+      <label class="f">Cidade<input class="in" id="pxC" maxlength="15" placeholder="Ex.: Recife" value="${esc(p.cidade||'')}"></label>
+      <label class="f">Frase do convite<input class="in" id="pxF" maxlength="60" placeholder="${esc(PIX_FRASE({categoria:f.categoria,extras:{}}))}" value="${esc(p.frase||'')}"></label>
+      <label class="f" style="flex-direction:row;align-items:center;gap:8px"><input type="checkbox" id="pxT" ${p.telao!==false?'checked':''}> Mostrar o QR do Pix no telão a cada 4 minutos</label>
+      <div class="row" style="gap:8px;margin-top:6px"><button class="btn" type="button" id="pxOk">💾 Salvar Pix</button>${p.chave?'<button class="btn ghost" type="button" id="pxX">Desligar</button>':''}</div><div class="msg" id="pxM"></div>
+    </div><div style="text-align:center"><div class="pix-qr" id="pxQ" style="max-width:240px;margin:0 auto"></div><p class="muted" id="pxP" style="font-size:13px">A prévia do QR aparece aqui. Teste com o app do seu banco antes da festa.</p></div></div></div>`;
+  const ler=()=>({chave:$('pxK').value.trim(), nome:$('pxN').value.trim(), cidade:$('pxC').value.trim(), frase:$('pxF').value.trim(), telao:$('pxT').checked});
+  const prev=()=>{ const d=ler(); if(d.chave.length>=5){ qrInto($('pxQ'), pixPayload(d), 240); $('pxP').textContent='Abra o app do banco e leia este QR: deve aparecer o seu nome.'; } else { $('pxQ').innerHTML=''; } };
+  ['pxK','pxN','pxC'].forEach(id=>$(id).addEventListener('input', prev)); prev();
+  const M=$('pxM');
+  $('pxOk').onclick=async()=>{ const d=ler(); if(d.chave.length<5){ M.className='msg err'; M.textContent='Digite a sua chave Pix.'; return; } if(d.nome.length<2){ M.className='msg err'; M.textContent='Digite o nome que aparece no banco.'; return; }
+    try{ await extrasSet('pix', d); M.className='msg ok'; M.textContent='Pix salvo! Já aparece na página da festa'+(d.telao?' e no telão.':'.'); }catch(e){ M.className='msg err'; M.textContent=ERR(e); } };
+  if($('pxX')) $('pxX').onclick=async()=>{ try{ await extrasSet('pix', null); toast('Pix desligado.'); vPix(); }catch(e){ M.className='msg err'; M.textContent=ERR(e); } };
+}
+
+// =====================================================================
+// MODO REVELAÇÃO e MOMENTOS DA FESTA
+// =====================================================================
+const REVELA = f => { const r=EXT(f).revelacao; if(!r||!r.em) return null; const t=new Date(r.em).getTime(); return t>Date.now()?t:null; };
+const MOMENTOS_SUG = f => CORP(f) ? [['Credenciamento','18:00'],['Abertura','19:00'],['Palestras','19:30'],['Premiação','21:00'],['Confraternização','22:00']]
+  : f.categoria==='casamento' ? [['Chegada','18:00'],['Cerimônia','19:00'],['Entrada dos noivos','20:30'],['Bolo','22:30'],['Pista','23:00']]
+  : f.categoria==='quinze' ? [['Chegada','19:00'],['Entrada','20:30'],['Valsa','21:00'],['Bolo','22:30'],['Pista','23:00']]
+  : [['Chegada','16:00'],['Brincadeiras','17:00'],['Parabéns','19:00'],['Pista','20:00']];
+function momentoDe(p, f){ const L=(EXT(f).momentos||[]).filter(m=>m&&m.n&&m.h); if(!L.length||!p.criado_em) return null; const d=new Date(p.criado_em); let min=d.getHours()*60+d.getMinutes(); if(min<6*60) min+=24*60;
+  const ms=L.map(m=>{ const [h,mm]=m.h.split(':').map(Number); let v=h*60+(mm||0); if(v<6*60) v+=24*60; return {n:m.n,v}; }).sort((a,b)=>a.v-b.v);
+  let r=ms[0].n; for(const m of ms) if(min>=m.v) r=m.n; return r; }
+function blocoRevelaMomentos(box){
+  const f=FESTA, r=EXT(f).revelacao||{}, ms=EXT(f).momentos||[];
+  const dIni = r.em ? new Date(new Date(r.em).getTime()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,16) : (f.data ? new Date(new Date(f.data+'T12:00').getTime()+864e5).toLocaleDateString('sv')+'T12:00' : '');
+  box.innerHTML=`<div class="grid2"><div>
+    <div style="font-size:36px">🔒</div><h3 style="margin:4px 0">Modo revelação</h3>
+    <p class="muted">O telão exibe ${CORP(f)?'as mensagens':'as homenagens'} ao vivo, mas o mural no celular dos ${CORP(f)?'participantes':'convidados'} só abre no horário programado. Todo mundo volta ao link para ver o resultado.</p>
+    <label class="f">O mural abre em<input class="in" type="datetime-local" id="rvEm" value="${esc(dIni)}"></label>
+    <div class="row" style="gap:8px"><button class="btn" type="button" id="rvOk">${r.em?'💾 Mudar horário':'🔒 Ligar revelação'}</button>${r.em?'<button class="btn ghost" type="button" id="rvX">Abrir o mural agora</button>':''}</div><div class="msg" id="rvM"></div>
+  </div><div>
+    <div style="font-size:36px">🕰️</div><h3 style="margin:4px 0">Momentos ${CORP(f)?'do evento':'da festa'}</h3>
+    <p class="muted">Diga a hora de cada momento: o mural ganha filtros (${MOMENTOS_SUG(f).slice(0,3).map(m=>m[0]).join(', ')}…) e o arquivo .zip sai organizado em pastas.</p>
+    <div id="mmL"></div><div class="row" style="gap:8px;margin-top:6px"><button class="btn ghost sm" type="button" id="mmAdd">+ Momento</button><button class="btn" type="button" id="mmOk">💾 Salvar momentos</button></div><div class="msg" id="mmM"></div>
+  </div></div>`;
+  let L = ms.length ? ms.map(m=>({...m})) : MOMENTOS_SUG(f).map(([n,h])=>({n,h}));
+  const pinta=()=>{ $('mmL').innerHTML=L.map((m,i)=>`<div class="row" style="gap:6px;margin-bottom:6px"><input class="in" data-mn="${i}" maxlength="24" value="${esc(m.n)}" style="flex:1"><input class="in" type="time" data-mh="${i}" value="${esc(m.h)}" style="width:130px"><button class="btn ghost sm" type="button" data-mx="${i}" aria-label="Tirar">✕</button></div>`).join('');
+    $('mmL').querySelectorAll('[data-mn]').forEach(e=>e.oninput=()=>L[+e.dataset.mn].n=e.value); $('mmL').querySelectorAll('[data-mh]').forEach(e=>e.oninput=()=>L[+e.dataset.mh].h=e.value);
+    $('mmL').querySelectorAll('[data-mx]').forEach(b=>b.onclick=()=>{ L.splice(+b.dataset.mx,1); pinta(); }); };
+  pinta(); $('mmAdd').onclick=()=>{ if(L.length<8){ L.push({n:'',h:''}); pinta(); } };
+  $('mmOk').onclick=async()=>{ const ok=L.filter(m=>m.n.trim()&&/^\d{2}:\d{2}$/.test(m.h)).map(m=>({n:m.n.trim().slice(0,24),h:m.h})); try{ await extrasSet('momentos', ok.length?ok:null); $('mmM').className='msg ok'; $('mmM').textContent=ok.length?'Momentos salvos!':'Momentos desligados.'; }catch(e){ $('mmM').className='msg err'; $('mmM').textContent=ERR(e); } };
+  $('rvOk').onclick=async()=>{ const v=$('rvEm').value; if(!v){ $('rvM').className='msg err'; $('rvM').textContent='Escolha o dia e a hora.'; return; } const iso=new Date(v).toISOString(); if(new Date(iso)<=new Date()){ $('rvM').className='msg err'; $('rvM').textContent='Escolha um horário no futuro.'; return; }
+    try{ await extrasSet('revelacao',{em:iso}); $('rvM').className='msg ok'; $('rvM').textContent='Revelação ligada: o mural abre '+new Date(iso).toLocaleString('pt-BR',{weekday:'long',day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'})+'.'; blocoRevelaMomentos(box); }catch(e){ $('rvM').className='msg err'; $('rvM').textContent=ERR(e); } };
+  if($('rvX')) $('rvX').onclick=async()=>{ try{ await extrasSet('revelacao',null); toast('Mural aberto para todos!'); blocoRevelaMomentos(box); }catch(e){ $('rvM').className='msg err'; $('rvM').textContent=ERR(e); } };
+}
+
+// =====================================================================
+// PALESTRANTE — controle da apresentação no celular de quem fala (código próprio)
+// =====================================================================
+async function telaPalestrante(){
+  FESTA = await carregarFesta(SLUG).catch(()=>null); if(!FESTA) return telaNaoAchou();
+  aplicarTema(temaDe(FESTA)); document.title='Palestrante · '+(FESTA.titulo||FESTA.homenageado);
+  const tentar=async cod=>{ try{ const e=await rpc('fe_palestrante_tv',{p_slug:SLUG,p_codigo:cod,p_modo:null,p_slide:null,p_video:null}); store.set('mf_pal_'+SLUG,cod); painelPalestrante(cod,e||{}); return true; }catch(err){ if(/incorreto/i.test(err.message||'')) return false; throw err; } };
+  const salvo=store.get('mf_pal_'+SLUG);
+  if(salvo && await tentar(salvo).catch(()=>false)) return;
+  telaLogin('🎙️ Palestrante', 'Controle da apresentação · '+esc(FESTA.titulo||FESTA.homenageado), tentar);
+  const lb=document.querySelector('#lg label.f'); if(lb && lb.firstChild) lb.firstChild.textContent='Código do palestrante';
+  const inp=$('lgP'); if(inp){ inp.type='text'; inp.inputMode='numeric'; inp.autocomplete='off'; }
+}
+function painelPalestrante(cod, est){
+  let e=est||{}; const L=()=>e.slides||[];
+  const pinta=()=>{ const sl=L(), i=e.slide||0, cur=sl[i], vid=EH_VIDEO(cur), noAr=e.modo==='apresentacao';
+    $('app').innerHTML=`<div class="wrap pal">
+      <div class="pal-top"><div><div class="muted" style="font-size:13px;font-weight:600">🎙️ Palestrante</div><b>${esc(FESTA.titulo||FESTA.homenageado)}</b></div><span class="pal-st ${noAr?'on':''}">${noAr?`No telão: ${vid?'vídeo':'slide'} ${i+1} de ${sl.length}`:e.modo==='pausa'?'Telão pausado':'Telão no mural'}</span></div>
+      ${sl.length?`<div class="pal-atual">${vid?`<video src="${midia(cur)}#t=1" muted preload="metadata" playsinline></video><b class="apr-v">🎬 vídeo</b>`:`<img src="${midia(cur)}" alt="Slide ${i+1}">`}</div>
+      <div class="pal-nav"><button class="btn ghost" data-nav="-1" ${i>0?'':'disabled'}>◀ Anterior</button><button class="btn" data-nav="1" ${i<sl.length-1?'':'disabled'}>Próximo ▶</button></div>
+      ${vid&&noAr?`<div class="pal-nav"><button class="btn alt" data-vd="play">▶ Tocar vídeo</button><button class="btn ghost" data-vd="pause">⏸ Pausar vídeo</button><button class="btn ghost" data-vd="inicio">⏮ Do início</button></div>`:''}
+      <div class="pal-nav">${noAr?'':`<button class="btn" data-m="apresentacao">▶ Mostrar no telão</button>`}<button class="btn ok" data-m="mural">💌 Voltar ao mural</button></div>
+      <div class="apr-grid">${sl.map((p,k)=>`<button data-i="${k}" aria-pressed="${noAr&&k===i}">${EH_VIDEO(p)?`<video src="${midia(p)}#t=1" muted preload="metadata" playsinline></video><b class="apr-v">🎬</b>`:`<img src="${midia(p)}" alt="Slide ${k+1}" loading="lazy">`}<span>${k+1}</span></button>`).join('')}</div>`
+      :'<p class="muted">A apresentação ainda não foi enviada. Peça ao organizador para enviar os slides na aba Apresentação.</p>'}
+      <p class="muted" style="font-size:13px;margin-top:16px">Você está no controle da apresentação. Caso necessário, a organização ${CORP(FESTA)?'do evento':'da festa'} também pode auxiliar no controle do telão.</p></div>`;
+    document.querySelectorAll('.pal [data-nav]').forEach(b=>b.onclick=()=>enviar('apresentacao', Math.max(0,Math.min(L().length-1,(e.slide||0)+(+b.dataset.nav))), null));
+    document.querySelectorAll('.pal [data-i]').forEach(b=>b.onclick=()=>enviar('apresentacao', +b.dataset.i, null));
+    document.querySelectorAll('.pal [data-m]').forEach(b=>b.onclick=()=>enviar(b.dataset.m, e.slide||0, null));
+    document.querySelectorAll('.pal [data-vd]').forEach(b=>b.onclick=()=>enviar(null, null, b.dataset.vd));
+  };
+  const enviar=async(modo, slide, video)=>{ try{ e=await rpc('fe_palestrante_tv',{p_slug:SLUG,p_codigo:cod,p_modo:modo,p_slide:slide,p_video:video})||e; if(navigator.vibrate) navigator.vibrate(20); if(video) toast(video==='pause'?'Vídeo pausado':video==='inicio'?'Vídeo voltou ao início':'Vídeo tocando'); pinta(); }
+    catch(err){ if(/incorreto/i.test(err.message||'')){ store.set('mf_pal_'+SLUG,null); toast('O código do palestrante mudou. Entre de novo.'); setTimeout(()=>location.reload(),1500); } else toast(ERR(err)); } };
+  pinta();
+  setInterval(async()=>{ if(document.hidden) return; try{ const n=await rpc('fe_tv_estado',{p_festa:FESTA.id}); if(n && (n.modo!==e.modo || n.slide!==e.slide || JSON.stringify(n.slides)!==JSON.stringify(e.slides))){ e=n; pinta(); } }catch(_){} }, 4000);
+}
+// admin: código do palestrante + botões de vídeo
+async function blocoPalestrante(box){
+  let cod=null; try{ const r=await rpc('fe_admin_palestrante_ver',{p_slug:SLUG,p_pin:PIN}); cod=r&&r.codigo||null; }catch(_){}
+  const link=linkFesta(FESTA.slug,'palestrante');
+  box.innerHTML=`<h3 style="margin:0 0 4px">🎙️ Controle do palestrante</h3>
+    <p class="muted" style="margin:0 0 12px">Compartilhe o link e o código com o palestrante para que ele controle os slides e vídeos direto do próprio celular no palco. Ele visualiza apenas a apresentação.</p>
+    ${cod?`<div class="grid2"><div><p style="margin:0 0 6px">Código atual: <b style="font-size:22px;letter-spacing:.12em">${esc(cod)}</b></p>
+      <div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn" type="button" id="plCp">📋 Copiar link e código</button><button class="btn ghost" type="button" id="plWa">💬 Mandar no WhatsApp</button><button class="btn ghost" type="button" id="plNovo">🔄 Trocar código</button><button class="btn ghost" type="button" id="plX">Desligar</button></div></div>
+      <div style="text-align:center"><div id="plQr" style="max-width:180px;margin:0 auto;background:#fff;padding:8px;border-radius:12px"></div><p class="muted" style="font-size:13px;margin:6px 0 0">O palestrante aponta a câmera aqui</p></div></div>`
+    :`<div class="row" style="gap:8px"><button class="btn" type="button" id="plNovo">🎙️ Criar código do palestrante</button></div>`}<div class="msg" id="plM"></div>`;
+  const novo=async()=>{ const c=String(Math.floor(1000+Math.random()*9000)); try{ await rpc('fe_admin_palestrante',{p_slug:SLUG,p_pin:PIN,p_codigo:c}); toast('Código do palestrante: '+c); blocoPalestrante(box); }catch(e){ $('plM').className='msg err'; $('plM').textContent=ERR(e); } };
+  $('plNovo').onclick=novo;
+  if(cod){ qrInto($('plQr'), link, 180); const txt=`🎙️ Controle da apresentação\n${link}\nCódigo do palestrante: ${cod}`;
+    $('plCp').onclick=()=>copiar(txt,'Link e código copiados!'); $('plWa').onclick=()=>window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank','noopener');
+    $('plX').onclick=async()=>{ try{ await rpc('fe_admin_palestrante',{p_slug:SLUG,p_pin:PIN,p_codigo:null}); toast('Controle do palestrante desligado.'); blocoPalestrante(box); }catch(e){ $('plM').className='msg err'; $('plM').textContent=ERR(e); } }; }
+}
+function tvVideoCtl(apr){ if(!apr || !apr.n) return; if(window.__aprN===undefined){ window.__aprN=apr.n; return; } if(apr.n===window.__aprN) return; window.__aprN=apr.n;
+  const v=document.querySelector('.tv-apr video'); if(!v) return; if(apr.v==='pause') v.pause(); else if(apr.v==='inicio'){ v.currentTime=0; v.play().catch(()=>{}); } else v.play().catch(()=>{}); }
 
 // =====================================================================
 // PDFs (álbum e cartões)
@@ -3391,7 +3735,7 @@ async function pdfAlbum(f, posts, prog){
     const st=[[posts.filter(p=>p.tipo==='foto').length,'fotos'],[textos.length,'recados'],[grav.length,'gravações'],[new Set(posts.map(p=>p.autor).filter(Boolean)).size,'convidados']];
     st.forEach((s,i)=>{ const bx=110+i*265; rr(c,bx,740,240,190,28); c.fillStyle='#fff'; c.fill(); c.lineWidth=4; c.strokeStyle=t.accent; c.stroke(); c.fillStyle=t.accent; c.font=`700 84px Fredoka, sans-serif`; c.fillText(String(s[0]),bx+120,850); c.fillStyle='#555'; c.font='600 28px Fredoka, sans-serif'; c.fillText(s[1],bx+120,895); });
     c.fillStyle=t.dark?t.bg:t.ink; c.font='600 54px Caveat, cursive'; ['Cada foto, cada recado e cada voz','fizeram deste dia uma lembrança para sempre.',`Com carinho, ${f.homenageado||'os anfitriões'} 💛`].forEach((l,i)=>c.fillText(l,PW/2,1080+i*74));
-    c.font='600 26px Fredoka, sans-serif'; c.fillStyle=t.dark?t.bg:t.muted; c.fillText('feito com o Mural da Festa', PW/2, PH-130); add(cv); }
+    c.font='600 26px Fredoka, sans-serif'; c.fillStyle=t.dark?t.bg:t.muted; c.fillText('feito com o Mural da Festa · '+SITE, PW/2, PH-130); add(cv); }
   return {blob:doc.output('blob'), paginas:n};
 }
 function marcaTeste(c, W, H){
@@ -3494,7 +3838,7 @@ function ligarDesafios(){
   r();
 }
 // --- telão: faixa de aviso e contagem em tela cheia ---
-function tvExtras(ex, agora){ ex=ex||{}; const off=agora?new Date(agora).getTime()-Date.now():0;
+function tvExtras(ex, agora){ ex=ex||{}; window.__tvEx=ex; try{ tvVideoCtl(ex.apr); }catch(_){} const off=agora?new Date(agora).getTime()-Date.now():0;
   document.body.classList.toggle('com-aviso',!!ex.aviso); let av=$('tvAviso'); if(ex.aviso){ if(!av){ av=document.createElement('div'); av.id='tvAviso'; av.className='tv-aviso'; document.body.appendChild(av); } if(av.dataset.t!==ex.aviso){ av.dataset.t=ex.aviso; av.innerHTML=`<span aria-hidden="true">📌</span><span>${esc(ex.aviso)}</span>`; } } else if(av) av.remove();
   const c=ex.contagem, fim=c&&c.ate?new Date(c.ate).getTime():0; let cd=$('tvCont');
   if(fim && fim-(Date.now()+off) > -15000){ if(!cd){ cd=document.createElement('div'); cd.id='tvCont'; cd.className='tv-cont'; document.body.appendChild(cd); }
@@ -3775,7 +4119,7 @@ const PERFIS={
     featT:'O que a sua equipe ganha na festa 🧑‍🍳',
     feat:[['🍹 Pedidos na mesa','Cada mesa tem seu QR. O convidado pede e o garçom recebe no celular, com o número da mesa.'],['🍽️ Cardápio antecipado','O convidado escolhe o prato antes. Você recebe o total de cada item e compra certo.'],['🚪 Portaria sem penetras','Selfie e ingresso com QR. A recepção confere o rosto e conta quem entrou.'],['🚗 Manobrista','Placa, fotos e vaga registradas pelo QR. Na saída, o convidado pede o carro pelo celular.'],['📺 Telão de homenagens','O momento que todo mundo filma e posta, marcando o seu espaço.'],['📖 Álbum para o cliente','Depois da festa, o cliente recebe tudo em PDF e guarda o seu nome junto.']],
     comissao:true},
-  empresa:{chip:'💼 Empresa', marca:'💼 Para empresas e eventos corporativos', h1:'Convenção, premiação ou confraternização, organizada pelo celular.',
+  empresa:{chip:'💼 Corporativo', marca:'💼 Para empresas e eventos corporativos', h1:'Convenção, premiação ou confraternização, organizada pelo celular.',
     sub:'Credenciamento com QR, apresentação no telão controlada pelo celular, cardápio, pedidos na mesa e manobrista. E um mural de mensagens que engaja a equipe.',
     cta:['Criar meu evento grátis','?criar&cat=corporativo'], nota:'Teste tudo de graça antes de contratar. Pagamento único por evento, sem mensalidade.', destaque:'grande',
     passosT:'Como funciona no seu evento 📋',
@@ -3806,7 +4150,7 @@ function telaInicio(perfil){
        <p class="lmarca">${P.marca}</p>
        <h1>${P.h1}</h1>
        <p class="lsub">${P.sub}</p>
-       <div class="row"><a class="btn big" href="${P.cta[1]}">${P.cta[0]}</a><a class="btn ghost" href="#como">Como funciona</a></div>
+       <div class="row"><a class="btn big" href="${P.cta[1]}">${P.cta[0]}</a><a class="btn ghost" href="?experimente">▶ Ver funcionando</a></div>
        <p class="nota">${P.nota}</p>
      </div>
      <div class="lcena" aria-hidden="true">${CENAS[k](ondas)}</div>
@@ -3850,6 +4194,56 @@ function telaInicio(perfil){
   }).catch(()=>{ $('inPlanos').innerHTML=''; });
   if($('inParc')) $('inParc').onclick=()=>faleConosco('Quero ser parceiro');
   $('inF').onsubmit=e=>{ e.preventDefault(); const v=$('inC').value.trim().toLowerCase().replace(/.*[?&]f=/,'').replace(/[^a-z0-9-]/g,''); if(v) location.href=linkFesta(v); };
+}
+
+
+// =====================================================================
+// EXPERIMENTE — demonstração para quem chega do Instagram (nada é salvo)
+// =====================================================================
+function telaExperimente(){
+  aplicarTema(TEMA_MARCA); document.title='Veja o Mural da Festa funcionando';
+  const SL=[
+    {img:'fotos/valsa.jpg', a:'📸 Ana Júlia'},
+    {q:'Que você nunca perca esse brilho no olhar. Te amamos!', a:'Vovó Lúcia'},
+    {img:'fotos/15anos.jpg', a:'📸 Tio Beto'},
+    {q:'15 anos de muita luz! Obrigada por ser a melhor amiga do mundo 💖', a:'Malu'},
+    {img:'fotos/casamento.jpg', a:'📸 Padrinho Rafa'}
+  ];
+  $('app').innerHTML=`<div class="xp">
+    <p class="lmarca">💌 Mural da Festa</p>
+    <h1>Os convidados mandam. O telão mostra na hora.</h1>
+    <p class="lead">Foto, recado, áudio ou vídeo pelo celular, sem baixar nada. No fim da festa, tudo vira um álbum de recordações.</p>
+    <div class="xp-tv" id="xpTv" aria-label="Telão de demonstração"><span class="xp-novo" id="xpNovo">✨ Nova homenagem</span></div>
+    <div class="xp-form">
+      <h2>Agora é a sua vez 👇</h2>
+      <p class="muted" style="margin:0 0 12px;font-size:14px">Escreva um recado ou escolha uma foto e veja aparecer no telão acima.</p>
+      <label class="f">Seu nome<input class="in" id="xpN" maxlength="30" placeholder="Ex.: Tia Cris"></label>
+      <label class="f" style="margin-top:10px">Recado<textarea class="in" id="xpQ" rows="3" maxlength="160" placeholder="Ex.: Parabéns! Que dia lindo 🎉"></textarea></label>
+      <div class="row" style="margin-top:12px;gap:8px"><button class="btn" type="button" id="xpEnv">💌 Mandar para o telão</button><label class="btn ghost" style="cursor:pointer">📸 Mandar uma foto<input type="file" id="xpF" accept="image/*" hidden></label></div>
+      <small class="muted">É só uma demonstração: nada é enviado nem salvo.</small>
+    </div>
+    <div class="xp-fim" id="xpFim">
+      <p style="font-weight:600;margin:0 0 10px">Imagina isso na sua festa? Crie agora e teste de graça.</p>
+      <a class="btn big" href="?criar&origem=experimente">Criar a minha festa grátis</a>
+      <p class="muted" style="font-size:14px;margin:12px 0 0">Leva 2 minutos, sem cartão. Só paga se gostar.<br><a href="?para=empresa">É para uma empresa?</a> · <a href="./">Conhecer o Mural</a></p>
+    </div></div>`;
+  const tv=$('xpTv'); let fila=SL.slice(), i=0, timer=null;
+  const pintar=(s)=>{ const el=document.createElement('div'); el.className='xp-sl';
+    el.innerHTML = s.img ? `<div><img src="${s.img}" alt=""><span class="a">${esc(s.a)}</span></div>` : `<div class="q">“${esc(s.q)}”<span class="a">${esc(s.a)}</span></div>`;
+    tv.appendChild(el); void el.offsetWidth; el.classList.add('on');
+    [...tv.querySelectorAll('.xp-sl')].slice(0,-1).forEach(o=>{ o.classList.remove('on'); setTimeout(()=>o.remove(),700); }); };
+  const proximo=()=>{ pintar(fila[i%fila.length]); i++; };
+  const rodar=()=>{ clearInterval(timer); timer=setInterval(proximo, 4200); };
+  proximo(); rodar();
+  const confete=()=>{ const b=document.createElement('div'); b.className='xp-conf'; const cs=['#e9b8a3','#cfa9c9','#963c5f','#ffc300','#2ec4b6'];
+    for(let k=0;k<60;k++){ const s=document.createElement('i'); s.style.left=(Math.random()*100)+'%'; s.style.background=cs[k%cs.length]; s.style.animationDelay=(Math.random()*.5).toFixed(2)+'s'; s.style.setProperty('--x',(Math.random()*60-30).toFixed(0)+'px'); s.style.setProperty('--g',(Math.random()*720-360).toFixed(0)+'deg'); b.appendChild(s); }
+    tv.appendChild(b); setTimeout(()=>b.remove(),3200); };
+  let feitos=0;
+  const novo=(s)=>{ fila.splice(i%fila.length,0,s); pintar(s); i++; rodar(); confete(); const n=$('xpNovo'); n.classList.add('on'); setTimeout(()=>n.classList.remove('on'),2600);
+    tv.scrollIntoView({behavior:'smooth',block:'center'}); feitos++; if(feitos===1) setTimeout(()=>$('xpFim').scrollIntoView({behavior:'smooth',block:'center'}), 4500); };
+  const autor=()=>($('xpN').value.trim()||'Você');
+  $('xpEnv').onclick=()=>{ const q=$('xpQ').value.trim(); if(!q){ toast('Escreva um recado primeiro 💌'); $('xpQ').focus(); return; } novo({q, a:autor()}); $('xpQ').value=''; };
+  $('xpF').onchange=e=>{ const fl=e.target.files&&e.target.files[0]; e.target.value=''; if(!fl) return; if(!/^image\/(jpeg|png|webp|gif)/.test(fl.type)){ toast('Use uma foto JPG ou PNG nesta demonstração.'); return; } novo({img:URL.createObjectURL(fl), a:'📸 '+autor()}); };
 }
 
 // =====================================================================
@@ -3915,6 +4309,7 @@ function montarAjuda(){
   try{
     if(MODE==='convidado') await telaConvidado();
     else if(MODE==='telao') await telaTelao();
+    else if(MODE==='palestrante') await telaPalestrante();
     else if(MODE==='portaria') await telaPortaria();
     else if(MODE==='pedidos') await telaPedidos();
     else if(MODE==='valet') await telaValet();
@@ -3922,6 +4317,7 @@ function montarAjuda(){
     else if(MODE==='mestre') await telaMestre();
     else if(MODE==='termos') telaTermos();
     else if(MODE==='criar') telaCriar();
+    else if(MODE==='experimente') telaExperimente();
     else telaInicio();
     montarAjuda();
   }catch(e){ console.error(e); $('app').innerHTML='<div class="wrap center" style="padding-top:20vh"><h2>Ops!</h2><p>Não consegui carregar agora. Confira a internet e recarregue.</p></div>'; }

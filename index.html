@@ -1030,6 +1030,7 @@ body.app-neutro .top h1 em{font-family:'Fraunces',Georgia,serif;font-weight:500;
 @media (max-width:760px){ .tvb-h{display:none} }
 .tvbar.pulsa{animation:tvPulsa 1.4s ease 2}
 @keyframes tvPulsa{0%,100%{box-shadow:0 10px 30px -18px rgba(15,23,42,.6)}50%{box-shadow:0 0 0 6px color-mix(in srgb,var(--accent) 45%,transparent)}}
+.so-telao{text-align:center;display:flex;flex-direction:column;align-items:center}.so-telao .desl-ic{width:60px;height:60px;font-size:28px}.so-n{margin:10px 0 0;font-weight:600;color:var(--accent)}.so-n:empty{display:none}
 .desl{min-height:78vh;display:flex;flex-direction:column;align-items:center;justify-content:center;max-width:340px;margin:0 auto}
 .desl-ic{width:72px;height:72px;border-radius:50%;display:grid;place-items:center;font-size:34px;background:color-mix(in srgb,var(--accent) 10%,transparent);color:var(--accent);margin-bottom:8px}
 .desl h1{font-size:26px;margin:8px 0 6px} .desl p{font-size:15px;line-height:1.5}
@@ -1481,18 +1482,22 @@ async function telaConvidado(){
     ${f.ativo && f.tem_cardapio && !MESA ? '<section class="card rsvp" id="cdp"></section>' : ''}
     ${f.ativo && f.correio_ativo!==false ? '<section class="card rsvp" id="crr"></section>' : ''}
     ${(t.fotos||[]).length ? `<h2 class="sec">📖 A história de ${esc(f.homenageado||'quem a gente ama')}</h2><div class="hist">${t.fotos.map(p=>`<figure><img loading="lazy" src="${midia(p)}" alt=""></figure>`).join('')}</div>` : ''}
-    <h2 class="sec">🖼️ Mural <span class="muted" id="muralN" style="font-size:16px;font-weight:500"></span></h2>
-    <div class="mural" id="mural"></div>
+    ${FEED_CEL(f)?`<h2 class="sec">🖼️ Mural <span class="muted" id="muralN" style="font-size:16px;font-weight:500"></span></h2>
+    <div class="mural" id="mural"></div>`:`<section class="card rsvp so-telao" id="soTv"><div class="desl-ic">📺</div><h3 style="justify-content:center">${CORP(f)?'As mensagens aparecem no telão':'As homenagens aparecem no telão'}</h3><p class="muted" style="margin:4px 0 0">${f.moderacao?(CORP(f)?'Depois da aprovação da organização, ':'Depois que o anfitrião aprova, '):''}${CORP(f)?'sua mensagem passa no telão do evento e entra no álbum.':'sua homenagem passa no telão da festa e entra no álbum de recordações.'}</p><p class="so-n" id="soN"></p></section>`}
     <p class="rod">Ao enviar ${CORP(f)?'uma mensagem':'uma homenagem'}, você concorda com os <a href="${BASE}?termos" target="_blank" rel="noopener">Termos de uso e Privacidade</a>.</p>
   </div>`;
   document.querySelectorAll('.act').forEach(b=>b.onclick=()=>abrirEnvio(b.dataset.k));
   document.querySelectorAll('.capa .enfc').forEach(im=>{ const t2=new Image(); t2.crossOrigin='anonymous'; t2.onload=()=>{ try{ const c=document.createElement('canvas'); c.width=c.height=16; const x=c.getContext('2d'); x.drawImage(t2,0,0,16,16); const d=x.getImageData(0,0,16,16).data; if(![0,15,240,255].some(k=>d[k*4+3]<200)) im.classList.add('sticker'); }catch(e){ im.classList.add('sticker'); } }; t2.src=im.src; });
   const nome=$('nome'); if(nome) nome.addEventListener('change',()=>store.set('mf_nome',nome.value.trim().slice(0,40)));
-  $('mural').addEventListener('click', e=>{ const l=e.target.closest('[data-like]'); if(l) return curtir(l); const rc=e.target.closest('[data-reac]'); if(rc) return reagir(rc); const cm=e.target.closest('[data-com]'); if(cm) return abrirComentarios(+cm.dataset.com); const m=e.target.closest('[data-mol]'); if(m){ const p=POSTS.find(x=>x.id===+m.dataset.mol); if(p) abrirMoldura(midia(p.caminho), p.autor); } });
+  pintarMeus(); if($('mural')) $('mural').addEventListener('click', e=>{ const l=e.target.closest('[data-like]'); if(l) return curtir(l); const rc=e.target.closest('[data-reac]'); if(rc) return reagir(rc); const cm=e.target.closest('[data-com]'); if(cm) return abrirComentarios(+cm.dataset.com); const m=e.target.closest('[data-mol]'); if(m){ const p=POSTS.find(x=>x.id===+m.dataset.mol); if(p) abrirMoldura(midia(p.caminho), p.autor); } });
   ligarConvite(); ligarPresenca(); ligarCardapio(MESA); ligarValet(); ligarSorteio(); ligarQuiz(); ligarEnquete(); ligarCorreio(); ligarPerguntas(MESA); ligarAvisoConvidado(); ligarDesafios(); ligarBingo();
-  await atualizarMural(); setInterval(()=>{ if(!document.hidden) atualizarMural(); }, 20000);
+  if(FEED_CEL(FESTA)){ await atualizarMural(); setInterval(()=>{ if(!document.hidden) atualizarMural(); }, 20000); }
 }
+const FEED_CEL = f => { try{ return EXT(f).feed===true; }catch(e){ return false; } };
+function contarMeu(){ const k='mf_meus_'+(FESTA&&FESTA.id); store.set(k, String((+store.get(k)||0)+1)); pintarMeus(); }
+function pintarMeus(){ const el=$('soN'); if(!el) return; const n=+store.get('mf_meus_'+FESTA.id)||0; el.textContent = n ? `Você já mandou ${n} ${CORP(FESTA)?(n>1?'mensagens':'mensagem'):(n>1?'homenagens':'homenagem')}. Obrigado!` : ''; }
 async function atualizarMural(){
+  if(!$('mural')) return;
   try{ POSTS = await postsAprovados(FESTA.id); }catch(e){ return; }
   const key=POSTS.map(p=>p.id+':'+(p.curtidas||0)+':'+JSON.stringify(p.reacoes||{})+':'+(p.comentarios||0)).join(','); if(key===muralKey) return; muralKey=key;
   $('muralN').textContent = POSTS.length ? `(${POSTS.length})` : '';
@@ -1871,13 +1876,13 @@ async function abrirMoldura(src, autor, fmt){
   document.querySelectorAll('.mol-fmt [data-fmt]').forEach(b=>b.onclick=()=>{ if(b.dataset.fmt!==(fmt||'feed')) abrirMoldura(src, autor, b.dataset.fmt); });
   if(podeShare) $('molSh').onclick=async()=>{ try{ await navigator.share({files:[file], text:`${DESTAQUE(FESTA)}${CORP(FESTA)?'':' 💛'}`}); }catch(e){} };
   if($('molTv')) $('molTv').onclick=async()=>{ const b=$('molTv'); b.disabled=true; msgE('<span class="spin"></span> Enviando…');
-    try{ const im=await encolher(src); ULTIMA_FOTO=im; const path=await subir(im,'foto','jpg','image/jpeg'); await gravarPost({tipo:'foto', caminho:path, texto:null, bytes:im.size}); msgE(FESTA.moderacao?'Enviada! Aparece no telão depois da aprovação.':'Enviada para o mural e o telão.','ok'); atualizarMural(); }
+    try{ const im=await encolher(src); ULTIMA_FOTO=im; const path=await subir(im,'foto','jpg','image/jpeg'); await gravarPost({tipo:'foto', caminho:path, texto:null, bytes:im.size}); msgE(FESTA.moderacao?'Enviada! Aparece no telão depois da aprovação.':(FEED_CEL(FESTA)?'Enviada para o mural e o telão.':'Enviada para o telão.'),'ok'); atualizarMural(); }
     catch(e){ msgE(ERR(e),'err'); b.disabled=false; } };
 }
 function agradecer(tipo){
   const ic={foto:'📸',texto:'💌',audio:'🎤',video:'🎥'}[tipo];
   $('sheet').innerHTML = `<div class="thanks"><div class="big">${ic}</div><h3 style="justify-content:center">Obrigado${nomeAtual()?', '+esc(nomeAtual()):''}!</h3>
-   <p>${FESTA.moderacao?'Sua homenagem chegou! Ela aparece no telão assim que o anfitrião aprovar 💛':'Sua homenagem já está no mural e no telão! 🎉'}</p>
+   <p>${FESTA.moderacao?'Sua homenagem chegou! Ela aparece no telão assim que o anfitrião aprovar 💛':(FEED_CEL(FESTA)?'Sua homenagem já está no mural e no telão! 🎉':'Sua homenagem já está no telão! 🎉')}</p>
    ${tipo==='foto'&&ULTIMA_FOTO?'<button class="btn alt" id="tMol" style="margin-top:6px">🖼️ Postar minha foto com a moldura da festa</button>':''}
    <div class="foot" style="justify-content:center"><button class="btn ghost" id="tOutra">Mandar outra</button><button class="btn" id="tOk">Fechar</button></div></div>`;
   $('tOk').onclick=fecharFolha; $('tOutra').onclick=()=>{ fecharFolha(); setTimeout(()=>abrirEnvio(tipo),50); };
@@ -1889,7 +1894,7 @@ async function subir(blob, tipo, ext, contentType){
   const {error}=await sb.storage.from('fe-midia').upload(path, blob, {contentType, upsert:false, cacheControl:'31536000'});
   if(error) throw error; return path;
 }
-async function gravarPost(row){ const {error}=await sb.from('fe_posts').insert({festa_id:FESTA.id, autor:nomeAtual(), aparelho:deviceId(), ...row}); if(error) throw error; }
+async function gravarPost(row){ const {error}=await sb.from('fe_posts').insert({festa_id:FESTA.id, autor:nomeAtual(), aparelho:deviceId(), ...row}); if(error) throw error; try{ contarMeu(); }catch(_){} }
 
 function folhaFoto(desafio, aoEnviar){
   abrirFolha(`<h3>${desafio?'📸 Desafio: '+esc(desafio):'📸 Fotos da festa'}</h3>
@@ -3189,7 +3194,8 @@ async function vInteracoes(){
   $('vw').innerHTML=`<div class="card" style="padding:18px"><h3 style="margin:0 0 4px">💬 Interações <span class="muted" style="font-size:14px;font-weight:500">(tudo passa por você)</span></h3>
       <p class="muted" style="margin:0 0 12px">Comentários nas homenagens, correio elegante e perguntas para o palco só aparecem depois que você aprova. As reações com emoji são livres.</p>
       <label class="row" style="gap:8px;font-weight:600"><input type="checkbox" id="itCr" style="width:22px;height:22px"> 💌 Correio elegante aberto para os convidados</label>
-      <label class="row" style="gap:8px;font-weight:600;margin-top:8px"><input type="checkbox" id="itPg" style="width:22px;height:22px"> 🙋 Perguntas para o palco (palestras, apresentações)</label></div>
+      <label class="row" style="gap:8px;font-weight:600;margin-top:8px"><input type="checkbox" id="itPg" style="width:22px;height:22px"> 🙋 Perguntas para o palco (palestras, apresentações)</label>
+      <label class="row" style="gap:8px;font-weight:600;margin-top:8px;align-items:flex-start"><input type="checkbox" id="itFd" style="width:22px;height:22px;flex:none"> <span>🖼️ Mostrar o mural também no celular dos ${CORP(f)?'participantes':'convidados'}<br><span class="muted" style="font-weight:500;font-size:14px">Desligado: o que for enviado aparece só no telão (e no álbum). Ligado: todos veem as ${CORP(f)?'mensagens':'homenagens'} aprovadas no celular e podem curtir e comentar.</span></span></label></div>
     <div class="card" style="padding:18px;margin-top:12px"><div class="seg" style="justify-content:flex-start;margin:0 0 12px" id="itF">
         <button type="button" data-f="pendentes" aria-pressed="true">⏳ Para aprovar <b id="itNp"></b></button><button type="button" data-f="perguntas" aria-pressed="false">🙋 Fila do palco <b id="itNq"></b></button><button type="button" data-f="aprovados" aria-pressed="false">✅ Aprovados</button></div>
       <div id="itL"><div class="empty"><span class="spin"></span></div></div></div>`;
@@ -3215,7 +3221,7 @@ async function vInteracoes(){
   const mudar=async(k,ids,st,btn)=>{ if(btn) btn.disabled=true; try{ await rpc('fe_admin_moderar_item',{p_slug:SLUG,p_pin:PIN,p_tipo:k,p_ids:ids,p_status:st}); await carregar(); }catch(e){ toast(ERR(e)); if(btn) btn.disabled=false; } };
   const carregar=async()=>{ try{ D=await rpc('fe_admin_interacoes',{p_slug:SLUG,p_pin:PIN}); $('itCr').checked=D.correio_ativo!==false; $('itPg').checked=!!D.perguntas_ativas; pintar(); }catch(e){ $('itL').innerHTML=`<div class="empty">${ERR(e)}</div>`; } };
   const cfg=async()=>{ try{ await rpc('fe_admin_interacoes_config',{p_slug:SLUG,p_pin:PIN,p_correio:$('itCr').checked,p_perguntas:$('itPg').checked}); FESTA=await carregarFesta(SLUG); toast('Pronto!'); }catch(e){ toast(ERR(e)); } };
-  $('itCr').onchange=cfg; $('itPg').onchange=cfg;
+  $('itCr').onchange=cfg; $('itPg').onchange=cfg; $('itFd').checked=FEED_CEL(FESTA); $('itFd').onchange=async()=>{ const on=$('itFd').checked; try{ await extrasSet('feed', on?true:null); toast(on?'Mural liberado no celular dos convidados.':'Pronto: o que chegar vai só para o telão.',3500); }catch(e){ $('itFd').checked=!on; toast(ERR(e)); } };
   $('itF').querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{ filtro=b.dataset.f; $('itF').querySelectorAll('[data-f]').forEach(x=>x.setAttribute('aria-pressed',x===b)); pintar(); });
   await carregar(); const it=setInterval(()=>{ if(ADM.view!=='interacoes') return clearInterval(it); if(!document.hidden && !document.querySelector('#itL audio:not([paused])')) carregar(); }, 6000);
 }

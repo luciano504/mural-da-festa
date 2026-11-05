@@ -489,18 +489,6 @@ h2.sec .muted{font-family:var(--body)}
 .passos4 b{display:block;font-size:17px;margin-bottom:4px}
 .passos4 span{color:var(--muted);font-size:15px}
 .feat{display:grid;grid-template-columns:repeat(2,1fr);gap:22px 40px}
-.ff-feat{margin:0 0 18px;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
-.ff-feat summary{cursor:pointer;list-style:none;position:relative;padding-right:30px;display:flex;flex-direction:column;gap:3px}
-.ff-feat summary::-webkit-details-marker{display:none}
-.ff-feat summary::after{content:"›";position:absolute;right:4px;top:50%;transform:translateY(-50%);font-size:26px;color:var(--accent);transition:transform .2s}
-.ff-feat[open] summary::after{transform:translateY(-50%) rotate(90deg)}
-.ff-feat summary b{font-size:16px}
-.ff-feat summary span{font-size:13px;color:var(--muted);line-height:1.35}
-.ff-feat[open] summary span{display:none}
-.ff-feat .ff-fg{margin-top:14px;gap:14px 28px}
-.ff-feat .ff-fg b{font-size:17px}
-.ff-feat .ff-fg p{font-size:14px}
-@media (max-width:640px){.ff-feat .ff-fg{grid-template-columns:1fr}}
 @media (max-width:640px){.feat{grid-template-columns:1fr}}
 .feat b{font-family:var(--serif);font-weight:450;font-size:21px}
 .feat p{margin:4px 0 0;color:var(--muted)}
@@ -534,30 +522,6 @@ h2.sec .muted{font-family:var(--body)}
 .pacoes{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-top:8px}
 .molbtn{border:0;background:none;color:var(--accent);font-weight:600;font-size:14px;cursor:pointer;padding:4px 2px}
 .rsvp{padding:22px 18px;text-align:center;margin-top:34px}
-.rs-card{grid-column:1/-1}
-.pix-qr{max-width:240px;margin:8px auto 14px;background:#fff;padding:12px;border-radius:16px}
-.lp-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:6px;text-align:center}
-.lp-it{display:flex;flex-direction:column;align-items:center;gap:3px;padding:14px 8px;border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--ink);font:inherit;cursor:pointer;transition:border-color .15s,transform .12s}
-.lp-it:hover{border-color:var(--accent);transform:translateY(-1px)}
-.lp-it .lp-e{font-size:30px;line-height:1.1}
-.lp-it b{font-size:15px;line-height:1.25}
-.lp-it .lp-v{font-weight:700;color:var(--accent);font-size:16px}
-.lp-it small{color:var(--muted);font-size:12px}
-.lp-livre{border-style:dashed}
-.lp-sh{position:relative;text-align:center;padding-top:6px}
-.lp-sh .x{position:absolute;top:-6px;right:-4px;width:36px;height:36px;border:0;border-radius:50%;background:transparent;color:var(--muted);font-size:20px;cursor:pointer}
-.lp-tot{font-size:26px;font-weight:800;color:var(--accent);margin:6px 0 0}
-#lpSug{display:flex;flex-wrap:wrap;gap:6px} #lpSug .chip{cursor:pointer;font:inherit;font-size:13px}
-.lp-adm{margin:14px 0 8px;padding:12px;border:1px dashed var(--line);border-radius:12px}
-.lp-row{display:grid;grid-template-columns:52px minmax(0,1fr) 88px 124px 40px;gap:6px;margin-bottom:6px;align-items:center}
-.lp-row .in{padding:8px 10px;min-width:0}
-.lp-row .lp-ie{text-align:center;padding:8px 4px}
-@media (max-width:560px){.lp-row{grid-template-columns:46px minmax(0,1fr) 84px 40px}.lp-row .lp-ic{grid-column:2/4}}
-.mm-chips{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px}
-.mm-chips .chip{border:0;cursor:pointer;font:inherit}
-.mm-chips .chip.on{background:var(--accent);color:#fff}
-.rs-prev{display:flex;gap:10px;overflow-x:auto;padding:4px 0}
-.rs-prev img{height:300px;width:auto;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,.18);flex:none}
 .rsvp h2.sec{margin:0 0 6px;justify-content:center}
 .rsvp .sub{color:var(--muted);margin:0 0 16px}
 .rsvp-op{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:420px;margin:0 auto}
@@ -631,22 +595,7 @@ h2.sec .muted{font-family:var(--body)}
 @media (min-width:640px){.ctrl{grid-template-columns:repeat(5,1fr)}}
 .ctrl .btn{padding:14px 10px}
 .tv-apr{position:fixed;inset:0;z-index:30;background:#000;display:grid;place-items:center}
-.tv-apr img,.tv-apr video{max-width:100vw;max-height:100vh;object-fit:contain;animation:fadein .4s ease both}
-.apr-it{display:flex;flex-direction:column;gap:4px}
-.pal{max-width:560px;padding-bottom:40px}
-.pal-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:14px 0}
-.pal-st{font-size:13px;font-weight:700;border-radius:999px;padding:6px 12px;background:rgba(0,0,0,.06)}
-.pal-st.on{background:var(--accent);color:var(--on,#fff)}
-.pal-atual{position:relative;background:#000;border-radius:14px;overflow:hidden;aspect-ratio:16/9}
-.pal-atual img,.pal-atual video{width:100%;height:100%;object-fit:contain;display:block}
-.pal-nav{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:8px;margin-top:10px}
-.pal-nav .btn{padding:16px 10px;font-size:17px}
-.apr-grid .apr-it>button{width:100%}
-.apr-grid button video{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none}
-.apr-v{position:absolute;right:6px;top:6px;background:rgba(0,0,0,.65);color:#fff;font-size:11px;border-radius:6px;padding:1px 6px}
-.apr-mv{display:flex;gap:4px;justify-content:center}
-.apr-grid .apr-mv button{aspect-ratio:auto;background:var(--surface,#fff);color:var(--ink,#2b2230);border:1px solid rgba(0,0,0,.15);border-radius:8px;padding:2px 10px;font-size:13px}
-.apr-grid .apr-mv button:disabled{opacity:.35;cursor:default}
+.tv-apr img{max-width:100vw;max-height:100vh;object-fit:contain;animation:fadein .4s ease both}
 .tv-pausa{position:fixed;inset:0;z-index:30;display:grid;place-items:center;text-align:center;background:color-mix(in srgb,var(--bg) 92%, transparent)}
 .tv-pausa .who{font-family:var(--display);color:var(--accent);font-size:clamp(48px,9vw,140px);line-height:1}
 .tv-pausa p{font-family:var(--serif);font-style:italic;font-size:clamp(20px,3vw,40px);color:var(--muted);margin:14px 0 0}
@@ -761,8 +710,8 @@ h2.sec .muted{font-family:var(--body)}
 .tv-enq .eb .tr{height:4.2vh;border-radius:1.2vh;background:color-mix(in srgb,var(--ink) 8%, transparent);overflow:hidden}
 .tv-enq .eb .fi{height:100%;border-radius:1.2vh;background:color-mix(in srgb,var(--accent) 55%, var(--surface));transition:width .8s ease}
 .tv-enq .eb.lider .fi{background:var(--accent)} .tv-enq .eb.lider .l b{color:var(--accent)}
-.tv-enq .nuv{flex:1;display:flex;flex-wrap:wrap;align-content:center;justify-content:center;gap:1.2vh 2.6vw;padding:0 4vw}
-.tv-enq .nuv span{font-weight:700;line-height:1.05;transition:font-size .8s ease;animation:fadein .6s ease both}
+.tv-enq .nuv{flex:1;min-height:0;overflow:hidden;display:flex;flex-wrap:wrap;align-content:center;justify-content:center;gap:1.2vh 2.6vw;padding:0 4vw}
+.tv-enq .nuv span{font-weight:700;line-height:1.05;white-space:nowrap;animation:fadein .6s ease both}
 .tv-enq .vazio{flex:1;display:grid;place-items:center;font-size:clamp(20px,2.6vw,42px);color:var(--muted)}
 .enq-ops{display:flex;flex-direction:column;gap:8px;max-width:440px;margin:0 auto}
 .enq-ops button{position:relative;overflow:hidden;text-align:left;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--ink);font:inherit;font-weight:600;font-size:16px;cursor:pointer;min-height:48px}
@@ -1002,34 +951,6 @@ body.com-aviso .tv-top{margin-top:5.5vh}
 .bg-banner{margin:-22px -18px 14px;height:150px;background:url("fotos/bingo.jpg") 30% 55%/cover;border-radius:var(--r-lg) var(--r-lg) 0 0}
 .bg-bateu{background:radial-gradient(circle at 50% 45%,color-mix(in srgb,var(--bg) 70%, transparent),color-mix(in srgb,var(--bg) 92%, transparent) 70%),url("fotos/bingo.jpg") center/cover !important}
 
-/* ===== divulgação (Instagram / boca a boca) ===== */
-.tv-promo{margin-left:auto;text-align:right;font-weight:600;font-size:clamp(11px,1.05vw,19px);line-height:1.3;color:var(--muted);opacity:.9;max-width:30vw}
-.tv-promo b{display:inline!important;font-size:inherit!important;font-family:inherit!important;color:var(--accent)}
-.promo-card{position:fixed;left:50%;bottom:16px;transform:translate(-50%,140%);z-index:60;width:min(440px,calc(100% - 32px));background:var(--surface);color:var(--ink);border-radius:18px;box-shadow:0 14px 40px rgba(0,0,0,.22);padding:16px 44px 16px 16px;transition:transform .45s cubic-bezier(.2,.9,.3,1.2)}
-.promo-card.on{transform:translate(-50%,0)}
-.promo-card p{margin:0 0 10px;font-size:15px;line-height:1.4}
-.promo-card .x{position:absolute;top:8px;right:8px;width:32px;height:32px;border:0;border-radius:50%;background:transparent;color:var(--muted);font-size:20px;cursor:pointer}
-.xp{max-width:560px;margin:0 auto;padding:20px 16px 48px}
-.xp h1{font-family:var(--serif,'Fraunces');font-weight:400;font-size:clamp(30px,7vw,44px);line-height:1.08;margin:6px 0 10px;letter-spacing:-.02em}
-.xp .lead{color:var(--muted);margin:0 0 18px;font-size:16px}
-.xp-tv{position:relative;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#17111a;border:8px solid #2a2430;box-shadow:0 18px 40px rgba(0,0,0,.25)}
-.xp-tv::after{content:"";position:absolute;left:50%;bottom:-20px;width:30%;height:10px;transform:translateX(-50%);background:#2a2430;border-radius:0 0 8px 8px}
-.xp-sl{position:absolute;inset:0;display:grid;place-items:center;padding:6%;color:#fff;text-align:center;opacity:0;transition:opacity .6s}
-.xp-sl.on{opacity:1}
-.xp-sl img{max-width:70%;max-height:70%;border-radius:6px;border:6px solid #fff;box-shadow:0 8px 20px rgba(0,0,0,.4);transform:rotate(-2deg);object-fit:cover}
-.xp-sl .q{font-family:'Caveat',cursive;font-size:clamp(20px,5.4vw,34px);line-height:1.15;max-width:90%}
-.xp-sl .a{display:block;margin-top:6px;font-family:'Figtree',sans-serif;font-weight:700;font-size:clamp(11px,2.6vw,15px);opacity:.85}
-.xp-novo{position:absolute;top:8px;left:50%;transform:translateX(-50%);background:#e9b8a3;color:#2b2230;font-weight:700;font-size:12px;padding:4px 10px;border-radius:999px;opacity:0;transition:opacity .3s;z-index:2}
-.xp-novo.on{opacity:1}
-.xp-conf{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:3}
-.xp-conf i{position:absolute;top:-10px;width:8px;height:5px;border-radius:1px;animation:xpcf 2.4s ease-in both}
-@keyframes xpcf{to{transform:translate(var(--x),120vh) rotate(var(--g))}}
-.xp-form{margin-top:34px;background:var(--surface);border-radius:18px;padding:18px;box-shadow:0 6px 20px rgba(0,0,0,.06)}
-.xp-form h2{margin:0 0 4px;font-size:20px}
-.xp-form .in{width:100%}
-.xp-fim{margin-top:22px;text-align:center}
-.xp-fim .btn{width:100%;max-width:360px}
-.xp small.muted{display:block;margin-top:8px}
 /* acabamento profissional (revisão de design: Gemini sugeriu, Claude validou) */
 body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 body.app-neutro{--bg:#F6F7FB;--bg2:#EEF1F6;background:#F6F7FB}
@@ -1066,6 +987,62 @@ html:has(body.app-neutro){background:#F6F7FB}
 body.app-neutro .top h1 em{font-family:'Fraunces',Georgia,serif;font-weight:500;font-style:italic;text-transform:none;letter-spacing:0;color:var(--accent)}
 .sobrio .tema:has(.rec) .nm{margin-top:24px}
 .tema{border-radius:12px}
+
+/* barra do telão no painel */
+.tvbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:#0F172A;color:#fff;border-radius:14px;padding:10px 12px 10px 16px;margin:0 0 16px;position:sticky;top:8px;z-index:20;box-shadow:0 10px 30px -18px rgba(15,23,42,.6)}
+.tvb-l{display:flex;align-items:center;gap:8px;white-space:nowrap} .tvb-l b{font-size:15px}
+.tvb-k{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#94A3B8;font-weight:700}
+.tvb-dot{width:9px;height:9px;border-radius:50%;background:#22C55E;box-shadow:0 0 0 4px rgba(34,197,94,.2);animation:tvbPulso 2s infinite}
+@keyframes tvbPulso{50%{box-shadow:0 0 0 7px rgba(34,197,94,0)}}
+.tvb-m{display:flex;gap:4px;flex-wrap:wrap;flex:1;min-width:0}
+.tvb-m button{display:inline-flex;align-items:center;gap:6px;border:0;background:rgba(255,255,255,.07);color:#E2E8F0;border-radius:9px;padding:8px 9px;font:inherit;font-size:13px;font-weight:600;cursor:pointer;min-height:38px}
+.tvb-m button:hover{background:rgba(255,255,255,.14)}
+.tvb-m button[aria-pressed=true]{background:#fff;color:#0F172A}
+.tvb-r .btn{background:transparent;color:#fff;border-color:rgba(255,255,255,.25);display:inline-flex;gap:6px;align-items:center}
+@media (max-width:700px){.tvbar{flex-direction:column;align-items:stretch;gap:10px;padding:12px}.tvb-m{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.tvb-m button{flex-direction:column;gap:3px;padding:8px 2px;font-size:11px;justify-content:center}.tvb-r{width:100%}.tvb-r .btn{width:100%;justify-content:center}}
+#abasTop .aic{display:inline-flex;vertical-align:-3px;margin-right:8px;opacity:.8} #abasTop button[aria-pressed=true] .aic{opacity:1}
+/* controle discreto dentro do telão (só aparece para o organizador, ao mexer o mouse) */
+.tv-dock{position:fixed;left:50%;bottom:18px;transform:translate(-50%,140%);z-index:60;display:flex;align-items:center;gap:4px;padding:6px;border-radius:14px;background:rgba(15,23,42,.88);backdrop-filter:blur(8px);box-shadow:0 18px 40px -18px rgba(0,0,0,.7);transition:transform .25s ease;opacity:.98}
+.tv-dock.on,.tv-dock:hover{transform:translate(-50%,0)}
+.tv-dock button{display:inline-flex;align-items:center;gap:6px;border:0;background:transparent;color:#E2E8F0;border-radius:9px;padding:9px 11px;font:600 13px Figtree,system-ui,sans-serif;cursor:pointer}
+.tv-dock button:hover{background:rgba(255,255,255,.14)} .tv-dock .sep{width:1px;height:24px;background:rgba(255,255,255,.2);margin:0 4px}
+.emi{width:1.08em;height:1.08em;display:inline-block;vertical-align:-.17em;flex:none;margin:0 .06em}
+.emi-heart{color:var(--accent, currentColor)}
+
+/* ===== Roteiro, barra do telão, refinamentos ===== */
+.rot{background:var(--surface,#fff);border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin:0 0 16px;box-shadow:0 1px 2px rgba(15,23,42,.04)}
+.rot-h{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.rot-h b{font-size:17px;margin-right:10px} .rot-h span{color:var(--muted);font-size:14px}
+.rot-x{background:none;border:0;color:var(--muted);cursor:pointer;padding:6px;border-radius:8px;font-size:18px;line-height:0}
+.rot-x:hover{background:var(--line)}
+.rot-bar{height:6px;border-radius:99px;background:var(--line);margin:10px 0 12px;overflow:hidden} .rot-bar i{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .4s}
+.rot-l{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.rot-l li{display:flex;flex-direction:column;gap:8px;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--bg2,transparent)}
+.rot-l li.prox{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 14%,transparent)}
+.rot-l li.ok{opacity:.62}
+.rot-n{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:14px;background:var(--line);color:var(--ink)}
+.rot-l li.prox .rot-n{background:var(--accent);color:var(--on,#fff)} .rot-l li.ok .rot-n{background:#16a34a;color:#fff}
+.rot-c{display:flex;flex-direction:column;gap:2px;flex:1} .rot-c b{font-size:15px} .rot-c span{font-size:13px;color:var(--muted);line-height:1.35}
+.rot-l .btn{align-self:flex-start}
+@media (max-width:900px){ .rot-l{grid-template-columns:1fr 1fr} }
+@media (max-width:560px){ .rot-l{grid-template-columns:1fr} .rot-l li{flex-direction:row;align-items:center} .rot-c span{display:none} }
+.tvb-h{font-size:12px;color:#94a3b8;font-weight:600;letter-spacing:.02em}
+@media (max-width:760px){ .tvb-h{display:none} }
+.tvbar.pulsa{animation:tvPulsa 1.4s ease 2}
+@keyframes tvPulsa{0%,100%{box-shadow:0 10px 30px -18px rgba(15,23,42,.6)}50%{box-shadow:0 0 0 6px color-mix(in srgb,var(--accent) 45%,transparent)}}
+.desl{min-height:78vh;display:flex;flex-direction:column;align-items:center;justify-content:center;max-width:340px;margin:0 auto}
+.desl-ic{width:72px;height:72px;border-radius:50%;display:grid;place-items:center;font-size:34px;background:color-mix(in srgb,var(--accent) 10%,transparent);color:var(--accent);margin-bottom:8px}
+.desl h1{font-size:26px;margin:8px 0 6px} .desl p{font-size:15px;line-height:1.5}
+body.app-neutro .plano-bar{background:var(--surface,#fff);border:1px solid var(--line);color:var(--muted);font-size:14px;padding:8px 14px}
+body.app-neutro .plano-bar b{color:var(--ink)}
+.upbox .pv:not(:has(img)){display:flex;flex-direction:column;gap:8px;align-items:center;justify-content:center;color:var(--muted);font-size:14px;border:1.5px dashed var(--line);background:color-mix(in srgb,var(--accent) 3%,transparent);cursor:pointer}
+.empty{display:flex;flex-direction:column;align-items:center;gap:6px}
+body.sobrio .in,body.sobrio textarea.in,body.sobrio select.in{min-height:46px;background:#fbfbfc;border-color:#e3e5ea}
+body.sobrio .in:focus{background:#fff}
+.upbox .pv .emi{width:30px;height:30px;opacity:.7}
+body.corp{--r-lg:10px}
+body.corp .card{border-radius:12px}
+body.corp .btn{border-radius:10px}
 </style>
 </head>
 <body>
@@ -1091,9 +1068,104 @@ const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const Q = new URLSearchParams(location.search);
 const SLUG = (Q.get('f') || '').trim().toLowerCase();
-const MODE = Q.has('experimente') ? 'experimente' : Q.has('termos') ? 'termos' : Q.has('criar') ? 'criar' : Q.has('mestre') ? 'mestre' : SLUG ? (Q.has('telao') ? 'telao' : Q.has('palestrante') ? 'palestrante' : Q.has('portaria') ? 'portaria' : Q.has('pedidos') ? 'pedidos' : Q.has('valet') ? 'valet' : Q.has('admin') ? 'admin' : 'convidado') : 'inicio';
+const MODE = Q.has('termos') ? 'termos' : Q.has('criar') ? 'criar' : Q.has('mestre') ? 'mestre' : SLUG ? (Q.has('telao') ? 'telao' : Q.has('portaria') ? 'portaria' : Q.has('pedidos') ? 'pedidos' : Q.has('valet') ? 'valet' : Q.has('admin') ? 'admin' : 'convidado') : 'inicio';
+
+// ===== Ícones de linha no lugar de emojis da interface =====
+const EMI_P={
+ ok:'<path d="M20 6 9 17l-5-5"/>',
+ mail:'<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/>',
+ spark:'<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 3v4M17 5h4"/>',
+ mic:'<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M19 10v1a7 7 0 0 1-14 0v-1M12 18v4"/>',
+ tv:'<rect x="2" y="7" width="20" height="14" rx="2"/><path d="m17 2-5 5-5-5"/>',
+ car:'<path d="M3 17v-4l2.2-5.2A2 2 0 0 1 7 6.5h10a2 2 0 0 1 1.8 1.3L21 13v4h-2M3 17h2M9 17h6M3 13h18"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/>',
+ food:'<path d="M3 2v7a3 3 0 0 0 6 0V2M6 2v20M21 15V2a5 5 0 0 0-5 5v6a2 2 0 0 0 2 2h3zm0 0v7"/>',
+ heart:'<path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7z"/>',
+ phone:'<rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/>',
+ door:'<path d="M13 4h3a2 2 0 0 1 2 2v14M2 20h20M13 20V3.6a.6.6 0 0 0-.7-.6L5 4.5V20"/><path d="M10 12v.01"/>',
+ userp:'<circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2M19 8v6M22 11h-6"/>',
+ chat:'<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+ cam:'<path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3"/>',
+ clip:'<rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2M9 12h6M9 16h4"/>',
+ pen:'<path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
+ book:'<path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2zM22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"/>',
+ clock:'<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
+ dice:'<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 8h.01M16 16h.01M12 12h.01M16 8h.01M8 16h.01" stroke-width="3"/>',
+ palette:'<path d="M12 22a10 10 0 1 1 10-10c0 2.8-2.2 4-4 4h-2a2 2 0 0 0-1.5 3.3A1.6 1.6 0 0 1 12 22z"/><path d="M7.5 10.5h.01M10.5 7h.01M15 7.5h.01" stroke-width="3"/>',
+ brief:'<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2M2 13h20"/>',
+ img:'<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/>',
+ x:'<path d="M18 6 6 18M6 6l12 12"/>',
+ glass:'<path d="M8 22h8M12 15v7M5 3h14l-1 6a6 6 0 0 1-12 0z"/>',
+ video:'<rect x="2" y="6" width="14" height="12" rx="2"/><path d="m22 8-6 4 6 4z"/>',
+ trophy:'<path d="M6 9H4a2 2 0 0 1 0-4h2M18 9h2a2 2 0 0 0 0-4h-2M6 3h12v6a6 6 0 0 1-12 0zM12 15v4M8 22h8M10 19h4"/>',
+ flask:'<path d="M9 2h6M10 2v7L4.3 19.5A1 1 0 0 0 5.2 21h13.6a1 1 0 0 0 .9-1.5L14 9V2M7 15h10"/>',
+ help:'<circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/>',
+ chart:'<path d="M3 3v18h18M8 17v-5M13 17V8M18 17v-9"/>',
+ pause:'<rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/>',
+ warn:'<path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0zM12 9v4M12 17h.01"/>',
+ bell:'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.9 1.9 0 0 0 3.4 0"/>',
+ mega:'<path d="m3 11 18-6v14L3 13zM11.6 16.8a3 3 0 1 1-5.8-1.6"/>',
+ lock:'<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+ unlock:'<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/>',
+ key:'<circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6M15.5 7.5l3 3L22 7l-3-3"/>',
+ gift:'<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5"/>',
+ cloud:'<path d="M17.5 19H9a7 7 0 1 1 6.7-9h1.8a4.5 4.5 0 1 1 0 9z"/>',
+ bulb:'<path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.3h6c0-1 .4-1.8 1-2.3A7 7 0 0 0 12 2z"/>',
+ card:'<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/>',
+ music:'<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>',
+ ticket:'<path d="M2 9a3 3 0 0 0 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 0 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2zM13 5v2M13 17v2M13 11v2"/>',
+ pin:'<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/>',
+ file:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/>',
+ user:'<circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/>',
+ users:'<circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2M16 3.1a4 4 0 0 1 0 7.8M21 21v-2a4 4 0 0 0-3-3.9"/>',
+ ball:'<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4.5"/>',
+ star:'<path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/>',
+ eyeoff:'<path d="M3 3l18 18M10.6 10.6a2 2 0 0 0 2.8 2.8M9.9 5.1A10 10 0 0 1 12 5c7 0 10 7 10 7a13 13 0 0 1-1.7 2.7M6.6 6.6A13.5 13.5 0 0 0 2 12s3 7 10 7a9.7 9.7 0 0 0 5.4-1.6"/>',
+ eye:'<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+ stop:'<rect x="5" y="5" width="14" height="14" rx="2" fill="currentColor"/>',
+ rec:'<circle cx="12" cy="12" r="7" fill="currentColor"/>',
+ search:'<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
+ plus:'<path d="M12 5v14M5 12h14"/>',
+ print:'<path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>',
+ tack:'<path d="M12 17v5M9 10.8V4h6v6.8l3 3.2v2H6v-2z"/>',
+ send:'<path d="m22 2-7 20-4-9-9-4zM22 2 11 13"/>',
+ zap:'<path d="M13 2 3 14h9l-1 8 10-12h-9z"/>',
+ crown:'<path d="m2 7 5 5 5-8 5 8 5-5-2 12H4z"/>',
+ refresh:'<path d="M21 12a9 9 0 1 1-3-6.7L21 8M21 3v5h-5"/>',
+ cal:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+ gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
+ trash:'<path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6"/>',
+ link:'<path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/>',
+ tag:'<path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L2 12V2h10l8.6 8.6a2 2 0 0 1 0 2.8z"/><circle cx="7" cy="7" r="1.5"/>',
+ vol:'<path d="M11 5 6 9H2v6h4l5 4zM15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/>',
+ mute:'<path d="M11 5 6 9H2v6h4l5 4zM22 9l-6 6M16 9l6 6"/>',
+ arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>',
+ down:'<path d="M12 5v14M6 13l6 6 6-6"/>',
+ target:'<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
+ upload:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>',
+ home:'<path d="M3 10 12 3l9 7v11H3z"/><path d="M9 21v-7h6v7"/>',
+ laptop:'<rect x="4" y="4" width="16" height="11" rx="2"/><path d="M2 20h20"/>',
+ ban:'<circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/>',
+ flag:'<path d="M4 22V4M4 4h13l-2 4 2 4H4"/>',
+ save:'<path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/>',
+ party:'<path d="M5.8 11.3 2 22l10.7-3.8M4 3h.01M22 8h.01M15 2h.01M22 20h.01M22 2l-2.2.8a2.9 2.9 0 0 0-1.9 3.2c.1.9-.6 1.6-1.4 1.6H16M11 2l.3 1.6c.2.8-.3 1.6-1.1 1.8L9 6"/><path d="M9.2 12.8 11.2 14.8"/><path d="M6 11c4 0 7 3 7 7"/>'
+};
+const EMI_MAP={'✅':'ok','✓':'ok','✔':'ok','💾':'save','💌':'mail','📨':'send','✉':'mail','🎉':'party','🥳':'party','🎊':'party','✨':'spark','🎤':'mic','🎙':'mic','📺':'tv','🚗':'car','🍽':'food','🍳':'food','💛':'heart','🤍':'heart','♥':'heart','♡':'heart','❤':'heart','💜':'heart','💙':'heart','🩷':'heart','💞':'heart','📲':'phone','📱':'phone','🚪':'door','🙋':'userp','💬':'chat','📸':'cam','📷':'cam','🤳':'cam','📋':'clip','📝':'pen','✍':'pen','✏':'pen','📖':'book','📚':'book','📜':'book','⏳':'clock','⏰':'clock','🏃':'clock','🎲':'dice','🎨':'palette','💼':'brief','🖼':'img','✕':'x','❌':'x','🍹':'glass','🥂':'glass','🍾':'glass','🎥':'video','🏆':'trophy','🏅':'trophy','🧪':'flask','❓':'help','📊':'chart','⏸':'pause','⚠':'warn','🔔':'bell','📢':'mega','🔑':'key','🔐':'lock','🔒':'lock','🔓':'unlock','🎁':'gift','☁':'cloud','🧠':'bulb','💳':'card','🎶':'music','🎵':'music','🎟':'ticket','🎫':'ticket','🗺':'pin','📍':'pin','🧭':'pin','📄':'file','🗂':'file','🧑':'user','👤':'user','👨':'user','🤝':'users','🎱':'ball','⭐':'star','★':'star','🤫':'eyeoff','🙈':'eyeoff','👀':'eye','⏹':'stop','⏺':'rec','🔎':'search','➕':'plus','🖨':'print','📌':'tack','🚀':'zap','⚡':'zap','🔥':'zap','👑':'crown','🔄':'refresh','📅':'cal','🗓':'cal','⚙':'gear','🗑':'trash','🔗':'link','🏷':'tag','🔊':'vol','🔇':'mute','🔕':'mute','👉':'arrow','👇':'down','🎯':'target','📤':'upload','🏠':'home','💻':'laptop','🚫':'ban','⛔':'ban','🏁':'flag','🎈':'party','🎂':'gift','🙌':'party','🙏':'heart','👌':'ok','🎮':'dice'};
+const EMI_RE=new RegExp('('+Object.keys(EMI_MAP).sort((a,b)=>b.length-a.length).map(k=>k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')+')\\uFE0F?','gu');
+const EMI_TEST=new RegExp(EMI_RE.source,'u');
+const EMI_EXCL='script,style,textarea,input,select,option,canvas,svg,#stage,.tv-dock,.tema,.pb,.q,blockquote,.media,.rx,.reac,.cap,.nuv,.bola,.chars,.noico,[contenteditable],.cv-prev,.wa-prev,pre,code';
+function emiSvg(k){ return `<svg class="emi emi-${k}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${EMI_P[k]}</svg>`; }
+function iconizar(root){
+  if(!root || MODE==='telao') return;
+  const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>{ if(!EMI_TEST.test(n.data)) return NodeFilter.FILTER_REJECT; const p=n.parentElement; return (!p||p.closest(EMI_EXCL))?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT; }});
+  const ns=[]; while(w.nextNode()) ns.push(w.currentNode);
+  ns.forEach(n=>{ const t=n.data, tmp=document.createElement('span'); let html='', last=0; t.replace(EMI_RE,(m,k,off)=>{ html+=esc(t.slice(last,off))+emiSvg(EMI_MAP[k]); last=off+m.length; return m; }); html+=esc(t.slice(last)); tmp.innerHTML=html; n.replaceWith(...tmp.childNodes); });
+}
+(function(){ let pend=false; const run=()=>{ pend=false; try{ iconizar(document.body); }catch(e){} };
+  const mo=new MutationObserver(()=>{ if(!pend){ pend=true; requestAnimationFrame(run); } });
+  const go=()=>{ if(MODE==='telao') return; run(); mo.observe(document.body,{childList:true,subtree:true,characterData:true}); };
+  if(document.body) go(); else document.addEventListener('DOMContentLoaded',go);
+})();
 const BASE = location.origin + location.pathname.replace(/index\.html$/, '');
-const SITE = (location.host + location.pathname).replace(/index\.html$/,'').replace(/\/$/,'');
 const linkFesta = (slug, extra) => BASE + '?f=' + slug + (extra ? '&' + extra : '');
 const midia = p => !p ? '' : /^(blob:|data:|https?:)/.test(p) ? p : `${SUPABASE_URL}/storage/v1/object/public/fe-midia/${p.split('/').map(encodeURIComponent).join('/')}`;
 const store = {
@@ -1322,7 +1394,7 @@ async function postsAprovados(festaId){
   const {data,error}=await sb.from('fe_posts').select('id,tipo,autor,texto,caminho,thumb,duracao,criado_em,curtidas,reacoes,comentarios').eq('festa_id',festaId).order('criado_em',{ascending:true}).limit(1000);
   if(error) throw error; return data;
 }
-const ERR = e => { const m=(e&&e.message)||''; if(/Impróprio/.test(m)) return 'Opa! Essa mensagem tem palavras que não podem ir para o telão. Que tal escrever de outro jeito? 💛'; if(/Calma/.test(m)) return 'Calma! Espere uns segundinhos para mandar outra.'; if(/Limite do plano/.test(m)) return 'Esta festa chegou ao limite de homenagens do plano contratado. O anfitrião pode mudar para um plano maior.'; if(/Gravação maior/.test(m)) return 'A gravação passou do tempo permitido nesta festa.'; if(/Limite do teste/.test(m)) return 'Esta festa está em modo teste e já recebeu as 10 homenagens do teste. O anfitrião precisa ativar a festa para receber mais.'; if(/Código inválido/.test(m)) return 'Código inválido ou já usado. Confira as letras e os números.'; if(/Muitas festas/.test(m)) return m; if(/Informe|Aceite/.test(m)) return m+'.'; if(/Senha/.test(m)) return 'Senha incorreta.'; if(/row-level|policy/i.test(m)) return 'Esta festa não está aceitando homenagens agora.'; if(/size|large|exceed/i.test(m)) return 'Arquivo grande demais. Tente um menor.'; if(/mime|type/i.test(m)) return 'Tipo de arquivo não aceito.'; return 'Não deu certo agora. Confira a internet e tente de novo.'; };
+const ERR = e => { const m=(e&&e.message)||''; if(/Calma/.test(m)) return 'Calma! Espere uns segundinhos para mandar outra.'; if(/Limite do plano/.test(m)) return 'Esta festa chegou ao limite de homenagens do plano contratado. O anfitrião pode mudar para um plano maior.'; if(/Gravação maior/.test(m)) return 'A gravação passou do tempo permitido nesta festa.'; if(/Limite do teste/.test(m)) return 'Esta festa está em modo teste e já recebeu as 10 homenagens do teste. O anfitrião precisa ativar a festa para receber mais.'; if(/Código inválido/.test(m)) return 'Código inválido ou já usado. Confira as letras e os números.'; if(/Muitas festas/.test(m)) return m; if(/Informe|Aceite/.test(m)) return m+'.'; if(/Senha/.test(m)) return 'Senha incorreta.'; if(/row-level|policy/i.test(m)) return 'Esta festa não está aceitando homenagens agora.'; if(/size|large|exceed/i.test(m)) return 'Arquivo grande demais. Tente um menor.'; if(/mime|type/i.test(m)) return 'Tipo de arquivo não aceito.'; return 'Não deu certo agora. Confira a internet e tente de novo.'; };
 
 // ---------- imagens ----------
 // Fotos HEIC/HEIF (padrão de vários Samsung e iPhone) não abrem no navegador: convertemos para JPG
@@ -1405,13 +1477,11 @@ async function telaConvidado(){
       ${f.moderacao?`<p class="nota">${CORP(f)?'As mensagens aparecem no telão depois da aprovação da organização.':'As homenagens aparecem no telão depois que o anfitrião aprova 💛'}</p>`:''}
     </section>
     ` : `<div class="closed">As homenagens desta festa foram encerradas. Obrigado por fazer parte.</div>`}
-    ${f.ativo && PIX(f) ? '<section class="card rsvp" id="pixC"></section>' : ''}
     ${f.ativo && (EXT(f).desafios||[]).length ? '<section class="card rsvp" id="dsf"></section>' : ''}
     ${f.ativo && f.tem_cardapio && !MESA ? '<section class="card rsvp" id="cdp"></section>' : ''}
     ${f.ativo && f.correio_ativo!==false ? '<section class="card rsvp" id="crr"></section>' : ''}
     ${(t.fotos||[]).length ? `<h2 class="sec">📖 A história de ${esc(f.homenageado||'quem a gente ama')}</h2><div class="hist">${t.fotos.map(p=>`<figure><img loading="lazy" src="${midia(p)}" alt=""></figure>`).join('')}</div>` : ''}
     <h2 class="sec">🖼️ Mural <span class="muted" id="muralN" style="font-size:16px;font-weight:500"></span></h2>
-    <div class="mm-chips" id="mmC"></div>
     <div class="mural" id="mural"></div>
     <p class="rod">Ao enviar ${CORP(f)?'uma mensagem':'uma homenagem'}, você concorda com os <a href="${BASE}?termos" target="_blank" rel="noopener">Termos de uso e Privacidade</a>.</p>
   </div>`;
@@ -1419,19 +1489,14 @@ async function telaConvidado(){
   document.querySelectorAll('.capa .enfc').forEach(im=>{ const t2=new Image(); t2.crossOrigin='anonymous'; t2.onload=()=>{ try{ const c=document.createElement('canvas'); c.width=c.height=16; const x=c.getContext('2d'); x.drawImage(t2,0,0,16,16); const d=x.getImageData(0,0,16,16).data; if(![0,15,240,255].some(k=>d[k*4+3]<200)) im.classList.add('sticker'); }catch(e){ im.classList.add('sticker'); } }; t2.src=im.src; });
   const nome=$('nome'); if(nome) nome.addEventListener('change',()=>store.set('mf_nome',nome.value.trim().slice(0,40)));
   $('mural').addEventListener('click', e=>{ const l=e.target.closest('[data-like]'); if(l) return curtir(l); const rc=e.target.closest('[data-reac]'); if(rc) return reagir(rc); const cm=e.target.closest('[data-com]'); if(cm) return abrirComentarios(+cm.dataset.com); const m=e.target.closest('[data-mol]'); if(m){ const p=POSTS.find(x=>x.id===+m.dataset.mol); if(p) abrirMoldura(midia(p.caminho), p.autor); } });
-  ligarConvite(); ligarPresenca(); ligarCardapio(MESA); ligarValet(); ligarSorteio(); ligarQuiz(); ligarEnquete(); ligarCorreio(); ligarPerguntas(MESA); ligarAvisoConvidado(); ligarDesafios(); ligarBingo(); ligarPix();
+  ligarConvite(); ligarPresenca(); ligarCardapio(MESA); ligarValet(); ligarSorteio(); ligarQuiz(); ligarEnquete(); ligarCorreio(); ligarPerguntas(MESA); ligarAvisoConvidado(); ligarDesafios(); ligarBingo();
   await atualizarMural(); setInterval(()=>{ if(!document.hidden) atualizarMural(); }, 20000);
 }
 async function atualizarMural(){
   try{ POSTS = await postsAprovados(FESTA.id); }catch(e){ return; }
-  const rv=REVELA(FESTA), sel=window.MURAL_MM||'';
-  const key=(rv?'rv'+rv:'')+'|'+sel+'|'+POSTS.map(p=>p.id+':'+(p.curtidas||0)+':'+JSON.stringify(p.reacoes||{})+':'+(p.comentarios||0)).join(','); if(key===muralKey) return; muralKey=key;
+  const key=POSTS.map(p=>p.id+':'+(p.curtidas||0)+':'+JSON.stringify(p.reacoes||{})+':'+(p.comentarios||0)).join(','); if(key===muralKey) return; muralKey=key;
   $('muralN').textContent = POSTS.length ? `(${POSTS.length})` : '';
-  if(rv){ $('mmC').innerHTML=''; $('mural').innerHTML=`<div class="empty">🔒 <b>O mural abre ${esc(new Date(rv).toLocaleString('pt-BR',{weekday:'long',day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'}))}.</b><br>${CORP(FESTA)?'As mensagens já estão passando no telão. Volte aqui para rever tudo.':'As homenagens já estão passando no telão. Guarde este link e volte para rever tudo 💛'}</div>`; return; }
-  const nomesM=[...new Set(POSTS.map(p=>momentoDe(p,FESTA)).filter(Boolean))];
-  $('mmC').innerHTML = nomesM.length>1 ? ['',...nomesM].map(n=>`<button type="button" class="chip${n===sel?' on':''}" data-mm="${esc(n)}">${n?esc(n):'Todos'}</button>`).join('') : '';
-  $('mmC').querySelectorAll('[data-mm]').forEach(b=>b.onclick=()=>{ window.MURAL_MM=b.dataset.mm; muralKey=null; atualizarMural(); });
-  const m=$('mural'); const list=[...POSTS].filter(p=>!sel||momentoDe(p,FESTA)===sel).reverse();
+  const m=$('mural'); const list=[...POSTS].reverse();
   m.innerHTML = list.length ? list.map(cardPost).join('') : `<div class="empty">${CORP(FESTA)?'Ainda não há mensagens. A primeira pode ser a sua.':'Ainda não chegou nenhuma homenagem. A primeira pode ser a sua ✨'}</div>`;
 }
 const curtidasMinhas = () => { try{ return new Set(JSON.parse(store.get('mf_curt_'+(FESTA&&FESTA.id))||'[]')); }catch(e){ return new Set(); } };
@@ -1824,19 +1889,7 @@ async function subir(blob, tipo, ext, contentType){
   const {error}=await sb.storage.from('fe-midia').upload(path, blob, {contentType, upsert:false, cacheControl:'31536000'});
   if(error) throw error; return path;
 }
-// moderação automática: barra palavrões e ofensas antes de chegar ao telão
-const PALAVRAS_BLOQ=['porra','caralho','buceta','boceta','puta','puto','putaria','fdp','vsf','vtnc','pqp','foda','fodase','foder','fodido','merda','bosta','cu','cuzao','arrombado','arrombada','viado','viadinho','sapatao','piranha','vagabunda','vagabundo','corno','corna','otario','otaria','babaca','escroto','escrota','desgraca','desgracado','desgracada','retardado','retardada','piroca','xoxota','xereca','punheta','siririca','safada','safado','nazista','prostituta','vadia','cacete','krl','crl','tnc','vai tomar','tomar no','filho da','filha da'];
-function textoImproprio(t){ if(!t) return false; const n=' '+String(t).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[0@]/g,'o').replace(/[1!]/g,'i').replace(/3/g,'e').replace(/4/g,'a').replace(/\$/g,'s').replace(/[^a-z ]+/g,' ').replace(/\s+/g,' ')+' ';
-  return PALAVRAS_BLOQ.some(w=>n.includes(' '+w+' ') || (w.includes(' ') && n.includes(' '+w))); }
-async function gravarPost(row){ if(textoImproprio(row.texto)||textoImproprio(nomeAtual())) throw new Error('Impróprio'); const {error}=await sb.from('fe_posts').insert({festa_id:FESTA.id, autor:nomeAtual(), aparelho:deviceId(), ...row}); if(error) throw error; setTimeout(promoAposEnvio, 2600); }
-// depois do 1º envio, uma vez por festa: convida o convidado a fazer o Mural da festa dele
-function promoAposEnvio(){ try{ if(!FESTA) return; const k='mf_promo_'+FESTA.slug; if(store.get(k)) return; store.set(k,'1');
-  const corp=CORP(FESTA); const href=BASE+(corp?'?para=empresa&origem=convidado':'?experimente&origem=convidado');
-  const el=document.createElement('div'); el.className='promo-card'; el.setAttribute('role','status');
-  el.innerHTML=`<button class="x" type="button" aria-label="Fechar">×</button><p><b>${corp?'Gostou? Leve o Mural para o evento da sua empresa.':'Gostou? Faça o Mural da sua festa também 💌'}</b><br>${corp?'Teste grátis antes de contratar.':'Veja funcionando em 30 segundos e teste grátis.'}</p><a class="btn sm" href="${href}" target="_blank" rel="noopener">${corp?'Conhecer o Mural':'Quero ver como funciona'}</a>`;
-  document.body.appendChild(el); void el.offsetWidth; el.classList.add('on');
-  const fechar=()=>{ el.classList.remove('on'); setTimeout(()=>el.remove(),500); }; el.querySelector('.x').onclick=fechar; setTimeout(fechar, 15000);
-}catch(e){} }
+async function gravarPost(row){ const {error}=await sb.from('fe_posts').insert({festa_id:FESTA.id, autor:nomeAtual(), aparelho:deviceId(), ...row}); if(error) throw error; }
 
 function folhaFoto(desafio, aoEnviar){
   abrirFolha(`<h3>${desafio?'📸 Desafio: '+esc(desafio):'📸 Fotos da festa'}</h3>
@@ -1982,7 +2035,7 @@ async function telaTelao(){
      <div class="tv-top"><div class="t">${EXT(f).logo?`<img class="tv-logo" src="${midia(EXT(f).logo)}" alt="">`:''}${esc(nome)}</div><div class="n" id="tvN"></div></div>
      <div class="stage" id="stage"></div>
      ${f.plano==='teste'?'<div class="demo" id="tvDemo">🎈 Modo grátis <small>· faça o upgrade para mais diversão</small></div>':''}
-     <div class="tv-bar"><div class="qr" id="tvQr"></div><div><b>${CORP(f)?'Participe!':'Deixe sua homenagem!'}</b><span>${CORP(f)?'Aponte a câmera do celular para o código · mensagens, perguntas e mais':'Aponte a câmera do celular para o código · foto, recado, áudio ou vídeo'}</span></div>${f.plano==='teste'?`<div class="tv-promo">Quer um telão assim na sua festa?<br><b>Crie grátis: ${esc(SITE)}</b></div>`:CORP(f)?'':`<div class="tv-promo">feito com 💌 Mural da Festa<br>${esc(SITE)}</div>`}</div>
+     <div class="tv-bar"><div class="qr" id="tvQr"></div><div><b>${CORP(f)?'Participe!':'Deixe sua homenagem!'}</b><span>${CORP(f)?'Aponte a câmera do celular para o código · mensagens, perguntas e mais':'Aponte a câmera do celular para o código · foto, recado, áudio ou vídeo'}</span></div></div>
    </div>
    <div class="tv-start" id="tvStart"><div>${t.enfeite?`<img class="enf-big" src="${midia(t.enfeite)}" alt="">`:`<div style="font-size:64px">${t.deco[0]}</div>`}<div class="who">${esc(nome)}</div><p class="muted" style="font-size:20px;font-weight:600">${esc(subtitulo(f))}</p>
      <div class="row" style="justify-content:center"><button class="btn" id="tvGo" style="font-size:22px;padding:16px 30px">▶ Iniciar telão</button><button class="btn ghost" id="tvTeste">🧪 Testar o telão antes</button><button class="btn ghost" id="tvAj">❓ Ajuda</button></div><p class="muted" style="font-size:14px;margin-top:14px">Dica: conecte o notebook na TV. Teclas: → próxima · ← anterior · espaço pausa · F tela cheia${t.musica&&t.musica.tipo&&t.musica.tipo!=='nenhuma'?' · M música':''}</p></div></div>
@@ -1990,12 +2043,12 @@ async function telaTelao(){
   if($('tvDemo')){ const d=$('tvDemo'); let x=innerWidth*.3, y=innerHeight*.3, vx=.6, vy=.45;
     const passo=()=>{ const w=d.offsetWidth, h=d.offsetHeight, W=innerWidth, H=innerHeight; x+=vx; y+=vy; if(x<0){x=0;vx=Math.abs(vx);} if(x>W-w){x=W-w;vx=-Math.abs(vx);} if(y<0){y=0;vy=Math.abs(vy);} if(y>H-h){y=H-h;vy=-Math.abs(vy);} d.style.transform=`translate(${x}px,${y}px) rotate(-6deg)`; requestAnimationFrame(passo); }; requestAnimationFrame(passo); }
   qrInto($('tvQr'), url, 300);
+  ligarDockTelao(f);
   const medir=()=>{ const h=$('stage')?$('stage').clientHeight:0; if(h) document.documentElement.style.setProperty('--sh', h+'px'); const bb=document.querySelector('.tv-bar'); if(bb) document.documentElement.style.setProperty('--bh', bb.offsetHeight+'px'); }; medir(); addEventListener('resize', medir); setTimeout(medir,500);
   const tv = {list:[], known:new Set(), queue:[], loop:0, cur:null, timer:null, paused:false, hist:[], hi:0, pv:1, pm:0, since:0};
   const fotosH = t.fotos||[], mus = criarMusica(t.musica);
-  const PADRAO_VAZIO = fotosH.length>=3 ? ['intro','hist','hist','col','hist','pix','hist','qr'] : fotosH.length ? ['intro','hist','pix','hist','qr'] : ['intro','pix','qr'];
-  const PADRAO_MIX   = fotosH.length>=3 ? ['hist','col','pix','hist','intro','hist','qr'] : fotosH.length ? ['hist','pix','intro','hist','qr'] : ['intro','pix','qr'];
-  const pixTv = () => { const ex=window.__tvEx||EXT(f); return ex.pix && ex.pix.chave && ex.pix.telao!==false ? ex.pix : null; };
+  const PADRAO_VAZIO = fotosH.length>=3 ? ['intro','hist','hist','col','hist','hist','qr'] : fotosH.length ? ['intro','hist','hist','qr'] : ['intro','qr'];
+  const PADRAO_MIX   = fotosH.length>=3 ? ['hist','col','hist','intro','hist','qr'] : fotosH.length ? ['hist','intro','hist','qr'] : ['intro','qr'];
   const proxFoto = () => fotosH[(tv.hi++) % fotosH.length];
   const extra = k => k==='hist' ? {tipo:'hist', caminho:proxFoto()} : k==='col' ? {tipo:'col', fotos:[proxFoto(),proxFoto(),proxFoto()]} : {tipo:k};
 
@@ -2051,7 +2104,7 @@ async function telaTelao(){
   setInterval(baixador, 2000);
   // QR grande no telão só de vez em quando (o QR pequeno fica sempre no rodapé):
   // com mensagens no mural, no máximo a cada 10 min; mural vazio, a cada 2 min
-  function padrao(arr,k){ for(let n=0;n<arr.length;n++){ const t=arr[tv[k]++ % arr.length]; if(t==='pix'){ if(pixTv() && Date.now()-(tv.pixEm||0)>=240000){ tv.pixEm=Date.now(); return t; } continue; } if(t!=='qr') return t; if(document.body.classList.contains('sem-qr')) continue;
+  function padrao(arr,k){ for(let n=0;n<arr.length;n++){ const t=arr[tv[k]++ % arr.length]; if(t!=='qr') return t; if(document.body.classList.contains('sem-qr')) continue;
       const gap=tv.list.length?600000:120000; if(Date.now()-(tv.qrEm||0)>=gap){ tv.qrEm=Date.now(); return t; } } return 'intro'; }
   function proxima(back){
     clearTimeout(tv.timer); if(tv.paused) return;
@@ -2077,18 +2130,15 @@ async function telaTelao(){
     if(p.tipo==='hist'){ el.classList.add('sl-hist'); el.innerHTML=`<div class="pol" style="--r:${giro()}"><img src="${midia(p.caminho)}" alt=""></div><div class="cap">📖 A história de ${esc(nome)}</div>`; dur=6500; }
     else if(p.tipo==='col'){ el.classList.add('sl-col'); el.innerHTML=p.fotos.map((c,i)=>`<div class="pol c${i+1}" style="--r:${[-9,4,10][i]}deg;animation-delay:${i*.45}s"><img src="${midia(c)}" alt=""></div>`).join('')+`<div class="cap">📖 A história de ${esc(nome)}</div>`; dur=8500; }
     else if(p.tipo==='intro'){ el.className='sl sl-intro '+(CORP(f)?'quieto e-calma':'e-zoom'); el.innerHTML=`<div class="hey">${CORP(f)?'Bem-vindos':'✨ Bem-vindos à festa ✨'}</div><div class="nm">${CORP(f)?esc(nome):(()=>{ let i=0; return nome.split(' ').map(w=>`<span class="w" style="display:inline-block;white-space:nowrap">${[...w].map(ch=>`<span style="animation-delay:${(i++*.08).toFixed(2)}s">${esc(ch)}</span>`).join('')}</span>`).join(' '); })()}</div><div class="sub">${esc(subtitulo(f))}</div><div class="cta">${CORP(f)?'Participe pelo QR Code aqui embaixo':'📸 ✍️ 🎤 🎥 Mande sua homenagem pelo QR Code aqui embaixo!'}</div>`; dur=7500; if(!CORP(f)){ confete(60); chars.festa(); } }
-    else if(p.tipo==='pix'){ const px=pixTv(); el.className='sl tv-empty e-zoom'; el.innerHTML=`<div class="qr" id="tvQrBig"></div><h2>🎁 ${esc(px&&px.frase||PIX_FRASE(f))}</h2><p>${px&&Array.isArray(px.lista)&&px.lista.length?`Aponte a câmera e escolha o seu presente · Pix sem taxa, direto para ${esc(px.nome||'o anfitrião')}`:`No app do banco: Pix › Pagar com QR Code · sem taxa, direto para ${esc(px&&px.nome||'o anfitrião')}`}</p>`; dur=9000; }
     else if(p.tipo==='qr'){ el.className='sl tv-empty e-zoom'; el.innerHTML=`<div class="qr" id="tvQrBig"></div><h2>${tv.list.length?'Deixe a sua homenagem também!':'Mande a primeira homenagem!'}</h2><p>Aponte a câmera do celular para o código</p>`; dur=7000; }
     else if(p.tipo==='foto'){ el.classList.add('sl-foto'); el.innerHTML=`<img class="ph" style="--r:${giro()}" src="${midia(p.caminho)}" alt="">${(p.texto||by||p.curtidas)?`<div class="cap">${esc(p.texto||'')}${p.curtidas?`<span class="tvlike">♥ ${p.curtidas}</span>`:''}${Object.entries(p.reacoes||{}).map(([e,n])=>`<span class="tvreac">${e} ${n}</span>`).join('')}${by?`<small>📸 ${by}</small>`:''}</div>`:''}`; dur=8000; }
     else if(p.tipo==='correio'){ el.classList.add('sl-texto','sl-correio'); const L=(p.texto||'').length; const fs=L<60?6:L<140?4.6:3.6; el.innerHTML=`<div><div class="env">${CORP(f)?'💬 Recado para um colega':'💌 Correio elegante'}</div><div class="pa">Para: ${esc(p.para)}</div><div class="q${t.fundo?' card-on':''}" style="font-size:${fs}vw">${esc(p.texto)}</div><div class="by">${p.de?'— '+esc(p.de):(CORP(f)?'— um colega':'🤫 De: alguém especial')}</div></div>`; dur=Math.min(16000, 8000+L*40); }
     else if(p.tipo==='texto'){ el.classList.add('sl-texto'); const L=(p.texto||'').length; const fs = L<40?9:L<90?7:L<180?5.4:L<320?4.2:3.4; el.innerHTML=`<div class="q${t.fundo?' card-on':''}" style="font-size:${fs}vw">${esc(p.texto)}</div>${by||p.curtidas?`<div class="by">${by?'— '+by:''}${p.curtidas?`<span class="tvlike">♥ ${p.curtidas}</span>`:''}</div>`:''}`; dur=Math.min(18000, 7000+L*45); }
     else if(p.tipo==='audio'){ el.classList.add('sl-audio'); el.innerHTML=`<div class="mic">🎤</div><div class="eq">${'<i></i>'.repeat(12)}</div><div class="cap">Recado de ${by||'um convidado'}</div><audio src="${(cacheM.get(p.id)||{}).url||midia(p.caminho)}" preload="auto"></audio>`; dur=null; }
     else if(p.tipo==='video'){ el.classList.add('sl-video'); el.innerHTML=`<video src="${(cacheM.get(p.id)||{}).url||midia(p.caminho)}" playsinline preload="auto" ${p.thumb?`poster="${midia(p.thumb)}"`:''}></video>${by?`<div class="cap"><small>🎥 Recado de ${by}</small></div>`:''}`; dur=null; }
-    if(p.tipo==='texto' && /^💸/.test(p.texto||'')){ const gm=(p.texto||'').match(/^💸\s*Presenteei:\s*([^!\n]{1,40})!/); el.insertAdjacentHTML('afterbegin',`<div class="novo">🎁 ${gm?esc(gm[1].trim())+'!':'Presente enviado!'} Obrigado${by?', '+by:''}!</div>`); if(!CORP(f)) confete(120); }
-    else if(p._novo){ el.insertAdjacentHTML('afterbegin',`<div class="novo">${CORP(f)?'✨ Nova mensagem':'✨ Nova homenagem! ✨'}</div>`); if(!CORP(f)){ confete(); chars.festa(); } }
+    if(p._novo){ el.insertAdjacentHTML('afterbegin',`<div class="novo">${CORP(f)?'✨ Nova mensagem':'✨ Nova homenagem! ✨'}</div>`); if(!CORP(f)){ confete(); chars.festa(); } }
     st.appendChild(el); tv.cur=p;
     if(p.tipo==='qr') qrInto($('tvQrBig'), url, 600);
-    if(p.tipo==='pix'){ const px=pixTv(); if(px) qrInto($('tvQrBig'), Array.isArray(px.lista)&&px.lista.length ? url : pixPayload(px), 600); }
     const m=el.querySelector('audio,video'); if(mus) mus.duck(!!m);
     if(m){ m.onended=()=>proxima(); m.onerror=()=>{ tv.timer=setTimeout(proxima,1500); }; m.play().catch(()=>{ tv.timer=setTimeout(proxima,3000); }); tv.timer=setTimeout(proxima, ((p.duracao||60)+6)*1000); }
     else tv.timer=setTimeout(proxima, dur);
@@ -2116,19 +2166,17 @@ async function telaTelao(){
   const aplicarCtl=e=>{
     const modo=(e&&e.modo)||'mural', sl=(e&&e.slides)||[];
     document.body.classList.toggle('sem-qr', !!e && e.qr===false);
-    if(sl.join()!==slidesCache.join()){ slidesCache=sl; sl.forEach(p=>{ if(!EH_VIDEO(p)){ const im=new Image(); im.src=midia(p); } }); }
-    if(modo==='apresentacao' && sl.length){ camada.className='tv-apr'; camada.hidden=false; const cam=sl[Math.min(e.slide||0,sl.length-1)], src=midia(cam), atual=camada.querySelector('[data-src]');
-      if(!atual || atual.dataset.src!==src){ if(EH_VIDEO(cam)){ camada.innerHTML=`<video data-src="${src}" src="${src}" playsinline autoplay preload="auto"></video>`; const v=camada.querySelector('video'); v.play().catch(()=>{ v.muted=true; v.play().catch(()=>{}); }); } else camada.innerHTML=`<img data-src="${src}" src="${src}" alt="">`; } else { const v=camada.querySelector('video'); if(v && v.paused && !v.ended) v.play().catch(()=>{}); } }
+    if(sl.join()!==slidesCache.join()){ slidesCache=sl; sl.forEach(p=>{ const im=new Image(); im.src=midia(p); }); }
+    if(modo==='apresentacao' && sl.length){ camada.className='tv-apr'; camada.hidden=false; const src=midia(sl[Math.min(e.slide||0,sl.length-1)]); const img=camada.querySelector('img'); if(!img || img.dataset.src!==src) camada.innerHTML=`<img data-src="${src}" src="${src}" alt="">`; }
     else if(modo==='sorteio'){ telaoSorteio(e.sorteio||{}); }
     else if(modo==='quiz'){ telaoQuiz(e.quiz||{}); }
     else if(modo==='enquete' && e.enquete){ telaoEnquete(e.enquete); }
     else if(modo==='bingo' && e.bingo){ telaoBingo(e.bingo); }
     else if(modo==='pergunta' && e.pergunta){ const q=e.pergunta; if(camada.dataset.pq!=String(q.id)){ camada.dataset.pq=q.id; camada.className='tv-prg'; camada.hidden=false;
         camada.innerHTML=`<div><div class="k">🙋 Pergunta da plateia</div><div class="t">${q.texto?esc(q.texto):q.tipo==='audio'?'🎙️ Pergunta gravada':''}</div><div class="w">${q.nome?esc(q.nome):'Anônimo'}${q.mesa?' · '+esc(q.mesa):''}</div>${q.audio?`<audio id="tvPa" src="${midia(q.audio)}" autoplay></audio>`:''}</div>`; } }
-    else if(modo==='pausa'){ camada.className='tv-pausa'; camada.hidden=false; if(!camada.querySelector('.who')) camada.innerHTML=`<div><div class="who">${esc(nome)}</div><p>Já voltamos 💛</p></div>`; }
+    else if(modo==='pausa'){ camada.className='tv-pausa'; camada.hidden=false; if(!camada.querySelector('.who')) camada.innerHTML=`<div><div class="who">${esc(nome)}</div><p>${CORP(f)?'Já voltamos':'Já voltamos 💛'}</p></div>`; }
     else { camada.hidden=true; camada.innerHTML=''; }
     const parar = modo!=='mural' && (modo==='pausa' || modo==='sorteio' || modo==='quiz' || modo==='pergunta' || modo==='enquete' || modo==='bingo' || sl.length);
-    if(modo!=='apresentacao'){ const v=camada.querySelector('.tv-apr video, video[data-src]'); if(v){ try{ v.pause(); }catch(_){} } }
     if(modo!=='enquete') delete camada.dataset.eid;
     if(modo!=='bingo'){ delete camada.dataset.bk; bgFesta=null; }
     if(modo!=='quiz'){ clearInterval(qzTick); qzChave=''; }
@@ -2166,7 +2214,7 @@ async function telaTelao(){
     const cores=['var(--accent)','var(--ink)','color-mix(in srgb,var(--accent) 70%, var(--ink))','var(--muted)','color-mix(in srgb,var(--accent2) 80%, var(--ink))'];
     const ord=pal.map((x,i)=>({...x,i})).sort((a,b)=>((a.i*7)%pal.length)-((b.i*7)%pal.length));
     const corpo=pal.length?`<div class="nuv">${ord.map(x=>{ const r=mx===mn?1:(x.n-mn)/(mx-mn); const fs=(2.2+r*6.8).toFixed(2); return `<span style="font-size:${fs}vw;color:${cores[x.i%cores.length]}">${esc(x.p)}</span>`; }).join('')}</div>`:'<div class="vazio">Mande a sua palavra pelo celular</div>';
-    camada.dataset.eid=q.id; camada.innerHTML=topo+corpo;
+    camada.dataset.eid=q.id; camada.innerHTML=topo+corpo; ajustarNuvem(camada.querySelector('.nuv'));
   };
   let qzTick=null, qzChave='', qzFinalVisto=false;
   const telaoQuiz=q=>{
@@ -2200,7 +2248,7 @@ async function telaTelao(){
       camada.innerHTML=`<div><div class="srt-t" style="font-size:clamp(36px,5vw,80px)">🎲 Sorteando…</div>${g.premio?`<div class="srt-p">Prêmio: <b>${esc(g.premio)}</b></div>`:''}<div class="srt-roda" id="srtR"></div><div class="srt-ok" id="srtOk"></div></div>`;
       const nomes=(s.nomes&&s.nomes.length?s.nomes:[g.nome.split(' ')[0]]); let i=0, d=60; const fim=Date.now()+5200;
       const girar=()=>{ const el=$('srtR'); if(!el){ srtRodando=false; return; } if(Date.now()<fim){ el.textContent=nomes[i++%nomes.length]; d=Math.min(420,d*1.09); setTimeout(girar,d); return; }
-        el.textContent=g.nome; el.classList.add('win'); const tt=camada.querySelector('.srt-t'); if(tt) tt.textContent='🏆 Sorteado!'; $('srtOk').innerHTML=CORP(f)?'Parabéns! Procure a organização':'🎉 Parabéns! Procure o anfitrião 🎉'; confete(140); if(chars&&chars.festa) chars.festa(); srtRodando=false; };
+        el.textContent=g.nome; el.classList.add('win'); const tt=camada.querySelector('.srt-t'); if(tt) tt.textContent='🏆 Sorteado!'; $('srtOk').innerHTML='🎉 Parabéns! Procure o anfitrião 🎉'; confete(140); if(chars&&chars.festa) chars.festa(); srtRodando=false; };
       girar(); return; }
     if(srtRodando) return;
     if(s.aberto || !g){ camada.innerHTML=`<div><div class="srt-t">🎲 Sorteio!</div>${s.premio?`<div class="srt-p">Prêmio: <b>${esc(s.premio)}</b></div>`:''}
@@ -2221,7 +2269,7 @@ function carregarJsQR(){ return _jsqr || (_jsqr=new Promise((res,rej)=>{ const s
 async function telaPortaria(){
   FESTA = await carregarFesta(SLUG).catch(()=>null); if(!FESTA) return telaNaoAchou();
   aplicarTema(temaDe(FESTA)); document.title='Portaria · '+(FESTA.homenageado||FESTA.titulo);
-  if(!FESTA.portaria){ $('app').innerHTML=`<div class="wrap center" style="padding-top:14vh"><div style="font-size:56px">🚪</div><h1>Portaria desligada</h1><p class="muted">O anfitrião liga a portaria na área dele, em 📲 Convite e links.</p></div>`; return; }
+  if(!FESTA.portaria){ $('app').innerHTML=`<div class="wrap center desl"><div class="desl-ic">🚪</div><h1>Portaria desligada</h1><p class="muted">O anfitrião liga a portaria na área dele, em 📲 Convite e links.</p></div>`; return; }
   const salvo=store.get('mf_port_'+SLUG);
   if(salvo && await rpc('fe_portaria_login',{p_slug:SLUG,p_pin:salvo}).catch(()=>false)) return painelPortaria(salvo);
   telaLogin('🚪 Portaria', esc(FESTA.homenageado||FESTA.titulo), async pin=>{ const ok=await rpc('fe_portaria_login',{p_slug:SLUG,p_pin:pin}); if(!ok) return false; store.set('mf_port_'+SLUG,pin); painelPortaria(pin); return true; });
@@ -2286,7 +2334,7 @@ function painelPortaria(pin){
 async function telaValet(){
   FESTA = await carregarFesta(SLUG).catch(()=>null); if(!FESTA) return telaNaoAchou();
   aplicarTema(temaDe(FESTA)); document.title='Manobrista · '+(FESTA.homenageado||FESTA.titulo);
-  if(!FESTA.valet){ $('app').innerHTML=`<div class="wrap center" style="padding-top:14vh"><div style="font-size:56px">🚗</div><h1>Manobrista desligado</h1><p class="muted">O anfitrião liga o manobrista na área dele, em 📲 Convite e links.</p></div>`; return; }
+  if(!FESTA.valet){ $('app').innerHTML=`<div class="wrap center desl"><div class="desl-ic">🚗</div><h1>Manobrista desligado</h1><p class="muted">O anfitrião liga o manobrista na área dele, em 📲 Convite e links.</p></div>`; return; }
   const salvo=store.get('mf_vl_'+SLUG);
   if(salvo && await rpc('fe_valet_login',{p_slug:SLUG,p_pin:salvo}).catch(()=>false)) return painelValet(salvo);
   telaLogin('🚗 Manobrista', esc(FESTA.homenageado||FESTA.titulo), async pin=>{ const ok=await rpc('fe_valet_login',{p_slug:SLUG,p_pin:pin}); if(!ok) return false; store.set('mf_vl_'+SLUG,pin); painelValet(pin); return true; });
@@ -2546,16 +2594,11 @@ function telaLogin(titulo, sub, entrar, esqueci){
 function painelAdmin(){
   const f=FESTA;
   $('app').innerHTML=`<div class="wrap">
-   <div class="top"><h1>${CORP(f)?'Organizador':'Anfitrião'} · <em>${esc(f.homenageado||f.titulo)}</em></h1><div class="row"><a class="btn ghost sm" href="${linkFesta(f.slug)}" target="_blank" rel="noopener">👀 Ver como convidado</a><a class="btn ghost sm" href="${linkFesta(f.slug,'telao')}&teste" target="_blank" rel="noopener">🧪 Testar telão</a><a class="btn sm" href="${linkFesta(f.slug,'telao')}" target="_blank" rel="noopener">📺 Abrir telão</a><button class="btn ghost sm" id="sair">Sair</button></div></div>
+   <div class="top"><h1>${CORP(f)?'Organizador':'Anfitrião'} · <em>${esc(f.homenageado||f.titulo)}</em></h1><div class="row"><a class="btn ghost sm" href="${linkFesta(f.slug)}" target="_blank" rel="noopener">👀 Ver como convidado</a><a class="btn ghost sm" href="${linkFesta(f.slug,'telao')}&teste" target="_blank" rel="noopener">🧪 Testar telão</a><button class="btn sm" type="button" id="abrirTv">📺 Abrir telão</button><button class="btn ghost sm" id="sair">Sair</button></div></div>
    ${f.plano==='teste'?`<div class="teste-bar"><div><b>🎈 Modo grátis</b><br><span style="font-size:14px">Faça o upgrade para mais diversão: mais homenagens, áudios e vídeos maiores, todos os arquivos e sem o selo no telão.</span></div><div class="row"><button class="btn sm" id="btPlano">⬆️ Fazer upgrade</button><button class="btn ghost sm" id="btAtivar">🔓 Tenho um código</button></div></div>`
      :`<div class="plano-bar"><div><b>${ICONE_PLANO[f.plano]||'⭐'} Plano ${esc(NOME_PLANO[f.plano]||f.plano)}</b> · até ${f.max_posts} ${CORP(f)?'mensagens':'homenagens'} · áudio e vídeo de até ${segTxt(f.max_seg)}${f.expira_em?` · no ar até ${new Date(f.expira_em+'T12:00:00').toLocaleDateString('pt-BR')}`:''}</div>${f.plano!=='grande'?'<button class="btn ghost sm" id="btPlano">⬆️ Mudar de plano</button>':''}</div>`}
-   ${store.get('mf_novo_'+f.slug)&&!CORP(f)?`<div class="card passos" id="passos"><div class="row" style="justify-content:space-between"><b style="font-size:18px">🎉 Sua festa está criada! Próximos passos:</b><button class="btn ghost sm" id="psOk">Entendi</button></div><ol>
-     <li><button class="link" data-ir="meutema">Faça o seu tema</button>: imagem de fundo, personagens, 8 a 12 fotos do homenageado e a música do telão.</li>
-     <li><button class="link" data-ir="compartilhar">Mande o convite com QR Code</button> no grupo da família e imprima os cartões de mesa.</li>
-     <li>No dia, abra o <b>📺 telão</b> no notebook ligado na TV. Na aba <b>💌 Homenagens</b> você aprova o que aparece.</li>
-     <li>Depois da festa, baixe o álbum em <button class="link" data-ir="recordacoes">📖 Recordações</button>.</li></ol></div>`:''}
-   ${f.data && f.data < new Date().toLocaleDateString('sv') ? `<div class="card seucta"><div><h2>✨ O resumo ${CORP(f)?'do seu evento':'da sua festa'} está pronto</h2><p>Stories com os números e o recado mais amado da noite, prontos para postar e mandar no WhatsApp.</p></div><button class="btn" data-ir="recordacoes" style="font-size:18px;padding:14px 24px">Ver o resumo →</button></div>`:''}
-   ${!f.custom&&!CORP(f)?`<div class="card seucta" id="seuCta"><div><h2>🎨 Faça o seu tema</h2><p>Imagem de fundo, personagens, 8 a 12 fotos de ${esc(f.homenageado||'quem a gente ama')} e música no telão. Leva 5 minutos.</p></div><button class="btn" id="seuGo" style="font-size:18px;padding:14px 24px">Começar agora →</button></div>`:''}
+   <div class="tvbar" id="tvBar"></div>
+   <div id="roteiro"></div>
    <div class="tabs" id="abasTop">
      ${CORP(f)?'<button data-v="evento" aria-pressed="false">🧭 Painel do evento</button>':''}
      <button data-v="meutema" aria-pressed="false">${CORP(f)?'🎨 Visual do evento':'🎨 Faça o seu tema'}</button>
@@ -2569,25 +2612,28 @@ function painelAdmin(){
      <button data-v="enquete" aria-pressed="false">📊 Enquetes</button>
      <button data-v="bingo" aria-pressed="false">🎱 Bingo</button>
      <button data-v="interacoes" aria-pressed="false">💬 Interações</button>
-     <button data-v="pix" aria-pressed="false">🎁 Pix e presentes</button>
      <button data-v="recordacoes" aria-pressed="false">📖 Álbum</button>
    </div>
    <div id="vw"></div></div>`;
   (()=>{ const a=$('abasTop'), v=$('vw'); if(a && v && !a.parentNode.classList.contains('adm-grid')){ const g=document.createElement('div'); g.className='adm-grid'; a.parentNode.insertBefore(g,a); g.appendChild(a); g.appendChild(v); } })();
   $('sair').onclick=()=>{ store.sset('mf_pin_'+SLUG,null); store.set('mf_pin_'+SLUG,null); location.reload(); };
+  $('abrirTv').onclick=()=>{ store.set('mf_r_tv_'+f.slug,'1'); abrirTelaoJanela(f); pintarRoteiro(f); };
+  document.querySelectorAll('.top a[href*="telao"]').forEach(a=>a.addEventListener('click',()=>{ store.set('mf_r_tv_'+f.slug,'1'); setTimeout(()=>pintarRoteiro(f),300); }));
+  document.querySelectorAll('#abasTop button[data-v]').forEach(b=>{ const ic=AICO[b.dataset.v]; if(ic) b.insertAdjacentHTML('afterbegin',`<span class="aic">${ic}</span>`); });
+  ligarTvBar(f);
   const abas=$('abasTop');
-  abas.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; abas.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed', x===b)); if(b.dataset.v==='meutema' && $('seuCta')) $('seuCta').remove(); ({pix:vPix, moderar:vModerar, festa:vFesta, meutema:vMeuTema, compartilhar:vCompartilhar, recordacoes:vRecordacoes, cardapio:vCardapio, apresentacao:vApresentacao, sorteio:vSorteio, quiz:vQuiz, enquete:vEnquete, bingo:vBingo, interacoes:vInteracoes, evento:vEvento})[b.dataset.v](); };
+  abas.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; abas.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed', x===b)); if(b.dataset.v==='meutema' && $('seuCta')) $('seuCta').remove(); ({moderar:vModerar, festa:vFesta, meutema:vMeuTema, compartilhar:vCompartilhar, recordacoes:vRecordacoes, cardapio:vCardapio, apresentacao:vApresentacao, sorteio:vSorteio, quiz:vQuiz, enquete:vEnquete, bingo:vBingo, interacoes:vInteracoes, evento:vEvento})[b.dataset.v](); };
   const ir=v=>{ const b=abas.querySelector(`[data-v="${v}"]`); if(b) b.click(); };
   document.querySelectorAll('[data-ir]').forEach(b=>b.onclick=()=>ir(b.dataset.ir));
-  if($('psOk')) $('psOk').onclick=()=>{ store.set('mf_novo_'+f.slug,null); $('passos').remove(); };
+  pintarRoteiro(f, ir);
   if($('btAtivar')) $('btAtivar').onclick=ativarFesta;
   if($('btPlano')) $('btPlano').onclick=escolherPlano;
   const pidQ = new URLSearchParams(location.search).get('pago'), pidS = store.get('mf_pag_'+f.slug);
   if(pidQ && /^[0-9a-f-]{36}$/.test(pidQ)) setTimeout(()=>conferirPagamento(pidQ),300);
   else if(pidS && /^[0-9a-f-]{36}$/.test(pidS) && f.plano==='teste') fetch(FN_PAG,{method:'POST',headers:{'Content-Type':'application/json',apikey:SUPABASE_KEY},body:JSON.stringify({acao:'conferir',pagamento:pidS})}).then(r=>r.json()).then(async j=>{ if(j.status==='approved'){ FESTA=await carregarFesta(SLUG); store.set('mf_pag_'+f.slug,null); toast('Pagamento confirmado! Festa liberada 🎉',4000); painelAdmin(); } }).catch(()=>{});
-  if($('seuGo')) $('seuGo').onclick=()=>{ ir('meutema'); $('vw').scrollIntoView({behavior:'smooth'}); };
+
   const abaIni = Q.get('aba') || (CORP(f) ? 'evento' : !f.custom ? 'meutema' : 'moderar');
-  ir(['pix','meutema','moderar','festa','compartilhar','recordacoes','cardapio','apresentacao','sorteio','quiz','interacoes','evento'].includes(abaIni) ? abaIni : 'moderar'); if(ADM.view!=='moderar') carregarAdmPosts();
+  ir(['meutema','moderar','festa','compartilhar','recordacoes','cardapio','apresentacao','sorteio','quiz','interacoes','evento'].includes(abaIni) ? abaIni : 'moderar'); if(ADM.view!=='moderar') carregarAdmPosts();
   setInterval(()=>{ if(!document.hidden && ADM.view==='moderar') carregarAdmPosts(); }, 12000);
 }
 function ativarFesta(){
@@ -2746,7 +2792,7 @@ async function vMeuTema(){
     <div class="kitsec"><h4>1 · Cores e imagem de fundo</h4>
       <div class="opts" id="kVis"><button type="button" class="opt" data-v="0"><span class="e">${base.e}</span><b>Usar o tema pronto</b><small>${esc(base.n)} · troque na aba Dados da festa</small></button><button type="button" class="opt" data-v="1"><span class="e">🖼️</span><b>Minhas cores e fundo</b><small>a arte do convite, o painel da festa</small></button></div>
       <div id="kVisBox" style="display:flex;flex-direction:column;gap:12px">
-        <div class="up2"><div class="upbox"><b>Imagem de fundo</b><span class="muted" style="font-size:13px">Aparece atrás do telão, do mural, da capa do álbum e do convite</span><div class="pv" id="mtPvF">sem imagem</div>
+        <div class="up2"><div class="upbox"><b>Imagem de fundo</b><span class="muted" style="font-size:13px">Aparece atrás do telão, do mural, da capa do álbum e do convite</span><div class="pv" id="mtPvF" onclick="if(!this.querySelector('img'))document.getElementById('mtF').click()">${emiSvg('img')} Clique para escolher a imagem</div>
           <div class="row" style="justify-content:center"><label class="btn sm" style="position:relative">Escolher imagem<input type="file" accept="image/*" id="mtF" style="position:absolute;inset:0;opacity:0;cursor:pointer"></label><button class="btn ghost sm" id="mtFx" type="button">Tirar</button></div></div></div>
         <div class="cores"><label>Cor principal<input type="color" id="mtA" value="${c.accent}"></label><label>Cor de destaque<input type="color" id="mtB" value="${c.accent2}"></label><label>Fundo das telas<input type="color" id="mtC" value="${c.bg}"></label>
           <button class="btn alt sm" id="mtPal" type="button">🎯 Pegar cores da imagem</button></div>
@@ -2775,10 +2821,10 @@ async function vMeuTema(){
   const temArquivo=()=>!!(K.fundo&&K.visual) || K.enfeites.length || K.fotos.length || (K.mus.tipo==='upload' && K.faixas.length);
   const rDecl=()=>{ $('kDecl').style.display = temArquivo() ? '' : 'none'; };
   // 1 · visual
-  const rVis=()=>{ $('kVis').querySelectorAll('.opt').forEach(b=>b.setAttribute('aria-pressed', String(b.dataset.v==='1')===String(K.visual))); $('kVisBox').style.display=K.visual?'flex':'none'; const el=$('mtPvF'); el.innerHTML = K.fundo ? `<img src="${src(K.fundo)}" alt="">` : 'sem imagem'; rDecl(); preview(); };
+  const rVis=()=>{ $('kVis').querySelectorAll('.opt').forEach(b=>b.setAttribute('aria-pressed', String(b.dataset.v==='1')===String(K.visual))); $('kVisBox').style.display=K.visual?'flex':'none'; const el=$('mtPvF'); el.innerHTML = K.fundo ? `<img src="${src(K.fundo)}" alt="">` : emiSvg('img')+' Clique para escolher a imagem'; rDecl(); preview(); };
   $('kVis').onclick=e=>{ const b=e.target.closest('.opt'); if(!b) return; K.visual=b.dataset.v==='1'; rVis(); };
   $('mtF').onchange=async e=>{ let file=e.target.files[0]; e.target.value=''; if(!file) return; if(file.size>25*1048576) return erro('Imagem acima de 25 MB. Escolha uma menor.');
-    $('mtPvF').innerHTML='<span class="spin"></span>'; try{ file=await prepararImagem(file); }catch(_){} if(!(await abreNoNavegador(file))){ $('mtPvF').textContent='sem imagem'; return erro('Essa imagem não abriu. Escolha outra (JPG ou PNG).'); }
+    $('mtPvF').innerHTML='<span class="spin"></span>'; try{ file=await prepararImagem(file); }catch(_){} if(!(await abreNoNavegador(file))){ $('mtPvF').innerHTML=emiSvg('img')+' Clique para escolher a imagem'; return erro('Essa imagem não abriu. Escolha outra (JPG ou PNG).'); }
     K.fundo={file, url:URL.createObjectURL(file)}; try{ const p=await paletaDe(file); $('mtA').value=p.accent; $('mtB').value=p.accent2; $('mtC').value=p.bg; }catch(_){} rVis(); };
   $('mtFx').onclick=()=>{ K.fundo=null; rVis(); };
   ['mtA','mtB','mtC','mtFont'].forEach(id=>$(id).addEventListener('input',preview));
@@ -2865,7 +2911,7 @@ function textoConvite(f, senha){
   return `${CATS[f.categoria]?.e||'🎉'} *${f.titulo}*\n\n${f.data&&f.data>=new Date().toISOString().slice(0,10)?`Confirme sua presença pelo link 👇 e, no dia, deixe sua homenagem para ${f.homenageado||'o homenageado'}: foto, recado, áudio ou vídeo. Vai aparecer no telão da festa 💛`:`Deixe sua homenagem para ${f.homenageado||'o homenageado'}: foto, recado, áudio ou vídeo! Vai aparecer no telão da festa 💛`}\n\n👉 ${linkFesta(f.slug)}`;
 }
 async function vCompartilhar(){
-  ADM.view='compartilhar'; const f=FESTA; let cvMeu=null; try{ cvMeu=await rpc('fe_convite_img',{p_festa:f.id}); }catch(e){} const L=[['Convidados','📲',linkFesta(f.slug)],['Telão (abrir no notebook/TV)','📺',linkFesta(f.slug,'telao')],['Área do anfitrião','🔐',linkFesta(f.slug,'admin')]];
+  ADM.view='compartilhar'; store.set('mf_r_conv_'+FESTA.slug,'1'); setTimeout(()=>pintarRoteiro(FESTA),200); const f=FESTA; let cvMeu=null; try{ cvMeu=await rpc('fe_convite_img',{p_festa:f.id}); }catch(e){} const L=[['Convidados','📲',linkFesta(f.slug)],['Telão (abrir no notebook/TV)','📺',linkFesta(f.slug,'telao')],['Área do anfitrião','🔐',linkFesta(f.slug,'admin')]];
   $('vw').innerHTML=`<div class="grid2">
    <div class="card" style="padding:18px;text-align:center;grid-column:1/-1"><h3 style="margin:0 0 6px">💌 Convite com QR Code</h3><p class="muted" style="margin:0 0 12px">Mande pelo WhatsApp ou imprima. O convidado já chega sabendo como deixar a homenagem.</p>
      <div class="seg" style="justify-content:center;margin-bottom:12px"><label class="btn ghost sm" style="position:relative">🖼️ ${cvMeu?'Trocar meu convite':'Usar meu próprio convite'}<input type="file" id="cvUpF" accept="image/*,application/pdf" style="position:absolute;inset:0;opacity:0;cursor:pointer"></label>${cvMeu?'<button class="btn ghost sm" type="button" id="cvUpX">Voltar ao convite automático</button>':''}</div>
@@ -3022,14 +3068,12 @@ async function vCardapio(){
 // ---------- apresentação no telão ----------
 let _pdfjs=null;
 function carregarPdfJs(){ return _pdfjs || (_pdfjs=new Promise((res,rej)=>{ const sc=document.createElement('script'); sc.src='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js'; sc.onload=()=>{ window.pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'; res(window.pdfjsLib); }; sc.onerror=()=>{ _pdfjs=null; rej(new Error('pdfjs')); }; document.head.appendChild(sc); })); }
-const EH_VIDEO = p => /\.(mp4|webm|mov|m4v)$/i.test(String(p||''));
 async function vApresentacao(){
   ADM.view='apresentacao'; const f=FESTA; let est={}; try{ est=await rpc('fe_tv_estado',{p_festa:f.id})||{}; }catch(e){}
   const slides=est.slides||[];
   $('vw').innerHTML=`<div class="card" style="padding:18px"><h3 style="margin:0 0 4px">🎤 Apresentação no telão <span class="muted" style="font-size:14px;font-weight:500">(opcional)</span></h3>
-      <p class="muted" style="margin:0 0 12px">Envie slides (PDF ou imagens) e vídeos para reproduzir no telão. Reordene os itens pelas setas e controle a exibição ao vivo por aqui.</p>
-      <details style="margin:0 0 12px"><summary style="cursor:pointer;font-weight:600">Quer PowerPoint animado? Exporte como vídeo</summary><p class="muted" style="margin:8px 0 0">No PowerPoint: <b>Arquivo › Exportar › Criar um Vídeo</b>, qualidade <b>Full HD (1080p)</b>, escolha os segundos por slide e clique em <b>Criar Vídeo</b>. Envie o arquivo MP4 aqui: animações, transições e vídeos do PowerPoint aparecem no telão. Cada vídeo pode ter até 50 MB.</p></details>
-      <div class="row"><label class="btn" style="position:relative">📄 Enviar slides (PDF/imagens)<input type="file" id="apF" accept="application/pdf,image/*" multiple style="position:absolute;inset:0;opacity:0;cursor:pointer"></label><label class="btn alt" style="position:relative">🎬 Enviar vídeo<input type="file" id="apV" accept="video/mp4,video/webm,video/quicktime,.mp4,.mov,.webm,.m4v" style="position:absolute;inset:0;opacity:0;cursor:pointer"></label>${slides.length?'<button class="btn ghost sm" id="apLimpa">Tirar apresentação</button>':''}<span class="msg" id="apM"></span></div></div>
+      <p class="muted" style="margin:0 0 12px">Envie os slides (PDF exportado do PowerPoint, ou imagens). Durante o evento, controle o telão por aqui: mostrar a apresentação, passar os slides, pausar e voltar ao mural.</p>
+      <div class="row"><label class="btn" style="position:relative">📄 Enviar PDF ou imagens<input type="file" id="apF" accept="application/pdf,image/*" multiple style="position:absolute;inset:0;opacity:0;cursor:pointer"></label>${slides.length?'<button class="btn ghost sm" id="apLimpa">Tirar apresentação</button>':''}<span class="msg" id="apM"></span></div></div>
     <div class="card" style="padding:18px;margin-top:12px"><div class="row" style="justify-content:space-between"><h3 style="margin:0">📺 Controle do telão</h3><span class="muted" id="apEst"></span></div>
       <div class="ctrl" style="margin-top:12px">
         <button class="btn" data-m="apresentacao" ${slides.length?'':'disabled'}>▶ Mostrar slides</button>
@@ -3037,27 +3081,15 @@ async function vApresentacao(){
         <button class="btn ghost" data-nav="1" ${slides.length?'':'disabled'}>Próximo ▶</button>
         <button class="btn alt" data-m="pausa">⏸ Pausar telão</button>
         <button class="btn ok" data-m="mural">💌 Voltar ao mural</button></div>
-      ${slides.some(EH_VIDEO)?`<div class="ctrl" style="margin-top:8px"><button class="btn alt" data-vd="play">▶ Tocar vídeo</button><button class="btn ghost" data-vd="pause">⏸ Pausar vídeo</button><button class="btn ghost" data-vd="inicio">⏮ Vídeo do início</button></div>`:''}
       <label class="row" style="gap:8px;font-weight:600;margin-top:12px"><input type="checkbox" id="apQr" style="width:20px;height:20px" ${est.qr===false?'':'checked'}> Mostrar o QR Code de participação no telão</label>
-      ${slides.length?`<div class="apr-grid" id="apG">${slides.map((p,i)=>`<div class="apr-it"><button data-i="${i}" aria-pressed="false">${EH_VIDEO(p)?`<video src="${midia(p)}#t=1" muted preload="metadata" playsinline></video><b class="apr-v">🎬 vídeo</b>`:`<img src="${midia(p)}" alt="Slide ${i+1}" loading="lazy">`}<span>${i+1}</span></button><div class="apr-mv"><button type="button" data-mv="${i}|-1" aria-label="Mover para trás" ${i?'':'disabled'}>◀</button><button type="button" data-mv="${i}|1" aria-label="Mover para frente" ${i<slides.length-1?'':'disabled'}>▶</button><button type="button" data-rm="${i}" aria-label="Tirar">✕</button></div></div>`).join('')}</div>`:'<p class="muted" style="margin:12px 0 0">Sem slides ainda. Mesmo sem apresentação, dá para pausar o telão (por exemplo, durante um discurso).</p>'}</div>`;
-  document.querySelectorAll('[data-vd]').forEach(b=>b.onclick=async()=>{ try{ await extrasSet('apr',{v:b.dataset.vd, n:Date.now()/1000}); toast(b.dataset.vd==='pause'?'Vídeo pausado':b.dataset.vd==='inicio'?'Vídeo voltou ao início':'Vídeo tocando'); }catch(e){ toast(ERR(e)); } });
-  const salvarLista=async(L,msg)=>{ try{ await rpc('fe_admin_slides',{p_slug:SLUG,p_pin:PIN,p_slides:L}); if(msg) toast(msg); vApresentacao(); }catch(e){ toast(ERR(e)); } };
-  $('vw').insertAdjacentHTML('beforeend','<div class="card" style="padding:18px;margin-top:12px" id="plBox"></div>'); blocoPalestrante($('plBox'));
-  const mostrarEst=e=>{ est=e||est; const nomes={mural:'💌 mostrando o mural',apresentacao:`🎤 ${EH_VIDEO(slides[est.slide||0])?'vídeo':'slide'} ${(est.slide||0)+1} de ${slides.length}`,pausa:'⏸ telão pausado'}; $('apEst').textContent=nomes[est.modo]||''; document.querySelectorAll('#apG [data-i]').forEach(b=>b.setAttribute('aria-pressed', est.modo==='apresentacao' && +b.dataset.i===est.slide)); };
+      ${slides.length?`<div class="apr-grid" id="apG">${slides.map((p,i)=>`<button data-i="${i}" aria-pressed="false"><img src="${midia(p)}" alt="Slide ${i+1}" loading="lazy"><span>${i+1}</span></button>`).join('')}</div>`:'<p class="muted" style="margin:12px 0 0">Sem slides ainda. Mesmo sem apresentação, dá para pausar o telão (por exemplo, durante um discurso).</p>'}</div>`;
+  const mostrarEst=e=>{ est=e||est; const nomes={mural:'💌 mostrando o mural',apresentacao:`🎤 slide ${(est.slide||0)+1} de ${slides.length}`,pausa:'⏸ telão pausado'}; $('apEst').textContent=nomes[est.modo]||''; document.querySelectorAll('#apG [data-i]').forEach(b=>b.setAttribute('aria-pressed', est.modo==='apresentacao' && +b.dataset.i===est.slide)); };
   mostrarEst(est);
   const mandar=async(modo, slide)=>{ try{ mostrarEst(await rpc('fe_admin_tv',{p_slug:SLUG,p_pin:PIN,p_modo:modo,p_slide:slide})); }catch(e){ toast(ERR(e)); } };
   document.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>mandar(b.dataset.m, est.slide||0));
   $('apQr').onchange=async ev=>{ try{ await rpc('fe_admin_tv_qr',{p_slug:SLUG,p_pin:PIN,p_on:ev.target.checked}); toast(ev.target.checked?'QR Code ligado no telão.':'QR Code escondido do telão.'); }catch(e){ ev.target.checked=!ev.target.checked; toast(ERR(e)); } };
   document.querySelectorAll('[data-nav]').forEach(b=>b.onclick=()=>mandar('apresentacao', Math.max(0,Math.min(slides.length-1,(est.slide||0)+(+b.dataset.nav)))));
   document.querySelectorAll('#apG [data-i]').forEach(b=>b.onclick=()=>mandar('apresentacao', +b.dataset.i));
-  document.querySelectorAll('#apG [data-mv]').forEach(b=>b.onclick=()=>{ const [i,d]=b.dataset.mv.split('|').map(Number), L=[...slides], j=i+d; if(j<0||j>=L.length) return; [L[i],L[j]]=[L[j],L[i]]; salvarLista(L); });
-  document.querySelectorAll('#apG [data-rm]').forEach(b=>b.onclick=()=>{ const L=[...slides]; L.splice(+b.dataset.rm,1); salvarLista(L, 'Item retirado da apresentação.'); });
-  $('apV').onchange=async e=>{ const file=e.target.files[0]; e.target.value=''; if(!file) return; const M=$('apM');
-    if(file.size>50*1024*1024){ M.className='msg err'; M.textContent='Esse vídeo passou de 50 MB. Exporte em 1080p ou divida em partes menores.'; return; }
-    if(slides.length>=80){ M.className='msg err'; M.textContent='Máximo de 80 itens na apresentação.'; return; }
-    const ext=((file.name.split('.').pop()||'mp4').toLowerCase().replace('m4v','mp4')), ct=file.type||(ext==='webm'?'video/webm':ext==='mov'?'video/quicktime':'video/mp4');
-    try{ M.className='msg'; M.innerHTML='<span class="spin"></span> Enviando o vídeo… (pode levar um minuto)'; const cam=await subir(file,'apresentacao/video',ext==='mov'?'mov':ext,ct); await salvarLista([...slides, cam], 'Vídeo adicionado no fim da apresentação 🎬'); }
-    catch(err){ M.className='msg err'; M.textContent='Não consegui enviar o vídeo. '+ERR(err); } };
   if($('apLimpa')) $('apLimpa').onclick=async()=>{ try{ await rpc('fe_admin_slides',{p_slug:SLUG,p_pin:PIN,p_slides:[]}); toast('Apresentação retirada.'); vApresentacao(); }catch(e){ toast(ERR(e)); } };
   $('apF').onchange=async e=>{ const fs=[...e.target.files]; e.target.value=''; if(!fs.length) return; const M=$('apM'); const caminhos=[];
     try{
@@ -3070,7 +3102,7 @@ async function vApresentacao(){
             const bl=await new Promise(r=>cv.toBlob(r,'image/jpeg',.88)); caminhos.push(await subir(bl,'apresentacao/slide','jpg','image/jpeg')); }
         } else { M.className='msg'; M.innerHTML=`<span class="spin"></span> Enviando imagem ${caminhos.length+1}…`; const bl=await encolher(file,1920,.88); caminhos.push(await subir(bl,'apresentacao/slide','jpg','image/jpeg')); }
       }
-      M.innerHTML='<span class="spin"></span> Salvando…'; if(slides.length+caminhos.length>80) throw new Error('Máximo de 80 slides'); await rpc('fe_admin_slides',{p_slug:SLUG,p_pin:PIN,p_slides:[...slides, ...caminhos]}); toast(`${caminhos.length} slide${caminhos.length>1?'s':''} pronto${caminhos.length>1?'s':''}! 🎤`); vApresentacao();
+      M.innerHTML='<span class="spin"></span> Salvando…'; await rpc('fe_admin_slides',{p_slug:SLUG,p_pin:PIN,p_slides:caminhos}); toast(`${caminhos.length} slide${caminhos.length>1?'s':''} pronto${caminhos.length>1?'s':''}! 🎤`); vApresentacao();
     }catch(err){ M.className='msg err'; M.textContent=/80 slides/.test(err.message||'')?'Máximo de 80 slides.':'Não consegui preparar os slides. '+ERR(err); } };
 }
 const QZ_COR=['#e21b3c','#1368ce','#d89e00','#26890c'], QZ_FORMA=['▲','◆','●','■'];
@@ -3239,6 +3271,85 @@ async function vEvento(){
 }
 const SORTEIO_SUG_CORP=['🎁 Kit de boas-vindas da empresa','🎫 Voucher de experiência','💻 Um acessório de tecnologia','📚 Uma vaga em curso ou treinamento','🏅 Destaque no palco com a diretoria','🍽️ Jantar para duas pessoas','🗓️ Um dia de folga','🎤 Fazer a pergunta final ao palestrante'];
 const SORTEIO_SUG=['🎁 Um presente surpresa','💃 Uma dança com o homenageado','🎤 Discurso improvisado de 1 minuto','📸 Foto oficial com o homenageado','🍾 Um brinde especial','🎶 Cantar um trecho no microfone','🍰 O primeiro pedaço do bolo','🕺 Puxar a próxima dança'];
+// encolhe a nuvem até todas as palavras caberem na tela (nunca corta)
+function ajustarNuvem(nv){ if(!nv) return; const sp=[...nv.querySelectorAll('span')]; if(!sp.length) return;
+  const base=sp.map(x=>parseFloat(x.style.fontSize)); let k=1;
+  const cabe=()=>nv.scrollHeight<=nv.clientHeight+1 && nv.scrollWidth<=nv.clientWidth+1 && sp.every(x=>x.offsetWidth<=nv.clientWidth);
+  for(let i=0;i<40;i++){ if(cabe()) break; k*=0.92; sp.forEach((x,j)=>x.style.fontSize=(base[j]*k).toFixed(2)+'vw'); }
+  if(!nv._ro && window.ResizeObserver){ nv._ro=new ResizeObserver(()=>{ sp.forEach((x,j)=>x.style.fontSize=base[j]+'vw'); k=1; for(let i=0;i<40;i++){ if(cabe()) break; k*=0.92; sp.forEach((x,j)=>x.style.fontSize=(base[j]*k).toFixed(2)+'vw'); } }); nv._ro.observe(nv); } }
+// ---------- ícones de linha do painel ----------
+const LI = d => `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+const AICO = {
+  evento: LI('<rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/>'),
+  meutema: LI('<circle cx="13.5" cy="6.5" r="1.2"/><circle cx="17.5" cy="10.5" r="1.2"/><circle cx="8.5" cy="7.5" r="1.2"/><circle cx="6.5" cy="12.5" r="1.2"/><path d="M12 2a10 10 0 0 0 0 20c1.1 0 2-.9 2-2 0-.5-.2-1-.5-1.3-.3-.4-.5-.8-.5-1.3 0-1.1.9-2 2-2h2.4A5.6 5.6 0 0 0 22 9.8C22 5.5 17.5 2 12 2z"/>'),
+  moderar: LI('<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>'),
+  festa: LI('<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>'),
+  compartilhar: LI('<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/>'),
+  cardapio: LI('<path d="M3 2v7a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V2M6 2v20M21 15V2a5 5 0 0 0-5 5v6a2 2 0 0 0 2 2h3zm0 0v7"/>'),
+  apresentacao: LI('<rect x="2" y="3" width="20" height="13" rx="2"/><path d="M12 16v5M8 21h8"/>'),
+  sorteio: LI('<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5C10 3 12 8 12 8s2-5 4.5-5a2.5 2.5 0 0 1 0 5"/>'),
+  quiz: LI('<circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/>'),
+  enquete: LI('<path d="M3 3v18h18"/><path d="M7 16v-4M12 16V8M17 16v-7"/>'),
+  bingo: LI('<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/>'),
+  interacoes: LI('<path d="M14 9a2 2 0 0 1-2 2H6l-3 3V4a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2z"/><path d="M18 9h2a2 2 0 0 1 2 2v11l-3-3h-6a2 2 0 0 1-2-2v-1"/>'),
+  recordacoes: LI('<path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>'),
+  mural: LI('<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>'),
+  pausa: LI('<rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/>'),
+  tv: LI('<rect x="2" y="7" width="20" height="13" rx="2"/><path d="m17 2-5 5-5-5"/>'),
+  cel: LI('<rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/>')
+};
+// ---------- controle do telão (barra fixa no painel e no próprio telão) ----------
+const TV_MODOS = [['mural','Mural'],['apresentacao','Apresentação'],['sorteio','Sorteio'],['quiz','Quiz'],['enquete','Enquete'],['bingo','Bingo'],['pausa','Pausa']];
+function abrirTelaoJanela(f){
+  const w=window.open(linkFesta(f.slug,'telao'),'telao_'+f.slug,'popup=yes,width=1280,height=720');
+  if(!w){ location.href=linkFesta(f.slug,'telao'); return; }
+  try{ w.focus(); }catch(e){}
+  toast('O telão abriu numa janela separada. Arraste a janela para a TV e aperte F para tela cheia. Este painel continua aqui com o controle.',7000);
+}
+let _irRot=null;
+function pintarRoteiro(f, ir){
+  if(ir) _irRot=ir; const box=$('roteiro'); if(!box) return; const CP=CORP(f);
+  if(store.get('mf_rot_ok_'+f.slug)){ box.innerHTML=''; return; }
+  const ex=(()=>{ try{ return EXT(f)||{}; }catch(e){ return {}; } })();
+  const P=[
+    {k:'visual', ok: !!(f.custom || ex.logo), t: CP?'Visual do evento':'Faça o seu tema', d: CP?'Logo, cores e imagem de fundo.':'Fundo, fotos e música do telão.', b:'Personalizar', go:()=>_irRot&&_irRot('meutema')},
+    {k:'conv', ok: !!store.get('mf_r_conv_'+f.slug), t: CP?'Divulgue o link':'Mande o convite', d: CP?'QR Code e link para os participantes.':'QR Code e link para o grupo da família.', b:'Ver convite e links', go:()=>_irRot&&_irRot('compartilhar')},
+    {k:'tv', ok: !!store.get('mf_r_tv_'+f.slug), t:'Teste o telão', d:'Abre numa janela separada. Arraste para a TV.', b:'Abrir telão', go:()=>{ store.set('mf_r_tv_'+f.slug,'1'); abrirTelaoJanela(f); pintarRoteiro(f); }},
+    {k:'bar', ok: !!store.get('mf_r_bar_'+f.slug), t:'No dia: comande pela barra', d:'A barra escura troca o que a TV mostra: mural, sorteio, bingo, pausa.', b:'Mostrar a barra', go:()=>{ const t=$('tvBar'); if(t){ t.scrollIntoView({behavior:'smooth',block:'center'}); t.classList.remove('pulsa'); void t.offsetWidth; t.classList.add('pulsa'); } }}
+  ];
+  const feitos=P.filter(x=>x.ok).length, prox=P.findIndex(x=>!x.ok);
+  if(feitos===P.length){ box.innerHTML=''; return; }
+  box.innerHTML=`<section class="rot" aria-label="Roteiro"><div class="rot-h"><div><b>${CP?'Roteiro do evento':'Roteiro da festa'}</b><span>${feitos} de ${P.length} prontos</span></div><button type="button" class="rot-x" id="rotX" title="Ocultar roteiro" aria-label="Ocultar roteiro">${emiSvg('x')}</button></div>
+    <div class="rot-bar"><i style="width:${feitos/P.length*100}%"></i></div>
+    <ol class="rot-l">${P.map((x,i)=>`<li class="${x.ok?'ok':''}${i===prox?' prox':''}"><span class="rot-n">${x.ok?emiSvg('ok'):i+1}</span><div class="rot-c"><b>${x.t}</b><span>${x.d}</span></div><button type="button" class="btn ${i===prox?'':'ghost '}sm" data-rot="${i}">${x.b}</button></li>`).join('')}</ol></section>`;
+  box.querySelectorAll('[data-rot]').forEach(b=>b.onclick=()=>P[+b.dataset.rot].go());
+  $('rotX').onclick=()=>{ store.set('mf_rot_ok_'+f.slug,'1'); box.innerHTML=''; toast('Roteiro ocultado. Ele volta se você limpar os dados do navegador.',3000); };
+}
+function ligarTvBar(f){
+  const box=$('tvBar'); if(!box) return; let modo=null;
+  const pintar=()=>{ box.innerHTML=`<div class="tvb-l"><span class="tvb-dot"></span><span class="tvb-k">Telão ao vivo</span><b>${(TV_MODOS.find(m=>m[0]===modo)||['','—'])[1]}</b></div>
+      <span class="tvb-h">Trocar para</span><div class="tvb-m" role="group" aria-label="Escolher o que aparece no telão">${TV_MODOS.map(([k,n])=>`<button type="button" data-tvm="${k}" aria-pressed="${k===modo}" title="Mostrar ${n} no telão">${AICO[k]||''}<span>${n}</span></button>`).join('')}</div>
+      <div class="tvb-r"><button type="button" class="btn ghost sm" id="tvCel" title="Controlar pelo celular">${AICO.cel} Pelo celular</button></div>`;
+    box.querySelectorAll('[data-tvm]').forEach(b=>b.onclick=async()=>{ const k=b.dataset.tvm;
+      if(k==='apresentacao' && !((FESTA.slides||[]).length)){ toast('Envie os slides na aba Apresentação primeiro.'); const t=document.querySelector('#abasTop [data-v="apresentacao"]'); if(t) t.click(); return; }
+      try{ const e=await rpc('fe_admin_tv',{p_slug:SLUG,p_pin:PIN,p_modo:k,p_slide:null}); modo=(e&&e.modo)||k; pintar(); store.set('mf_r_bar_'+SLUG,'1'); pintarRoteiro(FESTA); }catch(err){ toast(ERR(err)); return; }
+      if(['sorteio','quiz','enquete','bingo'].includes(k)){ const t=document.querySelector(`#abasTop [data-v="${k}"]`); if(t && ADM.view!==k) t.click(); } });
+    $('tvCel').onclick=()=>{ abrirFolha(`<h3>Controlar pelo celular</h3><p class="muted" style="margin-top:0">Deixe o notebook só com o telão na TV e comande tudo pelo celular. Aponte a câmera, entre com a senha e use a barra "No telão agora".</p><div style="width:240px;margin:8px auto;background:#fff;padding:10px;border-radius:12px" id="celQr"></div><div class="foot"><button class="btn" id="eCancel">Fechar</button></div>`); qrInto($('celQr'), linkFesta(SLUG,'admin'), 300); $('eCancel').onclick=fecharFolha; }; };
+  const ler=async()=>{ if(document.hidden || !$('tvBar')) return; try{ const e=await rpc('fe_tv_estado',{p_festa:f.id}); if(e && e.modo!==modo){ modo=e.modo; pintar(); } }catch(_){} };
+  pintar(); ler(); const t=setInterval(()=>{ if(!$('tvBar')){ clearInterval(t); return; } ler(); },4000);
+}
+// no próprio telão: se este aparelho é do organizador, aparece um controle discreto ao mexer o mouse
+function ligarDockTelao(f){
+  const pin=store.get('mf_pin_'+f.slug)||store.sget('mf_pin_'+f.slug); if(!pin) return;
+  rpc('fe_admin_login',{p_slug:f.slug,p_pin:pin}).then(ok=>{ if(!ok) return;
+    const d=document.createElement('div'); d.className='tv-dock'; d.innerHTML=`${TV_MODOS.map(([k,n])=>`<button type="button" data-tvm="${k}">${AICO[k]||''}<span>${n}</span></button>`).join('')}<span class="sep"></span><button type="button" data-painel="1">${AICO.evento}<span>Painel</span></button>`;
+    document.body.appendChild(d); let tm=null;
+    const mostra=()=>{ d.classList.add('on'); clearTimeout(tm); tm=setTimeout(()=>{ if(!d.matches(':hover')) d.classList.remove('on'); },3500); };
+    addEventListener('mousemove', mostra); addEventListener('touchstart', mostra, {passive:true});
+    d.querySelectorAll('[data-tvm]').forEach(b=>b.onclick=async e=>{ e.stopPropagation(); try{ await rpc('fe_admin_tv',{p_slug:f.slug,p_pin:pin,p_modo:b.dataset.tvm,p_slide:null}); }catch(err){ toast(ERR(err)); } });
+    d.querySelector('[data-painel]').onclick=e=>{ e.stopPropagation(); if(window.opener && !window.opener.closed){ try{ window.opener.focus(); return; }catch(_){} } window.open(linkFesta(f.slug,'admin'),'painel_'+f.slug); };
+  }).catch(()=>{});
+}
 // =====================================================================
 // BINGO: cartela no celular, globo no telão
 // =====================================================================
@@ -3338,15 +3449,15 @@ async function vSorteio(){
       <label class="row" style="gap:8px;font-weight:600;margin-top:12px"><input type="checkbox" id="srRep" style="width:20px;height:20px"> Quem já ganhou pode ser sorteado de novo</label>
       <div class="ctrl" style="margin-top:14px">
         <button class="btn" id="srAbrir">📢 Abrir e mostrar no telão</button>
-        <button class="btn ok" id="srSortear">🎲 Sortear agora</button>
+        <button class="btn" id="srSortear">🎲 Sortear agora</button>
         <button class="btn ghost" id="srTv">📺 Mostrar no telão</button>
         <button class="btn ghost" id="srMural">💌 Voltar ao mural</button>
-        <button class="btn alt" id="srFechar">🔒 Encerrar sorteio</button></div>
+        <button class="btn ghost" id="srFechar">🔒 Encerrar sorteio</button></div>
       <div class="msg" id="srM"></div></div>
     <div class="grid2" style="margin-top:12px">
       <div class="card" style="padding:18px"><div class="row" style="justify-content:space-between"><h3 style="margin:0">🙋 Participantes <span class="muted" id="srN"></span></h3><button class="btn ghost sm" id="srLimpar">Zerar lista</button></div><p class="muted" id="srEst" style="margin:6px 0 0;font-size:14px"></p><div class="srt-lista" id="srL"></div></div>
       <div class="card" style="padding:18px"><h3 style="margin:0">🏆 Sorteados</h3><div id="srG" style="margin-top:8px"></div></div></div>`;
-  const pintar=()=>{ $('srN').textContent=`(${lista.participantes.length})`; $('srEst').textContent=info.aberto?'🟢 Inscrições abertas: o convidado vê o botão “Quero participar” no celular.':'⚪ Inscrições fechadas.';
+  const pintar=()=>{ const ab=!!info.aberto; $('srAbrir').hidden=ab; $('srSortear').hidden=!ab; $('srFechar').hidden=!ab; $('srTv').hidden=!ab; $('srMural').hidden=true; $('srN').textContent=`(${lista.participantes.length})`; $('srEst').textContent=info.aberto?'🟢 Inscrições abertas: o convidado vê o botão “Quero participar” no celular.':'⚪ Inscrições fechadas.';
     if(document.activeElement!==$('srP') && info.premio!=null && !$('srP').dataset.mexeu) $('srP').value=info.premio||'';
     $('srL').innerHTML=lista.participantes.length?lista.participantes.map(n=>`<span>${esc(n)}</span>`).join(''):'<p class="muted" style="margin:0">Ninguém ainda. Abra o sorteio para os convidados entrarem.</p>';
     $('srG').innerHTML=lista.ganhadores.length?lista.ganhadores.map(g=>`<div class="linkbox" style="margin-bottom:6px"><code>${new Date(g.em).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})} · <b>${esc(g.nome)}</b>${g.premio?` · ${esc(g.premio)}`:''}</code></div>`).join(''):'<p class="muted" style="margin:0">Nenhum sorteio feito ainda.</p>'; };
@@ -3375,323 +3486,38 @@ function vRecordacoes(){
   $('vw').innerHTML=`<div class="grid2">
    <div class="card" style="padding:18px"><div style="font-size:44px">📖</div><h3 style="margin:4px 0">Álbum de recordações (PDF)</h3><p class="muted">Capa no tema da festa, fotos em polaroid, recados escritos à mão e um QR Code em cada áudio e vídeo para ouvir de novo pelo celular. Entra só o que foi aprovado.</p>
      <p style="font-weight:600">${c.foto} fotos · ${c.texto} recados · ${c.audio} áudios · ${c.video} vídeos</p><button class="btn" id="rcBook">📖 Baixar álbum</button><div class="msg" id="rcM1"></div></div>
-   <div class="card" style="padding:18px"><div style="font-size:44px">🗂️</div><h3 style="margin:4px 0">Baixar tudo (.zip)</h3><p class="muted">Todas as fotos, áudios e vídeos originais aprovados, mais um arquivo com todos os recados escritos. Para guardar para sempre.</p><button class="btn alt" id="rcZip">⬇️ Baixar tudo</button><div class="msg" id="rcM2"></div></div>
-   <div class="card rs-card" style="padding:18px" id="rsBox"></div>
-   <div class="card rs-card" style="padding:18px" id="rmBox"></div></div>`;
-  vResumo($('rsBox')); blocoRevelaMomentos($('rmBox'));
+   <div class="card" style="padding:18px"><div style="font-size:44px">🗂️</div><h3 style="margin:4px 0">Baixar tudo (.zip)</h3><p class="muted">Todas as fotos, áudios e vídeos originais aprovados, mais um arquivo com todos os recados escritos. Para guardar para sempre.</p><button class="btn alt" id="rcZip">⬇️ Baixar tudo</button><div class="msg" id="rcM2"></div></div></div>`;
   $('rcBook').onclick=async()=>{ const b=$('rcBook'); b.disabled=true; try{ const r=await pdfAlbum(FESTA, ap, t=>{ $('rcM1').className='msg'; $('rcM1').innerHTML=`<span class="spin"></span> ${t}`; }); baixar(r.blob, `Album_${FESTA.slug}.pdf`); $('rcM1').className='msg ok'; $('rcM1').textContent=`Álbum pronto: ${r.paginas} páginas! 💛`; }catch(e){ console.error(e); $('rcM1').className='msg err'; $('rcM1').textContent='Não consegui montar o álbum agora. Tente de novo.'; } b.disabled=false; };
   $('rcZip').onclick=async()=>{ if(FESTA.plano==='teste'){ $('rcM2').className='msg err'; $('rcM2').textContent='Baixar todos os arquivos é liberado depois de ativar a festa.'; return; } const b=$('rcZip'); b.disabled=true; try{ const blob=await zipTudo(FESTA, ap, t=>{ $('rcM2').className='msg'; $('rcM2').innerHTML=`<span class="spin"></span> ${t}`; }); baixar(blob, `Recordacoes_${FESTA.slug}.zip`); $('rcM2').className='msg ok'; $('rcM2').textContent='Arquivo pronto! 🗂️'; }catch(e){ $('rcM2').className='msg err'; $('rcM2').textContent='Não consegui montar o arquivo agora.'; } b.disabled=false; };
 }
 async function zipTudo(f, posts, prog){
   const z=new JSZip(); const pastas={foto:'Fotos',audio:'Audios',video:'Videos'}; let i=0; const media=posts.filter(p=>p.caminho);
-  for(const p of media){ i++; prog(`Juntando arquivo ${i} de ${media.length}…`); try{ const b=await fetch(midia(p.caminho)).then(r=>r.blob()); const ext=p.caminho.split('.').pop(); const nome=`${String(i).padStart(3,'0')}_${(p.autor||'convidado').replace(/[^\wÀ-ú ]+/g,'').trim().replace(/\s+/g,'_')||'convidado'}.${ext}`; const mo=momentoDe(p,f); z.folder(mo?`${mo.replace(/[\\/:*?"<>|]+/g,'')}/${pastas[p.tipo]}`:pastas[p.tipo]).file(nome,b); }catch(e){} }
+  for(const p of media){ i++; prog(`Juntando arquivo ${i} de ${media.length}…`); try{ const b=await fetch(midia(p.caminho)).then(r=>r.blob()); const ext=p.caminho.split('.').pop(); const nome=`${String(i).padStart(3,'0')}_${(p.autor||'convidado').replace(/[^\wÀ-ú ]+/g,'').trim().replace(/\s+/g,'_')||'convidado'}.${ext}`; z.folder(pastas[p.tipo]).file(nome,b); }catch(e){} }
   const rec=posts.filter(p=>p.tipo==='texto'||p.texto).map(p=>`${new Date(p.criado_em).toLocaleString('pt-BR')} — ${p.autor||'Convidado'}${p.tipo==='foto'?' (legenda de foto)':''}\n${p.texto}\n`).join('\n');
   z.file('Recados.txt', `${f.titulo}\n${f.homenageado||''}\n\n${rec}`);
   prog('Compactando…'); return await z.generateAsync({type:'blob'});
 }
 
 // =====================================================================
-// RESUMO PÓS-FESTA (stories 1080x1920) — ficha de produção do Gemini
-// =====================================================================
-const RS_W=1080, RS_H=1920;
-function resumoDados(f, posts){
-  const ap=posts.filter(p=>!p.status || p.status==='aprovado');
-  const n={foto:0,texto:0,audio:0,video:0}; let seg=0; const pessoas=new Set(); const horas={};
-  ap.forEach(p=>{ n[p.tipo]=(n[p.tipo]||0)+1; if(p.tipo==='audio') seg+=(+p.duracao||0);
-    const a=String(p.autor||'').trim().toLowerCase(); pessoas.add(a||('ap:'+(p.aparelho||p.id)));
-    const h=new Date(p.criado_em).getHours(); horas[h]=(horas[h]||0)+1; });
-  const pico=Object.entries(horas).sort((a,b)=>b[1]-a[1])[0];
-  const nota=p=>(+p.curtidas||0)+Object.values(p.reacoes||{}).reduce((s,v)=>s+(+v||0),0);
-  const comTexto=ap.filter(p=>p.texto && String(p.texto).trim().length>=8 && (p.tipo==='texto'||p.tipo==='foto'));
-  const top=(comTexto.length?comTexto:ap.filter(p=>p.tipo==='foto')).slice().sort((a,b)=>nota(b)-nota(a)||String(b.texto||'').length-String(a.texto||'').length)[0]||null;
-  const capa=ap.filter(p=>p.tipo==='foto').slice().sort((a,b)=>nota(b)-nota(a))[0]||null;
-  return {ap, n, min:Math.max(seg?1:0, Math.round(seg/60)), pessoas:pessoas.size, pico:pico?+pico[0]:null, top, topNota:top?nota(top):0, capa};
-}
-function rsFundo(c, cor, brilho){
-  c.fillStyle=cor; c.fillRect(0,0,RS_W,RS_H);
-  if(brilho){ const g=c.createRadialGradient(RS_W/2,RS_H*.42,40,RS_W/2,RS_H*.42,RS_W*.95); g.addColorStop(0,brilho); g.addColorStop(1,'rgba(0,0,0,0)'); c.fillStyle=g; c.fillRect(0,0,RS_W,RS_H); }
-}
-function rsTxt(c, txt, x, y, font, cor, {align='center', track=0, max=0}={}){
-  c.font=font; c.fillStyle=cor; c.textAlign=align; c.textBaseline='alphabetic';
-  if('letterSpacing' in c) c.letterSpacing=track+'px';
-  let t=String(txt);
-  if(max){ const m=font.match(/(\d+)px/); let px=m?+m[1]:0; const min=Math.round(px*.62); while(px>min && c.measureText(t).width>max){ px-=2; c.font=font.replace(/\d+px/, px+'px'); } while(c.measureText(t).width>max && t.length>4) t=t.slice(0,-2).trimEnd()+'…'; }
-  c.fillText(t, x, y); if('letterSpacing' in c) c.letterSpacing='0px';
-}
-function rsLinhas(c, txt, x, y, font, cor, maxW, lh, maxL, align='center'){
-  c.font=font; let L=wrap(c, txt, maxW); if(L.length>maxL){ L=L.slice(0,maxL); L[maxL-1]=L[maxL-1].replace(/\s*\S*$/,'')+'…'; }
-  c.fillStyle=cor; c.textAlign=align; L.forEach((l,i)=>c.fillText(l, x, y+i*lh)); return y+L.length*lh;
-}
-function rsRodape(c, txt, P){ c.fillStyle=P.acc; c.fillRect(0,RS_H-150,RS_W,150); rsTxt(c, txt, RS_W/2, RS_H-62, '600 30px Figtree', P.cre, {max:RS_W-100}); }
-function rsCapa(c, img, x, y, w, h, r){ c.save(); rr(c,x,y,w,h,r); c.clip(); const k=Math.max(w/img.width,h/img.height); const iw=img.width*k, ih=img.height*k; c.drawImage(img, x+(w-iw)/2, y+(h-ih)/2, iw, ih); c.restore(); }
-async function resumoTelas(f, posts){
-  await Promise.all(['700 40px Figtree','600 30px Figtree','500 30px Figtree','italic 400 80px Fraunces','400 60px Fraunces','700 80px Fraunces','700 50px Caveat'].map(x=>document.fonts.load(x).catch(()=>{})));
-  const D=resumoDados(f, posts), corp=CORP(f), marca=!(corp && f.plano!=='teste');
-  const P = corp ? {bg:'#0f1b33', acc:'#d4af37', hi:'#d4af37', cre:'#f6f1f4', ink:'#0f1b33', glow:'rgba(212,175,55,.16)', fim:'#0f1b33'}
-                 : {bg:'#2b2230', acc:'#963c5f', hi:'#e9b8a3', cre:'#f6f1f4', ink:'#2b2230', glow:'rgba(150,60,95,.45)', fim:'#963c5f'};
-  const nome = f.homenageado || f.titulo || 'a festa';
-  const site = SITE;
-  const telas=[];
-  // ---------- TELA 1: números ----------
-  { const cv=document.createElement('canvas'); cv.width=RS_W; cv.height=RS_H; const c=cv.getContext('2d'); rsFundo(c, P.bg, P.glow);
-    rsTxt(c, (corp?'Balanço de engajamento do evento':(f.titulo||nome)).toUpperCase(), RS_W/2, 330, '700 30px Figtree', P.hi, {track:4, max:RS_W-140});
-    rsTxt(c, corp?'Engajamento em tempo real!':'Foi inesquecível!', RS_W/2, 460, 'italic 400 96px Fraunces', P.cre, {max:RS_W-120});
-    const cards = corp
-      ? [[D.n.foto,'fotos no telão'],[D.n.texto,'mensagens enviadas'],[D.n.video+D.n.audio,'vídeos e áudios'],[D.pessoas,'participantes interagindo']]
-      : [[D.n.foto,'fotos no telão'],[D.n.texto,'mensagens de carinho'],[D.n.audio, D.min?`áudios · ${D.min} min gravados`:'áudios gravados'],[D.pessoas,'convidados interagindo']];
-    const gx=90, gy=560, cw=(RS_W-gx*2-40)/2, ch=380;
-    cards.forEach(([v,l],i)=>{ const x=gx+(i%2)*(cw+40), y=gy+Math.floor(i/2)*(ch+40);
-      c.fillStyle='rgba(246,241,244,.07)'; rr(c,x,y,cw,ch,28); c.fill();
-      rsTxt(c, String(v||0), x+cw/2, y+200, '700 132px Fraunces', P.hi);
-      rsLinhas(c, l, x+cw/2, y+275, '600 36px Figtree', P.cre, cw-60, 44, 2); });
-    if(D.pico!=null) rsTxt(c, `O momento mais agitado foi às ${D.pico}h!`, RS_W/2, gy+2*ch+40+120, '700 58px Caveat', P.hi, {max:RS_W-120});
-    if(marca) rsRodape(c, `Mural da Festa  •  ${site}`, P);
-    telas.push(cv); }
-  // ---------- TELA 2: recado campeão ----------
-  if(D.top){ const cv=document.createElement('canvas'); cv.width=RS_W; cv.height=RS_H; const c=cv.getContext('2d'); rsFundo(c, P.bg, P.glow);
-    rsTxt(c, corp?'A mensagem mais curtida da equipe':'A mensagem mais amada da noite', RS_W/2, 300, '700 30px Figtree', P.hi, {track:3, max:RS_W-120});
-    const x=90, w=RS_W-180; const img = D.top.tipo==='foto' && D.top.caminho ? await carregarImg(D.top.caminho, 1200) : null;
-    const temTxt = !!(D.top.texto && String(D.top.texto).trim());
-    c.font='italic 400 58px Fraunces'; const L=temTxt?wrap(c, `“${String(D.top.texto).trim()}”`, w-120):[];
-    const nl=Math.min(L.length, img?5:9), ih=img?(temTxt?640:980):0;
-    const h=60+ih+(img&&temTxt?50:0)+nl*74+(temTxt?40:0)+120; let y=Math.max(380, (RS_H-150-h)/2+60);
-    c.save(); c.shadowColor='rgba(0,0,0,.35)'; c.shadowBlur=60; c.shadowOffsetY=24; c.fillStyle=P.cre; rr(c,x,y,w,h,40); c.fill(); c.restore();
-    c.fillStyle=P.cre; c.beginPath(); c.moveTo(x+120,y+h-2); c.lineTo(x+90,y+h+60); c.lineTo(x+210,y+h-2); c.closePath(); c.fill();
-    let cy=y+60; if(img){ rsCapa(c, img, x+50, cy, w-100, ih, 24); cy+=ih+(temTxt?80:40); }
-    if(temTxt){ cy=rsLinhas(c, `“${String(D.top.texto).trim()}”`, RS_W/2, cy+40, 'italic 400 58px Fraunces', P.ink, w-120, 74, nl); }
-    rsTxt(c, '— '+(D.top.autor||'Convidado'), x+w-60, cy+60, '700 54px Caveat', corp?'#0f1b33':'#963c5f', {align:'right', max:w-120});
-    if(D.topNota>0) rsTxt(c, `♥ ${D.topNota} ${D.topNota==1?'reação':'reações'} no telão`, RS_W/2, Math.min(RS_H-210, y+h+150), '600 36px Figtree', P.hi);
-    if(marca) rsRodape(c, `Memórias guardadas para sempre  •  ${site}`, P);
-    telas.push(cv); }
-  // ---------- TELA 3: álbum + chamada ----------
-  { const cv=document.createElement('canvas'); cv.width=RS_W; cv.height=RS_H; const c=cv.getContext('2d'); rsFundo(c, P.fim, corp?'rgba(212,175,55,.12)':'rgba(233,184,163,.18)');
-    rsTxt(c, corp?'Relatório e mídias do evento':'Álbum digital oficial', RS_W/2, 250, '700 30px Figtree', P.hi, {track:4});
-    c.font='400 76px Fraunces'; c.fillStyle=P.cre; c.textAlign='center';
-    if(corp){ rsLinhas(c, nome, RS_W/2, 360, '400 76px Fraunces', P.cre, RS_W-160, 88, 2); }
-    else { c.fillText('Todas as memórias', RS_W/2, 360); c.fillText('guardadas', RS_W/2, 448); rsTxt(c,'para sempre.', RS_W/2, 536, 'italic 400 80px Fraunces', P.hi); }
-    const cx=150, cw=RS_W-300, cyy=marca?620:720, chh=820; c.save(); c.shadowColor='rgba(0,0,0,.35)'; c.shadowBlur=50; c.shadowOffsetY=20; c.fillStyle=P.cre; rr(c,cx,cyy,cw,chh,34); c.fill(); c.restore();
-    const capa = D.capa && D.capa.caminho ? await carregarImg(D.capa.caminho, 1100) : null;
-    if(capa) rsCapa(c, capa, cx+36, cyy+36, cw-72, 450, 22); else { c.fillStyle=P.hi; rr(c,cx+36,cyy+36,cw-72,450,22); c.fill(); rsTxt(c, nome, RS_W/2, cyy+290, 'italic 400 70px Fraunces', P.ink, {max:cw-140}); }
-    const q=qrCanvas(linkFesta(f.slug), 240); c.drawImage(q, cx+50, cyy+520, 240, 240);
-    rsLinhas(c, corp?`Escaneie para rever as mensagens de ${nome}`:`Escaneie para rever o mural de ${nome}`, cx+330, cyy+600, '600 40px Figtree', P.ink, cw-380, 50, 4, 'left');
-    if(marca){
-      rsLinhas(c, 'Quer as fotos e recados dos seus convidados ao vivo no telão da sua festa?', RS_W/2, 1540, '500 38px Figtree', P.cre, RS_W-200, 50, 2);
-      const bw=760, bx=(RS_W-bw)/2; c.fillStyle=P.cre; rr(c,bx,1640,bw,110,55); c.fill(); rsTxt(c, 'Teste grátis agora no seu celular', RS_W/2, 1712, '700 40px Figtree', corp?'#0f1b33':'#963c5f');
-      rsTxt(c, site, RS_W/2, 1850, '700 32px Figtree', P.hi, {max:RS_W-100});
-    }
-    telas.push(cv); }
-  return telas;
-}
-function resumoMsgWhats(f){ return `A festa foi um sucesso e os convidados deixaram homenagens incríveis! 🎉\n\nVeja o mural com todos os recados, fotos e áudios:\n${linkFesta(f.slug)}`; }
-async function vResumo(box){
-  const f=FESTA; const ap=ADM.posts.filter(p=>p.status==='aprovado');
-  box.innerHTML=`<div style="font-size:44px">✨</div><h3 style="margin:4px 0">Stories do evento (resumo)</h3>
-    <p class="muted">Imagens prontas no formato Story com os números e o recado mais amado da ${CORP(f)?'equipe':'festa'}, para postar no Instagram e mandar no WhatsApp.</p>
-    ${ap.length<3?`<p class="msg">Assim que chegarem algumas ${CORP(f)?'mensagens':'homenagens'} aprovadas, o resumo fica pronto aqui.</p>`:`
-    <div class="rs-prev" id="rsPrev"><span class="spin"></span> Montando…</div>
-    <div class="row" style="gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn" id="rsShare" type="button">📲 Compartilhar</button><button class="btn alt" id="rsDown" type="button">⬇️ Baixar as imagens</button><button class="btn ghost" id="rsWa" type="button">💬 Mandar o mural no WhatsApp</button></div><div class="msg" id="rsM"></div>`}`;
-  if(ap.length<3) return;
-  let telas=[]; try{ telas=await resumoTelas(f, ap); }catch(e){ console.error(e); $('rsPrev').textContent='Não consegui montar agora. Tente de novo.'; return; }
-  $('rsPrev').innerHTML=telas.map((cv,i)=>`<img alt="Story ${i+1}" src="${cv.toDataURL('image/jpeg',.7)}">`).join('');
-  const arquivos=async()=>Promise.all(telas.map((cv,i)=>new Promise(r=>cv.toBlob(b=>r(new File([b],`Resumo_${f.slug}_${i+1}.png`,{type:'image/png'})),'image/png'))));
-  $('rsDown').onclick=async()=>{ const fs=await arquivos(); for(const fl of fs){ baixar(fl, fl.name); await new Promise(r=>setTimeout(r,500)); } $('rsM').className='msg ok'; $('rsM').textContent='Imagens salvas! Poste uma por vez nos Stories 💛'; };
-  $('rsShare').onclick=async()=>{ const fs=await arquivos(); if(navigator.canShare && navigator.canShare({files:fs})){ try{ await navigator.share({files:fs, title:'Resumo da festa'}); }catch(e){} } else { for(const fl of fs){ baixar(fl, fl.name); await new Promise(r=>setTimeout(r,500)); } $('rsM').className='msg'; $('rsM').textContent='Seu navegador não compartilha direto: baixei as imagens para você postar.'; } };
-  $('rsWa').onclick=()=>window.open('https://wa.me/?text='+encodeURIComponent(resumoMsgWhats(f)),'_blank','noopener');
-}
-
-// =====================================================================
-// PIX (presentes sem taxa) — QR "copia e cola" padrão Banco Central, gerado no navegador
-// =====================================================================
-function pixLimpa(s, max){ return String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^A-Za-z0-9 .,-]/g,'').trim().slice(0,max).toUpperCase(); }
-function pixChave(k){ k=String(k||'').trim(); const dig=k.replace(/\D/g,'');
-  if(/@/.test(k)) return k.toLowerCase();
-  if(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(k)) return k.toLowerCase();
-  if(/^\+/.test(k)) return '+'+dig;
-  if(dig.length===11 && !/[.\-]/.test(k) && /^\(?\d{2}\)?\s?9/.test(k)) return '+55'+dig;   // celular digitado sem +55
-  if(dig.length===11 || dig.length===14) return dig;                                         // CPF / CNPJ
-  if(dig.length===13 && dig.startsWith('55')) return '+'+dig;
-  return k; }
-function pixCRC(s){ let c=0xFFFF; for(let i=0;i<s.length;i++){ c^=s.charCodeAt(i)<<8; for(let j=0;j<8;j++) c=(c&0x8000)?((c<<1)^0x1021)&0xFFFF:(c<<1)&0xFFFF; } return c.toString(16).toUpperCase().padStart(4,'0'); }
-function pixPayload(p, valor){ const tlv=(id,v)=>id+String(v.length).padStart(2,'0')+v;
-  const conta=tlv('00','br.gov.bcb.pix')+tlv('01',pixChave(p.chave));
-  const val=Number(valor)>0 ? tlv('54', Number(valor).toFixed(2)) : '';
-  let s=tlv('00','01')+tlv('26',conta)+tlv('52','0000')+tlv('53','986')+val+tlv('58','BR')+tlv('59',pixLimpa(p.nome,25)||'PRESENTE')+tlv('60',pixLimpa(p.cidade,15)||'BRASIL')+tlv('62',tlv('05','***'))+'6304';
-  return s+pixCRC(s); }
-const PIX = f => { const p=EXT(f).pix; return p && p.chave ? p : null; };
-const PIX_FRASE = f => (PIX(f)&&PIX(f).frase) || (f.categoria==='casamento'?'Ajude na nossa lua de mel 💛':'Mande um presentinho pelo Pix 💛');
-// lista de presentes e experiências: cada item tem valor (e, se quiser, cotas); o convidado paga no Pix com o valor já preenchido
-const PIX_LISTA = f => { const p=PIX(f); return (p && Array.isArray(p.lista)) ? p.lista.filter(x=>x && x.n && Number(x.v)>0) : []; };
-const LISTA_SUG = f => {
-  const c=f.categoria;
-  if(c==='casamento'||c==='bodas') return [['🛥️','Passeio de lancha',400,'exp',4],['🍷','Jantar romântico',250,'exp',0],['🏨','Diária na pousada',600,'exp',3],['💆','Spa do casal',350,'exp',0],['✈️','Cota da lua de mel',150,'exp',0],['📦','Micro-ondas',350,'pre',0],['🍳','Air fryer',400,'pre',2],['🍲','Jogo de panelas',300,'pre',0],['🛏️','Jogo de cama',200,'pre',0],['☕','Cafeteira',250,'pre',0]];
-  if(c==='quinze') return [['🎤','Ingresso para show',300,'exp',0],['💅','Dia de beleza',200,'exp',0],['🎧','Fone de ouvido',250,'pre',0],['📱','Cota do celular novo',200,'pre',0],['✈️','Cota da viagem',150,'exp',0],['👗','Look novo',250,'pre',0]];
-  if(c==='cha_bebe') return [['🛒','Carrinho de bebê',600,'pre',4],['🧷','Kit de fraldas',120,'pre',0],['🛁','Banheira',150,'pre',0],['📸','Ensaio newborn',500,'exp',2],['🧸','Enxoval',200,'pre',0]];
-  if(c==='infantil'||c==='menino'||c==='menina') return [['🧸','Brinquedo',120,'pre',0],['📚','Kit de livros',100,'pre',0],['🎢','Dia no parque',200,'exp',0],['🚲','Bicicleta',500,'pre',4],['🏊','Aulas de natação',180,'exp',0]];
-  if(c==='formatura') return [['✈️','Cota da viagem de formatura',200,'exp',0],['💻','Cota do notebook',250,'pre',0],['🍾','Jantar de comemoração',250,'exp',0],['📚','Curso de especialização',300,'exp',0]];
-  return [['🍷','Jantar especial',250,'exp',0],['🎤','Ingresso para show',300,'exp',0],['💆','Dia de spa',300,'exp',0],['✈️','Cota da viagem',150,'exp',0],['🎁','Presente surpresa',150,'pre',0]];
-};
-function ligarPix(){
-  const box=$('pixC'); if(!box) return; const f=FESTA, p=PIX(f); if(!p) return; const lista=PIX_LISTA(f);
-  const cartao=(x,k)=>{ const ct=Number(x.c)>1 ? Number(x.c) : 0;
-    return `<button type="button" class="lp-it" data-k="${k}"><span class="lp-e">${esc(x.e||'🎁')}</span><b>${esc(x.n)}</b><span class="lp-v">${brl(x.v)}</span>${ct?`<small>ou cota de ${brl(x.v/ct)}</small>`:x.t==='exp'?'<small>experiência</small>':''}</button>`; };
-  box.innerHTML=`<h2 class="sec" style="justify-content:center">🎁 ${esc(PIX_FRASE(f))}</h2>
-    <p class="sub">${lista.length?'Escolha um presente ou uma experiência. ':''}Sem taxa: o Pix vai direto para ${esc(p.nome||'o anfitrião')}.</p>
-    ${lista.length?`<div class="lp-grid">${lista.map(cartao).join('')}<button type="button" class="lp-it lp-livre" data-k="-1"><span class="lp-e">💛</span><b>Outro valor</b><span class="lp-v">Você escolhe</span></button></div>`
-      :`<div class="pix-qr" id="pixQr"></div>
-    <div class="row" style="justify-content:center;gap:8px;flex-wrap:wrap"><button class="btn" type="button" id="pixCp">📋 Copiar código Pix</button><button class="btn ghost" type="button" id="pixFiz">💛 Já fiz meu Pix</button></div>
-    <p class="muted" style="font-size:13px;margin:10px 0 0">No app do banco: escolha Pix Copia e Cola ou escaneie o QR Code.</p>`}`;
-  const recado=txt=>{ fecharFolha(); abrirEnvio('texto'); setTimeout(()=>{ const ta=document.querySelector('#sheet textarea'); if(ta){ ta.value=txt; ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); } },140); };
-  if(!lista.length){ const cod=pixPayload(p); qrInto($('pixQr'), cod, 260);
-    $('pixCp').onclick=()=>copiar(cod,'Código Pix copiado! Cole no app do seu banco 💛');
-    $('pixFiz').onclick=()=>recado('💸 Mandei meu presente no Pix! '); return; }
-  const abrir=k=>{ const x=k>=0?lista[k]:null, ct=x&&Number(x.c)>1?Number(x.c):0;
-    const pinta=valor=>{ const cod=pixPayload(p, valor);
-      abrirFolha(`<div class="lp-sh"><button class="x" type="button" id="lpX" aria-label="Fechar">✕</button>
-        <div class="lp-e" style="font-size:44px">${esc(x?x.e||'🎁':'💛')}</div><h3 style="margin:4px 0 2px;text-align:center">${esc(x?x.n:'Presente no valor que você quiser')}</h3>
-        ${ct?`<div class="row lp-opc" style="justify-content:center;gap:8px;margin:10px 0"><button type="button" class="btn ${valor==x.v?'':'ghost'}" data-val="${x.v}">Inteiro · ${brl(x.v)}</button><button type="button" class="btn ${valor!=x.v?'':'ghost'}" data-val="${(x.v/ct).toFixed(2)}">1 cota · ${brl(x.v/ct)}</button></div>`:''}
-        <p class="lp-tot">${valor?brl(valor):'Digite o valor no app do banco'}</p>
-        <div class="pix-qr" id="lpQr"></div>
-        <div class="row" style="justify-content:center;gap:8px;flex-wrap:wrap"><button class="btn" type="button" id="lpCp">📋 Copiar código Pix</button><button class="btn ghost" type="button" id="lpFiz">💛 Já presenteei</button></div>
-        <p class="muted" style="font-size:13px;margin:10px 0 0">No app do banco: Pix › Pix Copia e Cola, ou leia o QR Code${valor?'. O valor já vem preenchido':''}. Vai direto para ${esc(p.nome||'o anfitrião')}, sem taxa.</p></div>`);
-      qrInto($('lpQr'), cod, 240);
-      $('lpX').onclick=fecharFolha;
-      $('lpCp').onclick=()=>copiar(cod,'Código Pix copiado! Cole no app do seu banco 💛');
-      $('lpFiz').onclick=()=>recado(x?`💸 Presenteei: ${x.n}! `:'💸 Mandei meu presente no Pix! ');
-      document.querySelectorAll('.lp-opc [data-val]').forEach(b=>b.onclick=()=>pinta(Number(b.dataset.val))); };
-    pinta(x ? Number(x.v) : 0); };
-  box.querySelectorAll('.lp-it').forEach(b=>b.onclick=()=>abrir(+b.dataset.k));
-}
-async function vPix(){
-  ADM.view='pix'; const f=FESTA, p=EXT(f).pix||{};
-  $('vw').innerHTML=`<div class="card" style="padding:18px"><h3 style="margin:0 0 4px">🎁 Presentes por Pix <span class="muted" style="font-size:14px;font-weight:500">(opcional, sem taxa)</span></h3>
-    <p class="muted" style="margin:0 0 14px">Os ${CORP(f)?'participantes':'convidados'} veem um QR Code do Pix na página da festa${p.telao!==false?' e, de tempos em tempos, no telão':''}. O dinheiro cai direto na sua conta, o Mural não cobra nada e não passa pelo valor. Quem fizer o Pix pode deixar um recado, que aparece no telão com festa.</p>
-    <div class="grid2"><div>
-      <label class="f">Sua chave Pix<input class="in" id="pxK" maxlength="77" placeholder="CPF, celular, e-mail ou chave aleatória" value="${esc(p.chave||'')}"></label>
-      <label class="f">Nome que aparece no banco<input class="in" id="pxN" maxlength="25" placeholder="Ex.: Mariana Souza" value="${esc(p.nome||'')}"></label>
-      <label class="f">Cidade<input class="in" id="pxC" maxlength="15" placeholder="Ex.: Recife" value="${esc(p.cidade||'')}"></label>
-      <label class="f">Frase do convite<input class="in" id="pxF" maxlength="60" placeholder="${esc(PIX_FRASE({categoria:f.categoria,extras:{}}))}" value="${esc(p.frase||'')}"></label>
-      <label class="f" style="flex-direction:row;align-items:center;gap:8px"><input type="checkbox" id="pxT" ${p.telao!==false?'checked':''}> Mostrar o QR do Pix no telão a cada 4 minutos</label>
-      <div class="lp-adm"><b>🎁 Lista de presentes e experiências</b> <span class="muted" style="font-size:13px">(opcional)</span>
-        <p class="muted" style="font-size:13px;margin:4px 0 8px">Cada item vira um cartão para o ${CORP(f)?'participante':'convidado'}: ele toca, o Pix já abre com o valor certo. Use cotas para dividir um presente caro (ex.: lancha de R$ 400 em 4 cotas de R$ 100).</p>
-        <div id="lpL"></div>
-        <div class="row" style="gap:8px;flex-wrap:wrap;margin-top:6px"><button class="btn ghost" type="button" id="lpAdd">＋ Adicionar item</button></div>
-        <p class="muted" style="font-size:13px;margin:10px 0 4px">Sugestões (toque para incluir):</p><div class="chips" id="lpSug"></div></div>
-      <div class="row" style="gap:8px;margin-top:6px"><button class="btn" type="button" id="pxOk">💾 Salvar Pix</button>${p.chave?'<button class="btn ghost" type="button" id="pxX">Desligar</button>':''}</div><div class="msg" id="pxM"></div>
-    </div><div style="text-align:center"><div class="pix-qr" id="pxQ" style="max-width:240px;margin:0 auto"></div><p class="muted" id="pxP" style="font-size:13px">A prévia do QR aparece aqui. Teste com o app do seu banco antes da festa.</p></div></div></div>`;
-  let lista=(Array.isArray(p.lista)?p.lista:[]).map(x=>({...x}));
-  const pintaL=()=>{ $('lpL').innerHTML=lista.length?lista.map((x,k)=>`<div class="lp-row" data-k="${k}"><input class="in lp-ie" maxlength="4" value="${esc(x.e||'🎁')}" aria-label="Ícone"><input class="in lp-in" maxlength="40" placeholder="Ex.: Passeio de lancha" value="${esc(x.n||'')}" aria-label="Nome"><input class="in lp-iv" type="number" min="1" step="1" inputmode="decimal" placeholder="R$" value="${x.v||''}" aria-label="Valor em reais"><select class="in lp-ic" aria-label="Cotas"><option value="0">Sem cotas</option>${[2,3,4,5,6,8,10].map(n=>`<option value="${n}" ${Number(x.c)===n?'selected':''}>${n} cotas</option>`).join('')}</select><button class="btn ghost lp-rm" type="button" aria-label="Remover">✕</button></div>`).join('')
-      :'<p class="muted" style="font-size:13px;margin:0">Sem itens: o convidado vê só o QR Code com valor livre.</p>';
-    $('lpL').querySelectorAll('.lp-row').forEach(r=>{ const k=+r.dataset.k, x=lista[k];
-      r.querySelector('.lp-ie').oninput=e=>x.e=e.target.value.trim(); r.querySelector('.lp-in').oninput=e=>x.n=e.target.value.trim();
-      r.querySelector('.lp-iv').oninput=e=>x.v=Number(e.target.value)||0; r.querySelector('.lp-ic').onchange=e=>x.c=Number(e.target.value)||0;
-      r.querySelector('.lp-rm').onclick=()=>{ lista.splice(k,1); pintaL(); pintaS(); }; }); };
-  const pintaS=()=>{ const tem=new Set(lista.map(x=>x.n)); $('lpSug').innerHTML=LISTA_SUG(f).filter(z=>!tem.has(z[1])).map((z,k)=>`<button type="button" class="chip" data-s="${k}">${z[0]} ${esc(z[1])} · ${brl(z[2])}</button>`).join('');
-    $('lpSug').querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{ const z=LISTA_SUG(f).filter(z=>!tem.has(z[1]))[+b.dataset.s]; lista.push({e:z[0],n:z[1],v:z[2],t:z[3],c:z[4]}); pintaL(); pintaS(); }); };
-  $('lpAdd').onclick=()=>{ lista.push({e:'🎁',n:'',v:0,t:'pre',c:0}); pintaL(); const r=$('lpL').lastElementChild; r&&r.querySelector('.lp-in').focus(); };
-  pintaL(); pintaS();
-  const ler=()=>({chave:$('pxK').value.trim(), nome:$('pxN').value.trim(), cidade:$('pxC').value.trim(), frase:$('pxF').value.trim(), telao:$('pxT').checked,
-    lista: lista.filter(x=>x.n && Number(x.v)>0).slice(0,40).map(x=>({e:(x.e||'🎁').slice(0,4), n:x.n.slice(0,40), v:Math.round(Number(x.v)*100)/100, t:x.t==='exp'?'exp':'pre', c:Number(x.c)>1?Number(x.c):0}))});
-  const prev=()=>{ const d=ler(); if(d.chave.length>=5){ qrInto($('pxQ'), pixPayload(d), 240); $('pxP').textContent='Abra o app do banco e leia este QR: deve aparecer o seu nome.'; } else { $('pxQ').innerHTML=''; } };
-  ['pxK','pxN','pxC'].forEach(id=>$(id).addEventListener('input', prev)); prev();
-  const M=$('pxM');
-  $('pxOk').onclick=async()=>{ const d=ler(); if(d.chave.length<5){ M.className='msg err'; M.textContent='Digite a sua chave Pix.'; return; } if(d.nome.length<2){ M.className='msg err'; M.textContent='Digite o nome que aparece no banco.'; return; }
-    const inc=lista.filter(x=>(x.n&&!(Number(x.v)>0))||(!x.n&&Number(x.v)>0)); if(inc.length){ M.className='msg err'; M.textContent='Complete nome e valor de todos os itens da lista (ou remova os vazios).'; return; }
-    try{ await extrasSet('pix', d); M.className='msg ok'; M.textContent='Pix salvo! Já aparece na página da festa'+(d.lista.length?` com ${d.lista.length} ${d.lista.length>1?'presentes':'presente'} na lista`:'')+(d.telao?' e no telão.':'.'); }catch(e){ M.className='msg err'; M.textContent=ERR(e); } };
-  if($('pxX')) $('pxX').onclick=async()=>{ try{ await extrasSet('pix', null); toast('Pix desligado.'); vPix(); }catch(e){ M.className='msg err'; M.textContent=ERR(e); } };
-}
-
-// =====================================================================
-// MODO REVELAÇÃO e MOMENTOS DA FESTA
-// =====================================================================
-const REVELA = f => { const r=EXT(f).revelacao; if(!r||!r.em) return null; const t=new Date(r.em).getTime(); return t>Date.now()?t:null; };
-const MOMENTOS_SUG = f => CORP(f) ? [['Credenciamento','18:00'],['Abertura','19:00'],['Palestras','19:30'],['Premiação','21:00'],['Confraternização','22:00']]
-  : f.categoria==='casamento' ? [['Chegada','18:00'],['Cerimônia','19:00'],['Entrada dos noivos','20:30'],['Bolo','22:30'],['Pista','23:00']]
-  : f.categoria==='quinze' ? [['Chegada','19:00'],['Entrada','20:30'],['Valsa','21:00'],['Bolo','22:30'],['Pista','23:00']]
-  : [['Chegada','16:00'],['Brincadeiras','17:00'],['Parabéns','19:00'],['Pista','20:00']];
-function momentoDe(p, f){ const L=(EXT(f).momentos||[]).filter(m=>m&&m.n&&m.h); if(!L.length||!p.criado_em) return null; const d=new Date(p.criado_em); let min=d.getHours()*60+d.getMinutes(); if(min<6*60) min+=24*60;
-  const ms=L.map(m=>{ const [h,mm]=m.h.split(':').map(Number); let v=h*60+(mm||0); if(v<6*60) v+=24*60; return {n:m.n,v}; }).sort((a,b)=>a.v-b.v);
-  let r=ms[0].n; for(const m of ms) if(min>=m.v) r=m.n; return r; }
-function blocoRevelaMomentos(box){
-  const f=FESTA, r=EXT(f).revelacao||{}, ms=EXT(f).momentos||[];
-  const dIni = r.em ? new Date(new Date(r.em).getTime()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,16) : (f.data ? new Date(new Date(f.data+'T12:00').getTime()+864e5).toLocaleDateString('sv')+'T12:00' : '');
-  box.innerHTML=`<div class="grid2"><div>
-    <div style="font-size:36px">🔒</div><h3 style="margin:4px 0">Modo revelação</h3>
-    <p class="muted">O telão exibe ${CORP(f)?'as mensagens':'as homenagens'} ao vivo, mas o mural no celular dos ${CORP(f)?'participantes':'convidados'} só abre no horário programado. Todo mundo volta ao link para ver o resultado.</p>
-    <label class="f">O mural abre em<input class="in" type="datetime-local" id="rvEm" value="${esc(dIni)}"></label>
-    <div class="row" style="gap:8px"><button class="btn" type="button" id="rvOk">${r.em?'💾 Mudar horário':'🔒 Ligar revelação'}</button>${r.em?'<button class="btn ghost" type="button" id="rvX">Abrir o mural agora</button>':''}</div><div class="msg" id="rvM"></div>
-  </div><div>
-    <div style="font-size:36px">🕰️</div><h3 style="margin:4px 0">Momentos ${CORP(f)?'do evento':'da festa'}</h3>
-    <p class="muted">Diga a hora de cada momento: o mural ganha filtros (${MOMENTOS_SUG(f).slice(0,3).map(m=>m[0]).join(', ')}…) e o arquivo .zip sai organizado em pastas.</p>
-    <div id="mmL"></div><div class="row" style="gap:8px;margin-top:6px"><button class="btn ghost sm" type="button" id="mmAdd">+ Momento</button><button class="btn" type="button" id="mmOk">💾 Salvar momentos</button></div><div class="msg" id="mmM"></div>
-  </div></div>`;
-  let L = ms.length ? ms.map(m=>({...m})) : MOMENTOS_SUG(f).map(([n,h])=>({n,h}));
-  const pinta=()=>{ $('mmL').innerHTML=L.map((m,i)=>`<div class="row" style="gap:6px;margin-bottom:6px"><input class="in" data-mn="${i}" maxlength="24" value="${esc(m.n)}" style="flex:1"><input class="in" type="time" data-mh="${i}" value="${esc(m.h)}" style="width:130px"><button class="btn ghost sm" type="button" data-mx="${i}" aria-label="Tirar">✕</button></div>`).join('');
-    $('mmL').querySelectorAll('[data-mn]').forEach(e=>e.oninput=()=>L[+e.dataset.mn].n=e.value); $('mmL').querySelectorAll('[data-mh]').forEach(e=>e.oninput=()=>L[+e.dataset.mh].h=e.value);
-    $('mmL').querySelectorAll('[data-mx]').forEach(b=>b.onclick=()=>{ L.splice(+b.dataset.mx,1); pinta(); }); };
-  pinta(); $('mmAdd').onclick=()=>{ if(L.length<8){ L.push({n:'',h:''}); pinta(); } };
-  $('mmOk').onclick=async()=>{ const ok=L.filter(m=>m.n.trim()&&/^\d{2}:\d{2}$/.test(m.h)).map(m=>({n:m.n.trim().slice(0,24),h:m.h})); try{ await extrasSet('momentos', ok.length?ok:null); $('mmM').className='msg ok'; $('mmM').textContent=ok.length?'Momentos salvos!':'Momentos desligados.'; }catch(e){ $('mmM').className='msg err'; $('mmM').textContent=ERR(e); } };
-  $('rvOk').onclick=async()=>{ const v=$('rvEm').value; if(!v){ $('rvM').className='msg err'; $('rvM').textContent='Escolha o dia e a hora.'; return; } const iso=new Date(v).toISOString(); if(new Date(iso)<=new Date()){ $('rvM').className='msg err'; $('rvM').textContent='Escolha um horário no futuro.'; return; }
-    try{ await extrasSet('revelacao',{em:iso}); $('rvM').className='msg ok'; $('rvM').textContent='Revelação ligada: o mural abre '+new Date(iso).toLocaleString('pt-BR',{weekday:'long',day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'})+'.'; blocoRevelaMomentos(box); }catch(e){ $('rvM').className='msg err'; $('rvM').textContent=ERR(e); } };
-  if($('rvX')) $('rvX').onclick=async()=>{ try{ await extrasSet('revelacao',null); toast('Mural aberto para todos!'); blocoRevelaMomentos(box); }catch(e){ $('rvM').className='msg err'; $('rvM').textContent=ERR(e); } };
-}
-
-// =====================================================================
-// PALESTRANTE — controle da apresentação no celular de quem fala (código próprio)
-// =====================================================================
-async function telaPalestrante(){
-  FESTA = await carregarFesta(SLUG).catch(()=>null); if(!FESTA) return telaNaoAchou();
-  aplicarTema(temaDe(FESTA)); document.title='Palestrante · '+(FESTA.titulo||FESTA.homenageado);
-  const tentar=async cod=>{ try{ const e=await rpc('fe_palestrante_tv',{p_slug:SLUG,p_codigo:cod,p_modo:null,p_slide:null,p_video:null}); store.set('mf_pal_'+SLUG,cod); painelPalestrante(cod,e||{}); return true; }catch(err){ if(/incorreto/i.test(err.message||'')) return false; throw err; } };
-  const salvo=store.get('mf_pal_'+SLUG);
-  if(salvo && await tentar(salvo).catch(()=>false)) return;
-  telaLogin('🎙️ Palestrante', 'Controle da apresentação · '+esc(FESTA.titulo||FESTA.homenageado), tentar);
-  const lb=document.querySelector('#lg label.f'); if(lb && lb.firstChild) lb.firstChild.textContent='Código do palestrante';
-  const inp=$('lgP'); if(inp){ inp.type='text'; inp.inputMode='numeric'; inp.autocomplete='off'; }
-}
-function painelPalestrante(cod, est){
-  let e=est||{}; const L=()=>e.slides||[];
-  const pinta=()=>{ const sl=L(), i=e.slide||0, cur=sl[i], vid=EH_VIDEO(cur), noAr=e.modo==='apresentacao';
-    $('app').innerHTML=`<div class="wrap pal">
-      <div class="pal-top"><div><div class="muted" style="font-size:13px;font-weight:600">🎙️ Palestrante</div><b>${esc(FESTA.titulo||FESTA.homenageado)}</b></div><span class="pal-st ${noAr?'on':''}">${noAr?`No telão: ${vid?'vídeo':'slide'} ${i+1} de ${sl.length}`:e.modo==='pausa'?'Telão pausado':'Telão no mural'}</span></div>
-      ${sl.length?`<div class="pal-atual">${vid?`<video src="${midia(cur)}#t=1" muted preload="metadata" playsinline></video><b class="apr-v">🎬 vídeo</b>`:`<img src="${midia(cur)}" alt="Slide ${i+1}">`}</div>
-      <div class="pal-nav"><button class="btn ghost" data-nav="-1" ${i>0?'':'disabled'}>◀ Anterior</button><button class="btn" data-nav="1" ${i<sl.length-1?'':'disabled'}>Próximo ▶</button></div>
-      ${vid&&noAr?`<div class="pal-nav"><button class="btn alt" data-vd="play">▶ Tocar vídeo</button><button class="btn ghost" data-vd="pause">⏸ Pausar vídeo</button><button class="btn ghost" data-vd="inicio">⏮ Do início</button></div>`:''}
-      <div class="pal-nav">${noAr?'':`<button class="btn" data-m="apresentacao">▶ Mostrar no telão</button>`}<button class="btn ok" data-m="mural">💌 Voltar ao mural</button></div>
-      <div class="apr-grid">${sl.map((p,k)=>`<button data-i="${k}" aria-pressed="${noAr&&k===i}">${EH_VIDEO(p)?`<video src="${midia(p)}#t=1" muted preload="metadata" playsinline></video><b class="apr-v">🎬</b>`:`<img src="${midia(p)}" alt="Slide ${k+1}" loading="lazy">`}<span>${k+1}</span></button>`).join('')}</div>`
-      :'<p class="muted">A apresentação ainda não foi enviada. Peça ao organizador para enviar os slides na aba Apresentação.</p>'}
-      <p class="muted" style="font-size:13px;margin-top:16px">Você está no controle da apresentação. Caso necessário, a organização ${CORP(FESTA)?'do evento':'da festa'} também pode auxiliar no controle do telão.</p></div>`;
-    document.querySelectorAll('.pal [data-nav]').forEach(b=>b.onclick=()=>enviar('apresentacao', Math.max(0,Math.min(L().length-1,(e.slide||0)+(+b.dataset.nav))), null));
-    document.querySelectorAll('.pal [data-i]').forEach(b=>b.onclick=()=>enviar('apresentacao', +b.dataset.i, null));
-    document.querySelectorAll('.pal [data-m]').forEach(b=>b.onclick=()=>enviar(b.dataset.m, e.slide||0, null));
-    document.querySelectorAll('.pal [data-vd]').forEach(b=>b.onclick=()=>enviar(null, null, b.dataset.vd));
-  };
-  const enviar=async(modo, slide, video)=>{ try{ e=await rpc('fe_palestrante_tv',{p_slug:SLUG,p_codigo:cod,p_modo:modo,p_slide:slide,p_video:video})||e; if(navigator.vibrate) navigator.vibrate(20); if(video) toast(video==='pause'?'Vídeo pausado':video==='inicio'?'Vídeo voltou ao início':'Vídeo tocando'); pinta(); }
-    catch(err){ if(/incorreto/i.test(err.message||'')){ store.set('mf_pal_'+SLUG,null); toast('O código do palestrante mudou. Entre de novo.'); setTimeout(()=>location.reload(),1500); } else toast(ERR(err)); } };
-  pinta();
-  setInterval(async()=>{ if(document.hidden) return; try{ const n=await rpc('fe_tv_estado',{p_festa:FESTA.id}); if(n && (n.modo!==e.modo || n.slide!==e.slide || JSON.stringify(n.slides)!==JSON.stringify(e.slides))){ e=n; pinta(); } }catch(_){} }, 4000);
-}
-// admin: código do palestrante + botões de vídeo
-async function blocoPalestrante(box){
-  let cod=null; try{ const r=await rpc('fe_admin_palestrante_ver',{p_slug:SLUG,p_pin:PIN}); cod=r&&r.codigo||null; }catch(_){}
-  const link=linkFesta(FESTA.slug,'palestrante');
-  box.innerHTML=`<h3 style="margin:0 0 4px">🎙️ Controle do palestrante</h3>
-    <p class="muted" style="margin:0 0 12px">Compartilhe o link e o código com o palestrante para que ele controle os slides e vídeos direto do próprio celular no palco. Ele visualiza apenas a apresentação.</p>
-    ${cod?`<div class="grid2"><div><p style="margin:0 0 6px">Código atual: <b style="font-size:22px;letter-spacing:.12em">${esc(cod)}</b></p>
-      <div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn" type="button" id="plCp">📋 Copiar link e código</button><button class="btn ghost" type="button" id="plWa">💬 Mandar no WhatsApp</button><button class="btn ghost" type="button" id="plNovo">🔄 Trocar código</button><button class="btn ghost" type="button" id="plX">Desligar</button></div></div>
-      <div style="text-align:center"><div id="plQr" style="max-width:180px;margin:0 auto;background:#fff;padding:8px;border-radius:12px"></div><p class="muted" style="font-size:13px;margin:6px 0 0">O palestrante aponta a câmera aqui</p></div></div>`
-    :`<div class="row" style="gap:8px"><button class="btn" type="button" id="plNovo">🎙️ Criar código do palestrante</button></div>`}<div class="msg" id="plM"></div>`;
-  const novo=async()=>{ const c=String(Math.floor(1000+Math.random()*9000)); try{ await rpc('fe_admin_palestrante',{p_slug:SLUG,p_pin:PIN,p_codigo:c}); toast('Código do palestrante: '+c); blocoPalestrante(box); }catch(e){ $('plM').className='msg err'; $('plM').textContent=ERR(e); } };
-  $('plNovo').onclick=novo;
-  if(cod){ qrInto($('plQr'), link, 180); const txt=`🎙️ Controle da apresentação\n${link}\nCódigo do palestrante: ${cod}`;
-    $('plCp').onclick=()=>copiar(txt,'Link e código copiados!'); $('plWa').onclick=()=>window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank','noopener');
-    $('plX').onclick=async()=>{ try{ await rpc('fe_admin_palestrante',{p_slug:SLUG,p_pin:PIN,p_codigo:null}); toast('Controle do palestrante desligado.'); blocoPalestrante(box); }catch(e){ $('plM').className='msg err'; $('plM').textContent=ERR(e); } }; }
-}
-function tvVideoCtl(apr){ if(!apr || !apr.n) return; if(window.__aprN===undefined){ window.__aprN=apr.n; return; } if(apr.n===window.__aprN) return; window.__aprN=apr.n;
-  const v=document.querySelector('.tv-apr video'); if(!v) return; if(apr.v==='pause') v.pause(); else if(apr.v==='inicio'){ v.currentTime=0; v.play().catch(()=>{}); } else v.play().catch(()=>{}); }
-
-// =====================================================================
 // PDFs (álbum e cartões)
 // =====================================================================
+let ALBC=false; const FC=()=>ALBC?'Figtree, sans-serif':'Caveat, cursive';
+function capaCorp(c,t,f,foto){
+  c.fillStyle='#ffffff'; c.fillRect(0,0,PW,PH);
+  c.fillStyle=t.accent; c.fillRect(0,0,PW,14);
+  let y=170;
+  if(t._logo){ const lh=120, lw=Math.min(420,lh*t._logo.width/t._logo.height), h2=lw*t._logo.height/t._logo.width; c.drawImage(t._logo,(PW-lw)/2,y-70,lw,h2); y+=h2+40; }
+  c.textAlign='center'; c.fillStyle=t.muted; c.font='700 30px Figtree, sans-serif'; c.fillText('M E M Ó R I A   D O   E V E N T O', PW/2, y);
+  const nome=DESTAQUE(f); let fs=120; c.font=`500 ${fs}px Fraunces, Georgia, serif`; let ls=wrap(c,nome,PW-180); while(ls.length>2 && fs>56){ fs-=6; c.font=`500 ${fs}px Fraunces, Georgia, serif`; ls=wrap(c,nome,PW-180); }
+  c.fillStyle=t.ink; ls.slice(0,2).forEach((l,i)=>c.fillText(l, PW/2, y+fs+10+i*fs*1.05)); y+=fs+10+(Math.min(ls.length,2)-1)*fs*1.05;
+  c.font='500 40px Figtree, sans-serif'; c.fillStyle=t.accent; if(SEGUNDO(f) && SEGUNDO(f)!==nome) c.fillText(SEGUNDO(f), PW/2, y+70);
+  c.font='500 32px Figtree, sans-serif'; c.fillStyle=t.muted; c.fillText([dataBonita(f), f.local].filter(Boolean).join('  ·  '), PW/2, y+122);
+  const fy=y+180, fh=PH-fy-260;
+  if(foto){ c.save(); c.beginPath(); c.rect(90,fy,PW-180,fh); c.clip(); cobrir(c,foto,90,fy,PW-180,fh); c.restore(); }
+  else { c.fillStyle=t.bg2; c.fillRect(90,fy,PW-180,fh); }
+  c.fillStyle=t.ink; c.font='600 36px Figtree, sans-serif'; c.fillText('Mensagens, fotos e momentos da equipe', PW/2, PH-160);
+  c.strokeStyle=t.accent; c.lineWidth=3; c.beginPath(); c.moveTo(PW/2-60,PH-128); c.lineTo(PW/2+60,PH-128); c.stroke();
+}
 const PW=1240, PH=1754;
 function pg(){ const c=document.createElement('canvas'); c.width=PW; c.height=PH; return [c,c.getContext('2d')]; }
 function rr(c,x,y,w,h,r){ c.beginPath(); c.moveTo(x+r,y); c.arcTo(x+w,y,x+w,y+h,r); c.arcTo(x+w,y+h,x,y+h,r); c.arcTo(x,y+h,x,y,r); c.arcTo(x,y,x+w,y,r); c.closePath(); }
@@ -3701,10 +3527,10 @@ async function fontesProntas(t){ await Promise.all([`400 80px ${t.font}`,'700 40
 function papel(c, t, f, n){
   const enf = t._enfs && t._enfs.length ? t._enfs[n % t._enfs.length] : t._enf;
   const g=c.createLinearGradient(0,0,0,PH); g.addColorStop(0,t.paper); g.addColorStop(1,mix(t.paper,t.bg2,.35)); c.fillStyle=g; c.fillRect(0,0,PW,PH);
-  c.save(); c.globalAlpha=.35; for(let i=0;i<26;i++){ const x=(i*397)%PW, y=(i*631)%PH; c.fillStyle=t.pal[i%t.pal.length]; c.beginPath(); c.arc(x,y,6+(i%4)*3,0,6.28); c.fill(); } c.restore();
-  c.textAlign='center'; c.fillStyle=t.dark?t.bg:t.ink; c.font='600 26px Fredoka, sans-serif'; c.fillText(`${f.homenageado||f.titulo}${f.data?' · '+new Date(f.data+'T12:00:00').toLocaleDateString('pt-BR'):''}`, PW/2, 70);
+  if(!ALBC){ c.save(); c.globalAlpha=.35; for(let i=0;i<26;i++){ const x=(i*397)%PW, y=(i*631)%PH; c.fillStyle=t.pal[i%t.pal.length]; c.beginPath(); c.arc(x,y,6+(i%4)*3,0,6.28); c.fill(); } c.restore(); }
+  c.textAlign='center'; c.fillStyle=t.dark?t.bg:t.ink; c.font='600 26px Fredoka, sans-serif'; c.fillText(`${ALBC?DESTAQUE(f):(f.homenageado||f.titulo)}${f.data?' · '+new Date(f.data+'T12:00:00').toLocaleDateString('pt-BR'):''}`, PW/2, 70);
   c.strokeStyle=t.accent; c.globalAlpha=.6; c.lineWidth=3; c.beginPath(); c.moveTo(380,90); c.lineTo(PW-380,90); c.stroke(); c.globalAlpha=1;
-  if(enf){ const h=110, w=h*enf.width/enf.height; c.drawImage(enf,40,PH-40-h,w,h); c.save(); c.translate(PW-40,PH-40-h); c.scale(-1,1); c.drawImage(enf,0,0,w,h); c.restore(); } else { c.font='44px serif'; c.fillText(t.deco[0],90,PH-70); c.fillText(t.deco[1],PW-90,PH-70); }
+  if(enf){ const h=110, w=h*enf.width/enf.height; c.drawImage(enf,40,PH-40-h,w,h); c.save(); c.translate(PW-40,PH-40-h); c.scale(-1,1); c.drawImage(enf,0,0,w,h); c.restore(); } else if(ALBC && t._logo){ const lh=56, lw=Math.min(220,lh*t._logo.width/t._logo.height); c.drawImage(t._logo,70,PH-58-lh/2-14,lw,lw*t._logo.height/t._logo.width); } else if(!ALBC){ c.font='44px serif'; c.fillText(t.deco[0],90,PH-70); c.fillText(t.deco[1],PW-90,PH-70); }
   c.font='600 26px Fredoka, sans-serif'; c.fillStyle=t.dark?t.bg:t.muted; c.fillText(String(n), PW/2, PH-58);
 }
 function mix(a,b,k){ const p=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)); const A=p(a),B=p(b); return '#'+A.map((v,i)=>Math.round(v*(1-k)+B[i]*k).toString(16).padStart(2,'0')).join(''); }
@@ -3714,20 +3540,22 @@ function tituloSecao(c,t,txt,sub,y=200){
   return y+(sub?100:50);
 }
 function polaroid(c,im,cx,cy,pw,ph,rot,cap1,cap2,t){
+  if(ALBC) rot=0;
   const pad=24, bottom=cap2?118:94, W=pw+pad*2, H=ph+pad+bottom;
   c.save(); c.translate(cx,cy); c.rotate(rot*Math.PI/180);
   c.shadowColor='rgba(0,0,0,.28)'; c.shadowBlur=26; c.shadowOffsetY=10; c.fillStyle='#fff'; c.fillRect(-W/2,-H/2,W,H); c.shadowColor='transparent';
   const ar=pw/ph, iar=im.width/im.height; let sx=0,sy=0,sw=im.width,sh=im.height; if(iar>ar){ sw=im.height*ar; sx=(im.width-sw)/2; } else { sh=im.width/ar; sy=(im.height-sh)/2; }
   c.drawImage(im,sx,sy,sw,sh,-W/2+pad,-H/2+pad,pw,ph);
-  c.fillStyle=t.accent2; c.globalAlpha=.55; c.save(); c.translate(0,-H/2+4); c.rotate(-.04); c.fillRect(-70,-18,140,36); c.restore(); c.globalAlpha=1;
+  if(!ALBC){ c.fillStyle=t.accent2; c.globalAlpha=.55; c.save(); c.translate(0,-H/2+4); c.rotate(-.04); c.fillRect(-70,-18,140,36); c.restore(); c.globalAlpha=1; }
   c.textAlign='center'; c.fillStyle='#2b2b3a';
-  if(cap1){ let fs=44; c.font=`700 ${fs}px Caveat, cursive`; while(fs>32 && c.measureText(cap1).width>W-50){ fs-=2; c.font=`700 ${fs}px Caveat, cursive`; } let ls=wrap(c,cap1,W-50); if(ls.length>2){ ls=ls.slice(0,2); ls[1]+='…'; }
-    if(ls.length===1) c.fillText(ls[0],0,H/2-bottom+60); else { c.font=`700 ${Math.min(fs,34)}px Caveat, cursive`; c.fillText(ls[0],0,H/2-bottom+38); c.fillText(ls[1],0,H/2-bottom+70); } }
-  if(cap2){ c.font='500 28px Caveat, cursive'; c.fillStyle='#6b6b80'; c.fillText(cap2,0,H/2-18); }
+  if(cap1){ let fs=44; c.font=`700 ${fs}px ${FC()}`; while(fs>32 && c.measureText(cap1).width>W-50){ fs-=2; c.font=`700 ${fs}px ${FC()}`; } let ls=wrap(c,cap1,W-50); if(ls.length>2){ ls=ls.slice(0,2); ls[1]+='…'; }
+    if(ls.length===1) c.fillText(ls[0],0,H/2-bottom+60); else { c.font=`700 ${Math.min(fs,34)}px ${FC()}`; c.fillText(ls[0],0,H/2-bottom+38); c.fillText(ls[1],0,H/2-bottom+70); } }
+  if(cap2){ c.font=`500 28px ${FC()}`; c.fillStyle='#6b6b80'; c.fillText(cap2,0,H/2-18); }
   c.restore();
 }
 async function carregarImg(path, max=1400){ try{ const b=await fetch(midia(path)).then(r=>{ if(!r.ok) throw 0; return r.blob(); }); const bmp=await createImageBitmap(b); const k=Math.min(1,max/Math.max(bmp.width,bmp.height)); const cv=document.createElement('canvas'); cv.width=Math.round(bmp.width*k); cv.height=Math.round(bmp.height*k); cv.getContext('2d').drawImage(bmp,0,0,cv.width,cv.height); return cv; }catch(e){ return null; } }
 function capa(c,t,f,foto){
+  if(ALBC) return capaCorp(c,t,f,foto);
   const g=c.createLinearGradient(0,0,PW,PH); g.addColorStop(0,t.bg); g.addColorStop(1,t.bg2); c.fillStyle=g; c.fillRect(0,0,PW,PH);
   if(t._fundo){ cobrir(c,t._fundo,0,0,PW,PH); c.globalAlpha=.55; c.fillStyle=t.bg; c.fillRect(0,0,PW,PH); c.globalAlpha=1; }
   c.save(); for(let i=0;i<(t._fundo?0:70);i++){ const x=(i*211)%PW, y=(i*389)%PH; c.globalAlpha=.25+((i*7)%10)/20; c.fillStyle=t.pal[i%t.pal.length]; if(t.pat==='confete'){ c.save(); c.translate(x,y); c.rotate(i); c.fillRect(-10,-4,20,9); c.restore(); } else { c.beginPath(); c.arc(x,y,3+(i%5)*2.4,0,6.28); c.fill(); } } c.restore();
@@ -3740,12 +3568,13 @@ function capa(c,t,f,foto){
   c.font='500 34px Fredoka, sans-serif'; c.fillStyle=t.muted; c.fillText([dataBonita(f), f.local].filter(Boolean).join(' · '), PW/2, 495);
   if(foto) polaroid(c, foto, PW/2, 1010, 760, 570, -2, '', '', t);
   else { c.font='300px serif'; c.fillText(t.e, PW/2, 1150); }
-  c.fillStyle=t.accent; c.font='400 64px Caveat, cursive'; c.fillText('Álbum de recordações', PW/2, PH-220);
+  c.fillStyle=t.accent; c.font=`400 64px ${FC()}`; c.fillText('Álbum de recordações', PW/2, PH-220);
   c.fillStyle=t.muted; c.font='600 30px Fredoka, sans-serif'; c.fillText('com o carinho de todos os convidados', PW/2, PH-168);
 }
 function cobrir(c,im,x,y,w,h){ const ar=w/h, iar=im.width/im.height; let sx=0,sy=0,sw=im.width,sh=im.height; if(iar>ar){ sw=im.height*ar; sx=(im.width-sw)/2; } else { sh=im.width/ar; sy=(im.height-sh)/2; } c.drawImage(im,sx,sy,sw,sh,x,y,w,h); }
-async function temaPdf(f){ const t={...temaDe(f)}; await fontesProntas(t); if(t.fundo) t._fundo=await carregarImg(t.fundo,1800); t._enfs=[]; for(const p of (t.enfeites||(t.enfeite?[t.enfeite]:[]))){ const im=await carregarImg(p,900); if(im) t._enfs.push(im); } t._enf=t._enfs[0]||null; return t; }
+async function temaPdf(f){ const t={...temaDe(f)}; await fontesProntas(t); if(t.fundo) t._fundo=await carregarImg(t.fundo,1800); t._enfs=[]; for(const p of (t.enfeites||(t.enfeite?[t.enfeite]:[]))){ const im=await carregarImg(p,900); if(im) t._enfs.push(im); } t._enf=t._enfs[0]||null; if(EXT(f).logo) t._logo=await carregarImg(EXT(f).logo,600); return t; }
 async function pdfAlbum(f, posts, prog){
+  ALBC=CORP(f);
   const t=await temaPdf(f);
   const {jsPDF}=window.jspdf; const doc=new jsPDF({orientation:'p',unit:'mm',format:'a4',compress:true}); let n=0;
   const add=cv=>{ if(f.plano==='teste') marcaTeste(cv.getContext('2d'), PW, PH);
@@ -3765,14 +3594,14 @@ async function pdfAlbum(f, posts, prog){
   // recados escritos: 4 por página
   for(let i=0;i<textos.length;i+=4){
     prog(`Escrevendo os recados… ${Math.min(i+4,textos.length)}/${textos.length}`);
-    const [cv,c]=pg(); papel(c,t,f,n+1); let top=150; if(i===0) top=tituloSecao(c,t,'Recados','palavras de carinho',230)+10;
+    const [cv,c]=pg(); papel(c,t,f,n+1); let top=150; if(i===0) top=tituloSecao(c,t,ALBC?'Mensagens':'Recados',ALBC?'o que a equipe escreveu':'palavras de carinho',230)+10;
     const grupo=textos.slice(i,i+4), colW=(PW-180)/2, rows=Math.ceil(grupo.length/2), rowH=(PH-top-140)/Math.max(rows,2);
     grupo.forEach((p,j)=>{ const x=70+(j%2)*(colW+40), y=top+Math.floor(j/2)*rowH; const h=rowH-36; const rot=(j%2?1:-1)*0.8;
       c.save(); c.translate(x+colW/2,y+h/2); c.rotate(rot*Math.PI/180); c.shadowColor='rgba(0,0,0,.16)'; c.shadowBlur=18; c.shadowOffsetY=8; rr(c,-colW/2,-h/2,colW,h,26); c.fillStyle='#fff'; c.fill(); c.shadowColor='transparent';
       c.fillStyle=t.accent; c.font='120px Playfair Display, serif'; c.textAlign='left'; c.globalAlpha=.25; c.fillText('“',-colW/2+24,-h/2+110); c.globalAlpha=1;
-      let fs=50; c.font=`700 ${fs}px Caveat, cursive`; let ls=wrap(c,p.texto,colW-80); while((ls.length*fs*1.1>h-130) && fs>26){ fs-=2; c.font=`700 ${fs}px Caveat, cursive`; ls=wrap(c,p.texto,colW-80); }
+      let fs=50; c.font=`700 ${fs}px ${FC()}`; let ls=wrap(c,p.texto,colW-80); while((ls.length*fs*1.1>h-130) && fs>26){ fs-=2; c.font=`700 ${fs}px ${FC()}`; ls=wrap(c,p.texto,colW-80); }
       c.fillStyle='#2b2b3a'; c.textAlign='center'; const lh=fs*1.1, y0=-((ls.length-1)*lh)/2-20; ls.forEach((l,k)=>c.fillText(l,0,y0+k*lh));
-      c.fillStyle=t.accent; c.font='700 30px Fredoka, sans-serif'; c.fillText(`— ${p.autor||'Um convidado'}`,0,h/2-36); c.restore(); });
+      c.fillStyle=t.accent; c.font='700 30px Fredoka, sans-serif'; c.fillText(`— ${p.autor||(ALBC?'Um participante':'Um convidado')}`,0,h/2-36); c.restore(); });
     add(cv);
   }
   // fotos em polaroid: alterna 1, 2 e 3 por página
@@ -3780,7 +3609,7 @@ async function pdfAlbum(f, posts, prog){
   const blocos=[]; let r=imgs.length, cyc=[3,1,2], k=0; while(r>0){ let q=cyc[k%3]; k++; if(q>r) q=r; if(r-q===1 && q===3) q=2; blocos.push(q); r-=q; }
   let off=0;
   for(const [bi,q] of blocos.entries()){
-    prog(`Diagramando as fotos… página ${n+1}`); const [cv,c]=pg(); papel(c,t,f,n+1); let top=140; if(bi===0) top=tituloSecao(c,t,'Momentos','os cliques da festa',230);
+    prog(`Diagramando as fotos… página ${n+1}`); const [cv,c]=pg(); papel(c,t,f,n+1); let top=140; if(bi===0) top=tituloSecao(c,t,ALBC?'Registros do evento':'Momentos',ALBC?'fotos enviadas pelos participantes':'os cliques da festa',230);
     const g=imgs.slice(off,off+q); off+=q; const avail=PH-120-top; const cap=x=>[x.p.texto||'', x.p.autor?`por ${x.p.autor}`:''];
     if(q===1){ const land=g[0].im.width>=g[0].im.height; polaroid(c,g[0].im,PW/2,top+avail/2,land?960:740,Math.min(land?720:980,avail-170),-1.5,...cap(g[0]),t); }
     else if(q===2){ const h=(avail-30)/2, ph=Math.min(h-150,560), pw=Math.round(ph*4/3); polaroid(c,g[0].im,PW/2-90,top+h/2+8,pw,ph,-3,...cap(g[0]),t); polaroid(c,g[1].im,PW/2+90,top+h+30+h/2-8,pw,ph,2.5,...cap(g[1]),t); }
@@ -3790,7 +3619,7 @@ async function pdfAlbum(f, posts, prog){
   // áudios e vídeos: cartão com QR para ouvir/assistir
   for(let i=0;i<grav.length;i+=2){
     prog(`Preparando os recados gravados… ${Math.min(i+2,grav.length)}/${grav.length}`);
-    const [cv,c]=pg(); papel(c,t,f,n+1); let top=150; if(i===0) top=tituloSecao(c,t,'Recados gravados','aponte a câmera do celular para ouvir de novo',230)+20;
+    const [cv,c]=pg(); papel(c,t,f,n+1); let top=150; if(i===0) top=tituloSecao(c,t,ALBC?'Mensagens gravadas':'Recados gravados','aponte a câmera do celular para ouvir de novo',230)+20;
     const g=grav.slice(i,i+2), h=(PH-top-160)/2;
     for(const [j,p] of g.entries()){
       const y=top+j*(h+30), x=90, w=PW-180;
@@ -3803,18 +3632,18 @@ async function pdfAlbum(f, posts, prog){
       c.textAlign='left'; const mx=tx+thumbW+36, mw=qx-mx-24;
       const fit=(txt,max,base,fam)=>{ let s=base; c.font=`${fam.replace('{s}',s)}`; while(c.measureText(txt).width>max && s>16){ s-=2; c.font=fam.replace('{s}',s); } };
       c.fillStyle=t.accent; fit(p.tipo==='video'?'RECADO EM VÍDEO':'RECADO EM ÁUDIO', mw, 28, '700 {s}px Fredoka, sans-serif'); c.fillText(p.tipo==='video'?'RECADO EM VÍDEO':'RECADO EM ÁUDIO', mx, y+h/2-50);
-      let fs=60; c.font=`700 ${fs}px Caveat, cursive`; const nm=p.autor||'Um convidado'; while(c.measureText(nm).width>mw && fs>34){ fs-=2; c.font=`700 ${fs}px Caveat, cursive`; } c.fillStyle='#2b2b3a'; c.fillText(nm, mx, y+h/2+14);
+      let fs=60; c.font=`700 ${fs}px ${FC()}`; const nm=p.autor||'Um convidado'; while(c.measureText(nm).width>mw && fs>34){ fs-=2; c.font=`700 ${fs}px ${FC()}`; } c.fillStyle='#2b2b3a'; c.fillText(nm, mx, y+h/2+14);
       c.fillStyle='#777'; const l3=`${fmtDur(p.duracao)} · ${new Date(p.criado_em).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}`; fit(l3, mw, 28, '600 {s}px Fredoka, sans-serif'); c.fillText(l3, mx, y+h/2+62);
     }
     add(cv);
   }
   // contracapa
-  prog('Fechando o álbum…'); { const [cv,c]=pg(); papel(c,t,f,n+1); c.textAlign='center'; if(t._enf){ const e=t._enf, h=300, w=h*e.width/e.height; c.drawImage(e,PW/2-w/2,190,w,h); } else { c.font='220px serif'; c.fillText(t.e, PW/2, 470); }
-    c.fillStyle=t.dark?t.bg:t.accent; c.font=`400 ${/Great|Pacifico/.test(t.font)?120:92}px ${fonte(t)}`; c.fillText('Obrigado!', PW/2, 650);
-    const st=[[posts.filter(p=>p.tipo==='foto').length,'fotos'],[textos.length,'recados'],[grav.length,'gravações'],[new Set(posts.map(p=>p.autor).filter(Boolean)).size,'convidados']];
+  prog('Fechando o álbum…'); { const [cv,c]=pg(); papel(c,t,f,n+1); c.textAlign='center'; if(t._enf){ const e=t._enf, h=300, w=h*e.width/e.height; c.drawImage(e,PW/2-w/2,190,w,h); } else if(ALBC){ if(t._logo){ const h=150, w=Math.min(460,h*t._logo.width/t._logo.height), h2=w*t._logo.height/t._logo.width; c.drawImage(t._logo,PW/2-w/2,400-h2/2,w,h2); } } else { c.font='220px serif'; c.fillText(t.e, PW/2, 470); }
+    c.fillStyle=t.dark?t.bg:t.accent; c.font=`400 ${/Great|Pacifico/.test(t.font)?120:92}px ${fonte(t)}`; c.fillText(ALBC?'Obrigado, equipe!':'Obrigado!', PW/2, 650);
+    const st=[[posts.filter(p=>p.tipo==='foto').length,'fotos'],[textos.length,'recados'],[grav.length,'gravações'],[new Set(posts.map(p=>p.autor).filter(Boolean)).size,ALBC?'participantes':'convidados']];
     st.forEach((s,i)=>{ const bx=110+i*265; rr(c,bx,740,240,190,28); c.fillStyle='#fff'; c.fill(); c.lineWidth=4; c.strokeStyle=t.accent; c.stroke(); c.fillStyle=t.accent; c.font=`700 84px Fredoka, sans-serif`; c.fillText(String(s[0]),bx+120,850); c.fillStyle='#555'; c.font='600 28px Fredoka, sans-serif'; c.fillText(s[1],bx+120,895); });
-    c.fillStyle=t.dark?t.bg:t.ink; c.font='600 54px Caveat, cursive'; ['Cada foto, cada recado e cada voz','fizeram deste dia uma lembrança para sempre.',`Com carinho, ${f.homenageado||'os anfitriões'} 💛`].forEach((l,i)=>c.fillText(l,PW/2,1080+i*74));
-    c.font='600 26px Fredoka, sans-serif'; c.fillStyle=t.dark?t.bg:t.muted; c.fillText('feito com o Mural da Festa · '+SITE, PW/2, PH-130); add(cv); }
+    c.fillStyle=t.dark?t.bg:t.ink; c.font=`600 54px ${FC()}`; (ALBC?['Cada foto, cada mensagem e cada voz','registraram um dia importante para o nosso time.',`${DESTAQUE(f)}`]:['Cada foto, cada recado e cada voz','fizeram deste dia uma lembrança para sempre.',`Com carinho, ${f.homenageado||'os anfitriões'} 💛`]).forEach((l,i)=>c.fillText(l,PW/2,1080+i*74));
+    c.font='600 26px Fredoka, sans-serif'; c.fillStyle=t.dark?t.bg:t.muted; c.fillText('feito com o Mural da Festa', PW/2, PH-130); add(cv); }
   return {blob:doc.output('blob'), paginas:n};
 }
 function marcaTeste(c, W, H){
@@ -3917,7 +3746,7 @@ function ligarDesafios(){
   r();
 }
 // --- telão: faixa de aviso e contagem em tela cheia ---
-function tvExtras(ex, agora){ ex=ex||{}; window.__tvEx=ex; try{ tvVideoCtl(ex.apr); }catch(_){} const off=agora?new Date(agora).getTime()-Date.now():0;
+function tvExtras(ex, agora){ ex=ex||{}; const off=agora?new Date(agora).getTime()-Date.now():0;
   document.body.classList.toggle('com-aviso',!!ex.aviso); let av=$('tvAviso'); if(ex.aviso){ if(!av){ av=document.createElement('div'); av.id='tvAviso'; av.className='tv-aviso'; document.body.appendChild(av); } if(av.dataset.t!==ex.aviso){ av.dataset.t=ex.aviso; av.innerHTML=`<span aria-hidden="true">📌</span><span>${esc(ex.aviso)}</span>`; } } else if(av) av.remove();
   const c=ex.contagem, fim=c&&c.ate?new Date(c.ate).getTime():0; let cd=$('tvCont');
   if(fim && fim-(Date.now()+off) > -15000){ if(!cd){ cd=document.createElement('div'); cd.id='tvCont'; cd.className='tv-cont'; document.body.appendChild(cd); }
@@ -4025,9 +3854,6 @@ function telaCriar(){
   const cq=Q.get('cat'); const f0= cq && CATS[cq] ? {categoria:cq,tema:CATS[cq].tema,moderacao:true} : {categoria:'aniversario',tema:'confete',moderacao:true};
   $('app').innerHTML=`<div class="wrap"><div class="top"><h1>✨ Crie o mural da sua festa</h1><a class="btn ghost sm" href="${BASE}">← Início</a></div>
     <p class="muted" style="margin:-4px 0 14px">Leva 2 minutos. Escolha o tipo de festa e o tema, preencha os dados e pronto: você recebe o link, o QR Code e o convite na hora. Depois, monta o telão com imagens, fotos e música.</p>
-    <details class="ff-feat"><summary><b>📋 Tudo o que vem na sua festa</b><span>${(cq==='corporativo'?PERFIS.empresa:PERFIS.festa).feat.length} recursos: ${cq==='corporativo'?'apresentação com controle do palestrante, credenciamento com QR, perguntas ao palco, sorteio, quiz':'homenagens ao vivo no telão, lista de presentes no Pix, quiz, sorteio, bingo, álbum de recordações'} e mais. Toque para ver.</span></summary>
-      <div class="feat ff-fg">${(cq==='corporativo'?PERFIS.empresa:PERFIS.festa).feat.map(([t,d])=>`<div><b>${t}</b><p>${d}</p></div>`).join('')}</div>
-      <p class="muted" style="font-size:14px;margin:10px 0 0">${cq==='corporativo'?'':PERFIS.festa.mais+' '}Você liga só o que quiser, depois de criar.</p></details>
     ${formFesta(f0,{auto:true})}
     <div class="row" style="justify-content:flex-end;margin-top:12px"><span class="msg" id="nfM"></span><button class="btn" id="nfCriar" style="font-size:18px">🎉 Criar minha festa</button></div></div>`;
   const ler=ligarFormFesta(f0, k=>{ aplicarTema(k); $('ffSeuN').hidden=true; }, ()=>{ $('ffSeuN').hidden=false; }, true);
@@ -4191,23 +4017,23 @@ const PERFIS={
     passosT:'Como funciona ✨',
     passos:[['📲 O convidado aponta a câmera','Para o QR Code da mesa ou o link do grupo. Não precisa baixar nada.'],['💌 Deixa a homenagem','Uma foto, um recado escrito, um áudio ou um vídeo.'],['✅ Você aprova','Nada aparece no telão sem passar por quem organiza.'],['📺 Telão e álbum','As homenagens passam ao vivo e viram um álbum em PDF.']],
     featT:'Do jeito da sua festa 🎈',
-    feat:[['🎨 Tema e personagens','Escolha um dos temas prontos ou use a arte do seu convite.'],['📖 A história do homenageado','De 8 a 12 fotos, do bebê até hoje, no telão e no álbum.'],['🎵 Música no telão','Uma trilha suave, que se cala sozinha quando entra um vídeo.'],['💌 Convite com QR Code','Para o WhatsApp ou para imprimir. O convidado já chega sabendo.'],['✅ Confirmação de presença','O convidado confirma pelo link e você vê quantos adultos e crianças vão.'],['🎲 Sorteio no telão','Você escolhe o prêmio (um presente, uma dança, um discurso) e o telão sorteia entre quem está na festa.'],['🧠 Quiz ao vivo','Perguntas sobre o homenageado no telão, respostas pelo celular e ranking: quem acerta mais rápido ganha.'],['💌 Correio elegante','Recados para alguém da festa, assinados ou anônimos, no telão depois da sua aprovação.'],['❤️ Curtidas e moldura','Os convidados curtem as homenagens e postam a foto com a moldura da festa.'],['🎁 Lista de presentes no Pix','Presentes e experiências com valor (passeio de lancha, micro-ondas…), até em cotas. O Pix cai direto na sua conta, sem taxa, e o obrigado aparece no telão.'],['🙈 Modo revelação','As fotos ficam guardadas e só aparecem para os convidados na hora que você marcar.'],['🕰️ Momentos da festa','Chegada, cerimônia, bolo, pista: cada foto vai para o seu momento e o álbum já sai organizado.'],['📸 Desafios de foto','Missões divertidas para os convidados (a mesa inteira na foto, alguém arrasando na pista).'],['🎱 Bingo da festa','Cartela no celular de cada convidado e números sorteados no telão.'],['⏳ Aviso e contagem regressiva','Um recado fixo no celular de todos e a contagem para a valsa, o bolo ou a surpresa.'],['✨ Resumo para os Stories','No dia seguinte, a festa em números e as melhores homenagens, prontos para postar.'],['🛡️ Recados filtrados','Palavras impróprias são barradas na hora e você aprova o que vai ao telão.']],
-    mais:'Festa grande? Também tem portaria com QR, cardápio do buffet, pedidos na mesa, manobrista e apresentação no telão com vídeos. Tudo opcional.'},
+    feat:[['🎨 Tema e personagens','Escolha um dos temas prontos ou use a arte do seu convite.'],['📖 A história do homenageado','De 8 a 12 fotos, do bebê até hoje, no telão e no álbum.'],['🎵 Música no telão','Uma trilha suave, que se cala sozinha quando entra um vídeo.'],['💌 Convite com QR Code','Para o WhatsApp ou para imprimir. O convidado já chega sabendo.'],['✅ Confirmação de presença','O convidado confirma pelo link e você vê quantos adultos e crianças vão.'],['🎲 Sorteio no telão','Você escolhe o prêmio (um presente, uma dança, um discurso) e o telão sorteia entre quem está na festa.'],['🧠 Quiz ao vivo','Perguntas sobre o homenageado no telão, respostas pelo celular e ranking: quem acerta mais rápido ganha.'],['💌 Correio elegante','Recados para alguém da festa, assinados ou anônimos, no telão depois da sua aprovação.'],['❤️ Curtidas e moldura','Os convidados curtem as homenagens e postam a foto com a moldura da festa.']],
+    mais:'Festa grande? Também tem portaria com QR, cardápio do buffet, pedidos na mesa, manobrista e apresentação no telão. Tudo opcional.'},
   buffet:{chip:'🍽️ Buffet ou cerimonialista', marca:'🍽️ Para buffets e cerimonialistas', h1:'Entregue uma festa que o concorrente não entrega.',
     sub:'Telão de homenagens, cardápio pelo celular, pedidos na mesa, portaria com QR e manobrista. Você indica, o cliente contrata direto e o seu buffet entrega mais.',
     cta:['Testar grátis com uma festa','?criar'], nota:'Teste com a sua equipe hoje mesmo. Sem mensalidade e sem aparelho: cada um usa o próprio celular.', destaque:'festa',
     passosT:'Como funciona a parceria 🤝',
     passos:[['🔗 Você indica','Mostre o Mural ao cliente na hora de fechar a festa, com o seu link ou código.'],['💳 O cliente contrata','Ele cria a festa e paga direto. Você não cobra nem repassa nada.'],['📱 Sua equipe opera','Garçons, portaria e manobristas usam o celular, cada um com o seu painel.'],['🤝 Seja parceiro','Buffets e cerimonialistas parceiros têm condições especiais. Peça a proposta.']],
     featT:'O que a sua equipe ganha na festa 🧑‍🍳',
-    feat:[['🍹 Pedidos na mesa','Cada mesa tem seu QR. O convidado pede e o garçom recebe no celular, com o número da mesa.'],['🍽️ Cardápio antecipado','O convidado escolhe o prato antes. Você recebe o total de cada item e compra certo.'],['🚪 Portaria sem penetras','Selfie e ingresso com QR. A recepção confere o rosto e conta quem entrou.'],['🚗 Manobrista','Placa, fotos e vaga registradas pelo QR. Na saída, o convidado pede o carro pelo celular.'],['📺 Telão de homenagens','O momento que todo mundo filma e posta, marcando o seu espaço.'],['📖 Álbum para o cliente','Depois da festa, o cliente recebe tudo em PDF e guarda o seu nome junto.'],['🎁 Lista de presentes no Pix','Um diferencial para vender: o cliente monta a lista de presentes e experiências e recebe direto na conta dele, sem taxa.'],['🕰️ Momentos e revelação','Fotos organizadas por momento da festa e reveladas na hora certa, para criar expectativa.'],['✨ Resumo para os Stories','No dia seguinte o cliente posta o resumo da festa, com o nome do seu espaço.']],
+    feat:[['🍹 Pedidos na mesa','Cada mesa tem seu QR. O convidado pede e o garçom recebe no celular, com o número da mesa.'],['🍽️ Cardápio antecipado','O convidado escolhe o prato antes. Você recebe o total de cada item e compra certo.'],['🚪 Portaria sem penetras','Selfie e ingresso com QR. A recepção confere o rosto e conta quem entrou.'],['🚗 Manobrista','Placa, fotos e vaga registradas pelo QR. Na saída, o convidado pede o carro pelo celular.'],['📺 Telão de homenagens','O momento que todo mundo filma e posta, marcando o seu espaço.'],['📖 Álbum para o cliente','Depois da festa, o cliente recebe tudo em PDF e guarda o seu nome junto.']],
     comissao:true},
-  empresa:{chip:'💼 Corporativo', marca:'💼 Para empresas e eventos corporativos', h1:'Convenção, premiação ou confraternização, organizada pelo celular.',
+  empresa:{chip:'💼 Empresa', marca:'💼 Para empresas e eventos corporativos', h1:'Convenção, premiação ou confraternização, organizada pelo celular.',
     sub:'Credenciamento com QR, apresentação no telão controlada pelo celular, cardápio, pedidos na mesa e manobrista. E um mural de mensagens que engaja a equipe.',
     cta:['Criar meu evento grátis','?criar&cat=corporativo'], nota:'Teste tudo de graça antes de contratar. Pagamento único por evento, sem mensalidade.', destaque:'grande',
     passosT:'Como funciona no seu evento 📋',
     passos:[['📝 Cadastre','Crie o evento, envie os slides em PDF e o cardápio do buffet.'],['🎟️ Convide','Os convidados confirmam pelo link e recebem o ingresso com QR.'],['🚪 Credencie','Na entrada, a equipe lê o QR pelo celular e você vê quem chegou.'],['🎤 Apresente','Passe os slides e pause o telão pelo celular, sem precisar de técnico.']],
     featT:'Tudo o que o evento precisa 💼',
-    feat:[['🎤 Apresentação no telão','Slides em PDF, controlados pelo celular: passar, pausar e voltar ao mural.'],['🚪 Credenciamento com QR','Ingresso no celular, conferência na entrada e contagem em tempo real.'],['✅ Lista de presença','Quem confirmou, quem chegou e quantos são, para copiar e enviar.'],['🍽️ Cardápio e pedidos','Escolha do prato antes do evento e pedidos de bebida na mesa.'],['🚗 Manobrista','Registro do carro com fotos e pedido de saída pelo celular.'],['💬 Mural de mensagens','Fotos e recados da equipe no telão, para homenagens e premiações.'],['🎲 Sorteio e quiz ao vivo','Brindes sorteados no telão e quiz com ranking pelo celular, para integrar a equipe.'],['🙋 Perguntas para o palco','A plateia pergunta por escrito, gravando ou pedindo o microfone, com moderação antes de ir ao telão.'],['🎙️ Controle do palestrante','Cada palestrante recebe um link e um código: passa os slides e toca os vídeos do próprio celular.'],['🎬 Vídeos entre os slides','PowerPoint animado exportado em vídeo e vídeos institucionais no meio da apresentação.'],['📸 Desafios de foto','Missões para integrar as equipes (selfie com alguém de outra área, a mesa inteira na foto).'],['✨ Resumo do evento','O evento em números e os melhores momentos, prontos para o RH divulgar.']]}
+    feat:[['🎤 Apresentação no telão','Slides em PDF, controlados pelo celular: passar, pausar e voltar ao mural.'],['🚪 Credenciamento com QR','Ingresso no celular, conferência na entrada e contagem em tempo real.'],['✅ Lista de presença','Quem confirmou, quem chegou e quantos são, para copiar e enviar.'],['🍽️ Cardápio e pedidos','Escolha do prato antes do evento e pedidos de bebida na mesa.'],['🚗 Manobrista','Registro do carro com fotos e pedido de saída pelo celular.'],['💬 Mural de mensagens','Fotos e recados da equipe no telão, para homenagens e premiações.'],['🎲 Sorteio e quiz ao vivo','Brindes sorteados no telão e quiz com ranking pelo celular, para integrar a equipe.'],['🙋 Perguntas para o palco','A plateia pergunta por escrito, gravando ou pedindo o microfone, com moderação antes de ir ao telão.']]}
 };
 const CENAS={
   festa: o=>`<div class="lpol"><div class="lfoto lreal"><img src="fotos/valsa.jpg" alt=""></div><span>a primeira valsa</span></div>
@@ -4232,7 +4058,7 @@ function telaInicio(perfil){
        <p class="lmarca">${P.marca}</p>
        <h1>${P.h1}</h1>
        <p class="lsub">${P.sub}</p>
-       <div class="row"><a class="btn big" href="${P.cta[1]}">${P.cta[0]}</a><a class="btn ghost" href="?experimente">▶ Ver funcionando</a></div>
+       <div class="row"><a class="btn big" href="${P.cta[1]}">${P.cta[0]}</a><a class="btn ghost" href="#como">Como funciona</a></div>
        <p class="nota">${P.nota}</p>
      </div>
      <div class="lcena" aria-hidden="true">${CENAS[k](ondas)}</div>
@@ -4276,56 +4102,6 @@ function telaInicio(perfil){
   }).catch(()=>{ $('inPlanos').innerHTML=''; });
   if($('inParc')) $('inParc').onclick=()=>faleConosco('Quero ser parceiro');
   $('inF').onsubmit=e=>{ e.preventDefault(); const v=$('inC').value.trim().toLowerCase().replace(/.*[?&]f=/,'').replace(/[^a-z0-9-]/g,''); if(v) location.href=linkFesta(v); };
-}
-
-
-// =====================================================================
-// EXPERIMENTE — demonstração para quem chega do Instagram (nada é salvo)
-// =====================================================================
-function telaExperimente(){
-  aplicarTema(TEMA_MARCA); document.title='Veja o Mural da Festa funcionando';
-  const SL=[
-    {img:'fotos/valsa.jpg', a:'📸 Ana Júlia'},
-    {q:'Que você nunca perca esse brilho no olhar. Te amamos!', a:'Vovó Lúcia'},
-    {img:'fotos/15anos.jpg', a:'📸 Tio Beto'},
-    {q:'15 anos de muita luz! Obrigada por ser a melhor amiga do mundo 💖', a:'Malu'},
-    {img:'fotos/casamento.jpg', a:'📸 Padrinho Rafa'}
-  ];
-  $('app').innerHTML=`<div class="xp">
-    <p class="lmarca">💌 Mural da Festa</p>
-    <h1>Os convidados mandam. O telão mostra na hora.</h1>
-    <p class="lead">Foto, recado, áudio ou vídeo pelo celular, sem baixar nada. No fim da festa, tudo vira um álbum de recordações.</p>
-    <div class="xp-tv" id="xpTv" aria-label="Telão de demonstração"><span class="xp-novo" id="xpNovo">✨ Nova homenagem</span></div>
-    <div class="xp-form">
-      <h2>Agora é a sua vez 👇</h2>
-      <p class="muted" style="margin:0 0 12px;font-size:14px">Escreva um recado ou escolha uma foto e veja aparecer no telão acima.</p>
-      <label class="f">Seu nome<input class="in" id="xpN" maxlength="30" placeholder="Ex.: Tia Cris"></label>
-      <label class="f" style="margin-top:10px">Recado<textarea class="in" id="xpQ" rows="3" maxlength="160" placeholder="Ex.: Parabéns! Que dia lindo 🎉"></textarea></label>
-      <div class="row" style="margin-top:12px;gap:8px"><button class="btn" type="button" id="xpEnv">💌 Mandar para o telão</button><label class="btn ghost" style="cursor:pointer">📸 Mandar uma foto<input type="file" id="xpF" accept="image/*" hidden></label></div>
-      <small class="muted">É só uma demonstração: nada é enviado nem salvo.</small>
-    </div>
-    <div class="xp-fim" id="xpFim">
-      <p style="font-weight:600;margin:0 0 10px">Imagina isso na sua festa? Crie agora e teste de graça.</p>
-      <a class="btn big" href="?criar&origem=experimente">Criar a minha festa grátis</a>
-      <p class="muted" style="font-size:14px;margin:12px 0 0">Leva 2 minutos, sem cartão. Só paga se gostar.<br><a href="?para=empresa">É para uma empresa?</a> · <a href="./">Conhecer o Mural</a></p>
-    </div></div>`;
-  const tv=$('xpTv'); let fila=SL.slice(), i=0, timer=null;
-  const pintar=(s)=>{ const el=document.createElement('div'); el.className='xp-sl';
-    el.innerHTML = s.img ? `<div><img src="${s.img}" alt=""><span class="a">${esc(s.a)}</span></div>` : `<div class="q">“${esc(s.q)}”<span class="a">${esc(s.a)}</span></div>`;
-    tv.appendChild(el); void el.offsetWidth; el.classList.add('on');
-    [...tv.querySelectorAll('.xp-sl')].slice(0,-1).forEach(o=>{ o.classList.remove('on'); setTimeout(()=>o.remove(),700); }); };
-  const proximo=()=>{ pintar(fila[i%fila.length]); i++; };
-  const rodar=()=>{ clearInterval(timer); timer=setInterval(proximo, 4200); };
-  proximo(); rodar();
-  const confete=()=>{ const b=document.createElement('div'); b.className='xp-conf'; const cs=['#e9b8a3','#cfa9c9','#963c5f','#ffc300','#2ec4b6'];
-    for(let k=0;k<60;k++){ const s=document.createElement('i'); s.style.left=(Math.random()*100)+'%'; s.style.background=cs[k%cs.length]; s.style.animationDelay=(Math.random()*.5).toFixed(2)+'s'; s.style.setProperty('--x',(Math.random()*60-30).toFixed(0)+'px'); s.style.setProperty('--g',(Math.random()*720-360).toFixed(0)+'deg'); b.appendChild(s); }
-    tv.appendChild(b); setTimeout(()=>b.remove(),3200); };
-  let feitos=0;
-  const novo=(s)=>{ fila.splice(i%fila.length,0,s); pintar(s); i++; rodar(); confete(); const n=$('xpNovo'); n.classList.add('on'); setTimeout(()=>n.classList.remove('on'),2600);
-    tv.scrollIntoView({behavior:'smooth',block:'center'}); feitos++; if(feitos===1) setTimeout(()=>$('xpFim').scrollIntoView({behavior:'smooth',block:'center'}), 4500); };
-  const autor=()=>($('xpN').value.trim()||'Você');
-  $('xpEnv').onclick=()=>{ const q=$('xpQ').value.trim(); if(!q){ toast('Escreva um recado primeiro 💌'); $('xpQ').focus(); return; } novo({q, a:autor()}); $('xpQ').value=''; };
-  $('xpF').onchange=e=>{ const fl=e.target.files&&e.target.files[0]; e.target.value=''; if(!fl) return; if(!/^image\/(jpeg|png|webp|gif)/.test(fl.type)){ toast('Use uma foto JPG ou PNG nesta demonstração.'); return; } novo({img:URL.createObjectURL(fl), a:'📸 '+autor()}); };
 }
 
 // =====================================================================
@@ -4391,7 +4167,6 @@ function montarAjuda(){
   try{
     if(MODE==='convidado') await telaConvidado();
     else if(MODE==='telao') await telaTelao();
-    else if(MODE==='palestrante') await telaPalestrante();
     else if(MODE==='portaria') await telaPortaria();
     else if(MODE==='pedidos') await telaPedidos();
     else if(MODE==='valet') await telaValet();
@@ -4399,7 +4174,6 @@ function montarAjuda(){
     else if(MODE==='mestre') await telaMestre();
     else if(MODE==='termos') telaTermos();
     else if(MODE==='criar') telaCriar();
-    else if(MODE==='experimente') telaExperimente();
     else telaInicio();
     montarAjuda();
   }catch(e){ console.error(e); $('app').innerHTML='<div class="wrap center" style="padding-top:20vh"><h2>Ops!</h2><p>Não consegui carregar agora. Confira a internet e recarregue.</p></div>'; }

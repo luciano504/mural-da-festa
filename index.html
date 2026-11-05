@@ -1123,6 +1123,19 @@ body.sobrio .in:focus{background:#fff}
 body.corp{--r-lg:10px}
 body.corp .card{border-radius:12px}
 body.corp .btn{border-radius:10px}
+
+/* telão sóbrio: batizado, crisma, minimalista, corporativo */
+body.tv-quieto .chars{display:none}
+body.tv-quieto #fx{opacity:.18}
+body.tv-quieto .tv-top .n{white-space:nowrap}
+body.tv-quieto .sl-intro.quieto .nm{color:var(--accent);font-weight:500}
+body.tv-quieto .sl-intro.quieto .sub{letter-spacing:.06em}
+body.tv-quieto .sl-intro .cta{background:transparent;box-shadow:none;border:1px solid color-mix(in srgb,var(--accent) 35%,transparent);font-weight:500}
+body.tv-quieto .novo{background:var(--surface,#fff);color:var(--accent);box-shadow:none;border:1px solid color-mix(in srgb,var(--accent) 30%,transparent)}
+@media (orientation:portrait){ .tv-top .t{font-size:clamp(22px,6vw,48px)} .tv-top{align-items:flex-start} .sl-intro.quieto .nm{font-size:clamp(40px,11vw,96px)} }
+
+.mic .emi{width:1em;height:1em;color:var(--accent);stroke-width:1.6}
+.tv .emi,.stage .emi{stroke-width:1.7}
 </style>
 </head>
 <body>
@@ -1235,14 +1248,14 @@ const EMI_TEST=new RegExp(EMI_RE.source,'u');
 const EMI_EXCL='script,style,textarea,input,select,option,canvas,svg,#stage,.tv-dock,.tema,.pb,.q,blockquote,.media,.rx,.reac,.cap,.nuv,.bola,.chars,.noico,[contenteditable],.cv-prev,.wa-prev,pre,code';
 function emiSvg(k){ return `<svg class="emi emi-${k}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${EMI_P[k]}</svg>`; }
 function iconizar(root){
-  if(!root || MODE==='telao') return;
+  if(!root) return;
   const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>{ if(!EMI_TEST.test(n.data)) return NodeFilter.FILTER_REJECT; const p=n.parentElement; return (!p||p.closest(EMI_EXCL))?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT; }});
   const ns=[]; while(w.nextNode()) ns.push(w.currentNode);
   ns.forEach(n=>{ const t=n.data, tmp=document.createElement('span'); let html='', last=0; t.replace(EMI_RE,(m,k,off)=>{ html+=esc(t.slice(last,off))+emiSvg(EMI_MAP[k]); last=off+m.length; return m; }); html+=esc(t.slice(last)); tmp.innerHTML=html; n.replaceWith(...tmp.childNodes); });
 }
 (function(){ let pend=false; const run=()=>{ pend=false; try{ iconizar(document.body); }catch(e){} };
   const mo=new MutationObserver(()=>{ if(!pend){ pend=true; requestAnimationFrame(run); } });
-  const go=()=>{ if(MODE==='telao') return; run(); mo.observe(document.body,{childList:true,subtree:true,characterData:true}); };
+  const go=()=>{ run(); mo.observe(document.body,{childList:true,subtree:true,characterData:true}); };
   if(document.body) go(); else document.addEventListener('DOMContentLoaded',go);
 })();
 const BASE = location.origin + location.pathname.replace(/index\.html$/, '');
@@ -1313,8 +1326,8 @@ const TEMAS = {
   tropical:{n:'Pôr do Sol Tropical',e:'🌴',cats:['aniversario','outra','corporativo'],bg:'#fffdf5',bg2:'#ffeecb',surface:'#ffffff',ink:'#1c2a27',muted:'#526863',accent:'#c94a39',accent2:'#2a9d8f',on:'#ffffff',font:"'Outfit'",pat:'nenhum',pal:['#e05a47','#f4a261','#2a9d8f'],deco:['🌴','🌺','🍹'],paper:'#fffef8'},
   revelacao:{n:'Chá Revelação',e:'🎀',cats:['cha_bebe'],bg:'#faf8ff',bg2:'#efe8fc',surface:'#ffffff',ink:'#26203a',muted:'#62597c',accent:'#6d4cf0',accent2:'#f472b6',on:'#ffffff',font:"'Fredoka'",pat:'bolhas',pal:['#7c5cfc','#f472b6','#60a5fa'],deco:['🎀','💙','🩷'],paper:'#fcfbff'},
   arraia:{n:'Arraiá',e:'🌽',cats:['aniversario','outra','corporativo','infantil'],bg:'#fffdf5',bg2:'#fde8cd',surface:'#ffffff',ink:'#2b1810',muted:'#6b4e3d',accent:'#d9381e',accent2:'#2a9d8f',on:'#ffffff',font:"'Rye'",pat:'confete',pal:['#d9381e','#f4a261','#2a9d8f'],deco:['🌽','🔥','🎉'],paper:'#fffef8'},
-  minimal:{n:'Minimalista Moderno',e:'◾',cats:['aniversario','corporativo','formatura'],bg:'#f8fafc',bg2:'#e2e8f0',surface:'#ffffff',ink:'#0f172a',muted:'#475569',accent:'#0f172a',accent2:'#94a3b8',on:'#ffffff',font:"'Space Grotesk'",pat:'nenhum',pal:['#0f172a','#64748b','#94a3b8'],deco:['✨','🥂','🎶'],paper:'#ffffff'},
-  sacramental:{n:'Batizado e Comunhão',e:'🕊️',cats:['cha_bebe','infantil','outra'],bg:'#faf9f6',bg2:'#eceae4',surface:'#ffffff',ink:'#22252a',muted:'#5d636e',accent:'#5a6b5c',accent2:'#c5a059',on:'#ffffff',font:"'Playfair Display'",pat:'brilho',pal:['#5a6b5c','#c5a059','#d4af37'],deco:['🕊️','🤍','✨'],paper:'#fdfcfa'},
+  minimal:{n:'Minimalista Moderno',sobrio:true,e:'◾',cats:['aniversario','corporativo','formatura'],bg:'#f8fafc',bg2:'#e2e8f0',surface:'#ffffff',ink:'#0f172a',muted:'#475569',accent:'#0f172a',accent2:'#94a3b8',on:'#ffffff',font:"'Space Grotesk'",pat:'nenhum',pal:['#0f172a','#64748b','#94a3b8'],deco:['✨','🥂','🎶'],paper:'#ffffff'},
+  sacramental:{n:'Batizado e Comunhão',e:'🕊️',sobrio:true,cats:['cha_bebe','infantil','outra'],bg:'#faf9f6',bg2:'#eceae4',surface:'#ffffff',ink:'#22252a',muted:'#5d636e',accent:'#5a6b5c',accent2:'#c5a059',on:'#ffffff',font:"'Playfair Display'",pat:'brilho',pal:['#5a6b5c','#c5a059','#d4af37'],deco:['🕊️','🤍','✨'],paper:'#fdfcfa'},
   confete:{n:'Festa de Confete',e:'🎉',cats:['aniversario','outra','infantil','quinze'],bg:'#fffdf7',bg2:'#f3e8ff',surface:'#ffffff',ink:'#2a1745',muted:'#6d5c86',accent:'#7b2cbf',accent2:'#ff9f1c',on:'#ffffff',font:"'Fredoka'",pat:'confete',pal:['#7b2cbf','#ff9f1c','#2ec4b6','#ff5a5f'],deco:['🎉','🎂','🥳'],paper:'#fffdf8'}
 };
 const BODAS = [[1,'Papel'],[2,'Algodão'],[3,'Couro'],[4,'Flores'],[5,'Madeira'],[6,'Açúcar'],[7,'Lã'],[8,'Barro'],[9,'Cerâmica'],[10,'Estanho'],[11,'Aço'],[12,'Seda'],[13,'Renda'],[14,'Marfim'],[15,'Cristal'],[20,'Porcelana'],[25,'Prata'],[30,'Pérola'],[35,'Coral'],[40,'Esmeralda'],[45,'Rubi'],[50,'Ouro'],[55,'Ametista'],[60,'Diamante'],[65,'Platina'],[70,'Vinho'],[75,'Brilhante']];
@@ -1323,7 +1336,8 @@ function subtitulo(f){
   if(f.categoria==='bodas' && f.idade) return `${bodasNome(f.idade)} · ${f.idade} ${f.idade==1?'ano':'anos'} juntos`;
   if(f.categoria==='quinze') return '15 anos';
   if(f.idade!=null && ['infantil','menino','menina','aniversario'].includes(f.categoria)) return `${f.idade} ${f.idade==1?'aninho':'anos'}`;
-  return (CATS[f.categoria]||CATS.outra).n;
+  if(f.categoria==='outra' || !CATS[f.categoria]) return (f.titulo && f.titulo!==f.homenageado) ? f.titulo : '';
+  return CATS[f.categoria].n;
 }
 function dataBonita(f){ if(!f.data) return ''; const d=new Date(f.data+'T12:00:00'); const s=d.toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'}); return s.charAt(0).toUpperCase()+s.slice(1); }
 function tema(k){ return TEMAS[k] || TEMAS.confete; }
@@ -2134,14 +2148,15 @@ async function telaTelao(){
   FESTA = await carregarFesta(SLUG).catch(()=>null);
   if(!FESTA) return telaNaoAchou();
   const f=FESTA, t=temaDe(f), url=linkFesta(f.slug), nome=DESTAQUE(f); aplicarTema(t, .62); document.title='Telão · '+nome;
+  const QUIET = CORP(f) || !!t.sobrio || !!tema(f.tema||'').sobrio; document.body.classList.toggle('tv-quieto', QUIET);
   $('app').innerHTML = `
    <div class="tv">
      <div class="tv-top"><div class="t">${EXT(f).logo?`<img class="tv-logo" src="${midia(EXT(f).logo)}" alt="">`:''}${esc(nome)}</div><div class="n" id="tvN"></div></div>
      <div class="stage" id="stage"></div>
      ${f.plano==='teste'?'<div class="demo" id="tvDemo">🎈 Modo grátis <small>· faça o upgrade para mais diversão</small></div>':''}
-     <div class="tv-bar"><div class="qr" id="tvQr"></div><div><b>${CORP(f)?'Participe!':'Deixe sua homenagem!'}</b><span>${CORP(f)?'Aponte a câmera do celular para o código · mensagens, perguntas e mais':'Aponte a câmera do celular para o código · foto, recado, áudio ou vídeo'}</span></div>${f.plano==='teste'?`<div class="tv-promo">Quer um telão assim na sua festa?<br><b>Crie grátis: ${esc(SITE)}</b></div>`:CORP(f)?'':`<div class="tv-promo">feito com 💌 Mural da Festa<br>${esc(SITE)}</div>`}</div>
+     <div class="tv-bar"><div class="qr" id="tvQr"></div><div><b>${CORP(f)?'Participe!':'Deixe sua homenagem!'}</b><span>${CORP(f)?'Aponte a câmera do celular para o código · mensagens, perguntas e mais':'Aponte a câmera do celular para o código · foto, recado, áudio ou vídeo'}</span></div>${f.plano==='teste'?`<div class="tv-promo">Quer um telão assim na sua festa?<br><b>Crie grátis: ${esc(SITE)}</b></div>`:CORP(f)?'':`<div class="tv-promo">feito com o Mural da Festa<br>${esc(SITE)}</div>`}</div>
    </div>
-   <div class="tv-start" id="tvStart"><div>${t.enfeite?`<img class="enf-big" src="${midia(t.enfeite)}" alt="">`:`<div style="font-size:64px">${t.deco[0]}</div>`}<div class="who">${esc(nome)}</div><p class="muted" style="font-size:20px;font-weight:600">${esc(subtitulo(f))}</p>
+   <div class="tv-start" id="tvStart"><div>${t.enfeite?`<img class="enf-big" src="${midia(t.enfeite)}" alt="">`:(QUIET?'':`<div style="font-size:64px">${t.deco[0]}</div>`)}<div class="who">${esc(nome)}</div><p class="muted" style="font-size:20px;font-weight:600">${esc(subtitulo(f))}</p>
      <div class="row" style="justify-content:center"><button class="btn" id="tvGo" style="font-size:22px;padding:16px 30px">▶ Iniciar telão</button><button class="btn ghost" id="tvTeste">🧪 Testar o telão antes</button><button class="btn ghost" id="tvAj">❓ Ajuda</button></div><p class="muted" style="font-size:14px;margin-top:14px">Dica: conecte o notebook na TV. Teclas: → próxima · ← anterior · espaço pausa · F tela cheia${t.musica&&t.musica.tipo&&t.musica.tipo!=='nenhuma'?' · M música':''}</p></div></div>
    <div class="tv-hint" id="tvHint"></div>`;
   if($('tvDemo')){ const d=$('tvDemo'); let x=innerWidth*.3, y=innerHeight*.3, vx=.6, vy=.45;
@@ -2160,12 +2175,12 @@ async function telaTelao(){
   // ---- personagens que entram e saem da tela ----
   const chars = (()=>{
     const lay=document.createElement('div'); lay.className='chars'; document.body.appendChild(lay);
-    const srcs = (t.enfeites||[]).length ? t.enfeites.map(p=>({img:midia(p)})) : t.deco.map(e=>({emo:e}));
+    const srcs = (t.enfeites||[]).length ? t.enfeites.map(p=>({img:midia(p)})) : (['infantil','menino','menina','cha_bebe'].includes(f.categoria) ? t.deco.map(e=>({emo:e})) : []);
     srcs.forEach(s=>{ if(!s.img) return; const im=new Image(); im.crossOrigin='anonymous';
       im.onload=()=>{ try{ const c=document.createElement('canvas'); c.width=c.height=24; const x=c.getContext('2d'); x.drawImage(im,0,0,24,24); const d=x.getImageData(0,0,24,24).data; s.trans=[0,23,552,575].some(i=>d[i*4+3]<200); }catch(e){ s.trans=false; } };
       im.onerror=()=>{ s.trans=false; }; im.src=s.img; });
     const tipos=['pk-l','pk-r','pk-b','voa','pk-l','pk-r','pula']; let i=0, timer=null, ult='';
-    function um(forca){ if(lay.children.length>=(forca?3:1)) return; const s=srcs[i++ % srcs.length]; let k; do{ k=forca||tipos[Math.floor(Math.random()*tipos.length)]; }while(!forca && k===ult && tipos.length>1); ult=k;
+    function um(forca){ if(!srcs.length || lay.children.length>=(forca?3:1)) return; const s=srcs[i++ % srcs.length]; let k; do{ k=forca||tipos[Math.floor(Math.random()*tipos.length)]; }while(!forca && k===ult && tipos.length>1); ult=k;
       const el=document.createElement('div'); el.className='ch '+k;
       el.innerHTML = s.img ? `<img class="${s.trans===true?'':'sticker'}" style="--r:${(Math.random()*16-8).toFixed(1)}deg" src="${s.img}" alt="">` : `<span class="emo">${s.emo}</span>`;
       lay.appendChild(el); setTimeout(()=>el.remove(), 7000); }
@@ -2176,7 +2191,7 @@ async function telaTelao(){
     document.body.appendChild(box); setTimeout(()=>box.remove(),5000); }
 
   async function puxar(){
-    try{ let l=await postsAprovados(f.id); try{ const cs=await rpc('fe_correio_publico',{p_festa:f.id}); l=l.concat(cs.map(c=>({id:'c'+c.id,tipo:'correio',para:c.para,de:c.de,texto:c.mensagem,criado_em:c.criado_em}))).sort((a,b)=>new Date(a.criado_em)-new Date(b.criado_em)); }catch(_){} tv.list=l; for(const p of l){ if(!tv.known.has(p.id)){ tv.known.add(p.id); if(tv.started) tv.queue.push(p); } } $('tvN').textContent = l.length ? `${CORP(f)?`${l.length} mensage${l.length>1?'ns':'m'}`:`${l.length} homenage${l.length>1?'ns':'m'} 💛`}` : ''; }catch(e){}
+    try{ let l=await postsAprovados(f.id); try{ const cs=await rpc('fe_correio_publico',{p_festa:f.id}); l=l.concat(cs.map(c=>({id:'c'+c.id,tipo:'correio',para:c.para,de:c.de,texto:c.mensagem,criado_em:c.criado_em}))).sort((a,b)=>new Date(a.criado_em)-new Date(b.criado_em)); }catch(_){} tv.list=l; for(const p of l){ if(!tv.known.has(p.id)){ tv.known.add(p.id); if(tv.started) tv.queue.push(p); } } $('tvN').textContent = l.length ? `${CORP(f)?`${l.length} mensage${l.length>1?'ns':'m'}`:`${l.length} homenage${l.length>1?'ns':'m'}`}` : ''; }catch(e){}
   }
   // ---- pré-download: áudio e vídeo só entram no telão depois de baixados por inteiro ----
   const midiaPesada = p => p && (p.tipo==='video' || p.tipo==='audio');
@@ -2227,23 +2242,23 @@ async function telaTelao(){
     mostrar(p);
   }
   const ENTRADAS=['e-zoom','e-left','e-right','e-up','e-tilt'];
-  const giro = () => CORP(f) ? '0deg' : (Math.random()*8-4).toFixed(1)+'deg';
+  const giro = () => QUIET ? '0deg' : (Math.random()*8-4).toFixed(1)+'deg';
   function mostrar(p){
     const st=$('stage'); const old=st.firstElementChild; if(old){ old.classList.add('out'); const o=old; setTimeout(()=>o.remove(),600); old.querySelectorAll('audio,video').forEach(m=>{ try{ m.pause(); }catch(e){} }); }
-    const el=document.createElement('div'); el.className='sl '+(CORP(f)?'e-calma':ENTRADAS[Math.floor(Math.random()*ENTRADAS.length)]); const by = p.autor ? esc(p.autor) : '';
+    const el=document.createElement('div'); el.className='sl '+(QUIET?'e-calma':ENTRADAS[Math.floor(Math.random()*ENTRADAS.length)]); const by = p.autor ? esc(p.autor) : '';
     let dur=8000;
     if(p.tipo==='hist'){ el.classList.add('sl-hist'); el.innerHTML=`<div class="pol" style="--r:${giro()}"><img src="${midia(p.caminho)}" alt=""></div><div class="cap">📖 A história de ${esc(nome)}</div>`; dur=6500; }
     else if(p.tipo==='col'){ el.classList.add('sl-col'); el.innerHTML=p.fotos.map((c,i)=>`<div class="pol c${i+1}" style="--r:${[-9,4,10][i]}deg;animation-delay:${i*.45}s"><img src="${midia(c)}" alt=""></div>`).join('')+`<div class="cap">📖 A história de ${esc(nome)}</div>`; dur=8500; }
-    else if(p.tipo==='intro'){ el.className='sl sl-intro '+(CORP(f)?'quieto e-calma':'e-zoom'); el.innerHTML=`<div class="hey">${CORP(f)?'Bem-vindos':'✨ Bem-vindos à festa ✨'}</div><div class="nm">${CORP(f)?esc(nome):(()=>{ let i=0; return nome.split(' ').map(w=>`<span class="w" style="display:inline-block;white-space:nowrap">${[...w].map(ch=>`<span style="animation-delay:${(i++*.08).toFixed(2)}s">${esc(ch)}</span>`).join('')}</span>`).join(' '); })()}</div><div class="sub">${esc(subtitulo(f))}</div><div class="cta">${CORP(f)?'Participe pelo QR Code aqui embaixo':'📸 ✍️ 🎤 🎥 Mande sua homenagem pelo QR Code aqui embaixo!'}</div>`; dur=7500; if(!CORP(f)){ confete(60); chars.festa(); } }
+    else if(p.tipo==='intro'){ el.className='sl sl-intro '+(QUIET?'quieto e-calma':'e-zoom'); el.innerHTML=`<div class="hey">${CORP(f)?'Bem-vindos':QUIET?'Sejam bem-vindos':'Bem-vindos à festa'}</div><div class="nm">${QUIET?esc(nome):(()=>{ let i=0; return nome.split(' ').map(w=>`<span class="w" style="display:inline-block;white-space:nowrap">${[...w].map(ch=>`<span style="animation-delay:${(i++*.08).toFixed(2)}s">${esc(ch)}</span>`).join('')}</span>`).join(' '); })()}</div><div class="sub">${esc(subtitulo(f))}</div><div class="cta">${CORP(f)?'Participe pelo QR Code aqui embaixo':QUIET?'Deixe sua homenagem pelo QR Code aqui embaixo':'Mande foto, recado, áudio ou vídeo pelo QR Code aqui embaixo'}</div>`; dur=7500; if(!QUIET){ confete(60); chars.festa(); } }
     else if(p.tipo==='pix'){ const px=pixTv(); el.className='sl tv-empty e-zoom'; el.innerHTML=`<div class="qr" id="tvQrBig"></div><h2>🎁 ${esc(px&&px.frase||PIX_FRASE(f))}</h2><p>${px&&Array.isArray(px.lista)&&px.lista.length?`Aponte a câmera e escolha o seu presente · Pix sem taxa, direto para ${esc(px.nome||'o anfitrião')}`:`No app do banco: Pix › Pagar com QR Code · sem taxa, direto para ${esc(px&&px.nome||'o anfitrião')}`}</p>`; dur=9000; }
     else if(p.tipo==='qr'){ el.className='sl tv-empty e-zoom'; el.innerHTML=`<div class="qr" id="tvQrBig"></div><h2>${tv.list.length?'Deixe a sua homenagem também!':'Mande a primeira homenagem!'}</h2><p>Aponte a câmera do celular para o código</p>`; dur=7000; }
     else if(p.tipo==='foto'){ el.classList.add('sl-foto'); el.innerHTML=`<img class="ph" style="--r:${giro()}" src="${midia(p.caminho)}" alt="">${(p.texto||by||p.curtidas)?`<div class="cap">${esc(p.texto||'')}${p.curtidas?`<span class="tvlike">♥ ${p.curtidas}</span>`:''}${Object.entries(p.reacoes||{}).map(([e,n])=>`<span class="tvreac">${e} ${n}</span>`).join('')}${by?`<small>📸 ${by}</small>`:''}</div>`:''}`; dur=8000; }
     else if(p.tipo==='correio'){ el.classList.add('sl-texto','sl-correio'); const L=(p.texto||'').length; const fs=L<60?6:L<140?4.6:3.6; el.innerHTML=`<div><div class="env">${CORP(f)?'💬 Recado para um colega':'💌 Correio elegante'}</div><div class="pa">Para: ${esc(p.para)}</div><div class="q${t.fundo?' card-on':''}" style="font-size:${fs}vw">${esc(p.texto)}</div><div class="by">${p.de?'— '+esc(p.de):(CORP(f)?'— um colega':'🤫 De: alguém especial')}</div></div>`; dur=Math.min(16000, 8000+L*40); }
     else if(p.tipo==='texto'){ el.classList.add('sl-texto'); const L=(p.texto||'').length; const fs = L<40?9:L<90?7:L<180?5.4:L<320?4.2:3.4; el.innerHTML=`<div class="q${t.fundo?' card-on':''}" style="font-size:${fs}vw">${esc(p.texto)}</div>${by||p.curtidas?`<div class="by">${by?'— '+by:''}${p.curtidas?`<span class="tvlike">♥ ${p.curtidas}</span>`:''}</div>`:''}`; dur=Math.min(18000, 7000+L*45); }
-    else if(p.tipo==='audio'){ el.classList.add('sl-audio'); el.innerHTML=`<div class="mic">🎤</div><div class="eq">${'<i></i>'.repeat(12)}</div><div class="cap">Recado de ${by||'um convidado'}</div><audio src="${(cacheM.get(p.id)||{}).url||midia(p.caminho)}" preload="auto"></audio>`; dur=null; }
+    else if(p.tipo==='audio'){ el.classList.add('sl-audio'); el.innerHTML=`<div class="mic">${emiSvg('mic')}</div><div class="eq">${'<i></i>'.repeat(12)}</div><div class="cap">Recado de ${by||'um convidado'}</div><audio src="${(cacheM.get(p.id)||{}).url||midia(p.caminho)}" preload="auto"></audio>`; dur=null; }
     else if(p.tipo==='video'){ el.classList.add('sl-video'); el.innerHTML=`<video src="${(cacheM.get(p.id)||{}).url||midia(p.caminho)}" playsinline preload="auto" ${p.thumb?`poster="${midia(p.thumb)}"`:''}></video>${by?`<div class="cap"><small>🎥 Recado de ${by}</small></div>`:''}`; dur=null; }
-    if(p.tipo==='texto' && /^💸/.test(p.texto||'')){ const gm=(p.texto||'').match(/^💸\s*Presenteei:\s*([^!\n]{1,40})!/); el.insertAdjacentHTML('afterbegin',`<div class="novo">🎁 ${gm?esc(gm[1].trim())+'!':'Presente enviado!'} Obrigado${by?', '+by:''}!</div>`); if(!CORP(f)) confete(120); }
-    else if(p._novo){ el.insertAdjacentHTML('afterbegin',`<div class="novo">${CORP(f)?'✨ Nova mensagem':'✨ Nova homenagem! ✨'}</div>`); if(!CORP(f)){ confete(); chars.festa(); } }
+    if(p.tipo==='texto' && /^💸/.test(p.texto||'')){ const gm=(p.texto||'').match(/^💸\s*Presenteei:\s*([^!\n]{1,40})!/); el.insertAdjacentHTML('afterbegin',`<div class="novo">🎁 ${gm?esc(gm[1].trim())+'!':'Presente enviado!'} Obrigado${by?', '+by:''}!</div>`); if(!QUIET) confete(120); }
+    else if(p._novo){ el.insertAdjacentHTML('afterbegin',`<div class="novo">${CORP(f)?'Nova mensagem':'Nova homenagem'}</div>`); if(!QUIET){ confete(); chars.festa(); } }
     st.appendChild(el); tv.cur=p;
     if(p.tipo==='qr') qrInto($('tvQrBig'), url, 600);
     if(p.tipo==='pix'){ const px=pixTv(); if(px) qrInto($('tvQrBig'), Array.isArray(px.lista)&&px.lista.length ? url : pixPayload(px), 600); }
@@ -2257,7 +2272,7 @@ async function telaTelao(){
     $('tvStart').hidden=true; tv.started=true; if(mus) mus.start();
     try{ await document.documentElement.requestFullscreen(); }catch(e){}
     try{ if(navigator.wakeLock) await navigator.wakeLock.request('screen'); }catch(e){}
-    await puxar(); baixador(); if(!CORP(f)) chars.start(); mostrar(extra('intro'));
+    await puxar(); baixador(); if(!QUIET) chars.start(); mostrar(extra('intro'));
   };
   document.addEventListener('keydown', e=>{
     if(!tv.started) return;
@@ -2283,7 +2298,7 @@ async function telaTelao(){
     else if(modo==='bingo' && e.bingo){ telaoBingo(e.bingo); }
     else if(modo==='pergunta' && e.pergunta){ const q=e.pergunta; if(camada.dataset.pq!=String(q.id)){ camada.dataset.pq=q.id; camada.className='tv-prg'; camada.hidden=false;
         camada.innerHTML=`<div><div class="k">🙋 Pergunta da plateia</div><div class="t">${q.texto?esc(q.texto):q.tipo==='audio'?'🎙️ Pergunta gravada':''}</div><div class="w">${q.nome?esc(q.nome):'Anônimo'}${q.mesa?' · '+esc(q.mesa):''}</div>${q.audio?`<audio id="tvPa" src="${midia(q.audio)}" autoplay></audio>`:''}</div>`; } }
-    else if(modo==='pausa'){ camada.className='tv-pausa'; camada.hidden=false; if(!camada.querySelector('.who')) camada.innerHTML=`<div><div class="who">${esc(nome)}</div><p>${CORP(f)?'Já voltamos':'Já voltamos 💛'}</p></div>`; }
+    else if(modo==='pausa'){ camada.className='tv-pausa'; camada.hidden=false; if(!camada.querySelector('.who')) camada.innerHTML=`<div><div class="who">${esc(nome)}</div><p>Já voltamos</p></div>`; }
     else { camada.hidden=true; camada.innerHTML=''; }
     const parar = modo!=='mural' && (modo==='pausa' || modo==='sorteio' || modo==='quiz' || modo==='pergunta' || modo==='enquete' || modo==='bingo' || sl.length);
     if(modo!=='apresentacao'){ const v=camada.querySelector('.tv-apr video, video[data-src]'); if(v){ try{ v.pause(); }catch(_){} } }

@@ -493,7 +493,8 @@ h2.sec .muted{font-family:var(--body)}
 .mn-dot{position:absolute;transform:translate(-50%,-50%);width:26px;height:26px;border-radius:50%;border:3px solid #fff;background:color-mix(in srgb,var(--accent) 22%,transparent);box-shadow:0 0 0 2px var(--accent),0 4px 12px rgba(0,0,0,.25);cursor:pointer;padding:0;animation:mnPulse 2s infinite}
 .mn-dot.on,.mn-dot.mk{background:var(--accent);animation:none}.mn-dot.mk{opacity:.55}.mn-dot.on::after{content:'✓';color:#fff;font:800 14px/20px sans-serif}
 .mn-dot span{position:absolute;left:50%;top:calc(100% + 4px);transform:translateX(-50%);white-space:nowrap;background:rgba(0,0,0,.78);color:#fff;font:600 12px/1.2 sans-serif;padding:3px 7px;border-radius:8px;opacity:0;pointer-events:none;transition:opacity .2s}
-.mn-dot:hover span,.mn-dot:focus-visible span{opacity:1}.mn-dot:disabled{opacity:.35;animation:none}
+.mn-dot::before{content:'';position:absolute;inset:-10px;border-radius:50%}.cdp-mapa .mn-dot span{display:none}@media (hover:hover){.mn-pg .mn-dot:hover span{opacity:1}}
+.cdp-conf{margin:8px 0 0;padding:10px 12px;border-radius:12px;background:color-mix(in srgb,var(--accent) 10%,transparent);font-size:15px}.mn-dot:disabled{opacity:.35;animation:none}
 @keyframes mnPulse{50%{box-shadow:0 0 0 7px color-mix(in srgb,var(--accent) 25%,transparent),0 4px 12px rgba(0,0,0,.25)}}
 .cdp-mapa{margin:0 0 14px}
 .promo-de{font-size:14px;color:var(--muted);margin:2px 0 -2px}.promo-de b{color:var(--accent)}
@@ -1770,6 +1771,7 @@ async function ligarCardapio(MESA){
     return `<div class="cdp-mapa"><p style="margin:0 0 8px;font-weight:600">👆 Toque no prato que você quer${pessoas>1?':':''}</p>
       ${pessoas>1?`<div class="cdp-chips" style="margin-bottom:8px">${Array.from({length:pessoas},(_,k)=>`<button type="button" data-pa="${k}" aria-pressed="${k===pAtiva}">Pessoa ${k+1}</button>`).join('')}</div>`:''}
       ${pgs.map(pi=>`<div class="mn-pg"><img src="${midia(menu[pi])}" alt="Cardápio, página ${pi+1}">${P.filter(q=>q.p===pi).map(q=>{ const on=sel[q.it.secao]&&sel[q.it.secao][pAtiva]==q.it.id; return `<button type="button" class="mn-dot${on?' on':''}" style="left:${q.x*100}%;top:${q.y*100}%" data-mp="${q.it.id}" data-sec="${esc(q.it.secao)}" aria-pressed="${on}" aria-label="${esc(q.it.nome)}" ${q.it.pausado&&!on?'disabled':''}><span>${esc(q.it.nome)}${q.it.pausado?' · acabou':''}</span></button>`; }).join('')}</div>`).join('')}
+      ${(()=>{ const n=Object.values(sel).map(a=>a[pAtiva]).filter(Boolean).map(id=>(esc_.find(i=>i.id==id)||{}).nome).filter(Boolean); return n.length?`<p class="cdp-conf">✅ ${pessoas>1?`Pessoa ${pAtiva+1}: `:'Sua escolha: '}<b>${n.map(esc).join(' · ')}</b></p>`:''; })()}
       <p class="muted" style="font-size:13px;margin:6px 0 0">Ou escolha pela lista aqui embaixo.</p></div>`; };
   const blocoEscolha=()=>blocoMapa()+`<div class="cdp-pes"><span>Quantas pessoas vão comer?</span><span class="cdp-q"><button type="button" data-pes="-1" aria-label="Menos">−</button><b>${pessoas}</b><button type="button" data-pes="1" aria-label="Mais">+</button></span></div>
     ${Object.entries(secoesE).map(([sec,l])=>`<div class="cdp-sec"><h4>${esc(sec)} <small>uma opção por pessoa</small></h4>${sel[sec].map((v,k)=>`<div class="cdp-pp">${pessoas>1?`<span class="cdp-pl">Pessoa ${k+1}</span>`:''}<div class="cdp-chips">${l.map(i=>`<button type="button" data-sec="${esc(sec)}" data-k="${k}" data-op="${i.id}" aria-pressed="${v==i.id}" ${i.pausado&&v!=i.id?'disabled':''}>${esc(i.nome)}${i.descricao?`<small>${esc(i.descricao)}</small>`:''}${i.pausado?'<em>acabou</em>':''}</button>`).join('')}</div></div>`).join('')}</div>`).join('')}`;
@@ -2962,7 +2964,9 @@ async function paletaDe(blob){
   const tot=Object.values(caixa).reduce((t,x)=>t+x.n,0)||1, claros=Object.values(caixa).map(x=>({n:x.n,r:x.r/x.n,g:x.g/x.n,b:x.b/x.n})).filter(x=>hsl(x.r,x.g,x.b)[2]>.86).sort((a,b)=>b.n-a.n);
   const fundoClaro = claros.length && claros.reduce((t,x)=>t+x.n,0)/tot>.35 ? hex(claros[0].r,claros[0].g,claros[0].b) : null;
   const a1=cores.find(x=>x.l>.15&&x.l<.8&&x.s>.15)||cores[0]||{hex:'#7b2cbf',h:270}; const a2=cores.find(x=>{ const dh=Math.abs(x.h-a1.h); return Math.min(dh,360-dh)>40 && x.s>.25; }) || cores[1] || {hex:'#ff9f1c'};
-  return {accent:a1.hex, accent2:a2.hex, bg:fundoClaro||mix(a1.hex,'#ffffff',.9)};
+  const lum=h=>{ const v=[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)/255).map(c=>c<=.03928?c/12.92:Math.pow((c+.055)/1.055,2.4)); return .2126*v[0]+.7152*v[1]+.0722*v[2]; };
+  const legivel=h=>{ let k=0, x=h; while(1.05/(lum(x)+.05)<4.5 && k<.9){ k+=.08; x=mix(h,'#1a1a1a',k); } return x; };
+  return {accent:legivel(a1.hex), accent2:legivel(a2.hex), bg:fundoClaro||mix(a1.hex,'#ffffff',.9)};
 }
 const MAX_FOTOS=12, IDEAL_FOTOS=8, MAX_ENF=3, MAX_FAIXAS=3, MAX_MB_MUSICA=15;
 function tipoAudio(file){ const ext=(file.name.split('.').pop()||'').toLowerCase(); const map={mp3:'audio/mpeg',m4a:'audio/mp4',aac:'audio/aac',wav:'audio/wav',ogg:'audio/ogg',webm:'audio/webm'}; const ok=['audio/webm','audio/mp4','audio/mpeg','audio/mp3','audio/ogg','audio/aac','audio/x-m4a','audio/m4a','audio/wav','audio/x-wav']; const ct=ok.includes(file.type)?file.type:(map[ext]||'audio/mpeg'); const e2=map[ext]?ext:(ct==='audio/mp4'?'m4a':ct==='audio/wav'?'wav':ct==='audio/ogg'?'ogg':'mp3'); return [e2, ct]; }
@@ -3192,19 +3196,36 @@ async function pdfMesas(f){
 // pontos marcados pelo buffet na arte do cardápio: {n:nome, s:seção, p:página, x, y} (0–1)
 const MENU_PTS = f => { const m=EXT(f).menu_pontos; return m&&Array.isArray(m.pts) ? m.pts.filter(q=>q&&q.n&&q.p>=0&&q.x>=0&&q.x<=1&&q.y>=0&&q.y<=1) : []; };
 const ptChave = i => (i.secao||'')+'|'+i.nome;
+// acha onde começa o nome do prato na linha tocada e põe a marca um pouco à esquerda, sem cobrir o texto
+function inicioDoTexto(img, fx, fy){ try{
+  const W=img.naturalWidth, H=img.naturalHeight; if(!W||!H) return null; const k=Math.min(1,900/W), w=Math.round(W*k), h=Math.round(H*k);
+  const cv=document.createElement('canvas'); cv.width=w; cv.height=h; const c=cv.getContext('2d'); c.drawImage(img,0,0,w,h); const d=c.getImageData(0,0,w,h).data;
+  const px=(x,y)=>{ const i=(y*w+x)*4; return [d[i],d[i+1],d[i+2]]; };
+  const cy=Math.round(fy*h), band=Math.max(3,Math.round(h*.012)), cx=Math.round(fx*w);
+  const fundo=px(Math.max(0,cx-Math.round(w*.3)), cy); const dif=(a,b)=>Math.abs(a[0]-b[0])+Math.abs(a[1]-b[1])+Math.abs(a[2]-b[2]);
+  const tinta=x=>{ for(let y=Math.max(0,cy-band);y<=Math.min(h-1,cy+band);y++) if(dif(px(x,y),fundo)>90) return true; return false; };
+  let x=cx, ultimo=-1, gap=0, maxGap=Math.round(w*.035);
+  for(;x>=0;x--){ if(tinta(x)){ ultimo=x; gap=0; } else if(ultimo>=0 && ++gap>maxGap) break; }
+  if(ultimo<0){ for(x=cx;x<w && x<cx+Math.round(w*.3);x++) if(tinta(x)){ ultimo=x; break; } }
+  if(ultimo<0) return null;
+  let top=cy, bot=cy; for(let y=cy;y>=Math.max(0,cy-band*3);y--){ let a=false; for(let xx=ultimo;xx<Math.min(w,ultimo+Math.round(w*.15));xx++) if(dif(px(xx,y),fundo)>90){ a=true; break; } if(a) top=y; else if(y<cy-band) break; }
+  for(let y=cy;y<=Math.min(h-1,cy+band*3);y++){ let a=false; for(let xx=ultimo;xx<Math.min(w,ultimo+Math.round(w*.15));xx++) if(dif(px(xx,y),fundo)>90){ a=true; break; } if(a) bot=y; else if(y>cy+band) break; }
+  const off=Math.max(18, w*.03); return {x:Math.max(.02,(ultimo-off)/w), y:((top+bot)/2)/h};
+}catch(e){ return null; } }
 function marcarCardapio(menu, escolhas, aoSalvar){
   let pts=MENU_PTS(FESTA).filter(q=>escolhas.some(i=>ptChave(i)===(q.s||'')+'|'+q.n)).map(q=>({...q}));
   let atual=escolhas[0] ? ptChave(escolhas[0]) : null;
-  abrirFolha(`<h3>👆 Marcar os pratos no cardápio</h3><p class="muted" style="margin-top:0">1. Escolha o prato aqui embaixo. 2. Toque <b>logo à esquerda do nome</b> dele na arte do cardápio, para a marca não cobrir o texto. O convidado escolhe tocando no mesmo lugar.</p>
+  abrirFolha(`<h3>👆 Marcar os pratos no cardápio</h3><p class="muted" style="margin-top:0">1. Escolha o prato aqui embaixo. 2. Toque em cima do nome dele na arte do cardápio. A marca se ajeita sozinha ao lado do nome, sem cobrir o texto.</p>
     <div class="cdp-chips" id="mkI" style="margin-bottom:8px"></div><p style="margin:0 0 10px"><button class="btn ghost sm" type="button" id="mkX">✕ Tirar a marca do prato escolhido</button></p><div id="mkP"></div><div class="msg" id="eMsg"></div>
     <div class="foot"><button class="btn ghost" id="eCancel">Cancelar</button><button class="btn" id="eSend">💾 Salvar marcações</button></div>`);
   const pinta=()=>{
     $('mkI').innerHTML=escolhas.map(i=>{ const k=ptChave(i), feito=pts.some(q=>(q.s||'')+'|'+q.n===k); return `<button type="button" data-mk="${esc(k)}" aria-pressed="${k===atual}">${feito?'✅ ':''}${esc(i.nome)}<small>${esc(i.secao||'')}</small></button>`; }).join('');
-    $('mkP').innerHTML=menu.map((m,pi)=>`<div class="mn-pg" data-pg="${pi}"><img src="${midia(m)}" alt="Página ${pi+1} do cardápio">${pts.map((q,qi)=>q.p===pi?`<button type="button" class="mn-dot ${(q.s||'')+'|'+q.n===atual?'on':'mk'}" style="left:${q.x*100}%;top:${q.y*100}%" data-rm="${esc((q.s||'')+'|'+q.n)}" title="${esc(q.n)}"><span>${esc(q.n)}</span></button>`:'').join('')}</div>`).join('');
+    $('mkP').innerHTML=menu.map((m,pi)=>`<div class="mn-pg" data-pg="${pi}"><img src="${midia(m)}" crossorigin="anonymous" alt="Página ${pi+1} do cardápio">${pts.map((q,qi)=>q.p===pi?`<button type="button" class="mn-dot ${(q.s||'')+'|'+q.n===atual?'on':'mk'}" style="left:${q.x*100}%;top:${q.y*100}%" data-rm="${esc((q.s||'')+'|'+q.n)}" title="${esc(q.n)}"><span>${esc(q.n)}</span></button>`:'').join('')}</div>`).join('');
     $('mkI').querySelectorAll('[data-mk]').forEach(b=>b.onclick=()=>{ atual=b.dataset.mk; pinta(); });
     $('mkP').querySelectorAll('[data-rm]').forEach(b=>b.onclick=e=>{ e.stopPropagation(); atual=b.dataset.rm; pinta(); });
     $('mkP').querySelectorAll('.mn-pg').forEach(pg=>pg.onclick=e=>{ if(!atual) return; const r=pg.getBoundingClientRect(); const it=escolhas.find(i=>ptChave(i)===atual); if(!it) return;
-      pts=pts.filter(q=>(q.s||'')+'|'+q.n!==atual); pts.push({n:it.nome, s:it.secao||'', p:+pg.dataset.pg, x:+((e.clientX-r.left)/r.width).toFixed(4), y:+((e.clientY-r.top)/r.height).toFixed(4)});
+      let x=(e.clientX-r.left)/r.width, y=(e.clientY-r.top)/r.height; const aj=inicioDoTexto(pg.querySelector('img'), x, y); if(aj){ x=aj.x; y=aj.y; }
+      pts=pts.filter(q=>(q.s||'')+'|'+q.n!==atual); pts.push({n:it.nome, s:it.secao||'', p:+pg.dataset.pg, x:+x.toFixed(4), y:+y.toFixed(4)});
       const prox=escolhas.find(i=>!pts.some(q=>(q.s||'')+'|'+q.n===ptChave(i))); if(prox) atual=ptChave(prox); pinta(); });
   };
   pinta(); $('eCancel').onclick=fecharFolha; $('mkX').onclick=()=>{ pts=pts.filter(q=>(q.s||'')+'|'+q.n!==atual); pinta(); };
@@ -4250,9 +4271,9 @@ async function pdfCartaz(f){
   const q=620, qy=y0+300; rr(c,PW/2-q/2-30,qy,q+60,q+60,40); c.fillStyle='#fff'; c.fill(); c.drawImage(qr,PW/2-q/2,qy+30,q,q);
   let y=qy+q+130; c.fillStyle=t.ink; c.font='600 44px Fredoka, sans-serif'; c.fillText(corp?'📸 foto · 💬 mensagem · ❓ perguntas':'📸 foto · ✍️ recado · 🎤 áudio · 🎥 vídeo', PW/2, y);
   const extras=[]; const n=DESC_N(f); if(n) extras.push(`📷 Câmera descartável: ${n} fotos para cada um. Escolha bem!`); if(PIX_LISTA(f).length) extras.push('🎁 Lista de presentes no Pix, direto pelo mesmo QR'); if(EXT(f).revelacao&&EXT(f).revelacao.em) extras.push('🔒 As fotos são reveladas depois. Volte ao link!');
-  c.font='600 36px Fredoka, sans-serif'; c.fillStyle=t.accent; for(const x of extras.slice(0,2)){ y+=62; c.fillText(x, PW/2, y); }
-  y+=70; c.fillStyle=t.muted; c.font='500 34px Fredoka, sans-serif'; c.fillText('Aponte a câmera do celular para o código · não precisa baixar app', PW/2, y);
-  c.fillStyle=t.muted; c.font='500 24px Fredoka, sans-serif'; c.fillText('muraldafesta', PW/2, PH-m-24);
+  c.font='600 36px Fredoka, sans-serif'; c.fillStyle=t.accent; for(const x of extras.slice(0,2)){ y+=70; c.fillText(x, PW/2, y); }
+  y+=84; c.fillStyle=t.muted; c.font='500 34px Fredoka, sans-serif'; c.fillText('Aponte a câmera do celular para o código · não precisa baixar app', PW/2, y);
+  c.fillStyle=t.ink; c.globalAlpha=.7; c.font='600 30px Fredoka, sans-serif'; c.fillText('feito com o Mural da Festa · @muraldafesta', PW/2, PH-m-34); c.globalAlpha=1;
   if(f.plano==='teste') marcaTeste(c, PW, PH);
   doc.addImage(cv.toDataURL('image/jpeg',.92),'JPEG',0,0,210,297); return doc.output('blob');
 }

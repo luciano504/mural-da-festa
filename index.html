@@ -1182,6 +1182,15 @@ body.qr-off-auto .tv-bar{display:none}
 /* fotos ocupam o palco (antes podiam ficar minúsculas) */
 .sl-foto .ph{height:calc(var(--sh,60vh) - 14vh);width:auto;max-width:88vw !important}
 .sl{overflow:hidden;justify-content:safe center}
+
+/* várias fotos ao mesmo tempo */
+.sl-grade .grd{display:grid;gap:1.6vw;width:100%;height:calc(var(--sh,60vh) - 3vh);max-height:100%;padding:0 1vw}
+.sl-grade.n3 .grd{grid-template-columns:repeat(3,1fr)}
+.sl-grade.n4 .grd{grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(2,1fr);width:min(100%,calc((var(--sh,60vh) - 3vh) * 1.6))}
+.sl-grade figure{margin:0;min-height:0;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;animation:fadein .8s ease both}
+.sl-grade img{max-width:100%;max-height:calc(100% - 4.5vh);min-height:0;object-fit:contain;border:.8vh solid #fff;border-radius:1.4vh;box-shadow:0 1.5vh 4vh rgba(0,0,0,.25)}
+.sl-grade figcaption{margin-top:.8vh;font-weight:600;font-size:clamp(14px,1.5vw,26px);color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+@media (orientation:portrait){ .sl-grade.n3 .grd{grid-template-columns:1fr;grid-template-rows:repeat(3,1fr)} }
 </style>
 </head>
 <body>
@@ -2222,7 +2231,7 @@ function caberSlide(el){
   for(let i=0;i<40 && el.scrollHeight>el.clientHeight+2;i++){
     let mexeu=false;
     alvos.forEach(a=>{ const fs=parseFloat(getComputedStyle(a).fontSize); if(fs>14){ a.style.fontSize=(fs*0.92)+'px'; mexeu=true; } });
-    const im=el.querySelector('.ph,.intro-arte,.pol img'); if(im){ const h=im.getBoundingClientRect().height; if(h>120){ im.style.setProperty('height','auto'); im.style.setProperty('max-height',(h*0.92)+'px','important'); mexeu=true; } }
+    const im=el.querySelector('.ph,.intro-arte,.pol img,.tv-empty .qr,.grd'); if(im){ const h=im.getBoundingClientRect().height; if(h>120){ im.style.setProperty('height','auto'); im.style.setProperty('max-height',(h*0.92)+'px','important'); mexeu=true; } }
     if(!mexeu) break;
   }
 }
@@ -2325,6 +2334,14 @@ async function telaTelao(){
     else return mostrar(extra(padrao(PADRAO_VAZIO,'pv')));
     if(!p || !tv.list.find(x=>x.id===p.id)) return proxima();
     tv.since++; tv.hist.push(p); if(tv.hist.length>50) tv.hist.shift();
+    if(!back && !p._novo && p.tipo==='foto'){
+      tv.fq=(tv.fq||0)+1;
+      const outras=tv.list.filter(x=>x.tipo==='foto' && x.id!==p.id && pronto(x));
+      if(outras.length>=2 && tv.fq%2===0){
+        const ini=(tv.gi=(tv.gi||0)+1)*3; const pega=[]; for(let i=0;i<outras.length && pega.length<(outras.length>=3?3:2);i++) pega.push(outras[(ini+i)%outras.length]);
+        return mostrar({tipo:'grade', id:'g'+p.id, fotos:[p,...pega]});
+      }
+    }
     mostrar(p);
   }
   const ENTRADAS=['e-zoom','e-left','e-right','e-up','e-tilt'];
@@ -2334,6 +2351,7 @@ async function telaTelao(){
     const el=document.createElement('div'); el.className='sl '+(QUIET?'e-calma':ENTRADAS[Math.floor(Math.random()*ENTRADAS.length)]); const by = p.autor ? esc(p.autor) : '';
     let dur=8000;
     if(p.tipo==='hist'){ el.classList.add('sl-hist'); el.innerHTML=`<div class="pol" style="--r:${giro()}"><img src="${midia(p.caminho)}" alt=""></div><div class="cap">📖 A história de ${esc(nome)}</div>`; dur=6500; }
+    else if(p.tipo==='grade'){ el.classList.add('sl-grade','n'+p.fotos.length); el.innerHTML=`<div class="grd">${p.fotos.map((x,i)=>`<figure style="animation-delay:${i*.25}s"><img src="${midia(x.caminho)}" alt="">${x.autor?`<figcaption>${esc(x.autor)}</figcaption>`:''}</figure>`).join('')}</div>`; dur=9000; }
     else if(p.tipo==='col'){ el.classList.add('sl-col'); el.innerHTML=p.fotos.map((c,i)=>`<div class="pol c${i+1}" style="--r:${[-9,4,10][i]}deg;animation-delay:${i*.45}s"><img src="${midia(c)}" alt=""></div>`).join('')+`<div class="cap">📖 A história de ${esc(nome)}</div>`; dur=8500; }
     else if(p.tipo==='intro'){ el.className='sl sl-intro '+(QUIET?'quieto e-calma':'e-zoom'); el.innerHTML=`${EXT(f).logo?`<img class="intro-arte" src="${midia(EXT(f).logo)}" alt="">`:''}<div class="hey">${CORP(f)?'Bem-vindos':QUIET?'Sejam bem-vindos':'Bem-vindos à festa'}</div><div class="nm">${QUIET?esc(nome):(()=>{ let i=0; return nome.split(' ').map(w=>`<span class="w" style="display:inline-block;white-space:nowrap">${[...w].map(ch=>`<span style="animation-delay:${(i++*.08).toFixed(2)}s">${esc(ch)}</span>`).join('')}</span>`).join(' '); })()}</div><div class="sub">${esc(subtitulo(f))}</div>`; dur=7500; if(!QUIET){ confete(36); chars.festa(); } }
     else if(p.tipo==='pix'){ const px=pixTv(); el.className='sl tv-empty e-zoom'; el.innerHTML=`<div class="qr" id="tvQrBig"></div><h2>🎁 ${esc(px&&px.frase||PIX_FRASE(f))}</h2><p>${px&&Array.isArray(px.lista)&&px.lista.length?`Aponte a câmera e escolha o seu presente · Pix sem taxa, direto para ${esc(px.nome||'o anfitrião')}`:`No app do banco: Pix › Pagar com QR Code · sem taxa, direto para ${esc(px&&px.nome||'o anfitrião')}`}</p>`; dur=9000; }

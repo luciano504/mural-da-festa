@@ -1150,6 +1150,17 @@ body.tv-quieto .sl-intro.quieto .nm{font-size:clamp(56px,9vw,160px);line-height:
 .orn-a{left:1.5vw} .orn-b{right:1.5vw;transform:scaleX(-1)}
 body.tv-trop{background:linear-gradient(180deg,#ffe8d6 0%,#fff4e6 45%,#fffdf5 100%) fixed}
 @media (orientation:portrait){ .orn{width:26vw;bottom:24vh;opacity:.14} }
+
+/* QR do telão: discreto, grande em momentos, some quando não cabe */
+body.qr-mini .tv-bar{padding:.8vh 3vw 1.2vh;gap:1.4vw}
+body.qr-mini .tv-bar .qr{width:10vh;padding:.6vh;border-radius:1vh}
+body.qr-mini .tv-bar b{font-size:clamp(16px,1.8vw,30px)}
+body.qr-mini .tv-bar span{font-size:clamp(12px,1.1vw,18px)}
+body.qr-grande .tv-bar .qr{width:22vh}
+.tv-bar,.tv-bar .qr{transition:width .6s ease, padding .6s ease}
+body.qr-off-auto .tv-bar{display:none}
+.tvb-r{display:flex;gap:6px;flex-wrap:wrap}
+.tvb-r .btn.off{background:#7f1d1d;border-color:#7f1d1d;color:#fff}
 </style>
 </head>
 <body>
@@ -2191,6 +2202,9 @@ async function telaTelao(){
     const passo=()=>{ const w=d.offsetWidth, h=d.offsetHeight, W=innerWidth, H=innerHeight; x+=vx; y+=vy; if(x<0){x=0;vx=Math.abs(vx);} if(x>W-w){x=W-w;vx=-Math.abs(vx);} if(y<0){y=0;vy=Math.abs(vy);} if(y>H-h){y=H-h;vy=-Math.abs(vy);} d.style.transform=`translate(${x}px,${y}px) rotate(-6deg)`; requestAnimationFrame(passo); }; requestAnimationFrame(passo); }
   qrInto($('tvQr'), url, 300);
   ligarDockTelao(f);
+  // QR discreto no rodapé; grande na abertura e a cada 12 minutos por 20 segundos
+  (function(){ const B=document.body; B.classList.add('qr-mini'); const grande=ms=>{ B.classList.remove('qr-mini'); B.classList.add('qr-grande'); setTimeout(()=>{ B.classList.remove('qr-grande'); B.classList.add('qr-mini'); }, ms); };
+    grande(60000); setInterval(()=>grande(20000), 12*60000); })();
   const medir=()=>{ const h=$('stage')?$('stage').clientHeight:0; if(h) document.documentElement.style.setProperty('--sh', h+'px'); const bb=document.querySelector('.tv-bar'); if(bb) document.documentElement.style.setProperty('--bh', bb.offsetHeight+'px'); }; medir(); addEventListener('resize', medir); setTimeout(medir,500);
   const tv = {list:[], known:new Set(), queue:[], loop:0, cur:null, timer:null, paused:false, hist:[], hi:0, pv:1, pm:0, since:0};
   const fotosH = t.fotos||[], mus = criarMusica(t.musica);
@@ -2317,6 +2331,7 @@ async function telaTelao(){
   const aplicarCtl=e=>{
     const modo=(e&&e.modo)||'mural', sl=(e&&e.slides)||[];
     document.body.classList.toggle('sem-qr', !!e && e.qr===false);
+    document.body.classList.toggle('qr-off-auto', modo==='pausa' || (modo==='apresentacao' && sl.length>0) || (modo==='bingo' && e && e.bingo && (e.bingo.ganhadores||[]).length>0 && e.bingo.status!=='aberto'));
     if(sl.join()!==slidesCache.join()){ slidesCache=sl; sl.forEach(p=>{ if(!EH_VIDEO(p)){ const im=new Image(); im.src=midia(p); } }); }
     if(modo==='apresentacao' && sl.length){ camada.className='tv-apr'; camada.hidden=false; const cam=sl[Math.min(e.slide||0,sl.length-1)], src=midia(cam), atual=camada.querySelector('[data-src]');
       if(!atual || atual.dataset.src!==src){ if(EH_VIDEO(cam)){ camada.innerHTML=`<video data-src="${src}" src="${src}" playsinline autoplay preload="auto"></video>`; const v=camada.querySelector('video'); v.play().catch(()=>{ v.muted=true; v.play().catch(()=>{}); }); } else camada.innerHTML=`<img data-src="${src}" src="${src}" alt="">`; } else { const v=camada.querySelector('video'); if(v && v.paused && !v.ended) v.play().catch(()=>{}); } }
@@ -3497,16 +3512,17 @@ function pintarRoteiro(f, ir){
   $('rotX').onclick=()=>{ store.set('mf_rot_ok_'+f.slug,'1'); box.innerHTML=''; toast('Roteiro ocultado. Ele volta se você limpar os dados do navegador.',3000); };
 }
 function ligarTvBar(f){
-  const box=$('tvBar'); if(!box) return; let modo=null;
+  const box=$('tvBar'); if(!box) return; let modo=null, qrOn=true;
   const pintar=()=>{ box.innerHTML=`<div class="tvb-l"><span class="tvb-dot"></span><span class="tvb-k">Telão ao vivo</span><b>${(TV_MODOS.find(m=>m[0]===modo)||['','—'])[1]}</b></div>
       <span class="tvb-h">Trocar para</span><div class="tvb-m" role="group" aria-label="Escolher o que aparece no telão">${TV_MODOS.map(([k,n])=>`<button type="button" data-tvm="${k}" aria-pressed="${k===modo}" title="Mostrar ${n} no telão">${AICO[k]||''}<span>${n}</span></button>`).join('')}</div>
-      <div class="tvb-r"><button type="button" class="btn ghost sm" id="tvCel" title="Controlar pelo celular">${AICO.cel} Pelo celular</button></div>`;
+      <div class="tvb-r"><button type="button" class="btn ghost sm${qrOn?'':' off'}" id="tvQrB" aria-pressed="${qrOn}" title="${qrOn?'Esconder':'Mostrar'} o QR Code no telão">${emiSvg(qrOn?'eye':'eyeoff')} QR ${qrOn?'visível':'escondido'}</button><button type="button" class="btn ghost sm" id="tvCel" title="Controlar pelo celular">${AICO.cel} Pelo celular</button></div>`;
+    $('tvQrB').onclick=async()=>{ const on=!qrOn; try{ await rpc('fe_admin_tv_qr',{p_slug:SLUG,p_pin:PIN,p_on:on}); qrOn=on; pintar(); if($('apQr')) $('apQr').checked=on; toast(on?'QR Code de volta no telão.':'QR Code escondido do telão. Ele volta quando você tocar de novo.'); }catch(err){ toast(ERR(err)); } };
     box.querySelectorAll('[data-tvm]').forEach(b=>b.onclick=async()=>{ const k=b.dataset.tvm;
       if(k==='apresentacao' && !((FESTA.slides||[]).length)){ toast('Envie os slides na aba Apresentação primeiro.'); const t=document.querySelector('#abasTop [data-v="apresentacao"]'); if(t) t.click(); return; }
       try{ const e=await rpc('fe_admin_tv',{p_slug:SLUG,p_pin:PIN,p_modo:k,p_slide:null}); modo=(e&&e.modo)||k; pintar(); store.set('mf_r_bar_'+SLUG,'1'); pintarRoteiro(FESTA); }catch(err){ toast(ERR(err)); return; }
       if(['sorteio','quiz','enquete','bingo'].includes(k)){ const t=document.querySelector(`#abasTop [data-v="${k}"]`); if(t && ADM.view!==k) t.click(); } });
     $('tvCel').onclick=()=>{ abrirFolha(`<h3>Controlar pelo celular</h3><p class="muted" style="margin-top:0">Deixe o notebook só com o telão na TV e comande tudo pelo celular. Aponte a câmera, entre com a senha e use a barra "No telão agora".</p><div style="width:240px;margin:8px auto;background:#fff;padding:10px;border-radius:12px" id="celQr"></div><div class="foot"><button class="btn" id="eCancel">Fechar</button></div>`); qrInto($('celQr'), linkFesta(SLUG,'admin'), 300); $('eCancel').onclick=fecharFolha; }; };
-  const ler=async()=>{ if(document.hidden || !$('tvBar')) return; try{ const e=await rpc('fe_tv_estado',{p_festa:f.id}); if(e && e.modo!==modo){ modo=e.modo; pintar(); } }catch(_){} };
+  const ler=async()=>{ if(document.hidden || !$('tvBar')) return; try{ const e=await rpc('fe_tv_estado',{p_festa:f.id}); if(e && (e.modo!==modo || (e.qr!==false)!==qrOn)){ modo=e.modo; qrOn=e.qr!==false; pintar(); } }catch(_){} };
   pintar(); ler(); const t=setInterval(()=>{ if(!$('tvBar')){ clearInterval(t); return; } ler(); },4000);
 }
 // no próprio telão: se este aparelho é do organizador, aparece um controle discreto ao mexer o mouse

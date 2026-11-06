@@ -2963,7 +2963,7 @@ async function paletaDe(blob){
   const cores=Object.values(caixa).map(x=>{ const r=x.r/x.n,g=x.g/x.n,b=x.b/x.n,[h,s,l]=hsl(r,g,b); return {hex:hex(r,g,b),n:x.n,h,s,l,score:x.n*(0.05+s*s)*(l>.15&&l<.8?1:.003)}; }).sort((a,b)=>b.score-a.score);
   const tot=Object.values(caixa).reduce((t,x)=>t+x.n,0)||1, claros=Object.values(caixa).map(x=>({n:x.n,r:x.r/x.n,g:x.g/x.n,b:x.b/x.n})).filter(x=>hsl(x.r,x.g,x.b)[2]>.86).sort((a,b)=>b.n-a.n);
   const fundoClaro = claros.length && claros.reduce((t,x)=>t+x.n,0)/tot>.35 ? hex(claros[0].r,claros[0].g,claros[0].b) : null;
-  const a1=cores.find(x=>x.l>.15&&x.l<.8&&x.s>.15)||cores[0]||{hex:'#7b2cbf',h:270}; const a2=cores.find(x=>{ const dh=Math.abs(x.h-a1.h); return Math.min(dh,360-dh)>40 && x.s>.25; }) || cores[1] || {hex:'#ff9f1c'};
+  const a1=cores.find(x=>x.l>.15&&x.l<.8&&x.s>.15)||cores[0]||{hex:'#7b2cbf',h:270}; const a2=cores.find(x=>{ const dh=Math.abs(x.h-a1.h); return Math.min(dh,360-dh)>40 && x.s>.25; }) || cores.find(x=>x!==a1 && x.s>.3 && Math.abs(x.l-a1.l)>.12 && x.l>.15 && x.l<.9) || cores[1] || {hex:'#ff9f1c'};
   const lum=h=>{ const v=[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)/255).map(c=>c<=.03928?c/12.92:Math.pow((c+.055)/1.055,2.4)); return .2126*v[0]+.7152*v[1]+.0722*v[2]; };
   const legivel=h=>{ let k=0, x=h; while(1.05/(lum(x)+.05)<4.5 && k<.9){ k+=.08; x=mix(h,'#1a1a1a',k); } return x; };
   return {accent:legivel(a1.hex), accent2:legivel(a2.hex), bg:fundoClaro||mix(a1.hex,'#ffffff',.9)};
@@ -3116,6 +3116,17 @@ function textoConvite(f, senha){
   if(CORP(f)) return `💼 *${f.titulo}*\n\n${f.data&&f.data>=new Date().toISOString().slice(0,10)?'Confirme sua presença pelo link 👇. No dia, é por ele que você participa: perguntas, mensagens, cardápio e muito mais.':'Participe pelo link 👇: perguntas, mensagens, cardápio e muito mais.'}\n\n👉 ${linkFesta(f.slug)}`;
   return `${CATS[f.categoria]?.e||'🎉'} *${f.titulo}*\n\n${f.data&&f.data>=new Date().toISOString().slice(0,10)?`Confirme sua presença pelo link 👇 e, no dia, deixe sua homenagem para ${f.homenageado||'o homenageado'}: foto, recado, áudio ou vídeo. Vai aparecer no telão da festa 💛`:`Deixe sua homenagem para ${f.homenageado||'o homenageado'}: foto, recado, áudio ou vídeo! Vai aparecer no telão da festa 💛`}\n\n👉 ${linkFesta(f.slug)}`;
 }
+function perguntarVisualConvite(path){
+  const temTema=FESTA.custom && FESTA.custom.visual!==false;
+  abrirFolha(`<div class="center"><div style="font-size:40px;line-height:1">💌</div><h3 style="justify-content:center;margin:6px 0 4px">Convite enviado!</h3>
+    <img src="${midia(path)}" alt="Seu convite" style="display:block;margin:10px auto;max-width:min(220px,60%);max-height:260px;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.18)">
+    <p style="margin:8px 0 2px;font-weight:700;font-size:18px">Quer usar o visual deste convite na festa toda?</p>
+    <p class="muted" style="margin:0 0 4px">Telão, mural, placa da entrada, cartões de mesa e álbum com o fundo e as cores do convite. Você vê como fica e ajusta antes de salvar.</p>
+    ${temTema?'<p class="aviso" style="margin:12px 0 0">Isso troca o fundo e as cores do tema que você já montou. Fotos, personagens e música continuam.</p>':''}</div>
+    <div class="foot" style="justify-content:center;flex-wrap:wrap"><button class="btn ghost" id="eCancel">Agora não</button><button class="btn" id="cvSim" style="font-weight:700;min-height:46px">🎨 Sim, ver como fica</button></div>`);
+  $('eCancel').onclick=fecharFolha;
+  $('cvSim').onclick=()=>{ fecharFolha(); window.TEMA_CONVITE=path; document.querySelector('#abasTop [data-v="meutema"]').click(); };
+}
 async function vCompartilhar(){
   ADM.view='compartilhar'; store.set('mf_r_conv_'+FESTA.slug,'1'); setTimeout(()=>pintarRoteiro(FESTA),200); const f=FESTA; let cvMeu=null; try{ cvMeu=await rpc('fe_convite_img',{p_festa:f.id}); }catch(e){} const L=[['Convidados','📲',linkFesta(f.slug)],['Telão (abrir no notebook/TV)','📺',linkFesta(f.slug,'telao')],['Área do anfitrião','🔐',linkFesta(f.slug,'admin')]];
   $('vw').innerHTML=`<div class="grid2">
@@ -3167,7 +3178,7 @@ async function vCompartilhar(){
       if(/pdf/.test(file.type) || /\.pdf$/i.test(file.name)){ const pdfjs=await carregarPdfJs(); const pdf=await pdfjs.getDocument({data:await file.arrayBuffer()}).promise; const pgx=await pdf.getPage(1); const vp0=pgx.getViewport({scale:1}); const vp=pgx.getViewport({scale:1600/vp0.width});
         const cv=document.createElement('canvas'); cv.width=Math.round(vp.width); cv.height=Math.round(vp.height); await pgx.render({canvasContext:cv.getContext('2d'),viewport:vp}).promise; bl=await new Promise(r=>cv.toBlob(r,'image/jpeg',.9)); }
       else bl=await encolher(file,1600,.9);
-      const path=await subir(bl,'convite/convite','jpg','image/jpeg'); await rpc('fe_admin_convite_img',{p_slug:SLUG,p_pin:PIN,p_img:path}); toast('Convite enviado 💌'); vCompartilhar();
+      const path=await subir(bl,'convite/convite','jpg','image/jpeg'); await rpc('fe_admin_convite_img',{p_slug:SLUG,p_pin:PIN,p_img:path}); M.textContent=''; await vCompartilhar(); perguntarVisualConvite(path);
     }catch(err){ M.className='msg err'; M.textContent='Não consegui enviar o convite. '+ERR(err); } };
   const nomeArq=`Convite_${f.slug}`;
   $('cvImg').onclick=async()=>{ const b=$('cvImg'); b.disabled=true; try{ const cv=await gerarCv(); baixar(await new Promise(r=>cv.toBlob(r,'image/png')), nomeArq+'.png'); $('cvM').className='msg ok'; $('cvM').textContent='Convite salvo! Mande no grupo da família 💛'; }catch(e){ $('cvM').className='msg err'; $('cvM').textContent='Não consegui gerar o convite agora.'; } b.disabled=false; };

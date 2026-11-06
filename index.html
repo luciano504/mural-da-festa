@@ -489,6 +489,7 @@ h2.sec .muted{font-family:var(--body)}
 .passos4 b{display:block;font-size:17px;margin-bottom:4px}
 .passos4 span{color:var(--muted);font-size:15px}
 .feat{display:grid;grid-template-columns:repeat(2,1fr);gap:22px 40px}
+.desc-bar{background:var(--surface);border:1px dashed var(--line);border-radius:12px;padding:10px 12px;margin:0 0 10px;font-size:15px}
 .ff-feat{margin:0 0 18px;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
 .ff-feat summary{cursor:pointer;list-style:none;position:relative;padding-right:30px;display:flex;flex-direction:column;gap:3px}
 .ff-feat summary::-webkit-details-marker{display:none}
@@ -1996,7 +1997,7 @@ async function abrirMoldura(src, autor, fmt){
   $('eCancel').onclick=fecharFolha; $('molDl').onclick=()=>baixar(blob,nome);
   document.querySelectorAll('.mol-fmt [data-fmt]').forEach(b=>b.onclick=()=>{ if(b.dataset.fmt!==(fmt||'feed')) abrirMoldura(src, autor, b.dataset.fmt); });
   if(podeShare) $('molSh').onclick=async()=>{ try{ await navigator.share({files:[file], text:`${DESTAQUE(FESTA)}${CORP(FESTA)?'':' 💛'}`}); }catch(e){} };
-  if($('molTv')) $('molTv').onclick=async()=>{ const b=$('molTv'); b.disabled=true; msgE('<span class="spin"></span> Enviando…');
+  if($('molTv')) $('molTv').onclick=async()=>{ const b=$('molTv'); if(descRestam()<=0){ msgE('Seu filme acabou! 📷','err'); return; } b.disabled=true; msgE('<span class="spin"></span> Enviando…');
     try{ const im=await encolher(src); ULTIMA_FOTO=im; const path=await subir(im,'foto','jpg','image/jpeg'); await gravarPost({tipo:'foto', caminho:path, texto:null, bytes:im.size}); msgE(FESTA.moderacao?'Enviada! Aparece no telão depois da aprovação.':(FEED_CEL(FESTA)?'Enviada para o mural e o telão.':'Enviada para o telão.'),'ok'); atualizarMural(); }
     catch(e){ msgE(ERR(e),'err'); b.disabled=false; } };
 }
@@ -2019,7 +2020,7 @@ async function subir(blob, tipo, ext, contentType){
 const PALAVRAS_BLOQ=['porra','caralho','buceta','boceta','puta','puto','putaria','fdp','vsf','vtnc','pqp','foda','fodase','foder','fodido','merda','bosta','cu','cuzao','arrombado','arrombada','viado','viadinho','sapatao','piranha','vagabunda','vagabundo','corno','corna','otario','otaria','babaca','escroto','escrota','desgraca','desgracado','desgracada','retardado','retardada','piroca','xoxota','xereca','punheta','siririca','safada','safado','nazista','prostituta','vadia','cacete','krl','crl','tnc','vai tomar','tomar no','filho da','filha da'];
 function textoImproprio(t){ if(!t) return false; const n=' '+String(t).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[0@]/g,'o').replace(/[1!]/g,'i').replace(/3/g,'e').replace(/4/g,'a').replace(/\$/g,'s').replace(/[^a-z ]+/g,' ').replace(/\s+/g,' ')+' ';
   return PALAVRAS_BLOQ.some(w=>n.includes(' '+w+' ') || (w.includes(' ') && n.includes(' '+w))); }
-async function gravarPost(row){ if(textoImproprio(row.texto)||textoImproprio(nomeAtual())) throw new Error('Impróprio'); const {error}=await sb.from('fe_posts').insert({festa_id:FESTA.id, autor:nomeAtual(), aparelho:deviceId(), ...row}); if(error) throw error; try{ contarMeu(); }catch(_){}; setTimeout(promoAposEnvio, 2600); }
+async function gravarPost(row){ if(textoImproprio(row.texto)||textoImproprio(nomeAtual())) throw new Error('Impróprio'); const {error}=await sb.from('fe_posts').insert({festa_id:FESTA.id, autor:nomeAtual(), aparelho:deviceId(), ...row}); if(error) throw error; try{ contarMeu(); if(row.tipo==='foto'){ const k='mf_fotos_'+FESTA.id; store.set(k,String((+store.get(k)||0)+1)); } }catch(_){}; setTimeout(promoAposEnvio, 2600); }
 // depois do 1º envio, uma vez por festa: convida o convidado a fazer o Mural da festa dele
 function promoAposEnvio(){ try{ if(!FESTA) return; const k='mf_promo_'+FESTA.slug; if(store.get(k)) return; store.set(k,'1');
   const corp=CORP(FESTA); const href=BASE+(corp?'?para=empresa&origem=convidado':'?experimente&origem=convidado');
@@ -2031,16 +2032,18 @@ function promoAposEnvio(){ try{ if(!FESTA) return; const k='mf_promo_'+FESTA.slu
 
 function folhaFoto(desafio, aoEnviar){
   abrirFolha(`<h3>${desafio?'📸 Desafio: '+esc(desafio):'📸 Fotos da festa'}</h3>
-   <label class="drop"><input type="file" id="pF" accept="image/*" multiple><span class="ic">🖼️</span>Toque para tirar ou escolher fotos<span class="muted" style="font-weight:500;font-size:14px">Pode mandar várias de uma vez</span></label>
+   ${descBarra()}<label class="drop"${descRestam()<=0?' style="display:none"':''}><input type="file" id="pF" accept="image/*" multiple><span class="ic">🖼️</span>Toque para tirar ou escolher fotos<span class="muted" style="font-weight:500;font-size:14px">Pode mandar várias de uma vez</span></label>
    <div class="thumbs" id="pT"></div>
    <label class="f" style="margin-top:12px">Legenda (opcional)<input class="in" id="pL" maxlength="80" value="${desafio?esc(('Desafio: '+desafio).slice(0,80)):''}" placeholder="${CORP(FESTA)?'Ex.: Equipe comercial no palco':'Ex.: A tia mais animada da pista!'}"></label>
    ${rodapeEnvio('Enviar fotos')}<p class="nota">Ao enviar, você declara que as pessoas que aparecem concordam (no caso de crianças, os pais ou responsáveis) e aceita os <a href="${BASE}?termos" target="_blank" rel="noopener">Termos de uso</a>.</p>`);
   let files=[];
-  $('pF').onchange=async e=>{ const fs=[...e.target.files].filter(f=>/^image\//.test(f.type)||ehHeic(f)).slice(0,20); e.target.value=''; files=[]; $('pT').innerHTML=''; msgE(fs.length?'<span class="spin"></span> Preparando as fotos…':'');
+  $('pF').onchange=async e=>{ const fs=[...e.target.files].filter(f=>/^image\//.test(f.type)||ehHeic(f)).slice(0,Math.min(20,descRestam())); e.target.value=''; files=[]; $('pT').innerHTML=''; msgE(fs.length?'<span class="spin"></span> Preparando as fotos…':'');
     for(const f of fs){ let f2=f; try{ f2=await prepararImagem(f); }catch(_){} files.push(f2); $('pT').insertAdjacentHTML('beforeend',`<img src="${URL.createObjectURL(f2)}" alt="">`); }
     msgE(files.length?`${files.length} foto(s) prontas para enviar.`:''); };
   ligarRodape(async()=>{
+    if(descRestam()<=0){ msgE('Seu filme acabou! 📷','err'); return; }
     if(!files.length){ msgE('Escolha pelo menos uma foto.','err'); return; }
+    if(files.length>descRestam()) files=files.slice(0,descRestam());
     const btn=$('eSend'); btn.disabled=true; const leg=$('pL').value.trim().slice(0,80)||null;
     try{ for(let i=0;i<files.length;i++){ msgE(`<span class="spin"></span> Enviando foto ${i+1} de ${files.length}…`); const b=await encolher(files[i]); ULTIMA_FOTO=b; const path=await subir(b,'foto','jpg','image/jpeg'); await gravarPost({tipo:'foto', caminho:path, texto:leg, bytes:b.size}); if(i<files.length-1) await sleep(3100); }
       if(aoEnviar) aoEnviar(); agradecer('foto'); }
@@ -3068,7 +3071,7 @@ async function vCompartilhar(){
      <img id="cvPrev" alt="Prévia do convite" style="width:min(240px,70%);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.18);background:var(--bg)">
      ${cvMeu?'<p class="muted" style="font-size:13px;margin:8px 0 0">Seu convite ganha uma faixa com o QR da festa embaixo. Ele também aparece no topo da página do convidado.</p>':''}
      <div class="row" style="justify-content:center;margin-top:14px"><button class="btn" id="cvImg">📱 Baixar convite (imagem)</button><button class="btn alt" id="cvShare" hidden>📤 Compartilhar</button><button class="btn ghost" id="cvPdf">🖨️ Convite para imprimir (PDF)</button></div><div class="msg" id="cvM"></div></div>
-   <div class="card" style="padding:18px;text-align:center"><h3 style="margin:0 0 10px">QR Code dos convidados</h3><div class="qrbig" id="shQr"></div><p class="muted" style="font-size:14px">Mostre na entrada ou imprima nas mesas</p><button class="btn" id="shCartoes">🖨️ Cartões de mesa (PDF)</button></div>
+   <div class="card" style="padding:18px;text-align:center"><h3 style="margin:0 0 10px">QR Code dos convidados</h3><div class="qrbig" id="shQr"></div><p class="muted" style="font-size:14px">Mostre na entrada ou imprima nas mesas</p><div class="row" style="justify-content:center;gap:8px;flex-wrap:wrap"><button class="btn" id="shCartoes">🖨️ Cartões de mesa (PDF)</button><button class="btn ghost" id="shCartaz">🪧 Placa da entrada (PDF)</button></div></div>
    <div class="card" style="padding:18px;display:flex;flex-direction:column;gap:10px"><h3 style="margin:0">Links</h3>
      ${L.map(([n,e,u])=>`<div><div style="font-weight:600;font-size:14px;margin-bottom:4px">${e} ${n}</div><div class="linkbox"><code>${esc(u)}</code><button class="btn sm" data-copy="${esc(u)}">Copiar</button></div></div>`).join('')}
      <h3 style="margin:8px 0 0">Mensagem para o grupo</h3><textarea class="in" id="shTxt" style="min-height:130px">${esc(textoConvite(f))}</textarea><button class="btn alt" id="shCopy">📋 Copiar mensagem</button></div></div>`;
@@ -3119,6 +3122,7 @@ async function vCompartilhar(){
   $('cvPdf').onclick=async()=>{ const b=$('cvPdf'); b.disabled=true; try{ baixar(await pdfConvite(f), nomeArq+'.pdf'); $('cvM').className='msg ok'; $('cvM').textContent='PDF pronto: 2 convites por folha A4, é só cortar na linha.'; }catch(e){ $('cvM').className='msg err'; $('cvM').textContent='Não consegui gerar o PDF agora.'; } b.disabled=false; };
   document.querySelectorAll('[data-copy]').forEach(b=>b.onclick=()=>copiar(b.dataset.copy,'Link copiado!'));
   $('shCopy').onclick=()=>copiar($('shTxt').value,'Mensagem copiada!');
+  $('shCartaz').onclick=async()=>{ const b=$('shCartaz'); b.disabled=true; try{ baixar(await pdfCartaz(f), `Placa_${f.slug}.pdf`); toast('Placa pronta: imprima em A4 (ou A3) e coloque num cavalete na entrada.',4000); }catch(e){ toast('Não consegui gerar o PDF.'); } b.disabled=false; };
   $('shCartoes').onclick=async()=>{ const b=$('shCartoes'); b.disabled=true; try{ baixar(await pdfCartoes(f), `Cartoes_${f.slug}.pdf`); }catch(e){ toast('Não consegui gerar o PDF.'); } b.disabled=false; };
 }
 async function pdfMesas(f){
@@ -3879,6 +3883,10 @@ async function vPix(){
 // =====================================================================
 // MODO REVELAÇÃO e MOMENTOS DA FESTA
 // =====================================================================
+const DESC_N = f => { const r=EXT(f).revelacao; return r&&+r.fotos>0 ? +r.fotos : 0; };
+const descUsadas = () => +store.get('mf_fotos_'+(FESTA&&FESTA.id))||0;
+const descRestam = () => { const n=DESC_N(FESTA); return n ? Math.max(0, n-descUsadas()) : Infinity; };
+function descBarra(){ const n=DESC_N(FESTA); if(!n) return ''; const r=descRestam(); return `<div class="desc-bar" role="status">📷 <b>Câmera descartável:</b> ${r>0?`restam <b>${r}</b> de ${n} fotos. Escolha bem!`:'seu filme acabou! Obrigado pelas fotos 💛'}</div>`; }
 const REVELA = f => { const r=EXT(f).revelacao; if(!r||!r.em) return null; const t=new Date(r.em).getTime(); return t>Date.now()?t:null; };
 const MOMENTOS_SUG = f => CORP(f) ? [['Credenciamento','18:00'],['Abertura','19:00'],['Palestras','19:30'],['Premiação','21:00'],['Confraternização','22:00']]
   : f.categoria==='casamento' ? [['Chegada','18:00'],['Cerimônia','19:00'],['Entrada dos noivos','20:30'],['Bolo','22:30'],['Pista','23:00']]
@@ -3895,6 +3903,10 @@ function blocoRevelaMomentos(box){
     <p class="muted">O telão exibe ${CORP(f)?'as mensagens':'as homenagens'} ao vivo, mas o mural no celular dos ${CORP(f)?'participantes':'convidados'} só abre no horário programado. Todo mundo volta ao link para ver o resultado.</p>
     <label class="f">O mural abre em<input class="in" type="datetime-local" id="rvEm" value="${esc(dIni)}"></label>
     <div class="row" style="gap:8px"><button class="btn" type="button" id="rvOk">${r.em?'💾 Mudar horário':'🔒 Ligar revelação'}</button>${r.em?'<button class="btn ghost" type="button" id="rvX">Abrir o mural agora</button>':''}</div><div class="msg" id="rvM"></div>
+    <div style="font-size:36px;margin-top:14px">📷</div><h3 style="margin:4px 0">Câmera descartável</h3>
+    <p class="muted">Cada ${CORP(f)?'participante':'convidado'} tem um número limitado de fotos, como nas câmeras de filme. Todo mundo escolhe melhor o clique. Combina com o modo revelação.</p>
+    <label class="f">Fotos por ${CORP(f)?'participante':'convidado'}<select class="in" id="dsN">${[[0,'Sem limite'],[10,'10 fotos'],[15,'15 fotos'],[24,'24 fotos'],[27,'27 fotos (filme clássico)']].map(([v,t])=>`<option value="${v}"${DESC_N(f)===v?' selected':''}>${t}</option>`).join('')}</select></label>
+    <button class="btn" type="button" id="dsOk">💾 Salvar</button><div class="msg" id="dsM"></div>
   </div><div>
     <div style="font-size:36px">🕰️</div><h3 style="margin:4px 0">Momentos ${CORP(f)?'do evento':'da festa'}</h3>
     <p class="muted">Diga a hora de cada momento: o mural ganha filtros (${MOMENTOS_SUG(f).slice(0,3).map(m=>m[0]).join(', ')}…) e o arquivo .zip sai organizado em pastas.</p>
@@ -3907,8 +3919,9 @@ function blocoRevelaMomentos(box){
   pinta(); $('mmAdd').onclick=()=>{ if(L.length<8){ L.push({n:'',h:''}); pinta(); } };
   $('mmOk').onclick=async()=>{ const ok=L.filter(m=>m.n.trim()&&/^\d{2}:\d{2}$/.test(m.h)).map(m=>({n:m.n.trim().slice(0,24),h:m.h})); try{ await extrasSet('momentos', ok.length?ok:null); $('mmM').className='msg ok'; $('mmM').textContent=ok.length?'Momentos salvos!':'Momentos desligados.'; }catch(e){ $('mmM').className='msg err'; $('mmM').textContent=ERR(e); } };
   $('rvOk').onclick=async()=>{ const v=$('rvEm').value; if(!v){ $('rvM').className='msg err'; $('rvM').textContent='Escolha o dia e a hora.'; return; } const iso=new Date(v).toISOString(); if(new Date(iso)<=new Date()){ $('rvM').className='msg err'; $('rvM').textContent='Escolha um horário no futuro.'; return; }
-    try{ await extrasSet('revelacao',{em:iso}); $('rvM').className='msg ok'; $('rvM').textContent='Revelação ligada: o mural abre '+new Date(iso).toLocaleString('pt-BR',{weekday:'long',day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'})+'.'; blocoRevelaMomentos(box); }catch(e){ $('rvM').className='msg err'; $('rvM').textContent=ERR(e); } };
-  if($('rvX')) $('rvX').onclick=async()=>{ try{ await extrasSet('revelacao',null); toast('Mural aberto para todos!'); blocoRevelaMomentos(box); }catch(e){ $('rvM').className='msg err'; $('rvM').textContent=ERR(e); } };
+    try{ await extrasSet('revelacao',{em:iso, ...(DESC_N(f)?{fotos:DESC_N(f)}:{})}); $('rvM').className='msg ok'; $('rvM').textContent='Revelação ligada: o mural abre '+new Date(iso).toLocaleString('pt-BR',{weekday:'long',day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'})+'.'; blocoRevelaMomentos(box); }catch(e){ $('rvM').className='msg err'; $('rvM').textContent=ERR(e); } };
+  $('dsOk').onclick=async()=>{ const n=+$('dsN').value; try{ const cur=EXT(FESTA).revelacao||{}; const v={...(cur.em?{em:cur.em}:{}), ...(n?{fotos:n}:{})}; await extrasSet('revelacao', Object.keys(v).length?v:null); $('dsM').className='msg ok'; $('dsM').textContent=n?`Câmera descartável ligada: ${n} fotos por pessoa.`:'Sem limite de fotos.'; }catch(e){ $('dsM').className='msg err'; $('dsM').textContent=ERR(e); } };
+  if($('rvX')) $('rvX').onclick=async()=>{ try{ await extrasSet('revelacao',DESC_N(f)?{fotos:DESC_N(f)}:null); toast('Mural aberto para todos!'); blocoRevelaMomentos(box); }catch(e){ $('rvM').className='msg err'; $('rvM').textContent=ERR(e); } };
 }
 
 // =====================================================================
@@ -4147,6 +4160,27 @@ async function pdfConvite(f){
   doc.addImage(img,'JPEG',0,0,148.5,210); doc.addImage(img,'JPEG',148.5,0,148.5,210);
   doc.setLineDashPattern([2,2],0); doc.setDrawColor(180); doc.line(148.5,0,148.5,210); return doc.output('blob');
 }
+async function pdfCartaz(f){
+  const t=await temaPdf(f); const {jsPDF}=window.jspdf; const doc=new jsPDF({orientation:'p',unit:'mm',format:'a4'});
+  const [cv,c]=pg(); const m=40, corp=CORP(f), qr=qrCanvas(linkFesta(f.slug), 900);
+  const g=c.createLinearGradient(0,0,PW,PH); g.addColorStop(0,t.bg); g.addColorStop(1,t.bg2); c.fillStyle=g; c.fillRect(0,0,PW,PH);
+  if(t._fundo){ cobrir(c,t._fundo,0,0,PW,PH); c.globalAlpha=.6; c.fillStyle=t.bg; c.fillRect(0,0,PW,PH); c.globalAlpha=1; }
+  c.strokeStyle=t.accent; c.lineWidth=6; rr(c,m,m,PW-2*m,PH-2*m,36); c.stroke();
+  if(t._enfs&&t._enfs.length){ const e=t._enfs[0], eh=230, ew=eh*e.width/e.height; c.drawImage(e,m+30,PH-m-30-eh,ew,eh); const e2=t._enfs[1]||e, ew2=eh*e2.width/e2.height; c.save(); c.translate(PW-m-30,PH-m-30-eh); c.scale(-1,1); c.drawImage(e2,0,0,ew2,eh); c.restore(); }
+  if(t._logo){ const L=t._logo, lh=110, lw=Math.min(360,lh*L.width/L.height); c.drawImage(L,PW/2-lw/2,m+40,lw,lw*L.height/L.width); }
+  c.textAlign='center'; const y0=t._logo?m+200:m+120;
+  c.fillStyle=t.muted; c.font='700 40px Fredoka, sans-serif'; c.fillText(subtitulo(f).toUpperCase(), PW/2, y0);
+  const nome=DESTAQUE(f); let fs=/Great|Pacifico/.test(t.font)?150:118; c.font=`400 ${fs}px ${fonte(t)}`; while(c.measureText(nome).width>PW-2*m-120 && fs>56){ fs-=6; c.font=`400 ${fs}px ${fonte(t)}`; } c.fillStyle=t.accent; c.fillText(nome, PW/2, y0+150);
+  c.fillStyle=t.ink; c.font='700 62px Fredoka, sans-serif'; c.fillText(corp?'Participe pelo celular':'Deixe sua homenagem!', PW/2, y0+250);
+  const q=620, qy=y0+300; rr(c,PW/2-q/2-30,qy,q+60,q+60,40); c.fillStyle='#fff'; c.fill(); c.drawImage(qr,PW/2-q/2,qy+30,q,q);
+  let y=qy+q+130; c.fillStyle=t.ink; c.font='600 44px Fredoka, sans-serif'; c.fillText(corp?'📸 foto · 💬 mensagem · ❓ perguntas':'📸 foto · ✍️ recado · 🎤 áudio · 🎥 vídeo', PW/2, y);
+  const extras=[]; const n=DESC_N(f); if(n) extras.push(`📷 Câmera descartável: ${n} fotos para cada um. Escolha bem!`); if(PIX_LISTA(f).length) extras.push('🎁 Lista de presentes no Pix, direto pelo mesmo QR'); if(EXT(f).revelacao&&EXT(f).revelacao.em) extras.push('🔒 As fotos são reveladas depois. Volte ao link!');
+  c.font='600 36px Fredoka, sans-serif'; c.fillStyle=t.accent; for(const x of extras.slice(0,2)){ y+=62; c.fillText(x, PW/2, y); }
+  y+=70; c.fillStyle=t.muted; c.font='500 34px Fredoka, sans-serif'; c.fillText('Aponte a câmera do celular para o código · não precisa baixar app', PW/2, y);
+  c.fillStyle=t.muted; c.font='500 24px Fredoka, sans-serif'; c.fillText('muraldafesta', PW/2, PH-m-24);
+  if(f.plano==='teste') marcaTeste(c, PW, PH);
+  doc.addImage(cv.toDataURL('image/jpeg',.92),'JPEG',0,0,210,297); return doc.output('blob');
+}
 async function pdfCartoes(f){
   const t=await temaPdf(f); const {jsPDF}=window.jspdf; const doc=new jsPDF({orientation:'p',unit:'mm',format:'a4'});
   const [cv,c]=pg(); c.fillStyle='#fff'; c.fillRect(0,0,PW,PH); const qr=qrCanvas(linkFesta(f.slug), 600);
@@ -4161,7 +4195,7 @@ async function pdfCartoes(f){
     rr(c,x+w/2-170,y+258,340,340,24); c.fillStyle='#fff'; c.fill(); c.drawImage(qr,x+w/2-150,y+278,300,300);
     c.fillStyle=t.ink; c.font='600 26px Fredoka, sans-serif'; c.fillText('📸 foto · ✍️ recado · 🎤 áudio · 🎥 vídeo', x+w/2, y+650);
     c.fillStyle=t.muted; c.font='500 22px Fredoka, sans-serif'; c.fillText('Aponte a câmera do celular para o código', x+w/2, y+690);
-    c.fillStyle=t.accent; c.font='600 22px Fredoka, sans-serif'; c.fillText('Aparece no telão da festa! 📺', x+w/2, y+728);
+    c.fillStyle=t.accent; c.font='600 22px Fredoka, sans-serif'; c.fillText(DESC_N(f)?`📷 ${DESC_N(f)} fotos para cada um: escolha bem!`:'Aparece no telão da festa! 📺', x+w/2, y+728);
   }
   c.setLineDash([14,12]); c.strokeStyle='#bbb'; c.lineWidth=2; c.beginPath(); c.moveTo(w,0); c.lineTo(w,PH); c.moveTo(0,h); c.lineTo(PW,h); c.stroke();
   if(f.plano==='teste') marcaTeste(c, PW, PH);
@@ -4487,7 +4521,7 @@ const PERFIS={
     passosT:'Como funciona ✨',
     passos:[['📲 O convidado aponta a câmera','Para o QR Code da mesa ou o link do grupo. Não precisa baixar nada.'],['💌 Deixa a homenagem','Uma foto, um recado escrito, um áudio ou um vídeo.'],['✅ Você aprova','Nada aparece no telão sem passar por quem organiza.'],['📺 Telão e álbum','As homenagens passam ao vivo e viram um álbum em PDF.']],
     featT:'Do jeito da sua festa 🎈',
-    feat:[['🎨 Tema e personagens','Escolha um dos temas prontos ou use a arte do seu convite.'],['📖 A história do homenageado','De 8 a 12 fotos, do bebê até hoje, no telão e no álbum.'],['🎵 Música no telão','Uma trilha suave, que se cala sozinha quando entra um vídeo.'],['💌 Convite com QR Code','Para o WhatsApp ou para imprimir. O convidado já chega sabendo.'],['✅ Confirmação de presença','O convidado confirma pelo link e você vê quantos adultos e crianças vão.'],['🎲 Sorteio no telão','Você escolhe o prêmio (um presente, uma dança, um discurso) e o telão sorteia entre quem está na festa.'],['🧠 Quiz ao vivo','Perguntas sobre o homenageado no telão, respostas pelo celular e ranking: quem acerta mais rápido ganha.'],['💌 Correio elegante','Recados para alguém da festa, assinados ou anônimos, no telão depois da sua aprovação.'],['❤️ Curtidas e moldura','Os convidados curtem as homenagens e postam a foto com a moldura da festa.'],['🎁 Lista de presentes no Pix','Presentes e experiências com valor (passeio de lancha, micro-ondas…), até em cotas. O Pix cai direto na sua conta, sem taxa, e o obrigado aparece no telão.'],['🙈 Modo revelação','As fotos ficam guardadas e só aparecem para os convidados na hora que você marcar.'],['🕰️ Momentos da festa','Chegada, cerimônia, bolo, pista: cada foto vai para o seu momento e o álbum já sai organizado.'],['📸 Desafios de foto','Missões divertidas para os convidados (a mesa inteira na foto, alguém arrasando na pista).'],['🎱 Bingo da festa','Cartela no celular de cada convidado e números sorteados no telão.'],['⏳ Aviso e contagem regressiva','Um recado fixo no celular de todos e a contagem para a valsa, o bolo ou a surpresa.'],['✨ Resumo para os Stories','No dia seguinte, a festa em números e as melhores homenagens, prontos para postar.'],['🛡️ Recados filtrados','Palavras impróprias são barradas na hora e você aprova o que vai ao telão.']],
+    feat:[['🎨 Tema e personagens','Escolha um dos temas prontos ou use a arte do seu convite.'],['📖 A história do homenageado','De 8 a 12 fotos, do bebê até hoje, no telão e no álbum.'],['🎵 Música no telão','Uma trilha suave, que se cala sozinha quando entra um vídeo.'],['💌 Convite com QR Code','Para o WhatsApp ou para imprimir. O convidado já chega sabendo.'],['✅ Confirmação de presença','O convidado confirma pelo link e você vê quantos adultos e crianças vão.'],['🎲 Sorteio no telão','Você escolhe o prêmio (um presente, uma dança, um discurso) e o telão sorteia entre quem está na festa.'],['🧠 Quiz ao vivo','Perguntas sobre o homenageado no telão, respostas pelo celular e ranking: quem acerta mais rápido ganha.'],['💌 Correio elegante','Recados para alguém da festa, assinados ou anônimos, no telão depois da sua aprovação.'],['❤️ Curtidas e moldura','Os convidados curtem as homenagens e postam a foto com a moldura da festa.'],['🎁 Lista de presentes no Pix','Presentes e experiências com valor (passeio de lancha, micro-ondas…), até em cotas. O Pix cai direto na sua conta, sem taxa, e o obrigado aparece no telão.'],['🙈 Modo revelação','As fotos ficam guardadas e só aparecem para os convidados na hora que você marcar.'],['📷 Câmera descartável','Cada convidado tem um número de fotos, como nas câmeras de filme. Sem baixar app.'],['🪧 Placa da entrada e cartões de mesa','PDFs prontos com o QR da festa no seu tema. É só imprimir.'],['🕰️ Momentos da festa','Chegada, cerimônia, bolo, pista: cada foto vai para o seu momento e o álbum já sai organizado.'],['📸 Desafios de foto','Missões divertidas para os convidados (a mesa inteira na foto, alguém arrasando na pista).'],['🎱 Bingo da festa','Cartela no celular de cada convidado e números sorteados no telão.'],['⏳ Aviso e contagem regressiva','Um recado fixo no celular de todos e a contagem para a valsa, o bolo ou a surpresa.'],['✨ Resumo para os Stories','No dia seguinte, a festa em números e as melhores homenagens, prontos para postar.'],['🛡️ Recados filtrados','Palavras impróprias são barradas na hora e você aprova o que vai ao telão.']],
     mais:'Festa grande? Também tem portaria com QR, cardápio do buffet, pedidos na mesa, manobrista e apresentação no telão com vídeos. Tudo opcional.'},
   buffet:{chip:'🍽️ Buffet ou cerimonialista', marca:'🍽️ Para buffets e cerimonialistas', h1:'Entregue uma festa que o concorrente não entrega.',
     sub:'Telão de homenagens, cardápio pelo celular, pedidos na mesa, portaria com QR e manobrista. Você indica, o cliente contrata direto e o seu buffet entrega mais.',

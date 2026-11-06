@@ -1301,6 +1301,7 @@ const CATS = {
   cha_bebe:{n:'Chá de Bebê', e:'🍼', tema:'nuvens'},
   formatura:{n:'Formatura', e:'🎓', tema:'formatura'},
   corporativo:{n:'Evento corporativo', e:'💼', tema:'executivo'},
+  religioso:{n:'Batizado, Comunhão ou Crisma', e:'🕊️', tema:'sacramental'},
   outra:{n:'Outra festa', e:'🎉', tema:'confete'}
 };
 // ícones de linha das categorias (no lugar dos emojis)
@@ -1341,7 +1342,7 @@ const TEMAS = {
   revelacao:{n:'Chá Revelação',e:'🎀',cats:['cha_bebe'],bg:'#faf8ff',bg2:'#efe8fc',surface:'#ffffff',ink:'#26203a',muted:'#62597c',accent:'#6d4cf0',accent2:'#f472b6',on:'#ffffff',font:"'Fredoka'",pat:'bolhas',pal:['#7c5cfc','#f472b6','#60a5fa'],deco:['🎀','💙','🩷'],paper:'#fcfbff'},
   arraia:{n:'Arraiá',e:'🌽',cats:['aniversario','outra','corporativo','infantil'],bg:'#fffdf5',bg2:'#fde8cd',surface:'#ffffff',ink:'#2b1810',muted:'#6b4e3d',accent:'#d9381e',accent2:'#2a9d8f',on:'#ffffff',font:"'Rye'",pat:'confete',pal:['#d9381e','#f4a261','#2a9d8f'],deco:['🌽','🔥','🎉'],paper:'#fffef8'},
   minimal:{n:'Minimalista Moderno',sobrio:true,e:'◾',cats:['aniversario','corporativo','formatura'],bg:'#f6f5f1',bg2:'#e2e8f0',surface:'#ffffff',ink:'#0f172a',muted:'#475569',accent:'#0f172a',accent2:'#94a3b8',on:'#ffffff',font:"'Space Grotesk'",pat:'nenhum',pal:['#0f172a','#64748b','#94a3b8'],deco:['✨','🥂','🎶'],paper:'#ffffff'},
-  sacramental:{n:'Batizado e Comunhão',serif:true,e:'🕊️',sobrio:true,cats:['outra','cha_bebe','infantil'],bg:'#faf9f6',bg2:'#eceae4',surface:'#ffffff',ink:'#22252a',muted:'#5d636e',accent:'#5a6b5c',accent2:'#c5a059',on:'#ffffff',font:"'Playfair Display'",pat:'brilho',pal:['#5a6b5c','#c5a059','#d4af37'],deco:['🕊️','🤍','✨'],paper:'#fdfcfa'},
+  sacramental:{n:'Batizado e Comunhão',serif:true,e:'🕊️',sobrio:true,cats:['religioso','outra','cha_bebe','infantil'],bg:'#faf9f6',bg2:'#eceae4',surface:'#ffffff',ink:'#22252a',muted:'#5d636e',accent:'#5a6b5c',accent2:'#c5a059',on:'#ffffff',font:"'Playfair Display'",pat:'brilho',pal:['#5a6b5c','#c5a059','#d4af37'],deco:['🕊️','🤍','✨'],paper:'#fdfcfa'},
   confete:{n:'Festa de Confete',e:'🎉',cats:['aniversario','outra','infantil','quinze'],bg:'#fffdf7',bg2:'#f3e8ff',surface:'#ffffff',ink:'#2a1745',muted:'#6d5c86',accent:'#7b2cbf',accent2:'#ff9f1c',on:'#ffffff',font:"'Fredoka'",pat:'confete',pal:['#7b2cbf','#ff9f1c','#2ec4b6','#ff5a5f'],deco:['🎉','🎂','🥳'],paper:'#fffdf8'}
 };
 const BODAS = [[1,'Papel'],[2,'Algodão'],[3,'Couro'],[4,'Flores'],[5,'Madeira'],[6,'Açúcar'],[7,'Lã'],[8,'Barro'],[9,'Cerâmica'],[10,'Estanho'],[11,'Aço'],[12,'Seda'],[13,'Renda'],[14,'Marfim'],[15,'Cristal'],[20,'Porcelana'],[25,'Prata'],[30,'Pérola'],[35,'Coral'],[40,'Esmeralda'],[45,'Rubi'],[50,'Ouro'],[55,'Ametista'],[60,'Diamante'],[65,'Platina'],[70,'Vinho'],[75,'Brilhante']];

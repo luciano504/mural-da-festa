@@ -489,6 +489,13 @@ h2.sec .muted{font-family:var(--body)}
 .passos4 b{display:block;font-size:17px;margin-bottom:4px}
 .passos4 span{color:var(--muted);font-size:15px}
 .feat{display:grid;grid-template-columns:repeat(2,1fr);gap:22px 40px}
+.mn-pg{position:relative;margin:0 0 10px;border-radius:12px;overflow:hidden;border:1px solid var(--line);cursor:crosshair}.mn-pg img{display:block;width:100%;height:auto}
+.mn-dot{position:absolute;transform:translate(-50%,-50%);width:26px;height:26px;border-radius:50%;border:3px solid #fff;background:color-mix(in srgb,var(--accent) 22%,transparent);box-shadow:0 0 0 2px var(--accent),0 4px 12px rgba(0,0,0,.25);cursor:pointer;padding:0;animation:mnPulse 2s infinite}
+.mn-dot.on,.mn-dot.mk{background:var(--accent);animation:none}.mn-dot.mk{opacity:.55}.mn-dot.on::after{content:'✓';color:#fff;font:800 14px/20px sans-serif}
+.mn-dot span{position:absolute;left:50%;top:calc(100% + 4px);transform:translateX(-50%);white-space:nowrap;background:rgba(0,0,0,.78);color:#fff;font:600 12px/1.2 sans-serif;padding:3px 7px;border-radius:8px;opacity:0;pointer-events:none;transition:opacity .2s}
+.mn-dot:hover span,.mn-dot:focus-visible span{opacity:1}.mn-dot:disabled{opacity:.35;animation:none}
+@keyframes mnPulse{50%{box-shadow:0 0 0 7px color-mix(in srgb,var(--accent) 25%,transparent),0 4px 12px rgba(0,0,0,.25)}}
+.cdp-mapa{margin:0 0 14px}
 .promo-de{font-size:14px;color:var(--muted);margin:2px 0 -2px}.promo-de b{color:var(--accent)}
 .desc-bar{background:var(--surface);border:1px dashed var(--line);border-radius:12px;padding:10px 12px;margin:0 0 10px;font-size:15px}
 .ff-feat{margin:0 0 18px;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
@@ -1745,8 +1752,15 @@ async function ligarCardapio(MESA){
   const secoesE=porSecao(esc_);
   let pessoas=Math.max(1, ...Object.values(secoesE).map(l=>l.reduce((t,i)=>t+(+qe[i.id]||0),0)));
   const sel={}; Object.entries(secoesE).forEach(([sec,l])=>{ const a=[]; l.forEach(i=>{ for(let k=0;k<(+qe[i.id]||0);k++) a.push(i.id); }); sel[sec]=Array.from({length:pessoas},(_,k)=>a[k]||null); });
-  const ajustaPessoas=n=>{ pessoas=Math.max(1,Math.min(12,n)); Object.keys(sel).forEach(sec=>{ sel[sec]=Array.from({length:pessoas},(_,k)=>sel[sec][k]||null); }); };
-  const blocoEscolha=()=>`<div class="cdp-pes"><span>Quantas pessoas vão comer?</span><span class="cdp-q"><button type="button" data-pes="-1" aria-label="Menos">−</button><b>${pessoas}</b><button type="button" data-pes="1" aria-label="Mais">+</button></span></div>
+  let pAtiva=0;
+  const ajustaPessoas=n=>{ pAtiva=0; pessoas=Math.max(1,Math.min(12,n)); Object.keys(sel).forEach(sec=>{ sel[sec]=Array.from({length:pessoas},(_,k)=>sel[sec][k]||null); }); };
+  const ptsOk=()=>{ if(!menu.length) return []; return MENU_PTS(f).map(q=>({...q, it:esc_.find(i=>(i.secao||'')+'|'+i.nome===(q.s||'')+'|'+q.n)})).filter(q=>q.it && q.p<menu.length); };
+  const blocoMapa=()=>{ const P=ptsOk(); if(!P.length) return ''; const pgs=[...new Set(P.map(q=>q.p))];
+    return `<div class="cdp-mapa"><p style="margin:0 0 8px;font-weight:600">👆 Toque no prato que você quer${pessoas>1?':':''}</p>
+      ${pessoas>1?`<div class="cdp-chips" style="margin-bottom:8px">${Array.from({length:pessoas},(_,k)=>`<button type="button" data-pa="${k}" aria-pressed="${k===pAtiva}">Pessoa ${k+1}</button>`).join('')}</div>`:''}
+      ${pgs.map(pi=>`<div class="mn-pg"><img src="${midia(menu[pi])}" alt="Cardápio, página ${pi+1}">${P.filter(q=>q.p===pi).map(q=>{ const on=sel[q.it.secao]&&sel[q.it.secao][pAtiva]==q.it.id; return `<button type="button" class="mn-dot${on?' on':''}" style="left:${q.x*100}%;top:${q.y*100}%" data-mp="${q.it.id}" data-sec="${esc(q.it.secao)}" aria-pressed="${on}" aria-label="${esc(q.it.nome)}" ${q.it.pausado&&!on?'disabled':''}><span>${esc(q.it.nome)}${q.it.pausado?' · acabou':''}</span></button>`; }).join('')}</div>`).join('')}
+      <p class="muted" style="font-size:13px;margin:6px 0 0">Ou escolha pela lista aqui embaixo.</p></div>`; };
+  const blocoEscolha=()=>blocoMapa()+`<div class="cdp-pes"><span>Quantas pessoas vão comer?</span><span class="cdp-q"><button type="button" data-pes="-1" aria-label="Menos">−</button><b>${pessoas}</b><button type="button" data-pes="1" aria-label="Mais">+</button></span></div>
     ${Object.entries(secoesE).map(([sec,l])=>`<div class="cdp-sec"><h4>${esc(sec)} <small>uma opção por pessoa</small></h4>${sel[sec].map((v,k)=>`<div class="cdp-pp">${pessoas>1?`<span class="cdp-pl">Pessoa ${k+1}</span>`:''}<div class="cdp-chips">${l.map(i=>`<button type="button" data-sec="${esc(sec)}" data-k="${k}" data-op="${i.id}" aria-pressed="${v==i.id}" ${i.pausado&&v!=i.id?'disabled':''}>${esc(i.nome)}${i.descricao?`<small>${esc(i.descricao)}</small>`:''}${i.pausado?'<em>acabou</em>':''}</button>`).join('')}</div></div>`).join('')}</div>`).join('')}`;
   let mesa=MESA||0;
   if(!mesa){ try{ const pr=await rpc('fe_minha_presenca',{p_festa:f.id,p_aparelho:deviceId()}); if(pr&&pr.mesa){ mesa=+pr.mesa; store.set('mf_mesa_'+f.slug,String(mesa)); } }catch(e){} }
@@ -1764,7 +1778,9 @@ async function ligarCardapio(MESA){
         <input class="in" id="cdPO" maxlength="200" placeholder="Observação (ex.: sem gelo)" style="margin-top:10px">
         <button class="btn" id="cdPedir" style="margin-top:10px;width:100%">🍹 Fazer pedido</button><div class="msg" id="cdPM"></div><div class="meus-ped" id="cdMeus"></div></div>` : ''}`;
     box.querySelectorAll('[data-pes]').forEach(b=>b.onclick=()=>{ guardaCampos(); ajustaPessoas(pessoas+(+b.dataset.pes)); render(); });
-    box.querySelectorAll('[data-op]').forEach(b=>b.onclick=()=>{ const sec=b.dataset.sec, k=+b.dataset.k; sel[sec][k]=b.dataset.op; b.parentNode.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed', x===b)); });
+    box.querySelectorAll('[data-op]').forEach(b=>b.onclick=()=>{ const sec=b.dataset.sec, k=+b.dataset.k; sel[sec][k]=b.dataset.op; if(ptsOk().length){ guardaCampos(); render(); return; } b.parentNode.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed', x===b)); });
+    box.querySelectorAll('[data-pa]').forEach(b=>b.onclick=()=>{ guardaCampos(); pAtiva=+b.dataset.pa; render(); });
+    box.querySelectorAll('[data-mp]').forEach(b=>b.onclick=()=>{ const sec=b.dataset.sec; if(!sel[sec]) return; sel[sec][pAtiva]=b.dataset.mp; guardaCampos(); if(pessoas>1 && Object.values(sel).every(a=>a[pAtiva]) && pAtiva<pessoas-1) pAtiva++; render(); });
     if($('cdMenu')) $('cdMenu').onclick=()=>{ abrirFolha(`<h3>📄 Cardápio</h3><div style="display:flex;flex-direction:column;gap:10px">${menu.map((m,i)=>`<img src="${midia(m)}" alt="Página ${i+1} do cardápio" style="width:100%;border-radius:12px;display:block">`).join('')}</div><div class="foot"><button class="btn" id="eCancel">Fechar</button></div>`); $('eCancel').onclick=fecharFolha; };
     box.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{ const id=b.dataset.p; if(+b.dataset.d>0 && (itens.find(i=>i.id==id)||{}).pausado) return; qp[id]=Math.max(0,Math.min(10,(qp[id]||0)+(+b.dataset.d))); $('p'+id).textContent=qp[id]; });
     if($('cdSalvar')) $('cdSalvar').onclick=async()=>{ const nome=$('cdN').value.trim(); const it={};
@@ -3035,6 +3051,9 @@ async function vMeuTema(){
     rDecl();
   };
   rMus(); rVis();
+  if(window.TEMA_CONVITE){ const pth=window.TEMA_CONVITE; window.TEMA_CONVITE=null; K.visual=true; K.fundo={path:pth};
+    try{ const bl=await fetch(midia(pth)).then(r=>r.blob()); const pl=await paletaDe(bl); $('mtA').value=pl.accent; $('mtB').value=pl.accent2; $('mtC').value=pl.bg; }catch(_){}
+    rVis(); rDecl(); preview(); $('vw').querySelector('.card').insertAdjacentHTML('afterbegin','<p class="aviso" style="margin:0;background:#e7f5ff;color:#0b4a6f">💌 Pegamos o fundo e as cores do seu convite. Ajuste o que quiser (cores, letra, personagens) e toque em salvar: o telão, o mural, a placa da entrada, os cartões de mesa e o álbum ficam todos com o visual do convite.</p>'); }
   $('kVol').oninput=()=>{ K.mus.volume=+$('kVol').value; };
   if(info.ativo) $('mtOff').onclick=async()=>{ pararPrev(); try{ FESTA=await rpc('fe_admin_tema_off',{p_slug:SLUG,p_pin:PIN}); aplicarTema(temaDe(FESTA)); toast('Desligado. A festa voltou ao tema pronto, sem fotos nem música.'); vMeuTema(); }catch(e){ toast(ERR(e)); } };
   $('mtSave').onclick=async()=>{
@@ -3086,7 +3105,7 @@ async function vCompartilhar(){
    <div class="card" style="padding:18px;text-align:center;grid-column:1/-1"><h3 style="margin:0 0 6px">💌 Convite com QR Code</h3><p class="muted" style="margin:0 0 12px">Mande pelo WhatsApp ou imprima. O convidado já chega sabendo como deixar a homenagem.</p>
      <div class="seg" style="justify-content:center;margin-bottom:12px"><label class="btn ghost sm" style="position:relative">🖼️ ${cvMeu?'Trocar meu convite':'Usar meu próprio convite'}<input type="file" id="cvUpF" accept="image/*,application/pdf" style="position:absolute;inset:0;opacity:0;cursor:pointer"></label>${cvMeu?'<button class="btn ghost sm" type="button" id="cvUpX">Voltar ao convite automático</button>':''}</div>
      <img id="cvPrev" alt="Prévia do convite" style="width:min(240px,70%);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.18);background:var(--bg)">
-     ${cvMeu?'<p class="muted" style="font-size:13px;margin:8px 0 0">Seu convite ganha uma faixa com o QR da festa embaixo. Ele também aparece no topo da página do convidado.</p>':''}
+     ${cvMeu?'<p class="muted" style="font-size:13px;margin:8px 0 0">Seu convite ganha uma faixa com o QR da festa embaixo. Ele também aparece no topo da página do convidado.</p><p style="margin:10px 0 0"><button class="btn alt sm" type="button" id="cvVis">🎨 Usar o visual do convite na festa toda</button></p>':''}
      <div class="row" style="justify-content:center;margin-top:14px"><button class="btn" id="cvImg">📱 Baixar convite (imagem)</button><button class="btn alt" id="cvShare" hidden>📤 Compartilhar</button><button class="btn ghost" id="cvPdf">🖨️ Convite para imprimir (PDF)</button></div><div class="msg" id="cvM"></div></div>
    <div class="card" style="padding:18px;text-align:center"><h3 style="margin:0 0 10px">QR Code dos convidados</h3><div class="qrbig" id="shQr"></div><p class="muted" style="font-size:14px">Mostre na entrada ou imprima nas mesas</p><div class="row" style="justify-content:center;gap:8px;flex-wrap:wrap"><button class="btn" id="shCartoes">🖨️ Cartões de mesa (PDF)</button><button class="btn ghost" id="shCartaz">🪧 Placa da entrada (PDF)</button></div></div>
    <div class="card" style="padding:18px;display:flex;flex-direction:column;gap:10px"><h3 style="margin:0">Links</h3>
@@ -3125,6 +3144,7 @@ async function vCompartilhar(){
   const gerarCv=async()=>{ if(cvMeu){ try{ return await conviteProprio(f,cvMeu); }catch(e){} } return conviteCanvas(f,1080,1920); };
   (async()=>{ try{ const cv=await gerarCv(); $('cvPrev').src=cv.toDataURL('image/jpeg',.8); }catch(e){} })();
   if($('cvUpX')) $('cvUpX').onclick=async()=>{ try{ await rpc('fe_admin_convite_img',{p_slug:SLUG,p_pin:PIN,p_img:null}); toast('Voltamos ao convite automático.'); vCompartilhar(); }catch(e){ toast(ERR(e)); } };
+  if($('cvVis')) $('cvVis').onclick=()=>{ window.TEMA_CONVITE=cvMeu; document.querySelector('#abasTop [data-v="meutema"]').click(); };
   $('cvUpF').onchange=async e=>{ const file=e.target.files[0]; e.target.value=''; if(!file) return; const M=$('cvM'); M.className='msg'; M.innerHTML='<span class="spin"></span> Enviando o convite…';
     try{ let bl;
       if(/pdf/.test(file.type) || /\.pdf$/i.test(file.name)){ const pdfjs=await carregarPdfJs(); const pdf=await pdfjs.getDocument({data:await file.arrayBuffer()}).promise; const pgx=await pdf.getPage(1); const vp0=pgx.getViewport({scale:1}); const vp=pgx.getViewport({scale:1600/vp0.width});
@@ -3156,6 +3176,27 @@ async function pdfMesas(f){
     doc.addImage(cv.toDataURL('image/jpeg',.9),'JPEG',0,0,210,297); }
   return doc.output('blob');
 }
+// pontos marcados pelo buffet na arte do cardápio: {n:nome, s:seção, p:página, x, y} (0–1)
+const MENU_PTS = f => { const m=EXT(f).menu_pontos; return m&&Array.isArray(m.pts) ? m.pts.filter(q=>q&&q.n&&q.p>=0&&q.x>=0&&q.x<=1&&q.y>=0&&q.y<=1) : []; };
+const ptChave = i => (i.secao||'')+'|'+i.nome;
+function marcarCardapio(menu, escolhas, aoSalvar){
+  let pts=MENU_PTS(FESTA).filter(q=>escolhas.some(i=>ptChave(i)===(q.s||'')+'|'+q.n)).map(q=>({...q}));
+  let atual=escolhas[0] ? ptChave(escolhas[0]) : null;
+  abrirFolha(`<h3>👆 Marcar os pratos no cardápio</h3><p class="muted" style="margin-top:0">1. Escolha o prato aqui embaixo. 2. Toque <b>logo à esquerda do nome</b> dele na arte do cardápio, para a marca não cobrir o texto. O convidado escolhe tocando no mesmo lugar.</p>
+    <div class="cdp-chips" id="mkI" style="margin-bottom:8px"></div><p style="margin:0 0 10px"><button class="btn ghost sm" type="button" id="mkX">✕ Tirar a marca do prato escolhido</button></p><div id="mkP"></div><div class="msg" id="eMsg"></div>
+    <div class="foot"><button class="btn ghost" id="eCancel">Cancelar</button><button class="btn" id="eSend">💾 Salvar marcações</button></div>`);
+  const pinta=()=>{
+    $('mkI').innerHTML=escolhas.map(i=>{ const k=ptChave(i), feito=pts.some(q=>(q.s||'')+'|'+q.n===k); return `<button type="button" data-mk="${esc(k)}" aria-pressed="${k===atual}">${feito?'✅ ':''}${esc(i.nome)}<small>${esc(i.secao||'')}</small></button>`; }).join('');
+    $('mkP').innerHTML=menu.map((m,pi)=>`<div class="mn-pg" data-pg="${pi}"><img src="${midia(m)}" alt="Página ${pi+1} do cardápio">${pts.map((q,qi)=>q.p===pi?`<button type="button" class="mn-dot ${(q.s||'')+'|'+q.n===atual?'on':'mk'}" style="left:${q.x*100}%;top:${q.y*100}%" data-rm="${esc((q.s||'')+'|'+q.n)}" title="${esc(q.n)}"><span>${esc(q.n)}</span></button>`:'').join('')}</div>`).join('');
+    $('mkI').querySelectorAll('[data-mk]').forEach(b=>b.onclick=()=>{ atual=b.dataset.mk; pinta(); });
+    $('mkP').querySelectorAll('[data-rm]').forEach(b=>b.onclick=e=>{ e.stopPropagation(); atual=b.dataset.rm; pinta(); });
+    $('mkP').querySelectorAll('.mn-pg').forEach(pg=>pg.onclick=e=>{ if(!atual) return; const r=pg.getBoundingClientRect(); const it=escolhas.find(i=>ptChave(i)===atual); if(!it) return;
+      pts=pts.filter(q=>(q.s||'')+'|'+q.n!==atual); pts.push({n:it.nome, s:it.secao||'', p:+pg.dataset.pg, x:+((e.clientX-r.left)/r.width).toFixed(4), y:+((e.clientY-r.top)/r.height).toFixed(4)});
+      const prox=escolhas.find(i=>!pts.some(q=>(q.s||'')+'|'+q.n===ptChave(i))); if(prox) atual=ptChave(prox); pinta(); });
+  };
+  pinta(); $('eCancel').onclick=fecharFolha; $('mkX').onclick=()=>{ pts=pts.filter(q=>(q.s||'')+'|'+q.n!==atual); pinta(); };
+  $('eSend').onclick=async()=>{ try{ await extrasSet('menu_pontos', pts.length?{pts}:null); fecharFolha(); toast(pts.length?`${pts.length} prato(s) marcados. O convidado já escolhe tocando no cardápio 🍽️`:'Marcações retiradas.',4000); if(aoSalvar) aoSalvar(); }catch(e){ msgE(ERR(e),'err'); } };
+}
 async function vCardapio(){
   ADM.view='cardapio'; const f=FESTA; $('vw').innerHTML='<div class="empty"><span class="spin"></span></div>';
   let itens=[], escolhas=[], temEq=false;
@@ -3170,7 +3211,9 @@ async function vCardapio(){
       <p class="muted" style="margin:0 0 12px">Envie o cardápio do buffet em PDF ou foto. O convidado vê pelo botão "Ver cardápio completo".</p>
       <div class="row"><label class="btn" style="position:relative">📄 Enviar PDF ou imagens<input type="file" id="mnF" accept="application/pdf,image/*" multiple style="position:absolute;inset:0;opacity:0;cursor:pointer"></label>${menu.length?'<button class="btn ghost" id="mnLimpa">Retirar cardápio</button>':''}</div>
       <div class="msg" id="mnM"></div>
-      ${menu.length?`<div class="apr-grid" style="margin-top:12px">${menu.map((p,i)=>`<a href="${midia(p)}" target="_blank" rel="noopener"><img src="${midia(p)}" alt="Página ${i+1} do cardápio" loading="lazy"></a>`).join('')}</div>`:''}</div>
+      ${menu.length?`<div class="apr-grid" style="margin-top:12px">${menu.map((p,i)=>`<a href="${midia(p)}" target="_blank" rel="noopener"><img src="${midia(p)}" alt="Página ${i+1} do cardápio" loading="lazy"></a>`).join('')}</div>`:''}
+      ${menu.length?`<div style="margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)"><b>👆 Escolha tocando no cardápio</b> ${MENU_PTS(f).length?`<span class="kpill">${MENU_PTS(f).length} marcados</span>`:''}<p class="muted" style="margin:4px 0 10px;font-size:14px">Marque onde está cada prato na arte do buffet. O convidado escolhe tocando no mesmo cardápio que vai impresso nas mesas.</p>
+        ${L.escolha.length?'<button class="btn alt" id="mnMarcar" type="button">👆 Marcar os pratos no cardápio</button>':'<p class="aviso" style="margin:0">Primeiro cadastre os pratos de escolha antecipada aqui embaixo e salve.</p>'}</div>`:''}</div>
     <div class="card" style="padding:18px;margin-bottom:12px"><h3 style="margin:0 0 4px">🗺️ Mapa das mesas <span class="muted" style="font-size:14px;font-weight:500">(opcional)</span></h3>
       <p class="muted" style="margin:0 0 12px">Envie a planta do salão com os números das mesas, escreva como chegar, ou os dois. O convidado vê junto com o número da mesa dele.</p>
       <div class="row"><label class="btn" style="position:relative">🗺️ Enviar imagem ou PDF<input type="file" id="mpF" accept="application/pdf,image/*" style="position:absolute;inset:0;opacity:0;cursor:pointer"></label>${mapa.img?'<button class="btn ghost" id="mpTira">Retirar imagem</button>':''}</div>
@@ -3206,6 +3249,7 @@ async function vCardapio(){
       else bl=await encolher(file,1800,.88);
       await salvaMapa(await subir(bl,'cardapio/mapa','jpg','image/jpeg'));
     }catch(err){ M.className='msg err'; M.textContent='Não consegui enviar o mapa. '+ERR(err); } };
+  if($('mnMarcar')) $('mnMarcar').onclick=()=>marcarCardapio(menu, itens.filter(i=>i.tipo==='escolha'), vCardapio);
   if($('mnLimpa')) $('mnLimpa').onclick=async()=>{ try{ await rpc('fe_admin_cardapio_menu',{p_slug:SLUG,p_pin:PIN,p_imgs:[]}); toast('Cardápio completo retirado.'); vCardapio(); }catch(e){ toast(ERR(e)); } };
   $('mnF').onchange=async e=>{ const fs=[...e.target.files]; e.target.value=''; if(!fs.length) return; const M=$('mnM'); const caminhos=[];
     try{

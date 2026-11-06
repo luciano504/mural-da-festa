@@ -489,6 +489,7 @@ h2.sec .muted{font-family:var(--body)}
 .passos4 b{display:block;font-size:17px;margin-bottom:4px}
 .passos4 span{color:var(--muted);font-size:15px}
 .feat{display:grid;grid-template-columns:repeat(2,1fr);gap:22px 40px}
+.promo-de{font-size:14px;color:var(--muted);margin:2px 0 -2px}.promo-de b{color:var(--accent)}
 .desc-bar{background:var(--surface);border:1px dashed var(--line);border-radius:12px;padding:10px 12px;margin:0 0 10px;font-size:15px}
 .ff-feat{margin:0 0 18px;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
 .ff-feat summary{cursor:pointer;list-style:none;position:relative;padding-right:30px;display:flex;flex-direction:column;gap:3px}
@@ -2642,7 +2643,7 @@ function htmlPlanos(lista, {atual, botao, destaque='festa', gratis}={}){
       <a class="btn ghost" href="${gratis[1]}">${gratis[0]}</a></div>` : '';
   return `<div class="planos">${cardGratis}${lista.map(p=>{ const dif=Math.max(0,p.preco-precoAtual), pode=p.preco>precoAtual;
     return `<div class="plano${p.id===destaque?' dest':''}">${p.id===destaque?`<span class="tag">${destaque==='festa'?'mais escolhido':'indicado para você'}</span>`:''}<div class="e">${ICONE_PLANO[p.id]||'🎈'}</div><h4>${esc(p.nome)}</h4><p class="d">${esc(p.descricao||'')}</p>
-      <div class="p">${brl(precoAtual&&pode?dif:p.preco)}${precoAtual&&pode?' <small>(diferença)</small>':' <small>por festa</small>'}</div>
+      ${p.id==='festa'&&!(precoAtual&&pode)&&+p.preco<197&&Date.now()<Date.parse('2027-01-01T03:00:00Z')?`<div class="promo-de"><s>${brl(197)}</s> <b>lançamento até 31/12</b></div>`:''}<div class="p">${brl(precoAtual&&pode?dif:p.preco)}${precoAtual&&pode?' <small>(diferença)</small>':' <small>por festa</small>'}</div>
       <ul><li>até <b>${p.max_posts}</b> homenagens</li><li>áudio e vídeo de até <b>${segTxt(p.max_seg)}</b></li><li>telão, mural, tema próprio, fotos e música</li><li>álbum em PDF e todos os arquivos</li><li>no ar até <b>${p.dias_pos} dias</b> depois da festa</li></ul>
       ${gratis ? `<a class="btn" href="${gratis[1]}">Testar grátis primeiro</a>` : ''}${botao ? (pode ? `<button class="btn" data-plano="${p.id}">${atual&&atual!=='teste'?'⬆️ Mudar para este':'💳 Pagar e liberar'}</button>` : `<button class="btn ghost" disabled>${p.id===(atual==='completo'?'festa':atual)?'✓ Seu plano':'—'}</button>`) : ''}</div>`; }).join('')}</div>`;
 }

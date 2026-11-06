@@ -1175,7 +1175,7 @@ body.qr-off-auto .tv-bar{display:none}
 .tv:has(.sl-intro) .tv-top .tv-nome{opacity:0}
 .tv:has(#tvQrBig) .tv-bar{visibility:hidden}
 
-.sl-intro .intro-arte{display:block;margin:0 auto 2vh;max-height:24vh;max-width:40vw;object-fit:contain;border-radius:1.2vh;mix-blend-mode:multiply}
+.sl-intro .intro-arte{display:block;margin:0 auto 2vh;max-height:32vh;max-width:44vw;object-fit:contain;border-radius:1.2vh;mix-blend-mode:multiply}
 .tv:has(.sl-intro .intro-arte) .tv-top .tv-logo{opacity:0}
 .tv:has(.sl-intro .intro-arte) .sl-intro.quieto .nm{font-size:clamp(36px,min(7.5vw,9vh),140px)}
 </style>
@@ -1588,7 +1588,7 @@ async function telaConvidado(){
       ${EXT(f).logo?`<img class="capa-logo" src="${midia(EXT(f).logo)}" alt="Logomarca">`:''}
       <p class="lead">${CATS[f.categoria]?.e||"🎉"} ${esc(subtitulo(f))}</p>
       <h1 class="who">${esc(DESTAQUE(f))}</h1>
-      ${f.homenageado && f.homenageado.trim().toLowerCase()!==String(f.titulo||"").trim().toLowerCase()?`<p class="tit">${esc(SEGUNDO(f))}</p>`:''}
+      ${f.homenageado && f.homenageado.trim().toLowerCase()!==String(f.titulo||"").trim().toLowerCase() && String(SEGUNDO(f)||"").trim().toLowerCase()!==String(subtitulo(f)||"").trim().toLowerCase()?`<p class="tit">${esc(SEGUNDO(f))}</p>`:''}
       ${quando?`<p class="quando">${quando}</p>`:''}
       ${f.mensagem?`<p class="msgf">${esc(f.mensagem)}</p>`:''}
       ${MESA&&f.mesas?`<span class="mesa-chip">🍽️ Mesa ${MESA}</span>`:''}

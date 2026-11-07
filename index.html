@@ -4276,6 +4276,45 @@ function deQuem(f){
 function corPapel(im, def){ try{ const k=Math.min(1,120/Math.max(im.width,im.height)), w=Math.max(1,Math.round(im.width*k)), h=Math.max(1,Math.round(im.height*k)); const cv=document.createElement('canvas'); cv.width=w; cv.height=h; const c=cv.getContext('2d'); c.drawImage(im,0,0,w,h); const d=c.getImageData(0,0,w,h).data, M={};
   for(let i=0;i<d.length;i+=4){ const r=d[i],g=d[i+1],b=d[i+2]; if((.2126*r+.7152*g+.0722*b)/255<.6) continue; const q=((r>>3)<<10)|((g>>3)<<5)|(b>>3); (M[q]=M[q]||[0,0,0,0]); M[q][0]++; M[q][1]+=r; M[q][2]+=g; M[q][3]+=b; }
   const top=Object.values(M).sort((a,b)=>b[0]-a[0])[0]; if(!top) return def; return '#'+[1,2,3].map(i=>Math.round(top[i]/top[0]).toString(16).padStart(2,'0')).join(''); }catch(e){ return def; } }
+function textoCapa(c,t,f){
+  const ac=t.accent, nome=DESTAQUE(f), pre=deQuem(f), escuro=(h=>{ const m=String(h||'').match(/^#?(\w\w)(\w\w)(\w\w)/); if(!m) return false; const [r,g,bb]=m.slice(1).map(x=>parseInt(x,16)/255); return .2126*r+.7152*g+.0722*bb<.35; })(t.bg), sec=escuro?'#ffffff':t.ink, mut=escuro?'rgba(255,255,255,.78)':t.muted;
+  c.textAlign='center';
+  c.font='700 30px Figtree, Fredoka, sans-serif'; const cab=CORP(f)?'Á L B U M   D O   E V E N T O':'Á L B U M   D E   R E C O R D A Ç Õ E S';
+  let fs=/Great|Pacifico/.test(t.font)?130:108; c.font=`400 ${fs}px ${fonte(t)}`; let ls=wrap(c,nome,PW*.66); while((ls.length>2 || ls.some(l=>c.measureText(l).width>PW*.7)) && fs>52){ fs-=4; c.font=`400 ${fs}px ${fonte(t)}`; ls=wrap(c,nome,PW*.66); } ls=ls.slice(0,2);
+  const quando=[f.data?new Date(f.data+'T12:00:00').toLocaleDateString('pt-BR',{day:'numeric',month:'long',year:'numeric'}):'', f.local].filter(Boolean).join('  ·  ');
+  const H=40+60+(pre?78:0)+ls.length*fs*1.08+40+(quando?50:0); let y=PH/2-H/2;
+  c.fillStyle=escuro?'#ffffff':ac; c.globalAlpha=escuro?.9:1; c.font='700 30px Figtree, Fredoka, sans-serif'; c.fillText(cab, PW/2, y+30);
+  c.strokeStyle=ac; c.globalAlpha=.55; c.lineWidth=2; c.beginPath(); c.moveTo(PW/2-80,y+58); c.lineTo(PW/2+80,y+58); c.stroke(); c.globalAlpha=1; y+=100;
+  if(pre){ c.fillStyle=mut; c.font=`italic 400 50px ${fonte(t)}`; c.fillText(pre, PW/2, y+30); y+=78; }
+  c.fillStyle=ac; c.font=`400 ${fs}px ${fonte(t)}`; ls.forEach((l,i)=>c.fillText(l, PW/2, y+fs*.85+i*fs*1.08)); y+=ls.length*fs*1.08+40;
+  if(quando){ c.fillStyle=sec; c.globalAlpha=escuro?.88:.8; c.font='500 32px Figtree, Fredoka, sans-serif'; c.fillText(quando, PW/2, y+20); c.globalAlpha=1; }
+  c.fillStyle=sec; c.globalAlpha=escuro?.72:.6; c.font='500 26px Figtree, Fredoka, sans-serif'; c.fillText(CORP(f)?'com as fotos e mensagens de toda a equipe':'com o carinho de todos os convidados', PW/2, PH-178); c.globalAlpha=1;
+}
+// ramo de folhas em traço fino, desenhado pelo próprio app
+function ramo(c,x,y,len,ang,cor,curva){
+  c.save(); c.translate(x,y); c.rotate(ang); c.strokeStyle=cor; c.fillStyle=cor; c.lineCap='round'; c.lineJoin='round';
+  const k=curva||.12, P=u=>({x:u*len, y:-Math.sin(u*Math.PI)*len*k});
+  c.lineWidth=2.4; c.globalAlpha=.85; c.beginPath(); for(let u=0;u<=1.001;u+=.05){ const q=P(u); u?c.lineTo(q.x,q.y):c.moveTo(q.x,q.y); } c.stroke();
+  const n=9; for(let i=1;i<=n;i++){ const u=i/(n+1), q=P(u), lado=i%2?1:-1, tam=len*(.15-.07*u), dir=(lado>0?-1:1)*(.9-.25*u);
+    c.save(); c.translate(q.x,q.y); c.rotate(dir); c.globalAlpha=.22; c.beginPath(); c.moveTo(0,0); c.quadraticCurveTo(tam*.5,-tam*.38,tam,0); c.quadraticCurveTo(tam*.5,tam*.38,0,0); c.fill();
+    c.globalAlpha=.8; c.lineWidth=1.8; c.stroke(); c.globalAlpha=.5; c.lineWidth=1.1; c.beginPath(); c.moveTo(0,0); c.lineTo(tam*.85,0); c.stroke(); c.restore(); }
+  { const q=P(1), tam=len*.08; c.save(); c.translate(q.x,q.y); c.rotate(-.1); c.globalAlpha=.22; c.beginPath(); c.moveTo(0,0); c.quadraticCurveTo(tam*.5,-tam*.38,tam,0); c.quadraticCurveTo(tam*.5,tam*.38,0,0); c.fill(); c.globalAlpha=.8; c.lineWidth=1.8; c.stroke(); c.restore(); }
+  c.restore();
+}
+function cantosArte(c,t){
+  if(t._orn){ ornar(c,t,24,24,470,.8,false); c.save(); c.translate(PW,PH); c.rotate(Math.PI); ornar(c,t,24,24,470,.8,false); c.restore(); return; }
+  const cor=t.accent;
+  ramo(c,40,96,430,-.08,cor,.14); ramo(c,92,40,400,1.42,cor,-.12); ramo(c,60,70,250,.55,cor,.1);
+  c.save(); c.translate(PW,PH); c.rotate(Math.PI); ramo(c,40,96,430,-.08,cor,.14); ramo(c,92,40,400,1.42,cor,-.12); ramo(c,60,70,250,.55,cor,.1); c.restore();
+}
+function capaNativa(c,t,f){
+  const g=c.createLinearGradient(0,0,0,PH); g.addColorStop(0,t.bg); g.addColorStop(1,t.bg2||t.bg); c.fillStyle=g; c.fillRect(0,0,PW,PH);
+  if(t._fundo){ cobrir(c,t._fundo,0,0,PW,PH); c.globalAlpha=.86; c.fillStyle=t.bg; c.fillRect(0,0,PW,PH); c.globalAlpha=1; }
+  c.strokeStyle=t.accent; c.globalAlpha=.75; c.lineWidth=2.2; c.strokeRect(62,62,PW-124,PH-124); c.globalAlpha=.35; c.lineWidth=1.2; c.strokeRect(76,76,PW-152,PH-152); c.globalAlpha=1;
+  if(!CORP(f)) cantosArte(c,t); else { c.save(); c.strokeStyle=t.accent; c.lineWidth=2.4; c.globalAlpha=.85; const L=90, m=104; [[m,m,1,1],[PW-m,m,-1,1],[m,PH-m,1,-1],[PW-m,PH-m,-1,-1]].forEach(([x,y,sx,sy])=>{ c.beginPath(); c.moveTo(x,y+sy*L); c.lineTo(x,y); c.lineTo(x+sx*L,y); c.stroke(); c.globalAlpha=.4; c.beginPath(); c.moveTo(x+sx*18,y+sy*(L-30)); c.lineTo(x+sx*18,y+sy*18); c.lineTo(x+sx*(L-30),y+sy*18); c.stroke(); c.globalAlpha=.85; }); c.restore(); }
+  if(t._logo){ const e=t._logo, h=150, w=Math.min(420,h*e.width/e.height), hh=w*e.height/e.width; c.drawImage(e,PW/2-w/2,250,w,hh); }
+  textoCapa(c,t,f);
+}
 function capaConvite(c,t,f){
   const im=t._conv, papelC=corPapel(im, t.bg);
   c.fillStyle=papelC; c.fillRect(0,0,PW,PH); cobrir(c,im,0,0,PW,PH);
@@ -4286,21 +4325,11 @@ function capaConvite(c,t,f){
       const cx=Math.min(fx,1-fx), cy=Math.min(fy,1-fy)*mh/mw, canto=Math.hypot(cx,cy);
       const a=ss(.052,.064,borda)*ss(.24,.32,canto); const i=(y*mw+x)*4; id.data[i]=R; id.data[i+1]=G; id.data[i+2]=B; id.data[i+3]=Math.round(a*255); }
     mc.putImageData(id,0,0); c.imageSmoothingEnabled=true; c.drawImage(mk,0,0,PW,PH); }
-  const ac=t.accent, nome=DESTAQUE(f), pre=deQuem(f);
-  c.textAlign='center';
-  c.font='700 30px Figtree, Fredoka, sans-serif'; const cab='Á L B U M   D E   R E C O R D A Ç Õ E S';
-  let fs=/Great|Pacifico/.test(t.font)?130:108; c.font=`400 ${fs}px ${fonte(t)}`; let ls=wrap(c,nome,PW*.66); while((ls.length>2 || ls.some(l=>c.measureText(l).width>PW*.7)) && fs>52){ fs-=4; c.font=`400 ${fs}px ${fonte(t)}`; ls=wrap(c,nome,PW*.66); } ls=ls.slice(0,2);
-  const quando=[f.data?new Date(f.data+'T12:00:00').toLocaleDateString('pt-BR',{day:'numeric',month:'long',year:'numeric'}):'', f.local].filter(Boolean).join('  ·  ');
-  const H=40+60+(pre?78:0)+ls.length*fs*1.08+40+(quando?50:0); let y=PH/2-H/2;
-  c.fillStyle=ac; c.font='700 30px Figtree, Fredoka, sans-serif'; c.fillText(cab, PW/2, y+30);
-  c.strokeStyle=ac; c.globalAlpha=.55; c.lineWidth=2; c.beginPath(); c.moveTo(PW/2-80,y+58); c.lineTo(PW/2+80,y+58); c.stroke(); c.globalAlpha=1; y+=100;
-  if(pre){ c.fillStyle=t.muted; c.font=`italic 400 50px ${fonte(t)}`; c.fillText(pre, PW/2, y+30); y+=78; }
-  c.fillStyle=ac; c.font=`400 ${fs}px ${fonte(t)}`; ls.forEach((l,i)=>c.fillText(l, PW/2, y+fs*.85+i*fs*1.08)); y+=ls.length*fs*1.08+40;
-  if(quando){ c.fillStyle=t.ink; c.globalAlpha=.8; c.font='500 32px Figtree, Fredoka, sans-serif'; c.fillText(quando, PW/2, y+20); c.globalAlpha=1; }
-  c.fillStyle=t.ink; c.globalAlpha=.6; c.font='500 26px Figtree, Fredoka, sans-serif'; c.fillText(CORP(f)?'com as fotos e mensagens de toda a equipe':'com o carinho de todos os convidados', PW/2, PH-150); c.globalAlpha=1;
+  textoCapa(c,t,f);
 }
 function capa(c,t,f,foto){
   if(t._conv) return capaConvite(c,t,f);
+  return capaNativa(c,t,f);
   if(ALBC) return capaCorp(c,t,f,foto);
   const g=c.createLinearGradient(0,0,PW,PH); g.addColorStop(0,t.bg); g.addColorStop(1,t.bg2); c.fillStyle=g; c.fillRect(0,0,PW,PH);
   if(t._fundo){ cobrir(c,t._fundo,0,0,PW,PH); c.globalAlpha=.55; c.fillStyle=t.bg; c.fillRect(0,0,PW,PH); c.globalAlpha=1; }
@@ -4319,7 +4348,7 @@ function cobrir(c,im,x,y,w,h){ const ar=w/h, iar=im.width/im.height; let sx=0,sy
 async function temaPdf(f){ const t={...temaDe(f)}; await fontesProntas(t); if(t.fundo) t._fundo=await carregarImg(t.fundo,1800); t._enfs=[]; for(const p of (t.enfeites||(t.enfeite?[t.enfeite]:[]))){ const im=await carregarImg(p,900); if(im) t._enfs.push(im); } t._enf=t._enfs[0]||null; if(EXT(f).logo) t._logo=await carregarImg(EXT(f).logo,600); try{ const cvp=f.id?await rpc('fe_convite_img',{p_festa:f.id}):null; if(cvp) t._conv=await carregarImg(cvp,1600); }catch(e){} t._orn=await ornImg(f.tema, t.accent); return t; }
 async function capaCanvas(f, posts, t){
   ALBC=CORP(f); t=t||await temaPdf(f); const hist=t.fotos||[], fotos=posts.filter(p=>p.tipo==='foto');
-  const fotoCapa = t._conv ? null : hist.length ? await carregarImg(hist[hist.length-1]) : fotos.length ? await carregarImg(fotos[0].caminho) : null;
+  const fotoCapa = true ? null : hist.length ? await carregarImg(hist[hist.length-1]) : fotos.length ? await carregarImg(fotos[0].caminho) : null;
   const [cv,c]=pg(); capa(c,t,f,fotoCapa); return cv;
 }
 async function pdfAlbum(f, posts, prog){

@@ -1100,6 +1100,21 @@ body.app-neutro .top h1 em{font-family:'Fraunces',Georgia,serif;font-weight:500;
 .alb-capa img{width:100%;height:100%;object-fit:contain;border-radius:8px;box-shadow:0 18px 44px -16px rgba(0,0,0,.45)}
 .alb-acts{justify-content:center;margin:20px 0 6px;gap:10px;flex-wrap:wrap}
 .alb-sec{margin-top:44px} .alb-sec h2{font-family:var(--display, inherit);color:var(--accent);text-align:center;font-size:clamp(30px,6vw,44px);font-weight:400;margin:0} .alb-sec>p{text-align:center;margin:4px 0 18px}
+.alb-folhas{display:flex;flex-direction:column;gap:22px;align-items:center}
+.alb-folha{width:min(640px,100%);aspect-ratio:1240/1754;background:linear-gradient(180deg,var(--surface,#fff),color-mix(in srgb,var(--surface,#fff) 70%, var(--bg2,#eee)));border-radius:6px;box-shadow:0 14px 34px -18px rgba(0,0,0,.4);padding:7% 7%;display:grid;gap:5%;box-sizing:border-box;overflow:hidden}
+.alb-folha.n1{grid-template-rows:1fr;place-items:center}
+.alb-folha.n2{grid-template-rows:1fr 1fr} .alb-folha.n2 .alb-pol:nth-child(1){justify-self:start} .alb-folha.n2 .alb-pol:nth-child(2){justify-self:end}
+.alb-folha.n3{grid-template-columns:1fr 1fr;grid-template-rows:1.15fr 1fr} .alb-folha.n3 .alb-pol:nth-child(1){grid-column:1/-1;justify-self:center;width:84%}
+.alb-pol{margin:0;background:#fff;padding:3.2% 3.2% 0;width:82%;box-shadow:0 8px 20px -8px rgba(0,0,0,.35);transform:rotate(var(--r,0deg));display:flex;flex-direction:column;min-height:0;box-sizing:border-box;position:relative}
+.alb-folha.n3 .alb-pol:nth-child(n+2){width:100%}
+.alb-folha.corp .alb-pol{transform:none}
+.alb-pol a{display:block;flex:1;min-height:0} .alb-pol img{width:100%;height:100%;object-fit:cover;display:block}
+.alb-pol::before,.alb-pol::after{content:'';position:absolute;width:18px;height:18px;border:1.5px solid var(--accent);opacity:.6}
+.alb-pol::before{left:-6px;top:-6px;border-right:0;border-bottom:0} .alb-pol::after{right:-6px;bottom:-6px;border-left:0;border-top:0}
+.alb-folha.corp .alb-pol::before,.alb-folha.corp .alb-pol::after{display:none}
+.alb-pol figcaption{text-align:center;padding:6px 4px 8px;font-family:Caveat,cursive;line-height:1.1;color:#2b2b3a;min-height:2.2em}
+.alb-folha.corp .alb-pol figcaption{font-family:inherit}
+.alb-pol figcaption span{display:block;font-size:clamp(15px,3.2vw,22px);font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap} .alb-pol figcaption small{display:block;font-size:clamp(12px,2.4vw,16px);color:#6b6b80}
 .alb-fotos{columns:3 220px;column-gap:14px} .alb-fotos figure{break-inside:avoid;margin:0 0 14px;background:#fff;padding:10px 10px 12px;border-radius:4px;box-shadow:0 6px 18px -8px rgba(0,0,0,.3)}
 .alb-fotos img{width:100%;display:block;border-radius:2px} .alb-fotos figcaption{font-size:15px;color:#2b2b3a;padding-top:8px;line-height:1.35} .alb-fotos small{display:block;color:#6b6b80;margin-top:2px}
 .alb-recs{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px} .alb-recs blockquote{margin:0;background:var(--surface,#fff);border:1px solid var(--line,#e6e6ee);border-radius:14px;padding:18px 20px}
@@ -3835,6 +3850,7 @@ function vRecordacoes(){
   $('rcBook').onclick=async()=>{ const b=$('rcBook'); b.disabled=true; try{ const r=await pdfAlbum(FESTA, ap, t=>{ $('rcM1').className='msg'; $('rcM1').innerHTML=`<span class="spin"></span> ${t}`; }); baixar(r.blob, `Album_${FESTA.slug}.pdf`); $('rcM1').className='msg ok'; $('rcM1').textContent=`Álbum pronto: ${r.paginas} páginas.`; }catch(e){ console.error(e); $('rcM1').className='msg err'; $('rcM1').textContent='Não consegui montar o álbum agora. Tente de novo.'; } b.disabled=false; };
   $('rcZip').onclick=async()=>{ if(FESTA.plano==='teste'){ $('rcM2').className='msg err'; $('rcM2').textContent='Baixar todos os arquivos é liberado depois de ativar a festa.'; return; } const b=$('rcZip'); b.disabled=true; try{ const blob=await zipTudo(FESTA, ap, t=>{ $('rcM2').className='msg'; $('rcM2').innerHTML=`<span class="spin"></span> ${t}`; }); baixar(blob, `Recordacoes_${FESTA.slug}.zip`); $('rcM2').className='msg ok'; $('rcM2').textContent='Arquivo pronto.'; }catch(e){ $('rcM2').className='msg err'; $('rcM2').textContent='Não consegui montar o arquivo agora.'; } b.disabled=false; };
 }
+const semEmoji=t=>String(t||'').replace(/(?![©®™])\p{Extended_Pictographic}(?:\p{Emoji_Modifier}|️|‍\p{Extended_Pictographic})*️?|[\u{1F1E6}-\u{1F1FF}]/gu,'').replace(/[ \t]{2,}/g,' ').trim();
 function textoAlbum(f){ const n=DESTAQUE(f); return CORP(f)
   ? `Álbum do evento · ${n}\n\nReunimos as fotos, as mensagens e as vozes de quem esteve com a gente. Veja e guarde:\n${linkFesta(f.slug,'album')}`
   : `Álbum de recordações · ${n}\n\nReunimos as fotos, os recados e as vozes de quem esteve com a gente. Veja e guarde:\n${linkFesta(f.slug,'album')}`; }
@@ -3850,8 +3866,10 @@ async function telaAlbum(){
   const sec=(tit,sub,html)=>`<section class="alb-sec"><h2>${tit}</h2>${sub?`<p class="muted">${sub}</p>`:''}${html}</section>`;
   let h='';
   if(rev) h+=`<p class="aviso center">As fotos serão reveladas em ${esc(new Date(rev).toLocaleString('pt-BR',{weekday:'long',day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'}))}.</p>`;
-  if(fotos.length) h+=sec(corp?'Registros do evento':'Momentos', corp?'fotos enviadas pelos participantes':'os cliques da festa', `<div class="alb-fotos">${fotos.map(p=>`<figure><a href="${midia(p.caminho)}" target="_blank" rel="noopener"><img loading="lazy" src="${midia(p.thumb||p.caminho)}" alt=""></a>${p.texto||p.autor?`<figcaption>${p.texto?esc(p.texto):''}${p.autor?`<small>${esc(p.autor)}</small>`:''}</figcaption>`:''}</figure>`).join('')}</div>`);
-  if(textos.length) h+=sec(corp?'Mensagens':'Recados', corp?'o que a equipe escreveu':'palavras de carinho', `<div class="alb-recs">${textos.map(p=>`<blockquote><p>${esc(p.texto)}</p><cite>${esc(p.autor||(corp?'Um participante':'Um convidado'))}</cite></blockquote>`).join('')}</div>`);
+  if(fotos.length){ const fol=[]; let r=fotos.length, k=0, o=0; while(r>0){ let q=k%2?2:3; k++; if(q>r) q=r; if(r-q===1 && q===3) q=2; fol.push(fotos.slice(o,o+q)); o+=q; r-=q; }
+    const pol=(p,i)=>`<figure class="alb-pol" style="--r:${[-2.5,2,-1.5,3,-3][(p.id||i)%5]}deg"><a href="${midia(p.caminho)}" target="_blank" rel="noopener"><img loading="lazy" src="${midia(p.thumb||p.caminho)}" alt=""></a><figcaption>${semEmoji(p.texto)?`<span>${esc(semEmoji(p.texto))}</span>`:''}${p.autor?`<small>por ${esc(p.autor)}</small>`:''}</figcaption></figure>`;
+    h+=sec(corp?'Registros do evento':'Momentos', corp?'fotos enviadas pelos participantes':'os cliques da festa', `<div class="alb-folhas">${fol.map((g,i)=>`<div class="alb-folha n${g.length}${corp?' corp':''}">${g.map(pol).join('')}</div>`).join('')}</div>`); }
+  if(textos.length) h+=sec(corp?'Mensagens':'Recados', corp?'o que a equipe escreveu':'palavras de carinho', `<div class="alb-recs">${textos.map(p=>`<blockquote><p>${esc(semEmoji(p.texto))}</p><cite>${esc(p.autor||(corp?'Um participante':'Um convidado'))}</cite></blockquote>`).join('')}</div>`);
   if(grav.length) h+=sec(corp?'Mensagens gravadas':'Recados gravados', '', `<div class="alb-grav">${grav.map(p=>`<div class="alb-g"><div class="nm">${esc(p.autor||(corp?'Um participante':'Um convidado'))}</div>${p.tipo==='video'?`<video controls preload="none" playsinline ${p.thumb?`poster="${midia(p.thumb)}"`:''} src="${midia(p.caminho)}"></video>`:`<audio controls preload="none" src="${midia(p.caminho)}"></audio>`}</div>`).join('')}</div>`);
   if(!h) h=`<p class="muted center" style="margin-top:24px">O álbum ainda está vazio.</p>`;
   $('alCorpo').innerHTML=h;
@@ -4301,7 +4319,7 @@ async function pdfAlbum(f, posts, prog){
   }
   // fotos em polaroid: alterna 1, 2 e 3 por página
   const imgs=[]; for(let i=0;i<fotos.length;i++){ prog(`Revelando foto ${i+1} de ${fotos.length}…`); const im=await carregarImg(fotos[i].caminho); if(im) imgs.push({p:fotos[i],im}); }
-  const blocos=[]; let r=imgs.length, cyc=[3,1,2], k=0; while(r>0){ let q=cyc[k%3]; k++; if(q>r) q=r; if(r-q===1 && q===3) q=2; blocos.push(q); r-=q; }
+  const blocos=[]; let r=imgs.length, cyc=[3,2], k=0; while(r>0){ let q=cyc[k%2]; k++; if(q>r) q=r; if(r-q===1 && q===3) q=2; blocos.push(q); r-=q; }
   let off=0;
   for(const [bi,q] of blocos.entries()){
     prog(`Diagramando as fotos… página ${n+1}`); const [cv,c]=pg(); papel(c,t,f,n+1); let top=140; if(bi===0) top=tituloSecao(c,t,ALBC?'Registros do evento':'Momentos',ALBC?'fotos enviadas pelos participantes':'os cliques da festa',230);

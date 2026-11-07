@@ -1108,7 +1108,8 @@ body.app-neutro .top h1 em{font-family:'Fraunces',Georgia,serif;font-weight:500;
 .alb-pol{margin:0;background:#fff;padding:3.2% 3.2% 0;width:82%;box-shadow:0 8px 20px -8px rgba(0,0,0,.35);transform:rotate(var(--r,0deg));display:flex;flex-direction:column;min-height:0;box-sizing:border-box;position:relative}
 .alb-folha.n3 .alb-pol:nth-child(n+2){width:100%}
 .alb-folha.corp .alb-pol{transform:none}
-.alb-pol a{display:block;flex:1;min-height:0} .alb-pol img{width:100%;height:100%;object-fit:cover;display:block}
+.alb-pol a{display:block;flex:1;min-height:0} .alb-pol img{width:100%;height:100%;object-fit:cover;object-position:50% 18%;display:block}
+.alb-folha.n2 .alb-pol.ret{width:58%} .alb-folha.n1 .alb-pol.ret{width:64%;height:100%} .alb-folha.n3 .alb-pol.ret:nth-child(1){width:52%}
 .alb-pol::before,.alb-pol::after{content:'';position:absolute;width:18px;height:18px;border:1.5px solid var(--accent);opacity:.6}
 .alb-pol::before{left:-6px;top:-6px;border-right:0;border-bottom:0} .alb-pol::after{right:-6px;bottom:-6px;border-left:0;border-top:0}
 .alb-folha.corp .alb-pol::before,.alb-folha.corp .alb-pol::after{display:none}
@@ -3867,7 +3868,7 @@ async function telaAlbum(){
   let h='';
   if(rev) h+=`<p class="aviso center">As fotos serão reveladas em ${esc(new Date(rev).toLocaleString('pt-BR',{weekday:'long',day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'}))}.</p>`;
   if(fotos.length){ const fol=[]; let r=fotos.length, k=0, o=0; while(r>0){ let q=k%2?2:3; k++; if(q>r) q=r; if(r-q===1 && q===3) q=2; fol.push(fotos.slice(o,o+q)); o+=q; r-=q; }
-    const pol=(p,i)=>`<figure class="alb-pol" style="--r:${[-2.5,2,-1.5,3,-3][(p.id||i)%5]}deg"><a href="${midia(p.caminho)}" target="_blank" rel="noopener"><img loading="lazy" src="${midia(p.thumb||p.caminho)}" alt=""></a><figcaption>${semEmoji(p.texto)?`<span>${esc(semEmoji(p.texto))}</span>`:''}${p.autor?`<small>por ${esc(p.autor)}</small>`:''}</figcaption></figure>`;
+    const pol=(p,i)=>`<figure class="alb-pol" style="--r:${[-2.5,2,-1.5,3,-3][(p.id||i)%5]}deg"><a href="${midia(p.caminho)}" target="_blank" rel="noopener"><img loading="lazy" src="${midia(p.thumb||p.caminho)}" alt="" onload="if(this.naturalHeight>this.naturalWidth*1.08)this.closest('.alb-pol').classList.add('ret')"></a><figcaption>${semEmoji(p.texto)?`<span>${esc(semEmoji(p.texto))}</span>`:''}${p.autor?`<small>por ${esc(p.autor)}</small>`:''}</figcaption></figure>`;
     h+=sec(corp?'Registros do evento':'Momentos', corp?'fotos enviadas pelos participantes':'os cliques da festa', `<div class="alb-folhas">${fol.map((g,i)=>`<div class="alb-folha n${g.length}${corp?' corp':''}">${g.map(pol).join('')}</div>`).join('')}</div>`); }
   if(textos.length) h+=sec(corp?'Mensagens':'Recados', corp?'o que a equipe escreveu':'palavras de carinho', `<div class="alb-recs">${textos.map(p=>`<blockquote><p>${esc(semEmoji(p.texto))}</p><cite>${esc(p.autor||(corp?'Um participante':'Um convidado'))}</cite></blockquote>`).join('')}</div>`);
   if(grav.length) h+=sec(corp?'Mensagens gravadas':'Recados gravados', '', `<div class="alb-grav">${grav.map(p=>`<div class="alb-g"><div class="nm">${esc(p.autor||(corp?'Um participante':'Um convidado'))}</div>${p.tipo==='video'?`<video controls preload="none" playsinline ${p.thumb?`poster="${midia(p.thumb)}"`:''} src="${midia(p.caminho)}"></video>`:`<audio controls preload="none" src="${midia(p.caminho)}"></audio>`}</div>`).join('')}</div>`);
@@ -4237,7 +4238,7 @@ function polaroid(c,im,cx,cy,pw,ph,rot,cap1,cap2,t){
   const pad=24, bottom=cap2?118:94, W=pw+pad*2, H=ph+pad+bottom;
   c.save(); c.translate(cx,cy); c.rotate(rot*Math.PI/180);
   c.shadowColor='rgba(0,0,0,.28)'; c.shadowBlur=26; c.shadowOffsetY=10; c.fillStyle='#fff'; c.fillRect(-W/2,-H/2,W,H); c.shadowColor='transparent';
-  const ar=pw/ph, iar=im.width/im.height; let sx=0,sy=0,sw=im.width,sh=im.height; if(iar>ar){ sw=im.height*ar; sx=(im.width-sw)/2; } else { sh=im.width/ar; sy=(im.height-sh)/2; }
+  const ar=pw/ph, iar=im.width/im.height; let sx=0,sy=0,sw=im.width,sh=im.height; if(iar>ar){ sw=im.height*ar; sx=(im.width-sw)/2; } else { sh=im.width/ar; sy=(im.height-sh)*.18; }
   c.drawImage(im,sx,sy,sw,sh,-W/2+pad,-H/2+pad,pw,ph);
   if(!ALBC){ c.save(); c.strokeStyle=t.accent; c.globalAlpha=.7; c.lineWidth=2; const L=34, x0=-W/2+pad-10, y0=-H/2+pad-10, x1=-W/2+pad+pw+10, y1=-H/2+pad+ph+10; c.beginPath(); c.moveTo(x0,y0+L); c.lineTo(x0,y0); c.lineTo(x0+L,y0); c.moveTo(x1-L,y0); c.lineTo(x1,y0); c.lineTo(x1,y0+L); c.moveTo(x0,y1-L); c.lineTo(x0,y1); c.lineTo(x0+L,y1); c.moveTo(x1-L,y1); c.lineTo(x1,y1); c.lineTo(x1,y1-L); c.stroke(); c.restore(); }
   c.textAlign='center'; c.fillStyle='#2b2b3a';
@@ -4300,7 +4301,7 @@ function capa(c,t,f,foto){
   else if(t._orn) c.drawImage(t._orn, PW/2-260, 760, 520, 520);
   c.fillStyle=t.muted; c.font='600 30px Fredoka, sans-serif'; c.fillText('com o carinho de todos os convidados', PW/2, PH-120);
 }
-function cobrir(c,im,x,y,w,h){ const ar=w/h, iar=im.width/im.height; let sx=0,sy=0,sw=im.width,sh=im.height; if(iar>ar){ sw=im.height*ar; sx=(im.width-sw)/2; } else { sh=im.width/ar; sy=(im.height-sh)/2; } c.drawImage(im,sx,sy,sw,sh,x,y,w,h); }
+function cobrir(c,im,x,y,w,h){ const ar=w/h, iar=im.width/im.height; let sx=0,sy=0,sw=im.width,sh=im.height; if(iar>ar){ sw=im.height*ar; sx=(im.width-sw)/2; } else { sh=im.width/ar; sy=(im.height-sh)*.18; } c.drawImage(im,sx,sy,sw,sh,x,y,w,h); }
 async function temaPdf(f){ const t={...temaDe(f)}; await fontesProntas(t); if(t.fundo) t._fundo=await carregarImg(t.fundo,1800); t._enfs=[]; for(const p of (t.enfeites||(t.enfeite?[t.enfeite]:[]))){ const im=await carregarImg(p,900); if(im) t._enfs.push(im); } t._enf=t._enfs[0]||null; if(EXT(f).logo) t._logo=await carregarImg(EXT(f).logo,600); try{ const cvp=f.id?await rpc('fe_convite_img',{p_festa:f.id}):null; if(cvp) t._conv=await carregarImg(cvp,1600); }catch(e){} t._orn=await ornImg(f.tema, t.accent); return t; }
 async function capaCanvas(f, posts, t){
   ALBC=CORP(f); t=t||await temaPdf(f); const hist=t.fotos||[], fotos=posts.filter(p=>p.tipo==='foto');
@@ -4345,8 +4346,8 @@ async function pdfAlbum(f, posts, prog){
     prog(`Diagramando as fotos… página ${n+1}`); const [cv,c]=pg(); papel(c,t,f,n+1); let top=140; if(bi===0) top=tituloSecao(c,t,ALBC?'Registros do evento':'Momentos',ALBC?'fotos enviadas pelos participantes':'os cliques da festa',230);
     const g=imgs.slice(off,off+q); off+=q; const avail=PH-120-top; const cap=x=>[x.p.texto||'', x.p.autor?`por ${x.p.autor}`:''];
     if(q===1){ const land=g[0].im.width>=g[0].im.height; polaroid(c,g[0].im,PW/2,top+avail/2,land?960:740,Math.min(land?720:980,avail-170),-1.5,...cap(g[0]),t); }
-    else if(q===2){ const h=(avail-30)/2, ph=Math.min(h-150,560), pw=Math.round(ph*4/3); polaroid(c,g[0].im,PW/2-90,top+h/2+8,pw,ph,-3,...cap(g[0]),t); polaroid(c,g[1].im,PW/2+90,top+h+30+h/2-8,pw,ph,2.5,...cap(g[1]),t); }
-    else { const h1=avail*.54, h2=avail-h1, ph=Math.min(h1-150,520), pw=Math.round(ph*4/3); polaroid(c,g[0].im,PW/2,top+h1/2,pw,ph,-2,...cap(g[0]),t); const ph2=Math.min(h2-140,360), pw2=Math.min(470,Math.round(ph2*1.1)); polaroid(c,g[1].im,PW/2-285,top+h1+h2/2,pw2,ph2,3,...cap(g[1]),t); polaroid(c,g[2].im,PW/2+285,top+h1+h2/2+12,pw2,ph2,-2.5,...cap(g[2]),t); }
+    else if(q===2){ const h=(avail-30)/2, ph=Math.min(h-150,560), PWd=x=>Math.round(ph*(x.im.height>x.im.width*1.08?.78:4/3)); polaroid(c,g[0].im,PW/2-90,top+h/2+8,PWd(g[0]),ph,-3,...cap(g[0]),t); polaroid(c,g[1].im,PW/2+90,top+h+30+h/2-8,PWd(g[1]),ph,2.5,...cap(g[1]),t); }
+    else { const h1=avail*.54, h2=avail-h1, ph=Math.min(h1-150,520), pw=Math.round(ph*(g[0].im.height>g[0].im.width*1.08?.78:4/3)); polaroid(c,g[0].im,PW/2,top+h1/2,pw,ph,-2,...cap(g[0]),t); const ph2=Math.min(h2-140,360), pw2=Math.min(470,Math.round(ph2*1.1)); polaroid(c,g[1].im,PW/2-285,top+h1+h2/2,pw2,ph2,3,...cap(g[1]),t); polaroid(c,g[2].im,PW/2+285,top+h1+h2/2+12,pw2,ph2,-2.5,...cap(g[2]),t); }
     add(cv);
   }
   // áudios e vídeos: cartão com QR para ouvir/assistir
@@ -4358,7 +4359,7 @@ async function pdfAlbum(f, posts, prog){
       const y=top+j*(h+30), x=90, w=PW-180;
       c.save(); c.shadowColor='rgba(0,0,0,.15)'; c.shadowBlur=20; c.shadowOffsetY=8; rr(c,x,y,w,h,32); c.fillStyle='#fff'; c.fill(); c.restore();
       const thumbW=Math.min(h-60, 340), tx=x+30, ty=y+30;
-      if(p.tipo==='video' && p.thumb){ const im=await carregarImg(p.thumb,900); if(im){ c.save(); rr(c,tx,ty,thumbW,h-60,22); c.clip(); const ar=thumbW/(h-60), iar=im.width/im.height; let sx=0,sy=0,sw=im.width,sh=im.height; if(iar>ar){ sw=im.height*ar; sx=(im.width-sw)/2; } else { sh=im.width/ar; sy=(im.height-sh)/2; } c.drawImage(im,sx,sy,sw,sh,tx,ty,thumbW,h-60); c.restore();
+      if(p.tipo==='video' && p.thumb){ const im=await carregarImg(p.thumb,900); if(im){ c.save(); rr(c,tx,ty,thumbW,h-60,22); c.clip(); const ar=thumbW/(h-60), iar=im.width/im.height; let sx=0,sy=0,sw=im.width,sh=im.height; if(iar>ar){ sw=im.height*ar; sx=(im.width-sw)/2; } else { sh=im.width/ar; sy=(im.height-sh)*.18; } c.drawImage(im,sx,sy,sw,sh,tx,ty,thumbW,h-60); c.restore();
         c.fillStyle='rgba(0,0,0,.45)'; c.beginPath(); c.arc(tx+thumbW/2,ty+(h-60)/2,56,0,6.28); c.fill(); c.fillStyle='#fff'; c.beginPath(); c.moveTo(tx+thumbW/2-18,ty+(h-60)/2-28); c.lineTo(tx+thumbW/2+30,ty+(h-60)/2); c.lineTo(tx+thumbW/2-18,ty+(h-60)/2+28); c.fill(); } }
       else { rr(c,tx,ty,thumbW,h-60,22); const gg=c.createLinearGradient(tx,ty,tx+thumbW,ty+h); gg.addColorStop(0,t.accent); gg.addColorStop(1,t.accent2); c.fillStyle=gg; c.fill(); iconeGrav(c, p.tipo, tx+thumbW/2, ty+(h-60)/2); }
       const QS=230, qx=x+w-30-QS, qy=y+(h-QS)/2-14; const qr=qrCanvas(midia(p.caminho), 480); c.drawImage(qr,qx,qy,QS,QS); c.textAlign='center'; c.fillStyle='#777'; c.font='600 22px Fredoka, sans-serif'; c.fillText(p.tipo==='video'?'assistir':'ouvir', qx+QS/2, qy+QS+30);

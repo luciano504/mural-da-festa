@@ -3398,13 +3398,26 @@ async function vCardapio(){
 let _pdfjs=null;
 function carregarPdfJs(){ return _pdfjs || (_pdfjs=new Promise((res,rej)=>{ const sc=document.createElement('script'); sc.src='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js'; sc.onload=()=>{ window.pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'; res(window.pdfjsLib); }; sc.onerror=()=>{ _pdfjs=null; rej(new Error('pdfjs')); }; document.head.appendChild(sc); })); }
 const EH_VIDEO = p => /\.(mp4|webm|mov|m4v)$/i.test(String(p||''));
+function avisoPowerPoint(){
+  abrirFolha(`<h3 style="margin:0 0 6px">Salve a apresentação em PDF</h3>
+    <p class="muted" style="margin:0 0 12px">O telão lê PDF. Salvando em PDF no próprio programa, cada slide sai idêntico: fontes, cores e imagens.</p>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div><b>PowerPoint no computador</b><br>Arquivo → Salvar como → em Tipo, escolha PDF → Salvar.</div>
+      <div><b>PowerPoint no celular</b><br>Toque nos três pontinhos → Exportar → PDF.</div>
+      <div><b>Google Apresentações</b><br>Arquivo → Fazer download → Documento PDF.</div>
+      <div><b>Keynote (Mac ou iPhone)</b><br>Arquivo → Exportar para → PDF.</div>
+    </div>
+    <p class="muted" style="margin:12px 0 0;font-size:14px">Depois toque de novo em Enviar slides e escolha o PDF. Animações e vídeos dentro dos slides não passam para o PDF: os vídeos podem ser enviados à parte, no botão de vídeo.</p>
+    <div class="foot" style="justify-content:center"><button class="btn" id="ppOk">Entendi</button></div>`);
+  $('ppOk').onclick=fecharFolha;
+}
 async function vApresentacao(){
   ADM.view='apresentacao'; const f=FESTA; let est={}; try{ est=await rpc('fe_tv_estado',{p_festa:f.id})||{}; }catch(e){}
   const slides=est.slides||[];
   $('vw').innerHTML=`<div class="card" style="padding:18px"><h3 style="margin:0 0 4px">🎤 Apresentação no telão <span class="muted" style="font-size:14px;font-weight:500">(opcional)</span></h3>
       <p class="muted" style="margin:0 0 12px">Envie slides (PDF ou imagens) e vídeos para reproduzir no telão. Reordene os itens pelas setas e controle a exibição ao vivo por aqui.</p>
       <details style="margin:0 0 12px"><summary style="cursor:pointer;font-weight:600">Quer PowerPoint animado? Exporte como vídeo</summary><p class="muted" style="margin:8px 0 0">No PowerPoint: <b>Arquivo › Exportar › Criar um Vídeo</b>, qualidade <b>Full HD (1080p)</b>, escolha os segundos por slide e clique em <b>Criar Vídeo</b>. Envie o arquivo MP4 aqui: animações, transições e vídeos do PowerPoint aparecem no telão. Cada vídeo pode ter até 50 MB.</p></details>
-      <div class="row"><label class="btn" style="position:relative">📄 Enviar slides (PDF/imagens)<input type="file" id="apF" accept="application/pdf,image/*" multiple style="position:absolute;inset:0;opacity:0;cursor:pointer"></label><label class="btn alt" style="position:relative">🎬 Enviar vídeo<input type="file" id="apV" accept="video/mp4,video/webm,video/quicktime,.mp4,.mov,.webm,.m4v" style="position:absolute;inset:0;opacity:0;cursor:pointer"></label>${slides.length?'<button class="btn ghost sm" id="apLimpa">Tirar apresentação</button>':''}<span class="msg" id="apM"></span></div></div>
+      <div class="row"><label class="btn" style="position:relative">📄 Enviar slides (PDF/imagens)<input type="file" id="apF" accept="application/pdf,image/*,.pptx,.ppt,.pps,.ppsx,.key,.odp" multiple style="position:absolute;inset:0;opacity:0;cursor:pointer"></label><label class="btn alt" style="position:relative">🎬 Enviar vídeo<input type="file" id="apV" accept="video/mp4,video/webm,video/quicktime,.mp4,.mov,.webm,.m4v" style="position:absolute;inset:0;opacity:0;cursor:pointer"></label>${slides.length?'<button class="btn ghost sm" id="apLimpa">Tirar apresentação</button>':''}<span class="msg" id="apM"></span></div></div>
     <div class="card" style="padding:18px;margin-top:12px"><div class="row" style="justify-content:space-between"><h3 style="margin:0">📺 Controle do telão</h3><span class="muted" id="apEst"></span></div>
       <div class="ctrl" style="margin-top:12px">
         <button class="btn" data-m="apresentacao" ${slides.length?'':'disabled'}>▶ Mostrar slides</button>
@@ -3434,7 +3447,7 @@ async function vApresentacao(){
     try{ M.className='msg'; M.innerHTML='<span class="spin"></span> Enviando o vídeo… (pode levar um minuto)'; const cam=await subir(file,'apresentacao/video',ext==='mov'?'mov':ext,ct); await salvarLista([...slides, cam], 'Vídeo adicionado no fim da apresentação 🎬'); }
     catch(err){ M.className='msg err'; M.textContent='Não consegui enviar o vídeo. '+ERR(err); } };
   if($('apLimpa')) $('apLimpa').onclick=async()=>{ try{ await rpc('fe_admin_slides',{p_slug:SLUG,p_pin:PIN,p_slides:[]}); toast('Apresentação retirada.'); vApresentacao(); }catch(e){ toast(ERR(e)); } };
-  $('apF').onchange=async e=>{ const fs=[...e.target.files]; e.target.value=''; if(!fs.length) return; const M=$('apM'); const caminhos=[];
+  $('apF').onchange=async e=>{ const fs=[...e.target.files]; e.target.value=''; if(!fs.length) return; if(fs.some(x=>/\.(pptx?|ppsx?|key|odp)$/i.test(x.name))){ avisoPowerPoint(); return; } const M=$('apM'); const caminhos=[];
     try{
       for(const file of fs){
         if(/pdf/.test(file.type) || /\.pdf$/i.test(file.name)){

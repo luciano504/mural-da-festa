@@ -1099,7 +1099,7 @@ body.app-neutro .top h1 em{font-family:'Fraunces',Georgia,serif;font-weight:500;
 .alb-capa{width:min(520px,100%);margin:20px auto 0;aspect-ratio:1240/1754;display:grid;place-items:center}
 .alb-capa img{width:100%;height:100%;object-fit:contain;border-radius:8px;box-shadow:0 18px 44px -16px rgba(0,0,0,.45)}
 .alb-acts{justify-content:center;margin:20px 0 6px;gap:10px;flex-wrap:wrap}
-.alb-sec{margin-top:44px} .alb-sec h2{font-family:var(--display, inherit);color:var(--accent);text-align:center;font-size:clamp(30px,6vw,44px);font-weight:400;margin:0} .alb-sec>p{text-align:center;margin:4px 0 18px}
+.alb-sec{margin-top:44px} .alb-sec h2{font-family:var(--display, inherit);color:var(--accent);text-align:center;font-size:clamp(30px,6vw,44px);font-weight:400;margin:0} .alb-sec>p{text-align:center;margin:4px 0 30px}
 .alb-folhas{display:flex;flex-direction:column;gap:22px;align-items:center}
 .alb-folha{width:min(640px,100%);aspect-ratio:1240/1754;background:linear-gradient(180deg,var(--surface,#fff),color-mix(in srgb,var(--surface,#fff) 70%, var(--bg2,#eee)));border-radius:6px;box-shadow:0 14px 34px -18px rgba(0,0,0,.4);padding:7% 7%;display:grid;gap:5%;box-sizing:border-box;overflow:hidden}
 .alb-folha.n1{grid-template-rows:1fr;place-items:center}
@@ -1115,7 +1115,7 @@ body.app-neutro .top h1 em{font-family:'Fraunces',Georgia,serif;font-weight:500;
 .alb-folha.corp .alb-pol::before,.alb-folha.corp .alb-pol::after{display:none}
 .alb-pol figcaption{text-align:center;padding:6px 4px 8px;font-family:Caveat,cursive;line-height:1.1;color:#2b2b3a;min-height:2.2em}
 .alb-folha.corp .alb-pol figcaption{font-family:inherit}
-.alb-pol figcaption span{display:block;font-size:clamp(15px,3.2vw,22px);font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap} .alb-pol figcaption small{display:block;font-size:clamp(12px,2.4vw,16px);color:#6b6b80}
+.alb-pol figcaption span{display:block;font-size:clamp(15px,3.2vw,22px);font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap} .alb-pol figcaption small{display:block;font-size:clamp(13px,2.6vw,17px);color:#3f3f50;font-weight:600}
 .alb-fotos{columns:3 220px;column-gap:14px} .alb-fotos figure{break-inside:avoid;margin:0 0 14px;background:#fff;padding:10px 10px 12px;border-radius:4px;box-shadow:0 6px 18px -8px rgba(0,0,0,.3)}
 .alb-fotos img{width:100%;display:block;border-radius:2px} .alb-fotos figcaption{font-size:15px;color:#2b2b3a;padding-top:8px;line-height:1.35} .alb-fotos small{display:block;color:#6b6b80;margin-top:2px}
 .alb-recs{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px} .alb-recs blockquote{margin:0;background:var(--surface,#fff);border:1px solid var(--line,#e6e6ee);border-radius:14px;padding:18px 20px}
@@ -4244,7 +4244,7 @@ function polaroid(c,im,cx,cy,pw,ph,rot,cap1,cap2,t){
   c.textAlign='center'; c.fillStyle='#2b2b3a';
   if(cap1){ let fs=44; c.font=`700 ${fs}px ${FC()}`; while(fs>32 && c.measureText(cap1).width>W-50){ fs-=2; c.font=`700 ${fs}px ${FC()}`; } let ls=wrap(c,cap1,W-50); if(ls.length>2){ ls=ls.slice(0,2); ls[1]+='…'; }
     if(ls.length===1) c.fillText(ls[0],0,H/2-bottom+60); else { c.font=`700 ${Math.min(fs,34)}px ${FC()}`; c.fillText(ls[0],0,H/2-bottom+38); c.fillText(ls[1],0,H/2-bottom+70); } }
-  if(cap2){ c.font=`500 28px ${FC()}`; c.fillStyle='#6b6b80'; c.fillText(cap2,0,H/2-18); }
+  if(cap2){ c.font=`600 28px ${FC()}`; c.fillStyle='#45455a'; c.fillText(cap2,0,H/2-18); }
   c.restore();
 }
 async function carregarImg(path, max=1400){ try{ const b=await fetch(midia(path)).then(r=>{ if(!r.ok) throw 0; return r.blob(); }); const bmp=await createImageBitmap(b); const k=Math.min(1,max/Math.max(bmp.width,bmp.height)); const cv=document.createElement('canvas'); cv.width=Math.round(bmp.width*k); cv.height=Math.round(bmp.height*k); cv.getContext('2d').drawImage(bmp,0,0,cv.width,cv.height); return cv; }catch(e){ return null; } }
@@ -4284,6 +4284,7 @@ function capaConvite(c,t,f){
   if(pre){ c.fillStyle=t.muted; c.font=`italic 400 50px ${fonte(t)}`; c.fillText(pre, PW/2, y+30); y+=78; }
   c.fillStyle=ac; c.font=`400 ${fs}px ${fonte(t)}`; ls.forEach((l,i)=>c.fillText(l, PW/2, y+fs*.85+i*fs*1.08)); y+=ls.length*fs*1.08+40;
   if(quando){ c.fillStyle=t.ink; c.globalAlpha=.8; c.font='500 32px Figtree, Fredoka, sans-serif'; c.fillText(quando, PW/2, y+20); c.globalAlpha=1; }
+  c.fillStyle=t.ink; c.globalAlpha=.6; c.font='500 26px Figtree, Fredoka, sans-serif'; c.fillText(CORP(f)?'com as fotos e mensagens de toda a equipe':'com o carinho de todos os convidados', PW/2, PH-150); c.globalAlpha=1;
 }
 function capa(c,t,f,foto){
   if(t._conv) return capaConvite(c,t,f);

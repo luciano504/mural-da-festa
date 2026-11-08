@@ -901,6 +901,35 @@ button.kpi{cursor:pointer} button.kpi:hover{border-color:var(--accent)}
 /* logomarca, aviso fixado, contagem e desafios */
 .tv-start{z-index:50} .ds-top h2.sec{justify-content:flex-start;text-align:left}
 body.com-aviso .tv-top{margin-top:5.5vh}
+.mod-top{display:flex;flex-direction:column;gap:10px;margin-bottom:12px;position:sticky;top:0;z-index:15;background:var(--bg);padding:8px 0}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:4px;border-radius:14px;background:var(--surface);border:1px solid var(--line);width:100%}
+.seg button{border:0;background:transparent;border-radius:10px;padding:10px 2px;font:inherit;font-weight:600;font-size:14px;white-space:nowrap;color:var(--muted);cursor:pointer;min-height:44px}
+.seg button b{display:inline-block;min-width:20px;margin-left:3px;padding:1px 6px;border-radius:999px;background:color-mix(in srgb,var(--accent) 12%, transparent);color:var(--accent);font-size:13px}
+.seg button[aria-pressed=true]{background:var(--accent);color:var(--on,#fff)} .seg button[aria-pressed=true] b{background:rgba(255,255,255,.22);color:inherit}
+.mod-top #aprTodos{align-self:flex-start;min-height:44px;padding:10px 24px}
+@media (max-width:760px){ .mod-top #aprTodos{align-self:stretch;width:100%;min-height:48px;font-size:16px} }
+.livre-det{margin:0 0 12px} .livre-det summary{list-style:none;display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;color:var(--muted);padding:6px 2px} .livre-det summary::-webkit-details-marker{display:none} .livre-det summary svg{width:18px;height:18px;flex:none}
+.livre-det[open] summary{color:var(--ink)} .livre-det .livre-box{background:var(--surface);border:1px solid var(--line);border-radius:14px;margin-top:6px}
+.vw-top{display:none}
+.dia-festa #roteiro{display:none}
+.desc-rec{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:4px!important} .desc-rec.aberta{display:block}
+.desc-mais{border:0;background:transparent;color:var(--accent);font:inherit;font-size:14px;font-weight:600;padding:2px 0 10px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+@media (max-width:760px){
+  .vw-top{display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:16;background:var(--bg);padding:8px 0;margin:4px 0 6px}
+  .vw-top .vw-menu{display:inline-flex;align-items:center;gap:2px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:7px 12px 7px 8px;font:inherit;font-weight:600;font-size:14px;min-height:40px;cursor:pointer} .vw-top svg{width:18px;height:18px}
+  .vw-top b{font-size:17px}
+  .mod-top{top:56px}
+  .modgrid{display:flex;flex-direction:column;gap:10px}
+  .card.mod{display:grid;grid-template-columns:84px minmax(0,1fr) auto;grid-template-areas:"m i a";align-items:center;gap:0 12px;padding:10px}
+  .card.mod .media{grid-area:m;width:84px;height:84px;border-radius:10px;overflow:hidden;background:var(--line)} .card.mod .media img{width:100%;height:100%;object-fit:cover}
+  .card.mod > div:not(.media):not(.info):not(.acts2){display:none}
+  .card.mod .info{grid-area:i;display:flex;flex-direction:column;gap:2px;padding:0;font-size:14px;min-width:0} .card.mod .info span:first-child{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .card.mod .acts2{grid-area:a;display:flex;flex-direction:column;gap:6px;padding:0} .card.mod .acts2 .btn{min-height:44px;min-width:96px;font-size:15px}
+  .card.mod.t-texto,.card.mod.t-audio,.card.mod.t-video{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"m a" "i a"}
+  .card.mod.t-texto .media,.card.mod.t-audio .media,.card.mod.t-video .media{width:auto;height:auto;background:transparent;border-radius:0}
+  .card.mod.t-texto blockquote{margin:0 0 4px;font-size:16px;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+  .card.mod.t-video video{width:100%;max-height:180px;border-radius:10px;background:#000} .card.mod.t-audio .media>div{padding:0!important} .card.mod.t-audio audio{width:100%;margin-top:4px}
+}
 .snav{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:14px;padding:0 16px;height:52px;background:var(--accent);color:var(--on,#fff);box-shadow:0 2px 12px -6px rgba(0,0,0,.35)}
 .snav a{color:inherit;text-decoration:none}
 .snav-m{font-family:var(--display);font-size:24px;line-height:1;flex:none;opacity:.95}
@@ -2943,11 +2972,11 @@ function telaLogin(titulo, sub, entrar, esqueci){
     try{ const ok=await entrar(p); if(ok===false){ $('lgM').className='msg err'; $('lgM').textContent='Senha incorreta.'; } }catch(err){ $('lgM').className='msg err'; $('lgM').textContent=ERR(err); } };
 }
 function painelAdmin(){
-  const f=FESTA;
-  $('app').innerHTML=`<div class="wrap">
-   <div class="top"><h1>${CORP(f)?'Organizador':'Anfitrião'} · <em>${esc(f.homenageado||f.titulo)}</em></h1><div class="row"><a class="btn ghost sm" href="${linkFesta(f.slug)}" target="_blank" rel="noopener">👀 Ver como convidado</a><a class="btn ghost sm" href="${linkFesta(f.slug,'telao')}&teste" target="_blank" rel="noopener">🧪 Testar telão</a><button class="btn sm" type="button" id="abrirTv">📺 Abrir telão</button><button class="btn ghost sm" id="sair">Sair</button></div></div>
+  const f=FESTA; const hojeA=new Date().toLocaleDateString('sv'), DIA=!!(f.data && f.data<=hojeA && (new Date(hojeA)-new Date(f.data))/864e5<=1);
+  $('app').innerHTML=`<div class="wrap${DIA?' dia-festa':''}">
+   <div class="top"><h1>${CORP(f)?'Organizador':'Anfitrião'} · <em>${esc(f.homenageado||f.titulo)}</em></h1><div class="row"><a class="btn ghost sm" href="${linkFesta(f.slug)}" target="_blank" rel="noopener">👀 Ver como convidado</a><a class="btn ghost sm" href="${linkFesta(f.slug,'telao')}&teste" target="_blank" rel="noopener">🧪 Testar telão</a><button class="btn sm" type="button" id="abrirTv">📺 Abrir telão</button><button class="btn ghost sm" type="button" id="btAjudaTop">Ajuda</button><button class="btn ghost sm" id="sair">Sair</button></div></div>
    ${f.plano==='teste'?`<div class="teste-bar"><div><b>🎈 Modo grátis</b><br><span style="font-size:14px">Faça o upgrade para mais diversão: mais homenagens, áudios e vídeos maiores, todos os arquivos e sem o selo no telão.</span></div><div class="row"><button class="btn sm" id="btPlano">⬆️ Fazer upgrade</button><button class="btn ghost sm" id="btAtivar">🔓 Tenho um código</button></div></div>`
-     :`<div class="plano-bar"><div><b>${ICONE_PLANO[f.plano]||'⭐'} Plano ${esc(NOME_PLANO[f.plano]||f.plano)}</b> · até ${f.max_posts} ${CORP(f)?'mensagens':'homenagens'} · áudio e vídeo de até ${segTxt(f.max_seg)}${f.expira_em?` · no ar até ${new Date(f.expira_em+'T12:00:00').toLocaleDateString('pt-BR')}`:''}</div>${f.plano!=='grande'?'<button class="btn ghost sm" id="btPlano">⬆️ Mudar de plano</button>':''}</div>`}
+     :DIA?'':`<div class="plano-bar"><div><b>${ICONE_PLANO[f.plano]||'⭐'} Plano ${esc(NOME_PLANO[f.plano]||f.plano)}</b> · até ${f.max_posts} ${CORP(f)?'mensagens':'homenagens'} · áudio e vídeo de até ${segTxt(f.max_seg)}${f.expira_em?` · no ar até ${new Date(f.expira_em+'T12:00:00').toLocaleDateString('pt-BR')}`:''}</div>${f.plano!=='grande'?'<button class="btn ghost sm" id="btPlano">⬆️ Mudar de plano</button>':''}</div>`}
    <div class="tvbar" id="tvBar"></div>
    <div id="roteiro"></div>
    ${f.data && f.data < new Date().toLocaleDateString('sv') ? `<div class="card seucta"><div><h2>✨ O resumo ${CORP(f)?'do seu evento':'da sua festa'} está pronto</h2><p>Stories com os números e o recado mais amado da noite, prontos para postar e mandar no WhatsApp.</p></div><button class="btn" data-ir="recordacoes" style="font-size:18px;padding:14px 24px">Ver o resumo →</button></div>`:''}
@@ -2969,13 +2998,16 @@ function painelAdmin(){
    </div>
    <div id="vw"></div></div>`;
   (()=>{ const a=$('abasTop'), v=$('vw'); if(a && v && !a.parentNode.classList.contains('adm-grid')){ const g=document.createElement('div'); g.className='adm-grid'; a.parentNode.insertBefore(g,a); g.appendChild(a); g.appendChild(v); } })();
+  $('btAjudaTop').onclick=()=>abrirAjuda();
   $('sair').onclick=()=>{ store.sset('mf_pin_'+SLUG,null); store.set('mf_pin_'+SLUG,null); location.reload(); };
   $('abrirTv').onclick=()=>{ store.set('mf_r_tv_'+f.slug,'1'); abrirTelaoJanela(f); pintarRoteiro(f); };
   document.querySelectorAll('.top a[href*="telao"]').forEach(a=>a.addEventListener('click',()=>{ store.set('mf_r_tv_'+f.slug,'1'); setTimeout(()=>pintarRoteiro(f),300); }));
   document.querySelectorAll('#abasTop button[data-v]').forEach(b=>{ const ic=AICO[b.dataset.v]; if(ic) b.insertAdjacentHTML('afterbegin',`<span class="aic">${ic}</span>`); });
   ligarTvBar(f);
   const abas=$('abasTop');
-  abas.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; if(ADM.abasOk && matchMedia('(max-width:1099px)').matches) setTimeout(()=>{ const v=$('vw'); if(v) v.scrollIntoView({behavior:'smooth',block:'start'}); },60); abas.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed', x===b)); if(b.dataset.v==='meutema' && $('seuCta')) $('seuCta').remove(); ({pix:vPix, moderar:vModerar, festa:vFesta, meutema:vMeuTema, compartilhar:vCompartilhar, recordacoes:vRecordacoes, cardapio:vCardapio, apresentacao:vApresentacao, sorteio:vSorteio, quiz:vQuiz, enquete:vEnquete, bingo:vBingo, interacoes:vInteracoes, evento:vEvento})[b.dataset.v](); };
+  abas.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; if(ADM.abasOk && matchMedia('(max-width:1099px)').matches) setTimeout(()=>{ const v=$('vw'); if(v) v.scrollIntoView({behavior:'smooth',block:'start'}); },60); abas.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed', x===b)); if(b.dataset.v==='meutema' && $('seuCta')) $('seuCta').remove(); ({pix:vPix, moderar:vModerar, festa:vFesta, meutema:vMeuTema, compartilhar:vCompartilhar, recordacoes:vRecordacoes, cardapio:vCardapio, apresentacao:vApresentacao, sorteio:vSorteio, quiz:vQuiz, enquete:vEnquete, bingo:vBingo, interacoes:vInteracoes, evento:vEvento})[b.dataset.v](); vwTopo(b); };
+  const vwTopo=b=>{ const v=$('vw'); if(!v) return; let t=$('vwTop'); if(!t){ t=document.createElement('div'); t.id='vwTop'; t.className='vw-top'; t.innerHTML='<button type="button" class="vw-menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>Menu</button><b></b>'; t.querySelector('button').onclick=()=>{ const a=$('abasTop'); if(a) window.scrollTo({top:a.getBoundingClientRect().top+scrollY-10,behavior:'smooth'}); }; } v.parentNode.insertBefore(t,v); t.querySelector('b').textContent=(b.textContent||'').replace(/\s*\d+\s*$/,'').trim(); };
+  new MutationObserver(()=>recolherDescricoes($('vw'))).observe($('vw'),{childList:true,subtree:true});
   const ir=v=>{ const b=abas.querySelector(`[data-v="${v}"]`); if(b) b.click(); };
   document.querySelectorAll('[data-ir]').forEach(b=>b.onclick=()=>ir(b.dataset.ir));
   pintarRoteiro(f, ir);
@@ -2985,7 +3017,7 @@ function painelAdmin(){
   if(pidQ && /^[0-9a-f-]{36}$/.test(pidQ)) setTimeout(()=>conferirPagamento(pidQ),300);
   else if(pidS && /^[0-9a-f-]{36}$/.test(pidS) && f.plano==='teste') fetch(FN_PAG,{method:'POST',headers:{'Content-Type':'application/json',apikey:SUPABASE_KEY},body:JSON.stringify({acao:'conferir',pagamento:pidS})}).then(r=>r.json()).then(async j=>{ if(j.status==='approved'){ FESTA=await carregarFesta(SLUG); store.set('mf_pag_'+f.slug,null); toast('Pagamento confirmado! Festa liberada 🎉',4000); painelAdmin(); } }).catch(()=>{});
 
-  const abaIni = Q.get('aba') || (CORP(f) ? 'evento' : !f.custom ? 'meutema' : 'moderar');
+  const abaIni = Q.get('aba') || (DIA ? 'moderar' : CORP(f) ? 'evento' : !f.custom ? 'meutema' : 'moderar');
   ADM.abasOk=false; ir(['pix','meutema','moderar','festa','compartilhar','recordacoes','cardapio','apresentacao','sorteio','quiz','enquete','bingo','interacoes','evento'].includes(abaIni) ? abaIni : 'moderar'); ADM.abasOk=true; if(ADM.view!=='moderar') carregarAdmPosts();
   setInterval(()=>{ if(!document.hidden && ADM.view==='moderar') carregarAdmPosts(); }, 12000);
 }
@@ -3005,30 +3037,40 @@ async function carregarAdmPosts(){
 }
 function vModerar(){
   ADM.view='moderar';
-  $('vw').innerHTML=`<div class="row" style="justify-content:space-between;margin-bottom:12px"><div class="tabs" id="abasMod" style="margin:0">
-     <button data-s="pendente" aria-pressed="${ADM.aba==='pendente'}">⏳ Aguardando</button><button data-s="aprovado" aria-pressed="${ADM.aba==='aprovado'}">✅ No telão</button><button data-s="oculto" aria-pressed="${ADM.aba==='oculto'}">🙈 Ocultos</button></div>
-     <button class="btn ok" id="aprTodos" hidden>✓ Aprovar todas</button></div>
-     ${FESTA.moderacao!==false?`<div class="card livre-box"><b>Entram direto no telão, sem aprovação:</b><div class="livre-op">${[['foto','Fotos'],['texto','Recados'],['audio','Áudios'],['video','Vídeos']].map(([k,t])=>`<label><input type="checkbox" data-livre="${k}" ${(EXT(FESTA).livre||[]).includes(k)?'checked':''}> ${t}</label>`).join('')}</div><p class="livre-nota">O que não estiver marcado espera a sua aprovação aqui.</p></div>`:''}
+  const nmL={foto:'Fotos',texto:'Recados',audio:'Áudios',video:'Vídeos'}, resumoL=()=>{ const L=EXT(FESTA).livre||[]; return L.length?'Entram direto: '+L.map(k=>nmL[k]).join(', '):'Tudo passa pela sua aprovação'; };
+  $('vw').innerHTML=`<div class="mod-top"><div class="seg" id="abasMod">
+     <button data-s="pendente" aria-pressed="${ADM.aba==='pendente'}">Aguardando</button><button data-s="aprovado" aria-pressed="${ADM.aba==='aprovado'}">No telão</button><button data-s="oculto" aria-pressed="${ADM.aba==='oculto'}">Ocultos</button></div>
+     <button class="btn ok" id="aprTodos" hidden>Aprovar todas</button></div>
+     ${FESTA.moderacao!==false?`<details class="livre-det"><summary><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span id="livreRes">${resumoL()}</span></summary><div class="livre-box"><b>Entram direto no telão, sem aprovação:</b><div class="livre-op">${[['foto','Fotos'],['texto','Recados'],['audio','Áudios'],['video','Vídeos']].map(([k,t])=>`<label><input type="checkbox" data-livre="${k}" ${(EXT(FESTA).livre||[]).includes(k)?'checked':''}> ${t}</label>`).join('')}</div><p class="livre-nota">O que não estiver marcado espera a sua aprovação aqui.</p></div></details>`:''}
      <div id="modList"><div class="empty"><span class="spin"></span></div></div>`;
-  document.querySelectorAll('[data-livre]').forEach(c=>c.onchange=async()=>{ const L=[...document.querySelectorAll('[data-livre]:checked')].map(x=>x.dataset.livre); try{ await extrasSet('livre', L.length?L:null); toast(L.length?'Pronto. O que você marcou entra direto no telão.':'Tudo volta a passar pela sua aprovação.'); }catch(e){ c.checked=!c.checked; toast(ERR(e)); } });
+  document.querySelectorAll('[data-livre]').forEach(c=>c.onchange=async()=>{ const L=[...document.querySelectorAll('[data-livre]:checked')].map(x=>x.dataset.livre); try{ await extrasSet('livre', L.length?L:null); toast(L.length?'Pronto. O que você marcou entra direto no telão.':'Tudo volta a passar pela sua aprovação.'); if($('livreRes')) $('livreRes').textContent=resumoL(); }catch(e){ c.checked=!c.checked; toast(ERR(e)); } });
   $('abasMod').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; ADM.aba=b.dataset.s; $('abasMod').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b)); renderModeracao(); };
-  $('aprTodos').onclick=async()=>{ const ids=ADM.posts.filter(p=>p.status==='pendente').map(p=>p.id); if(!ids.length) return; await moderar(ids,'aprovado'); toast(`${ids.length} homenage${ids.length>1?'ns':'m'} no telão! 🎉`); };
+  $('aprTodos').onclick=()=>{ const ids=ADM.posts.filter(p=>p.status==='pendente').map(p=>p.id); if(!ids.length) return; const q=ids.length, nm=CORP(FESTA)?(q>1?'mensagens':'mensagem'):(q>1?'homenagens':'homenagem');
+    abrirFolha(`<h3>Aprovar ${q} ${nm} de uma vez?</h3><p class="muted" style="margin-top:0">Todas vão para o telão agora, sem você ver uma por uma.</p><div class="foot"><button class="btn ghost" id="atNao">Ver uma por uma</button><button class="btn ok" id="atSim">Aprovar ${q}</button></div>`);
+    $('atNao').onclick=fecharFolha; $('atSim').onclick=async()=>{ fecharFolha(); await moderar(ids,'aprovado'); toast(`${q} ${nm} no telão.`); }; };
   carregarAdmPosts();
+}
+function recolherDescricoes(root){
+  if(!root || !matchMedia('(max-width:760px)').matches) return;
+  root.querySelectorAll('.card > h3 + p, .card > h3 + p.muted, .card > div > h3 + p').forEach(p=>{
+    if(p.dataset.dc || p.closest('.mod,.mod-it,.alb-ent') || (p.textContent||'').length<120) return; p.dataset.dc='1'; p.classList.add('desc-rec');
+    const b=document.createElement('button'); b.type='button'; b.className='desc-mais'; b.textContent='Como funciona';
+    b.onclick=()=>{ const ab=p.classList.toggle('aberta'); b.textContent=ab?'Mostrar menos':'Como funciona'; }; p.after(b); });
 }
 function renderModeracao(){
   const list=ADM.posts.filter(p=>p.status===ADM.aba).reverse();
   const cnt={pendente:0,aprovado:0,oculto:0}; ADM.posts.forEach(p=>cnt[p.status]++);
-  const lb={pendente:'⏳ Aguardando',aprovado:'✅ No telão',oculto:'🙈 Ocultos'};
-  document.querySelectorAll('#abasMod button').forEach(b=>b.textContent=`${lb[b.dataset.s]} (${cnt[b.dataset.s]})`);
+  const lb={pendente:'Aguardando',aprovado:'No telão',oculto:'Ocultos'};
+  document.querySelectorAll('#abasMod button').forEach(b=>b.innerHTML=`${lb[b.dataset.s]} <b>${cnt[b.dataset.s]}</b>`);
   $('aprTodos').hidden = !(ADM.aba==='pendente' && cnt.pendente>1);
   const box=$('modList'); if(!box) return;
   if(!list.length){ box.innerHTML=`<div class="empty">${ADM.aba==='pendente'?'Nada aguardando aprovação. Quando os convidados mandarem, aparece aqui. 💌':ADM.aba==='aprovado'?'Nenhuma homenagem no telão ainda.':'Nada oculto.'}</div>`; return; }
   const ic={foto:'📸',texto:'✍️',audio:'🎤',video:'🎥'};
-  box.innerHTML=`<div class="modgrid">${list.map(p=>`<div class="card mod">
+  box.innerHTML=`<div class="modgrid">${list.map(p=>`<div class="card mod t-${p.tipo}">
     <div class="media">${p.tipo==='foto'?`<img loading="lazy" src="${midia(p.caminho)}" alt="">`:p.tipo==='texto'?`<blockquote>${esc(p.texto)}</blockquote>`:p.tipo==='video'?`<video controls playsinline preload="none" poster="${p.thumb?midia(p.thumb):''}" src="${midia(p.caminho)}"></video>`:`<div style="padding:12px 12px 0"><b>🎤 Áudio · ${fmtDur(p.duracao)}</b><audio controls preload="none" src="${midia(p.caminho)}"></audio></div>`}</div>
     ${p.tipo==='foto'&&p.texto?`<div style="padding:8px 12px 0">${esc(p.texto)}</div>`:''}
     <div class="info"><span>${ic[p.tipo]} ${esc(p.autor||'Sem nome')}</span><span>${new Date(p.criado_em).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}</span></div>
-    <div class="acts2">${p.status!=='aprovado'?`<button class="btn ok sm" data-id="${p.id}" data-s="aprovado">✓ Aprovar</button>`:''}${p.status!=='oculto'?`<button class="btn bad sm" data-id="${p.id}" data-s="oculto">✕ Ocultar</button>`:''}</div></div>`).join('')}</div>`;
+    <div class="acts2">${p.status!=='aprovado'?`<button class="btn ok sm" data-id="${p.id}" data-s="aprovado">Aprovar</button>`:''}${p.status!=='oculto'?`<button class="btn bad sm" data-id="${p.id}" data-s="oculto">Ocultar</button>`:''}</div></div>`).join('')}</div>`;
   box.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>moderar([+b.dataset.id], b.dataset.s));
 }
 async function moderar(ids, s){ try{ await rpc('fe_moderar',{p_slug:SLUG,p_pin:PIN,p_ids:ids,p_status:s}); ADM.posts.forEach(p=>{ if(ids.includes(p.id)) p.status=s; }); carregarAdmPosts(); }catch(e){ toast(ERR(e)); } }
@@ -5110,7 +5152,7 @@ function faleConosco(assunto){
     catch(e){ msgE(/e-mail|mensagens|Conte|minutos/.test(e.message||'')?e.message:ERR(e),'err'); $('eSend').disabled=false; } };
 }
 function montarAjuda(){
-  if(MODE==='telao' || MODE==='album' || $('ajudaBtn')) return;
+  if(MODE==='telao' || MODE==='album' || MODE==='admin' || $('ajudaBtn')) return;
   const b=document.createElement('button'); b.id='ajudaBtn'; b.type='button'; b.textContent=MODE==='convidado'?'❓':'❓ Ajuda'; if(MODE==='convidado') b.classList.add('mini'); b.setAttribute('aria-label','Ajuda'); b.onclick=abrirAjuda; document.body.appendChild(b); document.body.classList.add('tem-ajuda');
 }
 (async function iniciar(){

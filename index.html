@@ -1382,7 +1382,28 @@ function iconizar(root){
   const ns=[]; while(w.nextNode()) ns.push(w.currentNode);
   ns.forEach(n=>{ const t=n.data, tmp=document.createElement('span'); let html='', last=0; t.replace(EMI_RE,(m,k,off)=>{ const ic=EMI_MAP[k]; let antes=t.slice(last,off); if(!ic) antes=antes.replace(/ $/,''); html+=esc(antes)+(ic?emiSvg(ic):''); last=off+m.length; if(!ic && t[last]===' ' && !antes) last++; return m; }); html+=esc(t.slice(last)); tmp.innerHTML=html; n.replaceWith(...tmp.childNodes); });
 }
-(function(){ let pend=false; const run=()=>{ pend=false; try{ iconizar(document.body); }catch(e){} };
+// Evento de empresa: o vocabulário do painel, do telão e das telas de apoio vira o de evento (o que o participante escreveu fica como está)
+const CORP_EXCL='script,style,textarea,input,canvas,svg,.q,blockquote,.media,.rx,.reac,.cap,.nuv,.bola,.chars,[contenteditable],.cv-prev,.wa-prev,pre,code,.post,.mod-it .tx,.by,.nm,.hey,.who,.lead,.msgf,.alb-pol,.alb-recs,.alb-g,[data-nocorp]';
+const CORP_PROT=['Mural da Festa','Plano Festa','Festa Infantil','Outra festa','Festa animada','Correio elegante'];
+const CORP_RE=[[/Homenageado\(s\)/g,'Empresa ou equipe'],[/fotos do homenageado/gi,'fotos da empresa'],[/(vida|fotos|história) do homenageado/gi,'$1 da empresa'],[/do homenageado/g,'da empresa'],
+  [/Título da festa/g,'Nome do evento'],[/Tipo de festa/g,'Tipo de evento'],[/festa no telão/g,'comemoração no telão'],
+  [/(?<!\p{L})Convidad([oa])s(?!\p{L})/gu,'Participantes'],[/(?<!\p{L})convidad([oa])s(?!\p{L})/gu,'participantes'],[/(?<!\p{L})Convidad[oa](?!\p{L})/gu,'Participante'],[/(?<!\p{L})convidad[oa](?!\p{L})/gu,'participante'],
+  [/(?<!\p{L})anfitriões(?!\p{L})/gu,'organizadores'],[/(?<!\p{L})Anfitriões(?!\p{L})/gu,'Organizadores'],[/(?<!\p{L})anfitrião(?!\p{L})/gu,'organizador'],[/(?<!\p{L})Anfitrião(?!\p{L})/gu,'Organizador'],
+  [/(?<!\p{L})homenagens(?!\p{L})/gu,'mensagens'],[/(?<!\p{L})Homenagens(?!\p{L})/gu,'Mensagens'],[/(?<!\p{L})homenagem(?!\p{L})/gu,'mensagem'],[/(?<!\p{L})Homenagem(?!\p{L})/gu,'Mensagem'],
+  [/(?<!\p{L})([Dd])a festa(?!\p{L})/gu,(m,d)=>d+'o evento'],[/(?<!\p{L})([Nn])a festa(?!\p{L})/gu,(m,d)=>d+'o evento'],[/(?<!\p{L})à festa(?!\p{L})/gu,'ao evento'],[/(?<!\p{L})pela festa(?!\p{L})/gu,'pelo evento'],
+  [/(?<!\p{L})([Ee])sta festa(?!\p{L})/gu,(m,e)=>e+'ste evento'],[/(?<!\p{L})([Ss])ua festa(?!\p{L})/gu,(m,e)=>e+'eu evento'],[/(?<!\p{L})nossa festa(?!\p{L})/gu,'nosso evento'],[/(?<!\p{L})uma festa(?!\p{L})/gu,'um evento'],
+  [/(?<!\p{L})A festa(?!\p{L})/gu,'O evento'],[/(?<!\p{L})a festa(?!\p{L})/gu,'o evento'],[/(?<!\p{L})festas(?!\p{L})/gu,'eventos'],[/(?<!\p{L})Festa(?!\p{L})/gu,'Evento'],[/(?<!\p{L})festa(?!\p{L})/gu,'evento']];
+const CORP_TEST=/convidad|anfitri|homenage|festa/i;
+function corpVoc(t){ const tk=[]; CORP_PROT.forEach((w,i)=>{ t=t.split(w).join('\u0000'+i+'\u0000'); }); CORP_RE.forEach(([r,v])=>{ t=t.replace(r,v); }); return t.replace(/\u0000(\d+)\u0000/g,(m,i)=>CORP_PROT[+i]); }
+function corpTexto(root){
+  if(!root || typeof FESTA==='undefined' || !FESTA || FESTA.categoria!=='corporativo') return;
+  const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>{ if(!CORP_TEST.test(n.data)) return NodeFilter.FILTER_REJECT; const p=n.parentElement; return (!p||p.closest(CORP_EXCL))?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT; }});
+  const ns=[]; while(w.nextNode()) ns.push(w.currentNode);
+  ns.forEach(n=>{ const v=corpVoc(n.data); if(v!==n.data) n.data=v; });
+  root.querySelectorAll && root.querySelectorAll('input[placeholder],textarea[placeholder],[title],[aria-label]').forEach(el=>{ if(el.closest('[data-nocorp]')) return; ['placeholder','title','aria-label'].forEach(a=>{ const v=el.getAttribute(a); if(v && CORP_TEST.test(v)){ const nv=corpVoc(v); if(nv!==v) el.setAttribute(a,nv); } }); });
+}
+function semEmojiAttr(root){ if(!root||!root.querySelectorAll) return; root.querySelectorAll('[placeholder],[title],[aria-label]').forEach(el=>{ ['placeholder','title','aria-label'].forEach(k=>{ const v=el.getAttribute(k); if(v && /\p{Extended_Pictographic}/u.test(v)){ const nv=v.replace(/(?![\u00A9\u00AE\u2122])\p{Extended_Pictographic}\uFE0F?/gu,'').replace(/\s{2,}/g,' ').trim(); if(nv!==v) el.setAttribute(k,nv); } }); }); }
+(function(){ let pend=false; const run=()=>{ pend=false; try{ iconizar(document.body); }catch(e){} try{ corpTexto(document.body); }catch(e){} try{ semEmojiAttr(document.body); }catch(e){} };
   const mo=new MutationObserver(()=>{ if(!pend){ pend=true; requestAnimationFrame(run); } });
   const go=()=>{ run(); mo.observe(document.body,{childList:true,subtree:true,characterData:true}); };
   if(document.body) go(); else document.addEventListener('DOMContentLoaded',go);
@@ -1970,7 +1991,8 @@ async function ligarCorreio(){
     <button class="btn" id="crE" style="margin-top:12px">💌 Enviar correio</button><div class="msg" id="crMsg"></div><div class="crr-l" id="crL"></div>`;
   const modo=a=>{ anon=a; $('crId').setAttribute('aria-pressed',!a); $('crAn').setAttribute('aria-pressed',a); $('crD').hidden=a; };
   $('crId').onclick=()=>modo(false); $('crAn').onclick=()=>modo(true);
-  $('crE').onclick=async()=>{ const M=$('crMsg'), para=$('crP').value.trim(), msg=$('crM').value.trim(), de=anon?'':$('crD').value.trim();
+  ['focus','pointerdown'].forEach(ev=>$('crP').addEventListener(ev,()=>{ if(!$('crD').value.trim()){ const n=store.get('mf_nome')||''; if(n) $('crD').value=n; } }));
+  $('crE').onclick=async()=>{ if(!anon && !$('crD').value.trim() && store.get('mf_nome')) $('crD').value=store.get('mf_nome'); const M=$('crMsg'), para=$('crP').value.trim(), msg=$('crM').value.trim(), de=anon?'':$('crD').value.trim();
     if(para.length<2){ M.className='msg err'; M.textContent='Escreva para quem é.'; return; } if(msg.length<2){ M.className='msg err'; M.textContent='Escreva a mensagem.'; return; } if(!anon && de.length<2){ M.className='msg err'; M.textContent='Escreva seu nome ou escolha anônimo.'; return; }
     $('crE').disabled=true; try{ await rpc('fe_correio_enviar',{p_festa:f.id,p_aparelho:deviceId(),p_para:para,p_de:de,p_mensagem:msg}); if(de) store.set('mf_nome',de); $('crP').value=''; $('crM').value=''; M.className='msg ok'; M.textContent='Correio enviado! Aparece no telão depois da aprovação 💌'; }
     catch(e){ M.className='msg err'; M.textContent=/Calma|Limite|aberto|Escreva/.test(e.message||'')?e.message:ERR(e); } $('crE').disabled=false; };
@@ -4490,7 +4512,7 @@ async function pdfAlbum(f, posts, prog){
   // contracapa
   prog('Fechando o álbum…'); { const [cv,c]=pg(); papel(c,t,f,n+1); c.textAlign='center'; if(t._enf){ const e=t._enf, h=300, w=h*e.width/e.height; c.drawImage(e,PW/2-w/2,190,w,h); } else if(ALBC){ if(t._logo){ const h=150, w=Math.min(460,h*t._logo.width/t._logo.height), h2=w*t._logo.height/t._logo.width; c.drawImage(t._logo,PW/2-w/2,400-h2/2,w,h2); } } else if(t._orn) c.drawImage(t._orn, PW/2-170, 200, 340, 340);
     c.fillStyle=t.dark?t.bg:t.accent; c.font=`400 ${/Great|Pacifico/.test(t.font)?120:92}px ${fonte(t)}`; c.fillText(ALBC?'Obrigado, equipe!':'Obrigado!', PW/2, 650);
-    const st=[[posts.filter(p=>p.tipo==='foto').length,'fotos'],[textos.length,'recados'],[grav.length,'gravações'],[new Set(posts.map(p=>p.autor).filter(Boolean)).size,ALBC?'participantes':'convidados']];
+    const st=[[posts.filter(p=>p.tipo==='foto').length,'fotos'],[textos.length,ALBC?'mensagens':'recados'],[grav.length,'gravações'],[new Set(posts.map(p=>p.autor).filter(Boolean)).size,ALBC?'participantes':'convidados']];
     st.forEach((s,i)=>{ const bx=110+i*265; rr(c,bx,740,240,190,28); c.fillStyle='#fff'; c.fill(); c.lineWidth=4; c.strokeStyle=t.accent; c.stroke(); c.fillStyle=t.accent; c.font=`700 84px Fredoka, sans-serif`; c.fillText(String(s[0]),bx+120,850); c.fillStyle='#555'; c.font='600 28px Fredoka, sans-serif'; c.fillText(s[1],bx+120,895); });
     c.fillStyle=t.dark?t.bg:t.ink; c.font=`600 54px ${FC()}`; (ALBC?['Cada foto, cada mensagem e cada voz','registraram um dia importante para o nosso time.',`${DESTAQUE(f)}`]:['Cada foto, cada recado e cada voz','fizeram deste dia uma lembrança para sempre.',`Com carinho, ${f.homenageado||'os anfitriões'}`]).forEach((l,i)=>c.fillText(l,PW/2,1080+i*74));
     { const Q=230, qx=PW/2-Q/2, qy=1300; rr(c,qx-18,qy-18,Q+36,Q+36,22); c.fillStyle='#fff'; c.fill(); c.drawImage(qrCanvas(linkFesta(f.slug,'album'),460),qx,qy,Q,Q); c.fillStyle=t.dark?t.bg:t.ink; c.font='600 30px Fredoka, sans-serif'; c.fillText('Veja o álbum online, com os áudios e vídeos', PW/2, qy+Q+64); }

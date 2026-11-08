@@ -1199,13 +1199,22 @@ body.app-neutro .top h1 em{font-family:'Fraunces',Georgia,serif;font-weight:500;
 .emi-heart{color:var(--accent, currentColor)}
 
 /* ===== Roteiro, barra do telão, refinamentos ===== */
+.cvcta{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center;background:color-mix(in srgb,var(--accent) 9%, var(--surface,#fff));border:1.5px dashed color-mix(in srgb,var(--accent) 45%, transparent);border-radius:16px;padding:16px 18px;margin:0 0 14px;color:var(--ink)}
+.cvcta-art{display:flex;align-items:flex-end;gap:6px;color:var(--accent)}
+.cvcta-art svg{width:34px;height:34px}.cvcta-art .cv-pg{width:44px;height:44px}
+.cvcta h3{margin:0 0 4px;font-size:18px}.cvcta p{margin:0 0 10px;color:var(--muted,#555);font-size:15px;line-height:1.45}
+.cvcta-ok{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px;padding:0;list-style:none}
+.cvcta-ok li{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;padding:4px 10px;border-radius:999px;background:var(--surface,#fff);border:1px solid var(--line)}
+.cvcta-ok svg{width:16px;height:16px;color:var(--accent)}
+.cvcta .row{gap:8px;flex-wrap:wrap;align-items:center}.cvcta small{color:var(--muted,#666)}
+@media(max-width:600px){.cvcta{grid-template-columns:1fr;gap:10px}.cvcta-art{justify-content:center}}
 .rot{background:var(--surface,#fff);border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin:0 0 16px;box-shadow:0 1px 2px rgba(15,23,42,.04)}
 .rot-h{display:flex;justify-content:space-between;align-items:center;gap:10px}
 .rot-h b{font-size:17px;margin-right:10px} .rot-h span{color:var(--muted);font-size:14px}
 .rot-x{background:none;border:0;color:var(--muted);cursor:pointer;padding:6px;border-radius:8px;font-size:18px;line-height:0}
 .rot-x:hover{background:var(--line)}
 .rot-bar{height:6px;border-radius:99px;background:var(--line);margin:10px 0 12px;overflow:hidden} .rot-bar i{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .4s}
-.rot-l{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.rot-l{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
 .rot-l li{display:flex;flex-direction:column;gap:8px;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--bg2,transparent)}
 .rot-l li.prox{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 14%,transparent)}
 .rot-l li.ok{opacity:.62}
@@ -3011,6 +3020,7 @@ function painelAdmin(){
   const ir=v=>{ const b=abas.querySelector(`[data-v="${v}"]`); if(b) b.click(); };
   document.querySelectorAll('[data-ir]').forEach(b=>b.onclick=()=>ir(b.dataset.ir));
   pintarRoteiro(f, ir);
+  rpc('fe_convite_img',{p_festa:f.id}).then(p=>{ ADM.cv=p||null; pintarRoteiro(FESTA); colocarCtaConvite(); }).catch(()=>{ ADM.cv=null; });
   if($('btAtivar')) $('btAtivar').onclick=ativarFesta;
   if($('btPlano')) $('btPlano').onclick=escolherPlano;
   const pidQ = new URLSearchParams(location.search).get('pago'), pidS = store.get('mf_pag_'+f.slug);
@@ -3144,6 +3154,7 @@ function vFesta(){
   const ler=ligarFormFesta(f, k=>aplicarTema(FESTA.custom ? temaDe(FESTA) : k), ()=>document.querySelector('#abasTop [data-v="meutema"]').click(), !!(FESTA.custom && FESTA.custom.visual!==false));
   $('vw').insertAdjacentHTML('afterbegin', `<div class="aviso" style="margin-bottom:12px;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:color-mix(in srgb,var(--accent) 12%, var(--surface));color:var(--ink)"><span>🎨 Quer usar <b>sua imagem de fundo, personagens, fotos do homenageado e música</b>?</span><button class="btn sm" id="irKit">Faça o seu tema</button></div>`);
   $('irKit').onclick=()=>document.querySelector('#abasTop [data-v="meutema"]').click();
+  colocarCtaConvite();
   $('vw').insertAdjacentHTML('beforeend', `<div class="card" style="padding:18px;margin-top:14px"><h3 style="margin:0 0 4px">Dicas para os ${CORP(f)?'participantes':'convidados'} <span class="muted" style="font-size:14px;font-weight:500">(opcional)</span></h3><p class="muted" style="margin:0 0 10px">Aparece na página da festa antes do grande dia: traje, estacionamento, transporte, horário de chegada.</p>
     <textarea class="in" id="dcT" maxlength="800" style="min-height:96px" placeholder="Ex.: Traje: passeio completo. Para quem for de salto, prefira salto bloco, a cerimônia é na grama. Há estacionamento no local.">${esc(EXT(f).dicas||'')}</textarea>
     <div class="row" style="gap:8px;margin-top:8px"><button class="btn" id="dcOk">Salvar dicas</button><span class="msg" id="dcM"></span></div></div>`);
@@ -3270,9 +3281,10 @@ async function vMeuTema(){
     rDecl();
   };
   rMus(); rVis();
+  if(!window.TEMA_CONVITE) colocarCtaConvite();
   if(window.TEMA_CONVITE){ const pth=window.TEMA_CONVITE; window.TEMA_CONVITE=null; K.visual=true; K.fundo={path:pth};
     try{ const bl=await fetch(midia(pth)).then(r=>r.blob()); const pl=await paletaDe(bl); $('mtA').value=pl.accent; $('mtB').value=pl.accent2; $('mtC').value=pl.bg; }catch(_){}
-    rVis(); rDecl(); preview(); $('vw').querySelector('.card').insertAdjacentHTML('afterbegin','<p class="aviso" style="margin:0;background:#e7f5ff;color:#0b4a6f">💌 Pegamos o fundo e as cores do seu convite. Ajuste o que quiser (cores, letra, personagens) e toque em salvar: o telão, o mural, a placa da entrada, os cartões de mesa e o álbum ficam todos com o visual do convite.</p>'); }
+    rVis(); rDecl(); preview(); $('vw').querySelector('.card').insertAdjacentHTML('afterbegin','<p class="aviso" style="margin:0 0 14px;background:#e7f5ff;color:#0b4a6f">Cores e fundo aplicados a partir do convite. Ajuste se quiser e salve no fim da página.</p>'); }
   $('kVol').oninput=()=>{ K.mus.volume=+$('kVol').value; };
   if(info.ativo) $('mtOff').onclick=async()=>{ pararPrev(); try{ FESTA=await rpc('fe_admin_tema_off',{p_slug:SLUG,p_pin:PIN}); aplicarTema(temaDe(FESTA)); toast('Desligado. A festa voltou ao tema pronto, sem fotos nem música.'); vMeuTema(); }catch(e){ toast(ERR(e)); } };
   $('mtSave').onclick=async()=>{
@@ -3320,22 +3332,66 @@ function textoConvite(f, senha){
 }
 function perguntarVisualConvite(path){
   const temTema=FESTA.custom && FESTA.custom.visual!==false;
-  abrirFolha(`<div class="center"><div style="font-size:40px;line-height:1">💌</div><h3 style="justify-content:center;margin:6px 0 4px">Convite enviado!</h3>
+  abrirFolha(`<div class="center"><h3 style="justify-content:center;margin:6px 0 4px">${CORP(FESTA)?'Arte recebida':'Convite recebido'}</h3>
     <img src="${midia(path)}" alt="Seu convite" style="display:block;margin:10px auto;max-width:min(220px,60%);max-height:260px;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.18)">
-    <p style="margin:8px 0 2px;font-weight:700;font-size:18px">Quer usar o visual deste convite na festa toda?</p>
-    <p class="muted" style="margin:0 0 4px">Telão, mural, placa da entrada, cartões de mesa e álbum com o fundo e as cores do convite. Você vê como fica e ajusta antes de salvar.</p>
+    <p style="margin:8px 0 2px;font-weight:700;font-size:18px">Usar este design ${CORP(FESTA)?'no evento':'na festa'} toda?</p>
+    <p class="muted" style="margin:0 0 4px">Pegamos as cores e o fundo ${CORP(FESTA)?'da sua arte':'do seu convite'} automaticamente. Vale para a página dos ${CORP(FESTA)?'participantes':'convidados'}, o telão e o álbum.</p>
     ${temTema?'<p class="aviso" style="margin:12px 0 0">Isso troca o fundo e as cores do tema que você já montou. Fotos, personagens e música continuam.</p>':''}</div>
-    <div class="foot" style="justify-content:center;flex-wrap:wrap"><button class="btn ghost" id="eCancel">Agora não</button><button class="btn" id="cvSim" style="font-weight:700;min-height:46px">🎨 Sim, ver como fica</button></div>`);
+    <div class="foot" style="justify-content:center;flex-wrap:wrap"><button class="btn ghost" id="eCancel">Agora não</button><button class="btn" id="cvSim" style="font-weight:700;min-height:46px">Sim, ver como fica</button></div>`);
   $('eCancel').onclick=fecharFolha;
   $('cvSim').onclick=()=>{ fecharFolha(); window.TEMA_CONVITE=path; document.querySelector('#abasTop [data-v="meutema"]').click(); };
 }
+const CV_ICO={pg:'<svg class="cv-pg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2.5" width="14" height="19" rx="1.5"/><path d="M8.5 7h7M9.5 10h5"/><circle cx="12" cy="15" r="2.2"/></svg>',
+  cel:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6.5" y="2.5" width="11" height="19" rx="2.2"/><path d="M11 18.5h2"/></svg>',
+  tv:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="4" width="19" height="12.5" rx="1.6"/><path d="M8 20.5h8M12 16.5v4"/></svg>',
+  alb:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4.5A1.5 1.5 0 0 1 5.5 3H19v16H5.5A1.5 1.5 0 0 0 4 20.5z"/><path d="M4 20.5A1.5 1.5 0 0 0 5.5 22H19v-3"/><path d="M9 8h6"/></svg>'};
+function ctaConvite(onde){
+  const C=CORP(FESTA), cv=ADM.cv, nome=C?'a arte do evento':'o convite';
+  if(cv===undefined) return '';
+  const usa=!!(cv && FESTA.custom && FESTA.custom.visual!==false && FESTA.custom.fundo===cv);
+  const chips=`<ul class="cvcta-ok"><li>${CV_ICO.cel}Página dos ${C?'participantes':'convidados'}</li><li>${CV_ICO.tv}Telão</li><li>${CV_ICO.alb}Álbum</li></ul>`;
+  const art=`<div class="cvcta-art">${CV_ICO.pg}</div>`;
+  if(!cv){
+    const tit=onde==='recordacoes'?`Capa do álbum com ${nome}`:`Tem ${nome} pront${C?'a':'o'}? Envie aqui`;
+    const txt=onde==='recordacoes'?`Envie ${nome} e a capa do álbum usa a mesma arte. Sem ${C?'ela':'ele'}, a capa sai com uma arte do tema.`:`Com um envio só, ${C?'o evento inteiro fica':'a festa inteira fica'} com o mesmo design: fundo e cores ${C?'da arte':'do convite'}.`;
+    return `<div class="cvcta" data-cvcta>${art}<div><h3>${tit}</h3><p>${txt}</p>${chips}<div class="row"><button type="button" class="btn" data-cvenv>${C?'Usar a arte do evento':'Usar a arte do meu convite'}</button><small>Imagem ou PDF. Pode ser a arte que você mandou no WhatsApp.</small></div></div></div>`;
+  }
+  if(usa || store.get('mf_cvno_'+FESTA.slug) || onde==='recordacoes') return '';
+  return `<div class="cvcta" data-cvcta>${art}<div><h3>Use o design ${C?'da arte':'do convite'} ${C?'no evento':'na festa'} toda</h3><p>Você já enviou ${nome}. Falta levar o fundo e as cores para o resto.</p>${chips}<div class="row"><button type="button" class="btn" data-cvvis>Ver como fica</button><button type="button" class="btn ghost sm" data-cvno>Agora não</button></div></div></div>`;
+}
+function escolherConvite(){
+  const i=document.createElement('input'); i.type='file'; i.accept='image/*,application/pdf'; i.style.display='none'; document.body.appendChild(i);
+  i.onchange=async()=>{ const file=i.files[0]; i.remove(); if(!file) return; toast((CORP(FESTA)?'Enviando a arte':'Enviando o convite')+'…',8000);
+    try{ const path=await enviarConvite(file); toast(CORP(FESTA)?'Arte recebida.':'Convite recebido.',1200); if(ADM.view==='compartilhar') await vCompartilhar(); else if(ADM.view==='recordacoes') vRecordacoes(); else colocarCtaConvite(); pintarRoteiro(FESTA); perguntarVisualConvite(path); }
+    catch(err){ toast('Não consegui enviar. '+ERR(err),5000); } };
+  i.click();
+}
+async function enviarConvite(file){
+  let bl;
+  if(/pdf/.test(file.type) || /\.pdf$/i.test(file.name)){ const pdfjs=await carregarPdfJs(); const pdf=await pdfjs.getDocument({data:await file.arrayBuffer()}).promise; const pgx=await pdf.getPage(1); const vp0=pgx.getViewport({scale:1}); const vp=pgx.getViewport({scale:1600/vp0.width});
+    const cv=document.createElement('canvas'); cv.width=Math.round(vp.width); cv.height=Math.round(vp.height); await pgx.render({canvasContext:cv.getContext('2d'),viewport:vp}).promise; bl=await new Promise(r=>cv.toBlob(r,'image/jpeg',.9)); }
+  else bl=await encolher(file,1600,.9);
+  const path=await subir(bl,'convite/convite','jpg','image/jpeg'); await rpc('fe_admin_convite_img',{p_slug:SLUG,p_pin:PIN,p_img:path}); ADM.cv=path; return path;
+}
+function colocarCtaConvite(){
+  const v=$('vw'); if(!v) return; v.querySelectorAll('[data-cvcta]').forEach(x=>x.remove());
+  if(!['festa','meutema','recordacoes'].includes(ADM.view)) return;
+  const h=ctaConvite(ADM.view); if(!h) return;
+  const alvo=ADM.view==='recordacoes'? v.querySelector('.alb-ent') : null;
+  if(ADM.view==='festa'){ const k=$('irKit'); if(k && k.closest('.aviso')) k.closest('.aviso').remove(); }
+  if(alvo){ alvo.insertAdjacentHTML('afterend', h); const n=alvo.nextElementSibling; if(n){ n.style.gridColumn='1/-1'; n.style.margin='0'; } } else v.insertAdjacentHTML('afterbegin', h);
+}
+document.addEventListener('click',e=>{ const b=e.target.closest('[data-cvenv],[data-cvvis],[data-cvno]'); if(!b) return;
+  if(b.hasAttribute('data-cvenv')) escolherConvite();
+  else if(b.hasAttribute('data-cvvis')){ window.TEMA_CONVITE=ADM.cv; const t=document.querySelector('#abasTop [data-v="meutema"]'); if(ADM.view==='meutema') vMeuTema(); else if(t) t.click(); }
+  else { store.set('mf_cvno_'+FESTA.slug,'1'); const c=b.closest('[data-cvcta]'); if(c) c.remove(); } });
 async function vCompartilhar(){
-  ADM.view='compartilhar'; store.set('mf_r_conv_'+FESTA.slug,'1'); setTimeout(()=>pintarRoteiro(FESTA),200); const f=FESTA; let cvMeu=null; try{ cvMeu=await rpc('fe_convite_img',{p_festa:f.id}); }catch(e){} const L=[['Convidados','📲',linkFesta(f.slug)],['Telão (abrir no notebook/TV)','📺',linkFesta(f.slug,'telao')],['Área do anfitrião','🔐',linkFesta(f.slug,'admin')]];
+  ADM.view='compartilhar'; store.set('mf_r_conv_'+FESTA.slug,'1'); setTimeout(()=>pintarRoteiro(FESTA),200); const f=FESTA; let cvMeu=null; try{ cvMeu=await rpc('fe_convite_img',{p_festa:f.id}); ADM.cv=cvMeu||null; }catch(e){} const L=[['Convidados','📲',linkFesta(f.slug)],['Telão (abrir no notebook/TV)','📺',linkFesta(f.slug,'telao')],['Área do anfitrião','🔐',linkFesta(f.slug,'admin')]];
   $('vw').innerHTML=`<div class="grid2">
    <div class="card" style="padding:18px;text-align:center;grid-column:1/-1"><h3 style="margin:0 0 6px">💌 Convite com QR Code</h3><p class="muted" style="margin:0 0 12px">Mande pelo WhatsApp ou imprima. O convidado já chega sabendo como deixar a homenagem.</p>
-     <div class="seg" style="justify-content:center;margin-bottom:12px"><label class="btn ghost sm" style="position:relative">🖼️ ${cvMeu?'Trocar meu convite':'Usar meu próprio convite'}<input type="file" id="cvUpF" accept="image/*,application/pdf" style="position:absolute;inset:0;opacity:0;cursor:pointer"></label>${cvMeu?'<button class="btn ghost sm" type="button" id="cvUpX">Voltar ao convite automático</button>':''}</div>
+     <div class="seg" style="justify-content:center;margin-bottom:12px">${cvMeu?'':`<p style="margin:0 0 10px;font-weight:600">Já tem um convite pronto? Envie e a página, o telão e o álbum ficam com o mesmo design.</p>`}<label class="btn ${cvMeu?'ghost ':''}sm" style="position:relative">${cvMeu?'Trocar meu convite':'Enviar meu convite'}<input type="file" id="cvUpF" accept="image/*,application/pdf" style="position:absolute;inset:0;opacity:0;cursor:pointer"></label>${cvMeu?'<button class="btn ghost sm" type="button" id="cvUpX">Voltar ao convite automático</button>':''}</div>
      <img id="cvPrev" alt="Prévia do convite" style="width:min(240px,70%);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.18);background:var(--bg)">
-     ${cvMeu?'<p class="muted" style="font-size:13px;margin:8px 0 0">Seu convite ganha uma faixa com o QR da festa embaixo. Ele também aparece no topo da página do convidado.</p><p style="margin:10px 0 0"><button class="btn alt sm" type="button" id="cvVis">🎨 Usar o visual do convite na festa toda</button></p>':''}
+     ${cvMeu?'<p class="muted" style="font-size:13px;margin:8px 0 0">Seu convite ganha uma faixa com o QR da festa embaixo. Ele também aparece no topo da página do convidado.</p><p style="margin:10px 0 0"><button class="btn alt sm" type="button" id="cvVis">Usar o design do convite na festa toda</button></p>':''}
      <div class="row" style="justify-content:center;margin-top:14px"><button class="btn" id="cvImg">📱 Baixar convite (imagem)</button><button class="btn alt" id="cvShare" hidden>📤 Compartilhar</button><button class="btn ghost" id="cvPdf">🖨️ Convite para imprimir (PDF)</button></div><div class="msg" id="cvM"></div></div>
    <div class="card" style="padding:18px;text-align:center"><h3 style="margin:0 0 10px">QR Code dos convidados</h3><div class="qrbig" id="shQr"></div><p class="muted" style="font-size:14px">Mostre na entrada ou imprima nas mesas</p><div class="row" style="justify-content:center;gap:8px;flex-wrap:wrap"><button class="btn" id="shCartoes">🖨️ Cartões de mesa (PDF)</button><button class="btn ghost" id="shCartaz">🪧 Placa da entrada (PDF)</button></div></div>
    <div class="card" style="padding:18px;display:flex;flex-direction:column;gap:10px"><h3 style="margin:0">Links</h3>
@@ -3373,14 +3429,10 @@ async function vCompartilhar(){
   qrInto($('shQr'), linkFesta(f.slug), 220);
   const gerarCv=async()=>{ if(cvMeu){ try{ return await conviteProprio(f,cvMeu); }catch(e){} } return conviteCanvas(f,1080,1920); };
   (async()=>{ try{ const cv=await gerarCv(); $('cvPrev').src=cv.toDataURL('image/jpeg',.8); }catch(e){} })();
-  if($('cvUpX')) $('cvUpX').onclick=async()=>{ try{ await rpc('fe_admin_convite_img',{p_slug:SLUG,p_pin:PIN,p_img:null}); toast('Voltamos ao convite automático.'); vCompartilhar(); }catch(e){ toast(ERR(e)); } };
+  if($('cvUpX')) $('cvUpX').onclick=async()=>{ try{ await rpc('fe_admin_convite_img',{p_slug:SLUG,p_pin:PIN,p_img:null}); ADM.cv=null; toast('Voltamos ao convite automático.'); vCompartilhar(); }catch(e){ toast(ERR(e)); } };
   if($('cvVis')) $('cvVis').onclick=()=>{ window.TEMA_CONVITE=cvMeu; document.querySelector('#abasTop [data-v="meutema"]').click(); };
   $('cvUpF').onchange=async e=>{ const file=e.target.files[0]; e.target.value=''; if(!file) return; const M=$('cvM'); M.className='msg'; M.innerHTML='<span class="spin"></span> Enviando o convite…';
-    try{ let bl;
-      if(/pdf/.test(file.type) || /\.pdf$/i.test(file.name)){ const pdfjs=await carregarPdfJs(); const pdf=await pdfjs.getDocument({data:await file.arrayBuffer()}).promise; const pgx=await pdf.getPage(1); const vp0=pgx.getViewport({scale:1}); const vp=pgx.getViewport({scale:1600/vp0.width});
-        const cv=document.createElement('canvas'); cv.width=Math.round(vp.width); cv.height=Math.round(vp.height); await pgx.render({canvasContext:cv.getContext('2d'),viewport:vp}).promise; bl=await new Promise(r=>cv.toBlob(r,'image/jpeg',.9)); }
-      else bl=await encolher(file,1600,.9);
-      const path=await subir(bl,'convite/convite','jpg','image/jpeg'); await rpc('fe_admin_convite_img',{p_slug:SLUG,p_pin:PIN,p_img:path}); M.textContent=''; await vCompartilhar(); perguntarVisualConvite(path);
+    try{ const path=await enviarConvite(file); M.textContent=''; await vCompartilhar(); pintarRoteiro(FESTA); perguntarVisualConvite(path);
     }catch(err){ M.className='msg err'; M.textContent='Não consegui enviar o convite. '+ERR(err); } };
   const nomeArq=`Convite_${f.slug}`;
   $('cvImg').onclick=async()=>{ const b=$('cvImg'); b.disabled=true; try{ const cv=await gerarCv(); baixar(await new Promise(r=>cv.toBlob(r,'image/png')), nomeArq+'.png'); $('cvM').className='msg ok'; $('cvM').textContent='Convite salvo! Mande no grupo da família 💛'; }catch(e){ $('cvM').className='msg err'; $('cvM').textContent='Não consegui gerar o convite agora.'; } b.disabled=false; };
@@ -3803,8 +3855,9 @@ function pintarRoteiro(f, ir){
   if(store.get('mf_rot_ok_'+f.slug)){ box.innerHTML=''; return; }
   const ex=(()=>{ try{ return EXT(f)||{}; }catch(e){ return {}; } })();
   const P=[
+    {k:'cv', ok: !!ADM.cv, t: CP?'Envie a arte do evento':'Envie o convite', d:'Página, telão e álbum com o mesmo design.', b: CP?'Usar a arte':'Usar meu convite', go:escolherConvite},
     {k:'visual', ok: !!(f.custom || ex.logo), t: CP?'Visual do evento':'Faça o seu tema', d: CP?'Logo, cores e imagem de fundo.':'Fundo, fotos e música do telão.', b:'Personalizar', go:()=>_irRot&&_irRot('meutema')},
-    {k:'conv', ok: !!store.get('mf_r_conv_'+f.slug), t: CP?'Divulgue o link':'Mande o convite', d: CP?'QR Code e link para os participantes.':'QR Code e link para o grupo da família.', b:'Ver convite e links', go:()=>_irRot&&_irRot('compartilhar')},
+    {k:'conv', ok: !!store.get('mf_r_conv_'+f.slug), t: CP?'Divulgue o link':'Mande para os convidados', d: CP?'QR Code e link para os participantes.':'QR Code e link para o grupo da família.', b:'Ver convite e links', go:()=>_irRot&&_irRot('compartilhar')},
     {k:'tv', ok: !!store.get('mf_r_tv_'+f.slug), t:'Teste o telão', d:'Abre numa janela separada. Arraste para a TV.', b:'Abrir telão', go:()=>{ store.set('mf_r_tv_'+f.slug,'1'); abrirTelaoJanela(f); pintarRoteiro(f); }},
     {k:'bar', ok: !!store.get('mf_r_bar_'+f.slug), t:'No dia: comande pela barra', d:'A barra escura troca o que a TV mostra: mural, sorteio, bingo, pausa.', b:'Mostrar a barra', go:()=>{ const t=$('tvBar'); if(t){ t.scrollIntoView({behavior:'smooth',block:'center'}); t.classList.remove('pulsa'); void t.offsetWidth; t.classList.add('pulsa'); } }}
   ];
@@ -3977,7 +4030,7 @@ function vRecordacoes(){
   const ap=ADM.posts.filter(p=>p.status==='aprovado'); const c={foto:0,texto:0,audio:0,video:0}; ap.forEach(p=>c[p.tipo]++);
   $('vw').innerHTML=`<div class="grid2">
    <div class="card alb-ent" style="padding:18px;grid-column:1/-1"><div class="alb-ent-g"><div class="alb-ent-capa"><img id="rcCapa" alt="Capa do álbum"><span class="spin" id="rcCapaSp"></span></div>
-     <div><h3 style="margin:0 0 4px">Álbum de recordações</h3><p class="muted" style="margin:0 0 8px">A capa usa a arte do convite. Por dentro: fotos em polaroid, recados e um QR em cada áudio e vídeo. Entra só o que foi aprovado.</p>
+     <div><h3 style="margin:0 0 4px">Álbum de recordações</h3><p class="muted" style="margin:0 0 8px">${ADM.cv===null?'A capa sai com uma arte do tema.':'A capa usa a arte do convite.'} Por dentro: fotos em polaroid, recados e um QR em cada áudio e vídeo. Entra só o que foi aprovado.</p>
      <p style="font-weight:600;margin:0 0 12px">${[[c.foto,'foto','fotos'],[c.texto,'recado','recados'],[c.audio,'áudio','áudios'],[c.video,'vídeo','vídeos']].map(([n,a,b])=>`${n} ${n===1?a:b}`).join(' · ')}</p>
      <button class="btn" id="rcShare" style="width:100%;justify-content:center;min-height:50px;font-size:17px">Enviar capa e link</button>
      <div class="alb-sec2"><button class="btn ghost sm" id="rcBook">Baixar álbum (PDF)</button><button class="btn ghost sm" id="rcCapaB">Baixar capa</button><a class="btn ghost sm" href="${esc(linkFesta(FESTA.slug,'album'))}" target="_blank" rel="noopener">Ver o álbum online</a></div>
@@ -3986,7 +4039,7 @@ function vRecordacoes(){
    <div class="card" style="padding:18px"><h3 style="margin:0 0 4px">Baixar tudo (.zip)</h3><p class="muted">Todas as fotos, áudios e vídeos originais aprovados, mais um arquivo com todos os recados escritos. Para guardar para sempre.</p><button class="btn alt" id="rcZip">Baixar tudo</button><div class="msg" id="rcM2"></div></div>
    <div class="card rs-card" style="padding:18px" id="rsBox"></div>
    <div class="card rs-card" style="padding:18px" id="rmBox"></div></div>`;
-  vResumo($('rsBox')); blocoRevelaMomentos($('rmBox'));
+  vResumo($('rsBox')); blocoRevelaMomentos($('rmBox')); colocarCtaConvite();
   document.querySelectorAll('.alb-ent [data-copy]').forEach(b=>b.onclick=()=>copiar(b.dataset.copy,'Link do álbum copiado!'));
   let capaCv=null; const capaPronta=(async()=>{ try{ capaCv=await capaCanvas(FESTA, ap); $('rcCapa').src=capaCv.toDataURL('image/jpeg',.85); }catch(e){ console.error(e); } if($('rcCapaSp')) $('rcCapaSp').remove(); return capaCv; })();
   const capaBlob=async()=>{ const cv=await capaPronta; if(!cv) return null; return await new Promise(r=>cv.toBlob(r,'image/jpeg',.9)); };

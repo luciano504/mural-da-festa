@@ -2534,7 +2534,8 @@ async function telaTelao(){
   $('tvGo').onclick=async()=>{
     $('tvStart').hidden=true; tv.started=true; if(mus) mus.start();
     try{ await document.documentElement.requestFullscreen(); }catch(e){}
-    try{ if(navigator.wakeLock) await navigator.wakeLock.request('screen'); }catch(e){}
+    const acesa=async()=>{ try{ if(navigator.wakeLock && document.visibilityState==='visible') await navigator.wakeLock.request('screen'); }catch(e){} };
+    await acesa(); document.addEventListener('visibilitychange', acesa);
     await puxar(); baixador(); if(!QUIET) chars.start(); mostrar(extra('intro'));
   };
   document.addEventListener('keydown', e=>{

@@ -1199,6 +1199,18 @@ body.app-neutro .top h1 em{font-family:'Fraunces',Georgia,serif;font-weight:500;
 .emi-heart{color:var(--accent, currentColor)}
 
 /* ===== Roteiro, barra do telão, refinamentos ===== */
+.cota-de{margin:0 0 8px;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.cota-top{text-align:center;padding:24px 0 8px}.cota-top h1{margin:4px 0 6px;font-family:var(--display);font-weight:600;font-size:clamp(26px,6vw,38px);line-height:1.15}
+.cota-eb{margin:0;font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.cota-c{padding:18px;margin-top:12px}.cota-c h2{margin:0 0 6px;font-size:22px}.cota-c h3{margin:0 0 6px;font-size:18px}.cota-c p{line-height:1.5}
+.cota-bar,.cota-mini{display:block;height:8px;border-radius:99px;background:color-mix(in srgb,var(--accent) 15%,transparent);overflow:hidden}.cota-bar i,.cota-mini i{display:block;height:100%;background:var(--accent);border-radius:99px}
+.cota-mini{width:90px;flex:0 0 auto}
+.cota-lista{display:flex;flex-direction:column}.cota-p{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}.cota-p:first-child{border-top:0}
+.cota-p b{display:block}.cota-p small{display:block;font-size:13px}.cota-acts{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.cota-in{color:#2b8a3e;font-weight:700;font-size:14px}
+.cota-lgpd{font-size:13px;text-align:center;margin:16px 8px}.cota-pg{padding-bottom:110px}
+.cota-form{display:grid;grid-template-columns:1fr 130px auto;gap:10px;align-items:end}
+.cota-adm{margin-top:10px}.cota-d{border-top:1px solid var(--line);padding:10px 0}.cota-d summary{display:flex;justify-content:space-between;align-items:center;gap:12px;cursor:pointer;list-style:none}.cota-d summary::-webkit-details-marker{display:none}.cota-d summary small{display:block}
+@media(max-width:600px){.cota-form{grid-template-columns:1fr 1fr}.cota-form .btn{grid-column:1/-1}.cota-p{flex-direction:column;align-items:flex-start}.cota-acts{justify-content:flex-start}}
 .cvcta{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center;background:color-mix(in srgb,var(--accent) 9%, var(--surface,#fff));border:1.5px dashed color-mix(in srgb,var(--accent) 45%, transparent);border-radius:16px;padding:16px 18px;margin:0 0 14px;color:var(--ink)}
 .cvcta-art{display:flex;align-items:flex-end;gap:6px;color:var(--accent)}
 .cvcta-art svg{width:34px;height:34px}.cvcta-art .cv-pg{width:44px;height:44px}
@@ -1325,7 +1337,7 @@ const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const Q = new URLSearchParams(location.search);
 const SLUG = (Q.get('f') || '').trim().toLowerCase();
-const MODE = Q.has('experimente') ? 'experimente' : Q.has('termos') ? 'termos' : Q.has('criar') ? 'criar' : Q.has('mestre') ? 'mestre' : SLUG ? (Q.has('telao') ? 'telao' : Q.has('palestrante') ? 'palestrante' : Q.has('portaria') ? 'portaria' : Q.has('pedidos') ? 'pedidos' : Q.has('valet') ? 'valet' : Q.has('admin') ? 'admin' : Q.has('album') ? 'album' : 'convidado') : 'inicio';
+const MODE = Q.has('experimente') ? 'experimente' : Q.has('termos') ? 'termos' : Q.has('criar') ? 'criar' : Q.has('mestre') ? 'mestre' : SLUG ? (Q.has('telao') ? 'telao' : Q.has('palestrante') ? 'palestrante' : Q.has('portaria') ? 'portaria' : Q.has('cota') ? 'cota' : Q.has('pedidos') ? 'pedidos' : Q.has('valet') ? 'valet' : Q.has('admin') ? 'admin' : Q.has('album') ? 'album' : 'convidado') : 'inicio';
 
 // ===== Ícones de linha no lugar de emojis da interface =====
 const EMI_P={
@@ -1722,6 +1734,8 @@ async function telaConvidado(){
   FESTA = await carregarFesta(SLUG).catch(()=>null);
   if(!FESTA){ return telaNaoAchou(); }
   const t=temaDe(FESTA), f=FESTA; aplicarTema(t); document.title = FESTA.homenageado ? `${FESTA.homenageado} · Mural da Festa` : FESTA.titulo;
+  if(/^[0-9a-f]{18}$/.test(Q.get('ing')||'')) store.set('mf_ing_'+f.slug, Q.get('ing'));
+  const COTA_G = !!(store.get('mf_ing_'+f.slug) || /^[0-9a-f]{12}$/.test(Q.get('cv')||''));
   const mesaQ = parseInt(Q.get('mesa')||'',10); if(mesaQ>0 && mesaQ<=300) store.set('mf_mesa_'+f.slug, String(mesaQ));
   const MESA = parseInt(store.get('mf_mesa_'+f.slug)||'0',10) || 0;
   const retrato = (t.fotos||[]).length ? t.fotos[t.fotos.length-1] : null;
@@ -1759,7 +1773,7 @@ async function telaConvidado(){
     ${f.ativo ? '<section class="card rsvp" id="srt" hidden></section>' : ''}
     ${f.ativo && f.valet ? '<section class="card rsvp" id="vlt"></section>' : ''}
     ${f.ativo && f.tem_cardapio && MESA ? '<section class="card rsvp" id="cdp"></section>' : ''}
-    ${!SITE && f.ativo && ((f.data && f.data > new Date().toLocaleDateString('sv')) || f.portaria) ? `<section class="card rsvp" id="rsvp"></section>` : ''}
+    ${!SITE && f.ativo && ((f.data && f.data > new Date().toLocaleDateString('sv')) || f.portaria || COTA_G) ? `<section class="card rsvp" id="rsvp"></section>` : ''}
     ${f.ativo ? `
     <section class="deixe${SITE?' site-sec':''}" id="deixe">
       <h2 class="sec" style="justify-content:center">${CORP(f)?'Deixe sua mensagem':'Deixe sua homenagem'}</h2>
@@ -1919,7 +1933,78 @@ async function ligarPresenca(){
         c.font='500 26px Figtree, sans-serif'; c.fillStyle='#999'; c.fillText('Mostre este código na entrada · Mural da Festa', W/2, 1230);
         baixar(await new Promise(r=>cv.toBlob(r,'image/png')), `Ingresso_${f.slug}.png`); }; }
     };
+  const ing=store.get('mf_ing_'+f.slug), cvq=Q.get('cv');
+  if(ing){ let d=null; try{ d=await rpc('fe_ingresso',{p_festa:f.id,p_token:ing}); }catch(e){} if(d){ d.cotaTk=ing; store.set('mf_nome',d.nome); return mostrarCota(d); } store.set('mf_ing_'+f.slug,null); }
+  if(/^[0-9a-f]{12}$/.test(cvq||'')){ let c=null; try{ c=await rpc('fe_cota_convite',{p_convite:cvq}); }catch(e){} if(c && c.festa_id===f.id) return formCota(c, cvq); }
   atual ? mostrar(atual) : form(null);
+  function mostrarCota(d){ mostrar(d); const alt=$('rsAlt'); if(alt) alt.remove();
+    const ok=box.querySelector('.rsvp-ok'); if(ok && d.cota) ok.insertAdjacentHTML('afterbegin', `<p class="cota-de">Convite de ${esc(d.cota)}</p>`);
+    if(f.portaria && f.portaria_selfie && !d.selfie && !d.entrou_em && ok){ ok.insertAdjacentHTML('beforeend', `<div class="selfie" style="margin-top:12px"><div class="sfprev" id="csPv">${SVG_ROSTO}</div><div><label class="btn sm" style="position:relative">Tirar selfie<input type="file" accept="image/*" capture="user" id="csSf" style="position:absolute;inset:0;opacity:0;cursor:pointer"></label><small>Falta a sua selfie para a entrada. Só a equipe da portaria vê.</small></div></div><div class="msg" id="csM"></div>`);
+      $('csSf').onchange=async e=>{ const fl=e.target.files[0]; e.target.value=''; if(!fl) return; $('csM').className='msg'; $('csM').innerHTML='<span class="spin"></span> Enviando…';
+        try{ const bl=await encolher(fl,720,.82); const path=await subir(bl,'portaria/selfie','jpg','image/jpeg'); await rpc('fe_ingresso_selfie',{p_festa:f.id,p_token:d.cotaTk,p_selfie:path}); d.selfie=path; mostrarCota(d); toast('Selfie salva.'); }
+        catch(err){ $('csM').className='msg err'; $('csM').textContent='Não consegui enviar a selfie. '+ERR(err); } }; }
+  }
+  function formCota(c, codigo){ const sf=f.portaria&&f.portaria_selfie; let selfie=null;
+    if(!c.restam){ box.innerHTML=`<h2 class="sec">Seu convite</h2><p class="sub">Os convites de ${esc(c.dono)} já foram todos usados. Fale com ${esc(c.dono)} para conferir.</p>`; return; }
+    box.innerHTML=`<h2 class="sec">Seu convite</h2><p class="sub"><b>${esc(c.dono)}</b> convidou você. Cadastre-se para receber o seu ingresso.</p>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <input class="in" id="ccN" maxlength="60" autocomplete="name" placeholder="Seu nome completo" aria-label="Seu nome completo" value="${esc(store.get('mf_nome')||'')}">
+        <input class="in" id="ccC" inputmode="numeric" autocomplete="off" maxlength="14" placeholder="Seu CPF" aria-label="Seu CPF">
+        ${sf?`<div class="selfie"><div class="sfprev" id="ccPv">${SVG_ROSTO}</div><div><label class="btn alt sm" style="position:relative">Tirar selfie<input type="file" accept="image/*" capture="user" id="ccSf" style="position:absolute;inset:0;opacity:0;cursor:pointer"></label><small>Para a entrada. Só a equipe da portaria vê.</small></div></div>`:''}
+        <small class="muted"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true" style="vertical-align:-2px;margin-right:4px"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8.5 10.5V7.5a3.5 3.5 0 0 1 7 0v3"/></svg>O CPF serve só para achar o seu ingresso na entrada, se você perder o QR Code. Fica guardado cifrado e é apagado junto com a festa.</small>
+        <button class="btn" id="ccOk" type="button">Quero meu ingresso</button><div class="msg" id="ccM"></div></div>`;
+    mascaraCpf($('ccC'));
+    if($('ccSf')) $('ccSf').onchange=async e=>{ const fl=e.target.files[0]; e.target.value=''; if(!fl) return; try{ selfie=await encolher(fl,720,.82); $('ccPv').innerHTML=`<img src="${URL.createObjectURL(selfie)}" alt="Sua selfie">`; }catch(_){ selfie=null; } };
+    $('ccOk').onclick=async()=>{ const M=$('ccM'), nome=$('ccN').value.trim(), cpf=$('ccC').value;
+      if(nome.split(/\s+/).length<2){ M.className='msg err'; M.textContent='Escreva o nome completo.'; return; }
+      if(!cpfValido(cpf)){ M.className='msg err'; M.textContent='Confira o CPF: os números não batem.'; return; }
+      if(sf && !selfie){ M.className='msg err'; M.textContent='Tire a selfie para receber o ingresso.'; return; }
+      $('ccOk').disabled=true; M.className='msg'; M.innerHTML='<span class="spin"></span>';
+      try{ let path=null; if(selfie) path=await subir(selfie,'portaria/selfie','jpg','image/jpeg');
+        const r=await rpc('fe_cota_cadastro',{p_convite:codigo,p_nome:nome,p_cpf:cpf,p_selfie:path}); store.set('mf_ing_'+f.slug,r.token); store.set('mf_nome',nome);
+        try{ const u=new URL(location.href); u.searchParams.delete('cv'); u.searchParams.set('ing',r.token); history.replaceState(null,'',u); }catch(e){}
+        ligarPresenca(); toast('Pronto. O seu ingresso está aqui.'); }
+      catch(e){ $('ccOk').disabled=false; M.className='msg err'; M.textContent=/acabaram/.test(e.message||'')?`Os convites de ${c.dono} acabaram.`:/já está cadastrado/.test(e.message||'')?'Este CPF já tem ingresso nesta festa. Se perdeu o QR Code, a portaria acha pelo CPF.':/CPF/.test(e.message||'')?'Confira o CPF.':ERR(e); } };
+  }
+}
+function cpfValido(v){ const d=String(v||'').replace(/\D/g,''); if(d.length!==11 || /^(\d)\1{10}$/.test(d)) return false;
+  const dv=n=>{ let s=0; for(let i=0;i<n;i++) s+= +d[i]*(n+1-i); const r=(s*10)%11; return r===10?0:r; }; return dv(9)===+d[9] && dv(10)===+d[10]; }
+function mascaraCpf(inp){ if(!inp) return; inp.addEventListener('input',()=>{ const d=inp.value.replace(/\D/g,'').slice(0,11); inp.value=d.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2'); }); }
+const SVG_ROSTO='<svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="9" r="4"/><path d="M4.5 20.5c1.4-3.6 4.2-5.5 7.5-5.5s6.1 1.9 7.5 5.5"/></svg>';
+function compartilharTexto(txt, msgCopia){ if(navigator.share){ navigator.share({text:txt}).catch(()=>{}); } else copiar(txt, msgCopia||'Mensagem copiada. Cole no WhatsApp.'); }
+async function telaCota(){
+  FESTA = await carregarFesta(SLUG).catch(()=>null); if(!FESTA) return telaNaoAchou();
+  const f=FESTA, cod=Q.get('cota'); aplicarTema(temaDe(f)); document.title='Seus convites · '+(f.homenageado||f.titulo);
+  let d=null; try{ d=await rpc('fe_cota_ver',{p_codigo:cod}); }catch(e){}
+  if(!d){ $('app').innerHTML=`<div class="wrap center desl"><h1>Link de convites inválido</h1><p class="muted">Peça um link novo a quem organizou a festa.</p></div>`; return; }
+  const nomeF=esc(f.homenageado||f.titulo), sf=f.portaria&&f.portaria_selfie, aberta=f.ativo;
+  const render=()=>{ const P=d.pessoas||[], usados=P.length, resta=Math.max(0,d.qtd-usados), lk=linkFesta(f.slug,'cv='+d.convite);
+    $('app').innerHTML=`<div class="wrap cota-pg" style="max-width:640px">
+      <header class="cota-top"><p class="cota-eb">Convites para</p><h1>${esc(f.titulo||'')}${f.homenageado&&f.titulo&&!f.titulo.includes(f.homenageado)?` · ${nomeF}`:''}</h1><p class="muted">${[f.data?dataBonita(f):'',f.hora?'às '+esc(f.hora):'',f.local?esc(f.local):''].filter(Boolean).join(' · ')}</p></header>
+      <div class="card cota-c"><h2>Olá, ${esc(d.nome.split(',')[0].trim())}</h2><p>Você recebeu <b>${d.qtd} convite${d.qtd>1?'s':''}</b>. Se você também vai, cadastre-se como um deles.</p>
+        <div class="cota-bar" role="img" aria-label="${usados} de ${d.qtd} convites usados"><i style="width:${Math.round(usados/d.qtd*100)}%"></i></div><p class="muted" style="margin:6px 0 0"><b>${usados}</b> de ${d.qtd} usados · ${resta?`sobra${resta>1?'m':''} ${resta}`:'todos usados'}</p></div>
+      ${!aberta?`<div class="card cota-c"><p class="muted" style="margin:0">Esta festa não está aceitando cadastros agora.</p></div>`:resta?`<div class="card cota-c"><h3>Mande o link para os seus convidados</h3><p class="muted">Cada um preenche o nome, o CPF${sf?' e tira uma selfie':''} e recebe o próprio ingresso. O link para de aceitar quando os seus convites acabarem.</p>
+        <div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn" id="ctShare" type="button">Mandar o link</button><button class="btn ghost" id="ctCopy" type="button">Copiar link</button></div></div>
+      <div class="card cota-c"><h3>Ou cadastre você mesmo</h3><div style="display:flex;flex-direction:column;gap:10px"><input class="in" id="ctN" maxlength="60" placeholder="Nome completo" aria-label="Nome completo"><input class="in" id="ctC" inputmode="numeric" autocomplete="off" maxlength="14" placeholder="CPF" aria-label="CPF"><button class="btn alt" id="ctAdd" type="button">Cadastrar</button><div class="msg" id="ctM"></div></div>
+        ${sf?'<p class="muted" style="margin:10px 0 0;font-size:14px">A selfie para a entrada, a pessoa tira quando abrir o ingresso dela.</p>':''}</div>`:`<div class="card cota-c"><p style="margin:0"><b>Seus convites acabaram.</b> Para mais, fale com quem organizou a festa.</p></div>`}
+      <div class="card cota-c"><h3>Seus convidados${usados?` (${usados})`:''}</h3>${usados?`<div class="cota-lista">${P.map(x=>`<div class="cota-p"><div><b>${esc(x.nome)}</b><small class="muted">CPF ***.***.***-${esc(x.cpf_fim||'')}${x.por_link?' · pelo link':''}${sf&&!x.selfie&&!x.entrou_em?' · falta a selfie':''}</small></div><div class="cota-acts">${x.entrou_em?`<span class="cota-in">Entrou ${new Date(x.entrou_em).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}</span>`:`<button class="btn sm" data-ing="${x.id}" type="button">Mandar ingresso</button><button class="btn ghost sm" data-del="${x.id}" type="button" aria-label="Remover ${esc(x.nome)}">Remover</button>`}</div></div>`).join('')}</div>`:'<p class="muted" style="margin:0">Ninguém cadastrado ainda.</p>'}</div>
+      <p class="muted cota-lgpd"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true" style="vertical-align:-2px;margin-right:4px"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8.5 10.5V7.5a3.5 3.5 0 0 1 7 0v3"/></svg>O CPF serve só para achar o ingresso na entrada, se alguém perder o QR Code. Fica guardado cifrado, ninguém vê o número inteiro, e é apagado junto com a festa.</p>
+      <p class="center"><a class="btn ghost sm" href="${esc(linkFesta(f.slug))}">Ver a página da festa</a></p></div>`;
+    const txtLink=`Você está convidado para ${f.titulo||'a festa'}${f.homenageado&&!(f.titulo||'').includes(f.homenageado)?` de ${f.homenageado}`:''}${f.data?`, ${dataBonita(f)}`:''}. Cadastre-se aqui para receber o seu ingresso: ${lk}`;
+    if($('ctShare')){ $('ctShare').onclick=()=>compartilharTexto(txtLink); $('ctCopy').onclick=()=>copiar(lk,'Link copiado.'); mascaraCpf($('ctC'));
+      $('ctAdd').onclick=async()=>{ const M=$('ctM'), n=$('ctN').value.trim(), c=$('ctC').value;
+        if(n.split(/\s+/).length<2){ M.className='msg err'; M.textContent='Escreva o nome completo.'; return; }
+        if(!cpfValido(c)){ M.className='msg err'; M.textContent='Confira o CPF: os números não batem.'; return; }
+        $('ctAdd').disabled=true; M.className='msg'; M.innerHTML='<span class="spin"></span>';
+        try{ const r=await rpc('fe_cota_add',{p_codigo:cod,p_nome:n,p_cpf:c}); d.pessoas=[...(d.pessoas||[]), r]; render(); toast(`${n.split(' ')[0]} cadastrado. Agora mande o ingresso.`,3500); }
+        catch(e){ $('ctAdd').disabled=false; M.className='msg err'; M.textContent=/já está cadastrado/.test(e.message||'')?'Este CPF já tem ingresso nesta festa.':/acabaram/.test(e.message||'')?'Seus convites acabaram.':/CPF/.test(e.message||'')?'Confira o CPF.':/nome/i.test(e.message||'')?'Escreva o nome completo.':ERR(e); } }; }
+    document.querySelectorAll('[data-ing]').forEach(b=>b.onclick=()=>{ const x=(d.pessoas||[]).find(p=>p.id===+b.dataset.ing); if(!x) return;
+      compartilharTexto(`${x.nome.split(' ')[0]}, este é o seu ingresso para ${f.titulo||'a festa'}${f.data?`, ${dataBonita(f)}`:''}. Abra e mostre o QR Code na entrada: ${linkFesta(f.slug,'ing='+x.token)}`); });
+    document.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{ const x=(d.pessoas||[]).find(p=>p.id===+b.dataset.del); if(!x) return;
+      abrirFolha(`<h3>Remover ${esc(x.nome)}?</h3><p class="muted">O ingresso dessa pessoa deixa de valer e o convite volta para você.</p><div class="foot"><button class="btn ghost" id="eCancel">Cancelar</button><button class="btn" id="eSend">Remover</button></div>`);
+      $('eCancel').onclick=fecharFolha; $('eSend').onclick=async()=>{ try{ await rpc('fe_cota_del',{p_codigo:cod,p_pessoa:x.id}); d.pessoas=d.pessoas.filter(p=>p.id!==x.id); fecharFolha(); render(); toast('Removido.'); }catch(e){ toast(ERR(e)); } }; });
+  };
+  render();
 }
 async function ligarCardapio(MESA){
   const box=$('cdp'); if(!box) return; const f=FESTA;
@@ -2670,7 +2755,7 @@ function painelPortaria(pin){
     <div class="top"><h1>🚪 Portaria · <em>${esc(f.homenageado||f.titulo)}</em></h1><button class="btn ghost sm" id="pSair">Sair</button></div>
     <div class="card" style="padding:18px"><div class="port-top"><div class="port-cont"><span id="pE">0</span> <span class="muted" style="font-size:.5em">de</span> <span id="pT">0</span><small>pessoas já entraram</small></div>
       <button class="btn big" id="pScan">📷 Ler ingresso</button></div>
-      <div class="row"><input class="in" id="pBusca" placeholder="🔎 Buscar pelo nome" style="flex:1"><button class="btn ghost sm" id="pAvulso">➕ Entrada avulsa</button></div>
+      <div class="row"><input class="in" id="pBusca" placeholder="🔎 Buscar pelo nome" style="flex:1"><button class="btn ghost sm" id="pCpf" type="button">Buscar por CPF</button><button class="btn ghost sm" id="pAvulso">➕ Entrada avulsa</button></div>
       <div class="port-lista" id="pLista"><div class="empty"><span class="spin"></span></div></div></div></div>`;
   $('pSair').onclick=()=>{ store.set('mf_port_'+SLUG,null); location.reload(); };
   const render=()=>{ const tot=L.reduce((a,x)=>a+x.adultos+x.criancas,0), ent=L.reduce((a,x)=>a+(x.entrou_em?(x.entrou_qtd||0):0),0); $('pE').textContent=ent; $('pT').textContent=tot;
@@ -2691,6 +2776,11 @@ function painelPortaria(pin){
       $('gEntrar').onclick=async()=>{ try{ const r=await rpc('fe_portaria_entrar',{p_slug:SLUG,p_pin:pin,p_id:g.id,p_qtd:qtd}); fecharFolha(); toast(r.ja?'⚠️ Esse ingresso já tinha sido usado.':`✅ Entrada liberada: ${qtd} pessoa${qtd>1?'s':''}`,3500); carregar(); }catch(e){ msgE(ERR(e),'err'); } }; }
     if($('gDesf')) $('gDesf').onclick=async()=>{ try{ await rpc('fe_portaria_desfazer',{p_slug:SLUG,p_pin:pin,p_id:g.id}); fecharFolha(); toast('Entrada desfeita.'); carregar(); }catch(e){ msgE(ERR(e),'err'); } };
   };
+  $('pCpf').onclick=()=>{ abrirFolha(`<h3>Buscar por CPF</h3><p class="muted" style="margin-top:0">Para quem perdeu o QR Code. Peça um documento com foto.</p><input class="in" id="cpC" inputmode="numeric" maxlength="14" placeholder="CPF" autocomplete="off"><div class="msg" id="eMsg"></div><div class="foot"><button class="btn ghost" id="eCancel">Cancelar</button><button class="btn" id="eSend">Buscar</button></div>`);
+    mascaraCpf($('cpC')); $('cpC').focus(); $('eCancel').onclick=fecharFolha;
+    $('eSend').onclick=async()=>{ const v=$('cpC').value; if(!cpfValido(v)){ msgE('Confira o CPF.','err'); return; }
+      try{ const g=await rpc('fe_portaria_cpf',{p_slug:SLUG,p_pin:pin,p_cpf:v}); if(!g){ msgE('Nenhum ingresso com este CPF.','err'); return; } fecharFolha(); abrir(g, g.cota?`<p class="cota-de center">Convidado de ${esc(g.cota)}</p>`:''); }
+      catch(e){ msgE(ERR(e),'err'); } }; };
   $('pAvulso').onclick=()=>{ let q=1; abrirFolha(`<h3>➕ Entrada avulsa</h3><p class="muted" style="margin-top:0">Para quem não confirmou, mas o anfitrião autorizou entrar.</p><input class="in" id="avN" maxlength="60" placeholder="Nome">
       <div class="contador" style="margin-top:10px"><span>Pessoas</span><span class="row" style="gap:10px"><button type="button" id="avM">−</button><b id="avQ">1</b><button type="button" id="avP">+</button></span></div>
       <div class="msg" id="eMsg"></div><div class="foot"><button class="btn ghost" id="eCancel">Cancelar</button><button class="btn ok" id="eSend">Registrar entrada</button></div>`);
@@ -3386,6 +3476,37 @@ document.addEventListener('click',e=>{ const b=e.target.closest('[data-cvenv],[d
   if(b.hasAttribute('data-cvenv')) escolherConvite();
   else if(b.hasAttribute('data-cvvis')){ window.TEMA_CONVITE=ADM.cv; const t=document.querySelector('#abasTop [data-v="meutema"]'); if(ADM.view==='meutema') vMeuTema(); else if(t) t.click(); }
   else { store.set('mf_cvno_'+FESTA.slug,'1'); const c=b.closest('[data-cvcta]'); if(c) c.remove(); } });
+function blocoCotas(f){
+  const C=CORP(f), quem=C?'responsável':'padrinho';
+  $('presBox').insertAdjacentHTML('beforebegin', `<div class="card" style="padding:18px;margin-top:12px" id="cotaBox"><h3 style="margin:0 0 4px">Convites por ${quem}</h3>
+    <p class="muted" style="margin:0 0 12px">Dê um número de convites para alguém ${C?'(um gestor, um parceiro)':'(a madrinha, um padrinho, um amigo)'}. Essa pessoa cadastra os convidados dela, com nome e CPF, ou manda um link para eles se cadastrarem, até o limite. Cada um recebe o próprio ingresso com QR Code e usa a página ${C?'do evento':'da festa'} como qualquer ${C?'participante':'convidado'}. Você acompanha tudo aqui.</p><div id="cotaIn"><span class="spin"></span></div></div>`);
+  const pintar=async()=>{ let R; try{ R=await rpc('fe_admin_cotas',{p_slug:SLUG,p_pin:PIN}); }catch(e){ $('cotaIn').textContent=ERR(e); return; }
+    if(!R.liberado){ $('cotaIn').innerHTML=`<p class="aviso" style="margin:0">Disponível nos planos Festa e Grande Evento.</p>`; return; }
+    const L=R.cotas||[], dados=L.reduce((a,c)=>a+c.qtd,0), cad=L.reduce((a,c)=>a+c.pessoas.length,0), ent=L.reduce((a,c)=>a+c.pessoas.filter(p=>p.entrou_em).length,0);
+    $('cotaIn').innerHTML=`<div class="cota-form"><label class="f">Quem recebe os convites<input class="in" id="coN" maxlength="60" placeholder="${C?'Ex.: Carla, do comercial':'Ex.: Ana Paula, madrinha'}"></label><label class="f">Quantos convites<input class="in" id="coQ" type="number" min="1" max="60" inputmode="numeric" value="4"></label><button class="btn" id="coAdd" type="button">Dar convites</button></div><div class="msg" id="coM"></div>
+      ${L.length?`<div class="pres-tot" style="margin-top:12px"><div><b>${dados}</b>convites dados</div><div><b>${cad}</b>cadastrados</div><div><b>${ent}</b>já entraram</div></div>
+      <div class="cota-adm">${L.map(c=>`<details class="cota-d"><summary><span><b>${esc(c.nome)}</b><small class="muted">${c.pessoas.length} de ${c.qtd} cadastrados${c.pessoas.some(p=>p.entrou_em)?` · ${c.pessoas.filter(p=>p.entrou_em).length} ${c.pessoas.filter(p=>p.entrou_em).length>1?'entraram':'entrou'}`:''}</small></span><span class="cota-mini"><i style="width:${Math.round(c.pessoas.length/c.qtd*100)}%"></i></span></summary>
+        <div class="cota-acts" style="margin:10px 0"><button class="btn sm" data-cman="${c.id}" type="button">Enviar link de convites</button><button class="btn ghost sm" data-cqtd="${c.id}" type="button">Mudar quantidade</button><button class="btn ghost sm" data-capg="${c.id}" type="button">Apagar</button></div>
+        ${c.pessoas.length?`<div class="pres-lista">${c.pessoas.map(p=>`<div><span>${esc(p.nome)}<br><small class="muted">CPF ***.***.***-${esc(p.cpf_fim||'')}${p.por_link?' · pelo link':''}</small></span><span class="muted">${p.entrou_em?`<b style="color:#2b8a3e">entrou ${new Date(p.entrou_em).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}</b>`:`<button class="molbtn" data-ctir="${p.id}" type="button">Tirar</button>`}</span></div>`).join('')}</div>`:'<p class="muted" style="margin:0">Ninguém cadastrado ainda.</p>'}</details>`).join('')}</div>`:''}
+      ${!f.portaria?`<p class="muted" style="margin:12px 0 0;font-size:14px">Para conferir os ingressos na entrada, ligue a portaria, logo acima.</p>`:''}`;
+    $('coAdd').onclick=async()=>{ const M=$('coM'), n=$('coN').value.trim(), q=parseInt($('coQ').value,10);
+      if(n.length<2){ M.className='msg err'; M.textContent='Escreva o nome de quem recebe.'; return; } if(!(q>=1&&q<=60)){ M.className='msg err'; M.textContent='Escolha de 1 a 60 convites.'; return; }
+      try{ const r=await rpc('fe_admin_cota_salvar',{p_slug:SLUG,p_pin:PIN,p_id:null,p_nome:n,p_qtd:q}); await pintar(); mandar({nome:n,qtd:q,codigo:r.codigo}); }catch(e){ M.className='msg err'; M.textContent=ERR(e); } };
+    const mandar=c=>{ const lk=linkFesta(f.slug,'cota='+c.codigo), txt=`Olá, ${c.nome.split(/[ ,]/)[0]}! Você tem ${c.qtd} convite${c.qtd>1?'s':''} para ${f.titulo||'a festa'}${f.data?`, ${dataBonita(f)}`:''}. Por este link você cadastra os seus convidados e acompanha tudo: ${lk}`;
+      abrirFolha(`<h3>Mandar para ${esc(c.nome)}</h3><p class="muted" style="margin-top:0">Este link é só de ${esc(c.nome.split(' ')[0])}: por ele, cadastra os convidados e acompanha quem já tem ingresso.</p><div class="linkbox"><code>${esc(lk)}</code></div><div class="foot"><button class="btn ghost" id="eCancel">Fechar</button><button class="btn ghost" id="cmCp">Copiar link</button><button class="btn" id="cmSh">Mandar mensagem</button></div>`);
+      $('eCancel').onclick=fecharFolha; $('cmCp').onclick=()=>copiar(lk,'Link copiado.'); $('cmSh').onclick=()=>compartilharTexto(txt); };
+    const ach=id=>L.find(c=>c.id===+id);
+    document.querySelectorAll('[data-cman]').forEach(b=>b.onclick=()=>mandar(ach(b.dataset.cman)));
+    document.querySelectorAll('[data-cqtd]').forEach(b=>b.onclick=()=>{ const c=ach(b.dataset.cqtd);
+      abrirFolha(`<h3>Convites de ${esc(c.nome)}</h3><label class="f">Quantos convites<input class="in" id="cqQ" type="number" min="${Math.max(1,c.pessoas.length)}" max="60" inputmode="numeric" value="${c.qtd}"></label><p class="muted">Já ${c.pessoas.length===1?'há 1 pessoa cadastrada':`há ${c.pessoas.length} pessoas cadastradas`}.</p><div class="msg" id="eMsg"></div><div class="foot"><button class="btn ghost" id="eCancel">Cancelar</button><button class="btn" id="eSend">Salvar</button></div>`);
+      $('eCancel').onclick=fecharFolha; $('eSend').onclick=async()=>{ try{ await rpc('fe_admin_cota_salvar',{p_slug:SLUG,p_pin:PIN,p_id:c.id,p_nome:c.nome,p_qtd:parseInt($('cqQ').value,10)}); fecharFolha(); pintar(); toast('Quantidade salva.'); }catch(e){ msgE(/Já há/.test(e.message||'')?'Não dá para ficar abaixo de quem já se cadastrou.':ERR(e),'err'); } }; });
+    document.querySelectorAll('[data-capg]').forEach(b=>b.onclick=()=>{ const c=ach(b.dataset.capg);
+      abrirFolha(`<h3>Apagar os convites de ${esc(c.nome)}?</h3><p class="muted">${c.pessoas.length?`Os ${c.pessoas.length} ingressos já cadastrados deixam de valer.`:'Ninguém se cadastrou ainda.'} Não dá para desfazer.</p><div class="foot"><button class="btn ghost" id="eCancel">Cancelar</button><button class="btn" id="eSend">Apagar</button></div>`);
+      $('eCancel').onclick=fecharFolha; $('eSend').onclick=async()=>{ try{ await rpc('fe_admin_cota_apagar',{p_slug:SLUG,p_pin:PIN,p_id:c.id}); fecharFolha(); pintar(); toast('Convites apagados.'); }catch(e){ toast(ERR(e)); } }; });
+    document.querySelectorAll('[data-ctir]').forEach(b=>b.onclick=async()=>{ try{ await rpc('fe_admin_cota_tirar',{p_slug:SLUG,p_pin:PIN,p_pessoa:+b.dataset.ctir}); pintar(); toast('Ingresso cancelado.'); }catch(e){ toast(ERR(e)); } });
+  };
+  pintar();
+}
 async function vCompartilhar(){
   ADM.view='compartilhar'; store.set('mf_r_conv_'+FESTA.slug,'1'); setTimeout(()=>pintarRoteiro(FESTA),200); const f=FESTA; let cvMeu=null; try{ cvMeu=await rpc('fe_convite_img',{p_festa:f.id}); ADM.cv=cvMeu||null; }catch(e){} const L=[['Convidados','📲',linkFesta(f.slug)],['Telão (abrir no notebook/TV)','📺',linkFesta(f.slug,'telao')],['Área do anfitrião','🔐',linkFesta(f.slug,'admin')]];
   $('vw').innerHTML=`<div class="grid2">
@@ -3420,6 +3541,7 @@ async function vCompartilhar(){
     catch(e){ $('vlM').className='msg err'; $('vlM').textContent=/senha da equipe/i.test(e.message||'')?'Crie a senha da equipe (4 ou mais caracteres).':ERR(e); } };
   if(f.valet) (async()=>{ try{ const V=await rpc('fe_admin_valet_lista',{p_slug:SLUG,p_pin:PIN}); const c=s=>V.filter(x=>x.status===s).length;
     $('vlL').innerHTML=`<div class="pres-tot"><div><b>${V.length}</b>carros recebidos</div><div><b>${c('estacionado')}</b>estacionados</div><div><b>${c('entregue')}</b>entregues</div></div>`; }catch(e){} })();
+  blocoCotas(f);
   (async()=>{ let L2=[]; try{ L2=await rpc('fe_admin_presencas',{p_slug:SLUG,p_pin:PIN}); }catch(e){ $('presL').textContent=ERR(e); return; }
     const vao=L2.filter(x=>x.vai), ad=vao.reduce((a,x)=>a+x.adultos,0), cr=vao.reduce((a,x)=>a+x.criancas,0);
     $('presL').innerHTML = L2.length ? `<div class="pres-tot"><div><b>${ad+cr}</b>pessoas vão</div><div><b>${ad}</b>adultos · <b style="display:inline;font-size:inherit">${cr}</b> crianças</div><div><b>${L2.length-vao.length}</b>não vão</div></div>
@@ -5258,7 +5380,7 @@ function faleConosco(assunto){
     catch(e){ msgE(/e-mail|mensagens|Conte|minutos/.test(e.message||'')?e.message:ERR(e),'err'); $('eSend').disabled=false; } };
 }
 function montarAjuda(){
-  if(MODE==='telao' || MODE==='album' || MODE==='admin' || $('ajudaBtn')) return;
+  if(MODE==='telao' || MODE==='album' || MODE==='admin' || MODE==='cota' || $('ajudaBtn')) return;
   const b=document.createElement('button'); b.id='ajudaBtn'; b.type='button'; b.textContent=MODE==='convidado'?'❓':'❓ Ajuda'; if(MODE==='convidado') b.classList.add('mini'); b.setAttribute('aria-label','Ajuda'); b.onclick=abrirAjuda; document.body.appendChild(b); document.body.classList.add('tem-ajuda');
 }
 (async function iniciar(){
@@ -5268,6 +5390,7 @@ function montarAjuda(){
     else if(MODE==='telao') await telaTelao();
     else if(MODE==='palestrante') await telaPalestrante();
     else if(MODE==='portaria') await telaPortaria();
+    else if(MODE==='cota') await telaCota();
     else if(MODE==='pedidos') await telaPedidos();
     else if(MODE==='valet') await telaValet();
     else if(MODE==='admin') await telaAdmin();

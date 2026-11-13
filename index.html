@@ -3676,9 +3676,8 @@ async function vCompartilhar(){
   $('cvEnviar').onclick=async()=>{ const b=$('cvEnviar'); b.disabled=true; let blob=null;
     try{ const cv=await gerarCv(); blob=await new Promise(r=>cv.toBlob(r,'image/png')); }catch(e){ b.disabled=false; $('cvM').className='msg err'; $('cvM').textContent='Não consegui gerar o convite agora.'; return; }
     b.disabled=false; const txt=($('shTxt')&&$('shTxt').value)||textoConvite(f), file=new File([blob],nomeArq+'.png',{type:'image/png'});
-    // celular: o compartilhar do aparelho leva a arte e a mensagem juntas
-    const celular=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-    if(celular && !window.__cvWeb && navigator.canShare && navigator.canShare({files:[file], text:txt})){ try{ await navigator.share({files:[file], text:txt}); return; }catch(e){ if(e&&e.name==='AbortError') return; } }
+    // celular ou WhatsApp instalado no Windows: o compartilhar do aparelho leva a arte e a mensagem juntas, como foto com legenda
+    if(!window.__cvWeb && navigator.canShare && navigator.canShare({files:[file], text:txt})){ try{ await navigator.share({files:[file], text:txt}); return; }catch(e){ if(e&&e.name==='AbortError') return; } }
     // computador (WhatsApp Web): copia só a mensagem; o link mostra a arte do convite sozinho
     await copiar(txt,'Mensagem copiada.');
     abrirFolha(`<h3>Enviar pelo WhatsApp Web</h3><ol class="env-passos">

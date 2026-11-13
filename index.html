@@ -3628,7 +3628,7 @@ async function vCompartilhar(){
      <div class="seg" style="justify-content:center;margin-bottom:12px">${cvMeu?'':`<p style="margin:0 0 10px;font-weight:600">Já tem um convite pronto? Envie e a página, o telão e o álbum ficam com o mesmo design.</p>`}<label class="btn ${cvMeu?'ghost ':''}sm" style="position:relative">${cvMeu?'Trocar meu convite':'Enviar meu convite'}<input type="file" id="cvUpF" accept="image/*,application/pdf" style="position:absolute;inset:0;opacity:0;cursor:pointer"></label>${cvMeu?'<button class="btn ghost sm" type="button" id="cvUpX">Voltar ao convite automático</button>':''}</div>
      <img id="cvPrev" alt="Prévia do convite" style="width:min(240px,70%);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.18);background:var(--bg)">
      ${cvMeu?'<p class="muted" style="font-size:13px;margin:8px 0 0">Seu convite ganha uma faixa com o QR da festa embaixo. Ele também aparece no topo da página do convidado.</p><p style="margin:10px 0 0"><button class="btn alt sm" type="button" id="cvVis">Usar o design do convite na festa toda</button></p>':''}
-     <div class="row" style="justify-content:center;margin-top:14px"><button class="btn" id="cvEnviar" type="button">Enviar convite com a arte</button><button class="btn alt" id="cvWeb" type="button">Copiar para o WhatsApp Web</button><button class="btn ghost" id="cvImg">Baixar imagem</button><button class="btn ghost" id="cvPdf">Convite para imprimir (PDF)</button></div><p class="muted" style="font-size:13px;margin:8px 0 0">A arte e a mensagem com o link vão juntas, numa mensagem só.</p><div class="msg" id="cvM"></div></div>
+     <div class="row" style="justify-content:center;margin-top:14px"><button class="btn" id="cvEnviar" type="button">Enviar convite com a arte</button><button class="btn alt" id="cvWeb" type="button">Copiar mensagem para o WhatsApp Web</button><button class="btn ghost" id="cvImg">Baixar imagem</button><button class="btn ghost" id="cvPdf">Convite para imprimir (PDF)</button></div><p class="muted" style="font-size:13px;margin:8px 0 0">A arte e a mensagem com o link vão juntas, numa mensagem só.</p><div class="msg" id="cvM"></div></div>
    <div class="card" style="padding:18px;text-align:center"><h3 style="margin:0 0 10px">QR Code dos convidados</h3><div class="qrbig" id="shQr"></div><p class="muted" style="font-size:14px">Mostre na entrada ou imprima nas mesas</p><div class="row" style="justify-content:center;gap:8px;flex-wrap:wrap"><button class="btn" id="shCartoes">🖨️ Cartões de mesa (PDF)</button><button class="btn ghost" id="shCartaz">🪧 Placa da entrada (PDF)</button></div></div>
    <div class="card" style="padding:18px;display:flex;flex-direction:column;gap:10px"><h3 style="margin:0">Links</h3>
      ${L.map(([n,e,u])=>`<div><div style="font-weight:600;font-size:14px;margin-bottom:4px">${e} ${n}</div><div class="linkbox"><code>${esc(u)}</code><button class="btn sm" data-copy="${esc(u)}">Copiar</button></div></div>`).join('')}
@@ -3672,21 +3672,22 @@ async function vCompartilhar(){
     try{ const path=await enviarConvite(file); M.textContent=''; await vCompartilhar(); pintarRoteiro(FESTA); perguntarVisualConvite(path);
     }catch(err){ M.className='msg err'; M.textContent='Não consegui enviar o convite. '+ERR(err); } };
   const nomeArq=`Convite_${f.slug}`;
-  $('cvImg').onclick=async()=>{ const b=$('cvImg'); b.disabled=true; try{ const cv=await gerarCv(); baixar(await new Promise(r=>cv.toBlob(r,'image/png')), nomeArq+'.png'); $('cvM').className='msg ok'; $('cvM').textContent='Convite salvo! Mande no grupo da família 💛'; }catch(e){ $('cvM').className='msg err'; $('cvM').textContent='Não consegui gerar o convite agora.'; } b.disabled=false; };
+  $('cvImg').onclick=async()=>{ const b=$('cvImg'); b.disabled=true; try{ const cv=await gerarCv(); baixar(await new Promise(r=>cv.toBlob(r,'image/png')), nomeArq+'.png'); $('cvM').className='msg ok'; $('cvM').textContent='Convite salvo.'; }catch(e){ $('cvM').className='msg err'; $('cvM').textContent='Não consegui gerar o convite agora.'; } b.disabled=false; };
   $('cvEnviar').onclick=async()=>{ const b=$('cvEnviar'); b.disabled=true; let blob=null;
     try{ const cv=await gerarCv(); blob=await new Promise(r=>cv.toBlob(r,'image/png')); }catch(e){ b.disabled=false; $('cvM').className='msg err'; $('cvM').textContent='Não consegui gerar o convite agora.'; return; }
     b.disabled=false; const txt=($('shTxt')&&$('shTxt').value)||textoConvite(f), file=new File([blob],nomeArq+'.png',{type:'image/png'});
-    // um clique: o compartilhar do aparelho (celular ou Windows) leva a arte e a mensagem com o link juntas
-    if(!window.__cvWeb && navigator.canShare && navigator.canShare({files:[file], text:txt})){ try{ await navigator.share({files:[file], text:txt}); return; }catch(e){ if(e&&e.name==='AbortError') return; } }
-    // computador (WhatsApp Web): a arte vai pela área de transferência e a mensagem entra como legenda
-    let imgOk=false; try{ await navigator.clipboard.write([new ClipboardItem({'image/png':blob, 'text/plain':new Blob([txt],{type:'text/plain'})})]); imgOk=true; }catch(e){ try{ await navigator.clipboard.write([new ClipboardItem({'image/png':blob})]); imgOk=true; }catch(_){} }
+    // celular: o compartilhar do aparelho leva a arte e a mensagem juntas
+    const celular=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    if(celular && !window.__cvWeb && navigator.canShare && navigator.canShare({files:[file], text:txt})){ try{ await navigator.share({files:[file], text:txt}); return; }catch(e){ if(e&&e.name==='AbortError') return; } }
+    // computador (WhatsApp Web): copia só a mensagem; o link mostra a arte do convite sozinho
+    await copiar(txt,'Mensagem copiada.');
     abrirFolha(`<h3>Enviar pelo WhatsApp Web</h3><ol class="env-passos">
-      <li><b>${imgOk?'A arte já está copiada.':'Baixe a arte.'}</b> Abra a conversa ou o grupo no WhatsApp Web e ${imgOk?'aperte <kbd>Ctrl</kbd> + <kbd>V</kbd>. A arte aparece para enviar.':'arraste a imagem baixada para dentro da conversa.'}${imgOk?'':' <button class="btn sm" type="button" id="envBx">Baixar a arte</button>'}</li>
-      <li><b>Confira a legenda.</b> Se a mensagem com o link não vier junto, embaixo da arte, toque em <button class="btn sm" type="button" id="envTx">Copiar mensagem</button> e cole na legenda.</li>
+      <li><b>A mensagem já está copiada.</b> Abra a conversa ou o grupo no WhatsApp Web e aperte <kbd>Ctrl</kbd> + <kbd>V</kbd>.</li>
+      <li><b>Espere 2 a 3 segundos.</b> A arte do convite aparece sozinha em cima da mensagem.</li>
       <li><b>Envie.</b> A arte e a mensagem com o link chegam juntas.</li></ol>
+      <p class="muted" style="font-size:13px;margin:4px 0 0">Convite novo ou trocado agora? A arte pode levar até 10 minutos para aparecer no link.</p>
       <div class="foot"><a class="btn ghost" href="https://web.whatsapp.com/" target="_blank" rel="noopener">Abrir o WhatsApp Web</a><button class="btn" id="eCancel">Pronto</button></div>`);
-    $('eCancel').onclick=fecharFolha; $('envTx').onclick=()=>copiar(txt,'Mensagem copiada. Cole na legenda.');
-    if($('envBx')) $('envBx').onclick=()=>baixar(blob, nomeArq+'.png'); };
+    $('eCancel').onclick=fecharFolha; };
   $('cvWeb').onclick=async()=>{ window.__cvWeb=true; try{ await $('cvEnviar').onclick(); } finally{ window.__cvWeb=false; } };
   $('cvPdf').onclick=async()=>{ const b=$('cvPdf'); b.disabled=true; try{ baixar(await pdfConvite(f), nomeArq+'.pdf'); $('cvM').className='msg ok'; $('cvM').textContent='PDF pronto: 2 convites por folha A4, é só cortar na linha.'; }catch(e){ $('cvM').className='msg err'; $('cvM').textContent='Não consegui gerar o PDF agora.'; } b.disabled=false; };
   document.querySelectorAll('[data-copy]').forEach(b=>b.onclick=()=>copiar(b.dataset.copy,'Link copiado!'));

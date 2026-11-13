@@ -1777,9 +1777,9 @@ async function telaConvidado(){
   ${SITE?`<nav class="snav" aria-label="Seções"><a class="snav-m" href="#inicio">${esc(monograma(f))}</a><div class="snav-l" id="snavL">${navL.map(([id,t])=>`<a href="#${id}">${t}</a>`).join('')}</div><button class="snav-b" type="button" id="snavB" aria-label="Abrir menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button></nav>`:''}
   <div class="wrap convite${SITE?' site':''}">
     <header class="capa" id="inicio">
-      ${t.enfeite?`<img class="enfc l" src="${midia(t.enfeites[0])}" alt="">${t.enfeites[1]?`<img class="enfc r" src="${midia(t.enfeites[1])}" alt="">`:''}`:''}
+      ${t.enfeite?`<img class="enfc l" crossorigin="anonymous" src="${midia(t.enfeites[0])}" alt="">${t.enfeites[1]?`<img class="enfc r" crossorigin="anonymous" src="${midia(t.enfeites[1])}" alt="">`:''}${t.enfeites[2]?`<img class="enfc l" crossorigin="anonymous" src="${midia(t.enfeites[2])}" alt="">`:''}`:''}
       ${retrato?`<div class="arco"><img src="${midia(retrato)}" alt="${esc(f.homenageado||'')}"></div>`:''}
-      ${EXT(f).logo?`<img class="capa-logo" src="${midia(EXT(f).logo)}" alt="Logomarca">`:''}
+      ${EXT(f).logo?`<img class="capa-logo" crossorigin="anonymous" src="${midia(EXT(f).logo)}" alt="Logomarca">`:''}
       <p class="lead">${esc(subtitulo(f))}</p>
       <h1 class="who">${esc(DESTAQUE(f))}</h1>
       ${f.homenageado && f.homenageado.trim().toLowerCase()!==String(f.titulo||"").trim().toLowerCase() && String(SEGUNDO(f)||"").trim().toLowerCase()!==String(subtitulo(f)||"").trim().toLowerCase()?`<p class="tit">${esc(SEGUNDO(f))}</p>`:''}
@@ -1831,7 +1831,7 @@ async function telaConvidado(){
     <p class="rod">Ao enviar ${CORP(f)?'uma mensagem':'uma homenagem'}, você concorda com os <a href="${BASE}?termos" target="_blank" rel="noopener">Termos de uso e Privacidade</a>.</p>
   </div>`;
   document.querySelectorAll('.act').forEach(b=>b.onclick=()=>abrirEnvio(b.dataset.k));
-  arrumarEnfeites(); document.querySelectorAll('.capa .enfc').forEach(im=>im.addEventListener('load',arrumarEnfeites,{once:true}));
+  arrumarEnfeites(); document.querySelectorAll('.capa .enfc, .capa .capa-logo').forEach(im=>{ im.addEventListener('load',()=>{ arrumarEnfeites(); logoRepetida(); },{once:true}); if(im.complete) logoRepetida(); });
   if(!window._enfRz){ window._enfRz=1; let tm; addEventListener('resize',()=>{ clearTimeout(tm); tm=setTimeout(arrumarEnfeites,150); }); }
   document.querySelectorAll('.capa .enfc').forEach(im=>{ const t2=new Image(); t2.crossOrigin='anonymous'; t2.onload=()=>{ try{ const c=document.createElement('canvas'); c.width=c.height=16; const x=c.getContext('2d'); x.drawImage(t2,0,0,16,16); const d=x.getImageData(0,0,16,16).data; if(![0,15,240,255].some(k=>d[k*4+3]<200)) im.classList.add('sticker'); }catch(e){ im.classList.add('sticker'); } }; t2.src=im.src; });
   const nome=$('nome'); if(nome) nome.addEventListener('change',()=>store.set('mf_nome',nome.value.trim().slice(0,40)));
@@ -2001,6 +2001,10 @@ async function ligarPresenca(){
   }
 }
 // a arte nunca pode ficar por cima do texto: os enfeites vão para as laterais livres ou para uma fileira acima
+function miniAssinatura(im){ try{ const c=document.createElement('canvas'); c.width=c.height=12; const x=c.getContext('2d'); x.drawImage(im,0,0,12,12); return x.getImageData(0,0,12,12).data; }catch(e){ return null; } }
+function logoRepetida(){ const capa=document.querySelector('.capa'), lg=capa&&capa.querySelector('.capa-logo'); if(!lg||!lg.complete||!lg.naturalWidth) return;
+  const a=miniAssinatura(lg); if(!a) return;
+  for(const im of capa.querySelectorAll('.enfc')){ if(!im.complete||!im.naturalWidth) continue; const b=miniAssinatura(im); if(!b) continue; let d=0; for(let i=0;i<a.length;i+=4) d+=Math.abs(a[i]-b[i])+Math.abs(a[i+1]-b[i+1])+Math.abs(a[i+2]-b[i+2]); if(d/(a.length/4)/3<18){ lg.remove(); arrumarEnfeites(); return; } } }
 function arrumarEnfeites(){
   const capa=document.querySelector('.capa'); if(!capa) return; const ims=[...capa.querySelectorAll('.enfc')]; if(!ims.length) return;
   let row=capa.querySelector('.enf-row'); if(row){ ims.forEach(im=>capa.insertBefore(im,row)); row.remove(); }
@@ -2009,7 +2013,7 @@ function arrumarEnfeites(){
   if(!txt.length) return; let L=Infinity,R=-Infinity,T=Infinity,B=-Infinity;
   for(const e of txt){ const r=e.getBoundingClientRect(); if(!r.width) continue; const rg=document.createRange(); rg.selectNodeContents(e); const rr=rg.getBoundingClientRect(); const x0=Math.max(r.left,rr.left||r.left), x1=Math.min(r.right,rr.right||r.right); L=Math.min(L,x0); R=Math.max(R,x1); T=Math.min(T,r.top); B=Math.max(B,r.bottom); }
   const vw=document.documentElement.clientWidth, gl=L-8, gr=vw-R-8, w=Math.min(160, Math.min(gl,gr)-28);
-  if(w>=70){ ims.forEach((im,i)=>{ im.style.width=w+'px'; im.style.top=(T-cr.top+(B-T)*(i?.45:.08))+'px';
+  if(w>=70){ ims.forEach((im,i)=>{ im.style.width=w+'px'; im.style.top=(T-cr.top+(B-T)*([.04,.4,.62][i]||0))+'px';
     if(im.classList.contains('l')){ const x=Math.max(8, L-40-w); im.style.left=(x-cr.left)+'px'; } else { const x=Math.min(vw-8-w, R+40); im.style.left=(x-cr.left)+'px'; im.style.right='auto'; } }); return; }
   row=document.createElement('div'); row.className='enf-row'; ims.forEach(im=>row.appendChild(im)); capa.insertBefore(row, capa.firstChild);
 }
@@ -3523,8 +3527,9 @@ async function vMeuTema(){
 }
 async function encolherPng(file, max){ file=await prepararImagem(file).catch(()=>file); const bmp=await createImageBitmap(file); const k=Math.min(1,max/Math.max(bmp.width,bmp.height)); const cv=document.createElement('canvas'); cv.width=Math.round(bmp.width*k); cv.height=Math.round(bmp.height*k); cv.getContext('2d').drawImage(bmp,0,0,cv.width,cv.height); return await new Promise(r=>cv.toBlob(r,'image/png')); }
 function textoConvite(f, senha){
-  if(CORP(f)) return `💼 *${f.titulo}*\n\n${f.data&&f.data>=new Date().toISOString().slice(0,10)?'Confirme sua presença pelo link 👇. No dia, é por ele que você participa: perguntas, mensagens, cardápio e muito mais.':'Participe pelo link 👇: perguntas, mensagens, cardápio e muito mais.'}\n\n👉 ${linkFesta(f.slug)}`;
-  return `${CATS[f.categoria]?.e||'🎉'} *${f.titulo}*\n\n${f.data&&f.data>=new Date().toISOString().slice(0,10)?`Confirme sua presença pelo link 👇 e, no dia, deixe sua homenagem para ${f.homenageado||'o homenageado'}: foto, recado, áudio ou vídeo. Vai aparecer no telão da festa 💛`:`Deixe sua homenagem para ${f.homenageado||'o homenageado'}: foto, recado, áudio ou vídeo! Vai aparecer no telão da festa 💛`}\n\n👉 ${linkFesta(f.slug)}`;
+  const futuro=f.data&&f.data>=new Date().toISOString().slice(0,10);
+  if(CORP(f)) return `*${f.titulo}*\n\n${futuro?'Confirme sua presença pelo link abaixo. No dia, é por ele que você participa: perguntas, mensagens, cardápio e muito mais.':'Participe pelo link abaixo: perguntas, mensagens, cardápio e muito mais.'}\n\n${linkFesta(f.slug)}`;
+  return `*${f.titulo}*\n\n${futuro?`Confirme sua presença pelo link abaixo e, no dia, deixe sua homenagem para ${f.homenageado||'o homenageado'}: foto, recado, áudio ou vídeo. Vai aparecer no telão da festa.`:`Deixe sua homenagem para ${f.homenageado||'o homenageado'}: foto, recado, áudio ou vídeo. Vai aparecer no telão da festa.`}\n\n${linkFesta(f.slug)}`;
 }
 function perguntarVisualConvite(path){
   const temTema=FESTA.custom && FESTA.custom.visual!==false;

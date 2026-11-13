@@ -1479,6 +1479,7 @@ function semEmojiAttr(root){ if(!root||!root.querySelectorAll) return; root.quer
 })();
 const BASE = location.origin + location.pathname.replace(/index\.html$/, '');
 const SITE = (location.host + location.pathname).replace(/index\.html$/,'').replace(/\/$/,'');
+const diaDaFesta = f => { if(!f.data) return true; const hoje=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10); return f.data<=hoje; };   // correio elegante só no dia da festa
 const linkLongo = (slug, extra) => BASE + '?f=' + slug + (extra ? '&' + extra : '');
 const linkConvite = slug => (/github\.io$/.test(location.hostname) ? BASE + 'c/' + slug + '/' : linkLongo(slug));
 const linkFesta = (slug, extra) => (extra ? linkLongo(slug, extra) : linkConvite(slug));   // link dos convidados sempre no formato que mostra a arte no WhatsApp
@@ -1825,7 +1826,7 @@ async function telaConvidado(){
     ${!SITE && f.ativo && PIX(f) ? '<section class="card rsvp" id="pixC"></section>' : ''}
     ${f.ativo && (EXT(f).desafios||[]).length ? '<section class="card rsvp" id="dsf"></section>' : ''}
     ${f.ativo && f.tem_cardapio && !MESA ? '<section class="card rsvp" id="cdp"></section>' : ''}
-    ${f.ativo && f.correio_ativo!==false ? '<section class="card rsvp" id="crr"></section>' : ''}
+    ${f.ativo && f.correio_ativo!==false && diaDaFesta(f) ? '<section class="card rsvp" id="crr"></section>' : ''}
     ${(t.fotos||[]).length ? `<h2 class="sec">📖 A história de ${esc(f.homenageado||'quem a gente ama')}</h2><div class="hist">${t.fotos.map(p=>`<figure><img loading="lazy" src="${midia(p)}" alt=""></figure>`).join('')}</div>` : ''}
     ${FEED_CEL(f)?`<h2 class="sec">🖼️ Mural <span class="muted" id="muralN" style="font-size:16px;font-weight:500"></span></h2>
     <div class="mm-chips" id="mmC"></div>
@@ -3979,7 +3980,7 @@ async function vInteracoes(){
   ADM.view='interacoes'; const f=FESTA; let D={comentarios:[],correio:[],perguntas:[]}, filtro='pendentes';
   $('vw').innerHTML=`<div class="card" style="padding:18px"><h3 style="margin:0 0 4px">💬 Interações <span class="muted" style="font-size:14px;font-weight:500">(tudo passa por você)</span></h3>
       <p class="muted" style="margin:0 0 12px">Comentários nas homenagens, correio elegante e perguntas para o palco só aparecem depois que você aprova. As reações com emoji são livres.</p>
-      <label class="row" style="gap:8px;font-weight:600"><input type="checkbox" id="itCr" style="width:22px;height:22px"> 💌 Correio elegante aberto para os convidados</label>
+      <label class="row" style="gap:8px;font-weight:600"><input type="checkbox" id="itCr" style="width:22px;height:22px"> Correio elegante aberto para os convidados <span class="muted" style="font-weight:400">(aparece na página só no dia da festa)</span></label>
       <label class="row" style="gap:8px;font-weight:600;margin-top:8px"><input type="checkbox" id="itPg" style="width:22px;height:22px"> 🙋 Perguntas para o palco (palestras, apresentações)</label>
       <label class="row" style="gap:8px;font-weight:600;margin-top:8px;align-items:flex-start"><input type="checkbox" id="itFd" style="width:22px;height:22px;flex:none"> <span>🖼️ Mostrar o mural também no celular dos ${CORP(f)?'participantes':'convidados'}<br><span class="muted" style="font-weight:500;font-size:14px">Desligado: o que for enviado aparece só no telão (e no álbum). Ligado: todos veem as ${CORP(f)?'mensagens':'homenagens'} aprovadas no celular e podem curtir e comentar.</span></span></label></div>
     <div class="card" style="padding:18px;margin-top:12px"><div class="seg" style="justify-content:flex-start;margin:0 0 12px" id="itF">

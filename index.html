@@ -33,7 +33,7 @@ body{font-family:var(--body);font-size:16px;line-height:1.45;min-height:100%;ove
 img,video{max-width:100%}
 button,input,textarea,select{font:inherit;color:inherit}
 :focus-visible{outline:3px solid var(--accent2);outline-offset:2px}
-#bgimg{position:fixed;inset:0;z-index:0;background-size:cover;background-position:center;pointer-events:none}
+#bgimg{position:fixed;inset:-40px;z-index:0;background-size:cover;background-position:center;pointer-events:none;filter:blur(16px)}
 #bgimg::after{content:"";position:absolute;inset:0;background:var(--bg);opacity:var(--veu,.8)}
 #fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
 .wrap{position:relative;z-index:1;max-width:1120px;margin:0 auto;
@@ -381,6 +381,8 @@ h2.sec .muted{font-family:var(--body)}
 .capa .enfc.l{left:-2%;top:18%;width:min(22%,150px)} .capa .enfc.r{right:-2%;top:30%;width:min(20%,130px);animation-delay:-3s}
 .capa .enfc.sticker{background:#fff;padding:5px;border-radius:14px;transform:rotate(-5deg)}
 .capa .enfc.r.sticker{transform:rotate(6deg)}
+.capa .enf-row{display:flex;justify-content:center;gap:18px;margin:0 0 10px}
+.capa .enf-row .enfc{position:static;width:auto;height:84px;max-width:40%;object-fit:contain}
 .capa .lead{font-family:var(--serif);font-style:italic;font-weight:350;color:var(--muted);font-size:clamp(17px,2.6vw,21px);margin:0}
 .capa .who{font-family:var(--display);color:var(--accent);font-size:clamp(52px,13vw,112px);line-height:.98;margin:6px 0 10px;text-wrap:balance;word-break:break-word}
 .capa .tit{font-family:var(--serif);font-weight:400;font-size:clamp(18px,3vw,22px);margin:0 0 4px;text-wrap:balance}
@@ -1802,6 +1804,8 @@ async function telaConvidado(){
     <p class="rod">Ao enviar ${CORP(f)?'uma mensagem':'uma homenagem'}, você concorda com os <a href="${BASE}?termos" target="_blank" rel="noopener">Termos de uso e Privacidade</a>.</p>
   </div>`;
   document.querySelectorAll('.act').forEach(b=>b.onclick=()=>abrirEnvio(b.dataset.k));
+  arrumarEnfeites(); document.querySelectorAll('.capa .enfc').forEach(im=>im.addEventListener('load',arrumarEnfeites,{once:true}));
+  if(!window._enfRz){ window._enfRz=1; let tm; addEventListener('resize',()=>{ clearTimeout(tm); tm=setTimeout(arrumarEnfeites,150); }); }
   document.querySelectorAll('.capa .enfc').forEach(im=>{ const t2=new Image(); t2.crossOrigin='anonymous'; t2.onload=()=>{ try{ const c=document.createElement('canvas'); c.width=c.height=16; const x=c.getContext('2d'); x.drawImage(t2,0,0,16,16); const d=x.getImageData(0,0,16,16).data; if(![0,15,240,255].some(k=>d[k*4+3]<200)) im.classList.add('sticker'); }catch(e){ im.classList.add('sticker'); } }; t2.src=im.src; });
   const nome=$('nome'); if(nome) nome.addEventListener('change',()=>store.set('mf_nome',nome.value.trim().slice(0,40)));
   pintarMeus(); if($('mural')) $('mural').addEventListener('click', e=>{ const l=e.target.closest('[data-like]'); if(l) return curtir(l); const rc=e.target.closest('[data-reac]'); if(rc) return reagir(rc); const cm=e.target.closest('[data-com]'); if(cm) return abrirComentarios(+cm.dataset.com); const m=e.target.closest('[data-mol]'); if(m){ const p=POSTS.find(x=>x.id===+m.dataset.mol); if(p) abrirMoldura(midia(p.caminho), p.autor); } });
@@ -1968,6 +1972,19 @@ async function ligarPresenca(){
         ligarPresenca(); toast('Pronto. O seu ingresso está aqui.'); }
       catch(e){ $('ccOk').disabled=false; M.className='msg err'; M.textContent=/acabaram/.test(e.message||'')?`Os convites de ${c.dono} acabaram.`:/já está cadastrado/.test(e.message||'')?'Este CPF já tem ingresso nesta festa. Se perdeu o QR Code, a portaria acha pelo CPF.':/CPF/.test(e.message||'')?'Confira o CPF.':ERR(e); } };
   }
+}
+// a arte nunca pode ficar por cima do texto: os enfeites vão para as laterais livres ou para uma fileira acima
+function arrumarEnfeites(){
+  const capa=document.querySelector('.capa'); if(!capa) return; const ims=[...capa.querySelectorAll('.enfc')]; if(!ims.length) return;
+  let row=capa.querySelector('.enf-row'); if(row){ ims.forEach(im=>capa.insertBefore(im,row)); row.remove(); }
+  ims.forEach(im=>{ im.style.left=im.style.right=im.style.top=im.style.width=''; });
+  const cr=capa.getBoundingClientRect(); const txt=[...capa.querySelectorAll('.lead,.who,.tit,.data-site,.contagem,.capa-logo,.arco,p,h1')].filter(e=>!e.closest('.enf-row')&&e.offsetParent);
+  if(!txt.length) return; let L=Infinity,R=-Infinity,T=Infinity,B=-Infinity;
+  for(const e of txt){ const r=e.getBoundingClientRect(); if(!r.width) continue; const rg=document.createRange(); rg.selectNodeContents(e); const rr=rg.getBoundingClientRect(); const x0=Math.max(r.left,rr.left||r.left), x1=Math.min(r.right,rr.right||r.right); L=Math.min(L,x0); R=Math.max(R,x1); T=Math.min(T,r.top); B=Math.max(B,r.bottom); }
+  const vw=document.documentElement.clientWidth, gl=L-8, gr=vw-R-8, w=Math.min(160, Math.min(gl,gr)-28);
+  if(w>=70){ ims.forEach((im,i)=>{ im.style.width=w+'px'; im.style.top=(T-cr.top+(B-T)*(i?.45:.08))+'px';
+    if(im.classList.contains('l')){ const x=Math.max(8, L-40-w); im.style.left=(x-cr.left)+'px'; } else { const x=Math.min(vw-8-w, R+40); im.style.left=(x-cr.left)+'px'; im.style.right='auto'; } }); return; }
+  row=document.createElement('div'); row.className='enf-row'; ims.forEach(im=>row.appendChild(im)); capa.insertBefore(row, capa.firstChild);
 }
 function cpfValido(v){ const d=String(v||'').replace(/\D/g,''); if(d.length!==11 || /^(\d)\1{10}$/.test(d)) return false;
   const dv=n=>{ let s=0; for(let i=0;i<n;i++) s+= +d[i]*(n+1-i); const r=(s*10)%11; return r===10?0:r; }; return dv(9)===+d[9] && dv(10)===+d[10]; }

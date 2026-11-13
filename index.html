@@ -1224,6 +1224,11 @@ body.app-neutro .top h1 em{font-family:'Fraunces',Georgia,serif;font-weight:500;
 .cota-form{display:grid;grid-template-columns:1fr 130px auto;gap:10px;align-items:end}
 .cota-adm{margin-top:10px}.cota-d{border-top:1px solid var(--line);padding:10px 0}.cota-d summary{display:flex;justify-content:space-between;align-items:center;gap:12px;cursor:pointer;list-style:none}.cota-d summary::-webkit-details-marker{display:none}.cota-d summary small{display:block}
 @media(max-width:600px){.cota-form{grid-template-columns:1fr 1fr}.cota-form .btn{grid-column:1/-1}.cota-p{flex-direction:column;align-items:flex-start}.cota-acts{justify-content:flex-start}}
+.fx-box{display:flex;gap:14px;align-items:flex-start;margin-top:6px}.fx-cv{flex:0 0 150px;position:sticky;top:70px;text-align:center}.fx-cv img{width:100%;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,.15);display:block}.fx-cv small{color:var(--muted);font-size:12px}
+.fx-main{flex:1;min-width:0}.fx-grp{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}.fx-grp button{border:1px solid var(--line);background:var(--surface,#fff);border-radius:99px;padding:6px 12px;font:inherit;font-size:13px;font-weight:600;cursor:pointer;color:var(--ink)}.fx-grp button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on,#fff)}
+.fx-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}.fx-op{border:1.5px solid var(--line);background:var(--surface,#fff);border-radius:12px;padding:10px 8px 8px;cursor:pointer;text-align:center;color:var(--ink)}.fx-op span{display:block;font-size:24px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.fx-op small{display:block;font-size:11px;color:var(--muted);margin-top:4px;font-family:var(--body,inherit)}.fx-op[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 35%,transparent)}
+.fx-up{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}.fx-up small{flex:1;min-width:180px}
+@media(max-width:600px){.fx-box{flex-direction:column}.fx-cv{position:static;flex:none;width:120px;margin:0 auto}}
 .cvcta{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center;background:color-mix(in srgb,var(--accent) 9%, var(--surface,#fff));border:1.5px dashed color-mix(in srgb,var(--accent) 45%, transparent);border-radius:16px;padding:16px 18px;margin:0 0 14px;color:var(--ink)}
 .cvcta-art{display:flex;align-items:flex-end;gap:6px;color:var(--accent)}
 .cvcta-art svg{width:34px;height:34px}.cvcta-art .cv-pg{width:44px;height:44px}
@@ -1556,7 +1561,19 @@ function subtitulo(f){
 }
 function dataBonita(f){ if(!f.data) return ''; const d=new Date(f.data+'T12:00:00'); const s=d.toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'}); return s.charAt(0).toUpperCase()+s.slice(1); }
 function tema(k){ return TEMAS[k] || TEMAS.confete; }
-const FONTES = [["'Luckiest Guy'",'Divertida'],["'Pacifico'",'Delicada'],["'Great Vibes'",'Elegante'],["'Bungee'",'Moderna'],["'Cinzel'",'Clássica'],["'Playfair Display'",'Sofisticada'],["'Fredoka'",'Simples'],["'Cormorant Garamond'",'Romântica']];
+const FONTES = [
+  ["'Great Vibes'",'Elegante','Manuscritas'],["'Pacifico'",'Delicada','Manuscritas'],["'Dancing Script'",'Dancing Script','Manuscritas'],["'Parisienne'",'Parisienne','Manuscritas'],["'Allura'",'Allura','Manuscritas'],["'Sacramento'",'Sacramento','Manuscritas'],["'Alex Brush'",'Alex Brush','Manuscritas'],["'Satisfy'",'Satisfy','Manuscritas'],["'Lobster'",'Lobster','Manuscritas'],["'Kaushan Script'",'Kaushan','Manuscritas'],["'Cookie'",'Cookie','Manuscritas'],["'Caveat'",'Caveat','Manuscritas'],
+  ["'Luckiest Guy'",'Divertida','Divertidas'],["'Fredoka'",'Simples','Divertidas'],["'Baloo 2'",'Baloo','Divertidas'],["'Chewy'",'Chewy','Divertidas'],["'Sniglet'",'Sniglet','Divertidas'],["'Bubblegum Sans'",'Bubblegum','Divertidas'],["'Amatic SC'",'Amatic','Divertidas'],["'Bungee'",'Moderna','Divertidas'],
+  ["'Cinzel'",'Clássica','Clássicas'],["'Playfair Display'",'Sofisticada','Clássicas'],["'Cormorant Garamond'",'Romântica','Clássicas'],["'Abril Fatface'",'Abril','Clássicas'],["'DM Serif Display'",'DM Serif','Clássicas'],["'Cinzel Decorative'",'Cinzel Decorativa','Clássicas'],
+  ["'Montserrat'",'Montserrat','Modernas'],["'Poppins'",'Poppins','Modernas'],["'Josefin Sans'",'Josefin','Modernas'],["'Raleway'",'Raleway','Modernas']];
+const FONTES_LINK = new Set(['Bungee','Outfit','Rye','Space Grotesk','Cormorant Garamond','Caveat','Fraunces','Figtree','Cinzel','Fredoka','Great Vibes','Luckiest Guy','Pacifico','Playfair Display']);
+// carrega a letra do tema: do Google Fonts ou o arquivo que o anfitrião enviou ('MF Letra')
+function carregarFonte(t){ if(!t) return Promise.resolve();
+  if(t.fonteArq){ if(!window.__mfLetra || window.__mfLetra.src!==t.fonteArq){ const ff=new FontFace('MF Letra', `url("${midia(t.fonteArq)}")`); window.__mfLetra={src:t.fonteArq, p:ff.load().then(x=>{ document.fonts.add(x); }).catch(()=>{})}; } return window.__mfLetra.p; }
+  const fam=(String(t.font||'').match(/'([^']+)'/)||[])[1]; if(!fam || FONTES_LINK.has(fam) || fam==='MF Letra') return Promise.resolve();
+  let l=document.querySelector(`link[data-fam="${fam}"]`); if(l) return l._p||Promise.resolve();
+  l=document.createElement('link'); l.rel='stylesheet'; l.dataset.fam=fam; l.href='https://fonts.googleapis.com/css2?family='+fam.replace(/ /g,'+')+'&display=swap';
+  l._p=new Promise(r=>{ l.onload=()=>document.fonts.load(`400 40px '${fam}'`).then(r,r); l.onerror=r; }); document.head.appendChild(l); return l._p; }
 function lum(h){ const v=[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)/255).map(c=>c<=.03928?c/12.92:Math.pow((c+.055)/1.055,2.4)); return .2126*v[0]+.7152*v[1]+.0722*v[2]; }
 function escurecer(h,k){ return mix(h,'#000000',k); }
 function temaDe(f){
@@ -1569,7 +1586,7 @@ function temaDe(f){
   const crz=(a,b)=>{ const x=lum(a)+.05, y=lum(b)+.05; return Math.max(x,y)/Math.min(x,y); };
   for(let i=0;i<12 && lum(bg)>.5 && crz(acc,bg)<4.5;i++) acc=escurecer(acc,.12);
   return {...base, n:'Tema próprio', e:base.e, bg, bg2:mix(bg,accent2,.25), surface:'#ffffff', ink:'#2b2335', muted:'#6b6478',
-    accent:acc, accent2, on: lum(acc)>.5?'#1a1a1a':'#ffffff', font:c.font||base.font, pal:[accent,accent2,mix(accent,'#ffffff',.5)],
+    accent:acc, accent2, on: lum(acc)>.5?'#1a1a1a':'#ffffff', font:c.fonte?"'MF Letra', "+(base.font||'serif'):(c.font||base.font), fonteArq:c.fonte||null, pal:[accent,accent2,mix(accent,'#ffffff',.5)],
     paper:mix(bg,'#ffffff',.55), dark:0, fundo:c.fundo||null, ...kit};
 }
 // Empresa: tira o emoji do começo de títulos, botões e abas (o conteúdo dos convidados não é tocado)
@@ -1584,7 +1601,7 @@ function iniciarSobrio(){ if(_sobrio) return; limparEmoji(document.body);
   _sobrio=new MutationObserver(ms=>{ if(!document.body.classList.contains('sobrio')) return; ms.forEach(m=>m.addedNodes.forEach(n=>{ if(n.nodeType===1) limparEmoji(n); else if(n.nodeType===3 && n.parentElement) limparEmoji(n.parentElement); })); });
   _sobrio.observe(document.body,{childList:true,subtree:true}); }
 function aplicarTema(k, veu){
-  const t = typeof k==='object' && k ? k : tema(k), r=document.documentElement.style;
+  const t = typeof k==='object' && k ? k : tema(k), r=document.documentElement.style; try{ carregarFonte(t); }catch(_){}
   const bgi=$('bgimg'); if(t.fundo){ bgi.style.backgroundImage=`url("${midia(t.fundo)}")`; bgi.hidden=false; r.setProperty('--veu', veu ?? .8); } else { bgi.style.backgroundImage=''; bgi.hidden=true; }
   const ehCorp=(()=>{ try{ return CORP(FESTA); }catch(e){ return false; } })(); r.setProperty('--hand', "'Figtree', system-ui, sans-serif"); document.body.classList.toggle('corp', ehCorp); const sob = MODE!=='telao'; document.body.classList.toggle('sobrio', sob); document.body.classList.toggle('app-neutro', ['admin','criar','pedidos','portaria','valet','mestre'].includes(MODE)); if(sob) iniciarSobrio();
   r.setProperty('--bg',t.bg); r.setProperty('--bg2',t.bg2); r.setProperty('--surface',t.surface); r.setProperty('--ink',t.ink);
@@ -3373,7 +3390,11 @@ async function vMeuTema(){
           <div class="row" style="justify-content:center"><label class="btn sm" style="position:relative">Escolher imagem<input type="file" accept="image/*" id="mtF" style="position:absolute;inset:0;opacity:0;cursor:pointer"></label><button class="btn ghost sm" id="mtFx" type="button">Tirar</button></div></div></div>
         <div class="cores"><label>Cor principal<input type="color" id="mtA" value="${c.accent}"></label><label>Cor de destaque<input type="color" id="mtB" value="${c.accent2}"></label><label>Fundo das telas<input type="color" id="mtC" value="${c.bg}"></label>
           <button class="btn alt sm" id="mtPal" type="button">🎯 Pegar cores da imagem</button></div>
-        <label class="f">Letra do nome<select class="in" id="mtFont">${FONTES.map(([v,n])=>`<option value="${esc(v)}" ${v===c.font?'selected':''} style="font-family:${v}">${n} · ${esc(FESTA.homenageado||'Maria')}</option>`).join('')}</select></label>
+        <div class="f"><b style="font-size:14px">Letra do nome</b><select class="in" id="mtFont" hidden>${FONTES.map(([v,n])=>`<option value="${esc(v)}" ${v===c.font?'selected':''}>${n}</option>`).join('')}<option value="'MF Letra'" ${c.fonte?'selected':''}>Letra enviada</option></select>
+          <div class="fx-box">${ADM.cv?`<div class="fx-cv"><img src="${midia(ADM.cv)}" alt="Seu convite"><small>Seu convite</small></div>`:''}<div class="fx-main"><p class="muted" style="margin:0 0 8px;font-size:14px">${ADM.cv?'Compare com o seu convite e toque na letra mais parecida.':'Toque na letra que combina com a festa.'}</p>
+            <div class="fx-grp" id="fxGrp" role="group">${[...new Set(FONTES.map(x=>x[2]))].map((g,i)=>`<button type="button" data-fxg="${g}" aria-pressed="${i===0}">${g}</button>`).join('')}</div>
+            <div class="fx-grid" id="fxGrid"></div>
+            <div class="fx-up"><label class="btn ghost sm" style="position:relative">Enviar o arquivo da letra<input type="file" id="fxArq" accept=".ttf,.otf,.woff,.woff2" style="position:absolute;inset:0;opacity:0;cursor:pointer"></label><small class="muted">Se quem fez o convite mandou a letra (.ttf, .otf ou .woff), ela fica idêntica.</small><span id="fxArqN" class="muted" style="font-size:13px"></span></div></div></div></div>
       </div></div>
 
     <div class="kitsec"><h4>2 · Personagens e enfeites <span class="kpill" id="kEnfN"></span></h4><p class="dica">Até 3 imagens, de preferência PNG com fundo transparente. Eles se revezam no telão, enfeitam o mural e as páginas do álbum.</p><div class="thumbs" id="kEnf"></div></div>
@@ -3393,8 +3414,21 @@ async function vMeuTema(){
     <div class="row" style="justify-content:flex-end"><span class="msg" id="mtM"></span>${info.ativo?'<button class="btn ghost" id="mtOff" type="button">Desligar tudo</button>':''}<button class="btn" id="mtSave" type="button" ${info.bloqueado?'disabled':''}>💾 Salvar e ligar</button></div>
   </div>`;
   const M=$('mtM'), erro=t=>{ M.className='msg err'; M.textContent=t; };
-  const dados=()=>({visual:K.visual, accent:$('mtA').value, accent2:$('mtB').value, bg:$('mtC').value, font:$('mtFont').value, fundo:src(K.fundo), enfeites:K.enfeites.map(src), fotos:K.fotos.map(src)});
+  const dados=()=>({visual:K.visual, accent:$('mtA').value, accent2:$('mtB').value, bg:$('mtC').value, font:$('mtFont').value, fonte:$('mtFont').value==="'MF Letra'"&&K.fonte?K.fonte.path:null, fundo:src(K.fundo), enfeites:K.enfeites.map(src), fotos:K.fotos.map(src)});
   const preview=()=>aplicarTema(temaDe({...FESTA, custom:dados()}));
+  const nomeFx=esc(FESTA.homenageado||'Maria Clara'); let grpFx=(FONTES.find(x=>x[0]===c.font)||FONTES[0])[2];
+  const pintarFx=()=>{ $('fxGrp').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed', b.dataset.fxg===grpFx));
+    const lst=FONTES.filter(x=>x[2]===grpFx); lst.forEach(([v])=>carregarFonte({font:v}));
+    $('fxGrid').innerHTML=(K.fonte?`<button type="button" class="fx-op" data-fx="'MF Letra'" aria-pressed="${$('mtFont').value==="'MF Letra'"}"><span style="font-family:'MF Letra'">${nomeFx}</span><small>Letra enviada</small></button>`:'')+lst.map(([v,n])=>`<button type="button" class="fx-op" data-fx="${esc(v)}" aria-pressed="${$('mtFont').value===v}"><span style="font-family:${esc(v)}">${nomeFx}</span><small>${n}</small></button>`).join('');
+    $('fxGrid').querySelectorAll('[data-fx]').forEach(b=>b.onclick=()=>{ $('mtFont').value=b.dataset.fx; pintarFx(); preview(); }); };
+  K.fonte = c.fonte ? {path:c.fonte} : null; if(K.fonte) carregarFonte({fonteArq:c.fonte});
+  $('fxGrp').onclick=e=>{ const b=e.target.closest('[data-fxg]'); if(!b) return; grpFx=b.dataset.fxg; pintarFx(); };
+  $('fxArq').onchange=async e=>{ const fl=e.target.files[0]; e.target.value=''; if(!fl) return; const ext=(fl.name.split('.').pop()||'').toLowerCase(); if(!['ttf','otf','woff','woff2'].includes(ext)) return toast('Envie um arquivo .ttf, .otf, .woff ou .woff2.'); if(fl.size>3e6) return toast('O arquivo da letra passa de 3 MB.');
+    $('fxArqN').textContent='Enviando…'; try{ const ff=new FontFace('MF Letra', await fl.arrayBuffer()); await ff.load(); document.fonts.add(ff);
+      const path=await subir(fl,'tema/fonte',ext,{ttf:'font/ttf',otf:'font/otf',woff:'font/woff',woff2:'font/woff2'}[ext]); K.fonte={path}; window.__mfLetra={src:path,p:Promise.resolve()};
+      $('mtFont').value="'MF Letra'"; $('fxArqN').textContent='Letra enviada: '+fl.name; pintarFx(); preview(); }
+    catch(err){ $('fxArqN').textContent=''; toast('Não consegui usar este arquivo de letra. '+ERR(err)); } };
+  setTimeout(pintarFx,0);
   const temArquivo=()=>!!(K.fundo&&K.visual) || K.enfeites.length || K.fotos.length || (K.mus.tipo==='upload' && K.faixas.length);
   const rDecl=()=>{ $('kDecl').style.display = temArquivo() ? '' : 'none'; };
   // 1 · visual
@@ -3467,7 +3501,7 @@ async function vMeuTema(){
       for(const [i,x] of K.fotos.entries()) if(x.file){ etapa=`a foto ${i+1}`; passo(`Enviando foto ${i+1} de ${K.fotos.length}…`); const bl=await imagem(x.file,1600); K.fotos[i]={path:await tentar(()=>subir(bl,'tema/foto',...tipoImg(bl)))}; }
       if(K.mus.tipo==='upload') for(const [i,x] of K.faixas.entries()) if(x.file){ etapa=`a música ${i+1} (${x.nome})`; passo(`Enviando música ${i+1}…`); const [ext,ct]=tipoAudio(x.file); K.faixas[i]={path:await tentar(()=>subir(x.file,'tema/musica',ext,ct)), nome:x.nome}; }
       etapa='o tema'; passo('Salvando…');
-      const d={visual:K.visual, accent:$('mtA').value, accent2:$('mtB').value, bg:$('mtC').value, font:$('mtFont').value,
+      const d={visual:K.visual, accent:$('mtA').value, accent2:$('mtB').value, bg:$('mtC').value, font:$('mtFont').value==="'MF Letra'"?(FONTES[0][0]):$('mtFont').value, ...($('mtFont').value==="'MF Letra'"&&K.fonte?{fonte:K.fonte.path}:{}),
         enfeites:K.enfeites.map(x=>x.path), fotos:K.fotos.map(x=>x.path),
         musica: K.mus.tipo==='upload' ? {tipo:'upload', volume:K.mus.volume, faixas:K.faixas.map(x=>x.path), nomes:K.faixas.map(x=>x.nome)} : {tipo:K.mus.tipo, trilha:K.mus.trilha, volume:K.mus.volume}};
       if(K.visual && K.fundo) d.fundo=K.fundo.path;
@@ -4296,6 +4330,7 @@ async function albumDigital(f, posts, prog){
     const blocos=cssF.split('/* ').filter(b=>/^latin \*\//.test(b)).map(b=>b.replace(/^latin \*\/\s*/,''));
     for(let b of blocos){ const m=b.match(/url\((https:[^)]+)\)/); if(m){ try{ b=b.replace(m[1], await paraData(await fetch(m[1]).then(r=>r.blob()))); }catch(e){} } fontes+=b+'\n'; }
   }catch(e){}
+  if(t.fonteArq){ try{ fontes+=`@font-face{font-family:'MF Letra';src:url(${await paraData(await fetch(midia(t.fonteArq)).then(r=>r.blob()))})}\n`; }catch(e){} }
   const partes=[`<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Álbum de recordações · ${esc(nome)}</title>
 <style>${fontes}:root{--bg:${t.bg};--bg2:${t.bg2};--surface:${t.surface};--ink:${t.ink};--muted:${t.muted};--accent:${t.accent};--accent2:${t.accent2};--line:${t.dark?'rgba(255,255,255,.14)':'rgba(0,0,0,.10)'};--display:${t.font}, 'Fraunces', Georgia, serif;color-scheme:${t.dark?'dark':'light'}}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 'Figtree',system-ui,sans-serif}
@@ -4670,7 +4705,7 @@ function pg(){ const c=document.createElement('canvas'); c.width=PW; c.height=PH
 function rr(c,x,y,w,h,r){ c.beginPath(); c.moveTo(x+r,y); c.arcTo(x+w,y,x+w,y+h,r); c.arcTo(x+w,y+h,x,y+h,r); c.arcTo(x,y+h,x,y,r); c.arcTo(x,y,x+w,y,r); c.closePath(); }
 function wrap(c,text,maxW){ const out=[]; for(const par of String(text).split(/\n/)){ const ws=par.split(/\s+/); let cur=''; for(const w of ws){ const t=cur?cur+' '+w:w; if(c.measureText(t).width>maxW && cur){ out.push(cur); cur=w; } else cur=t; } out.push(cur); } return out; }
 function fonte(t){ return `${t.font}, Fredoka, sans-serif`; }
-async function fontesProntas(t){ await Promise.all([`400 80px ${t.font}`,'700 40px Caveat','500 30px Caveat','600 30px Fredoka','700 30px Fredoka'].map(x=>document.fonts.load(x).catch(()=>{}))); }
+async function fontesProntas(t){ try{ await carregarFonte(t); }catch(_){} await Promise.all([`400 80px ${t.font}`,'700 40px Caveat','500 30px Caveat','600 30px Fredoka','700 30px Fredoka'].map(x=>document.fonts.load(x).catch(()=>{}))); }
 function papel(c, t, f, n){
   const enf = t._enfs && t._enfs.length ? t._enfs[n % t._enfs.length] : t._enf;
   const g=c.createLinearGradient(0,0,0,PH); g.addColorStop(0,t.paper); g.addColorStop(1,mix(t.paper,t.bg2,.35)); c.fillStyle=g; c.fillRect(0,0,PW,PH);

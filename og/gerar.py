@@ -24,10 +24,10 @@ def cor(h, padrao):
         h = (h or '').lstrip('#'); return tuple(int(h[i:i+2], 16) for i in (0, 2, 4))
     except Exception: return padrao
 
-def arte(img):
+def arte(img, W=W, H=H):
     fundo = ImageOps.fit(img, (W, H), Image.LANCZOS).filter(ImageFilter.GaussianBlur(28))
     fundo = Image.blend(fundo, Image.new('RGB', (W, H), (255, 255, 255)), .25)
-    a = img.copy(); a.thumbnail((W - 80, H - 50), Image.LANCZOS)
+    a = ImageOps.contain(img, (W - 80, H - 50), Image.LANCZOS)
     x, y = (W - a.width) // 2, (H - a.height) // 2
     sombra = Image.new('L', (a.width + 60, a.height + 60), 0); ImageDraw.Draw(sombra).rectangle([30, 34, a.width + 30, a.height + 34], fill=110)
     sombra = sombra.filter(ImageFilter.GaussianBlur(14))
@@ -50,19 +50,19 @@ def cartao(f):
     if sub: d.text((W / 2, H / 2 + 60), sub, font=fonte('DejaVuSerif.ttf', 40), fill=(60, 50, 70), anchor='mm')
     return im
 
-def pagina(f, ver):
+def pagina(f, ver, quadrado=False):
     slug = f['slug']; corp = f.get('categoria') == 'corporativo'
     titulo = f.get('titulo') or f.get('homenageado') or 'Mural da Festa'
     desc = ('Confirme sua presença pelo link. No dia, é por ele que você participa: perguntas, mensagens e muito mais.' if corp
             else f"Confirme sua presença e deixe sua homenagem para {f.get('homenageado') or 'o homenageado'}: foto, recado, áudio ou vídeo.")
-    destino = f'{SITE}?f={slug}'; img = f'{SITE}c/{slug}/og.jpg?v={ver}'
+    destino = f'{SITE}?f={slug}'; img = f'{SITE}c/{slug}/' + ('og_q.jpg' if quadrado else 'og.jpg') + f'?v={ver}'; LA, AL = (1200, 1200) if quadrado else (W, H)
     e = html.escape
     return f'''<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{e(titulo)}</title>
 <meta property="og:type" content="website"><meta property="og:site_name" content="Mural da Festa">
 <meta property="og:title" content="{e(titulo)}"><meta property="og:description" content="{e(desc)}">
-<meta property="og:url" content="{SITE}c/{slug}/"><meta property="og:image" content="{img}">
-<meta property="og:image:width" content="{W}"><meta property="og:image:height" content="{H}"><meta property="og:image:type" content="image/jpeg">
+<meta property="og:url" content="{SITE}c/{slug}/{'q/' if quadrado else ''}"><meta property="og:image" content="{img}">
+<meta property="og:image:width" content="{LA}"><meta property="og:image:height" content="{AL}"><meta property="og:image:type" content="image/jpeg">
 <meta name="twitter:card" content="summary_large_image"><meta name="description" content="{e(desc)}">
 <meta property="og:image:secure_url" content="{img}"><meta property="og:locale" content="pt_BR">
 <script>location.replace({json.dumps(destino)} + location.hash);</script>
@@ -76,19 +76,26 @@ def main():
         slug = f.get('slug')
         if not slug or '/' in slug or '..' in slug: continue
         fonte_img = f.get('convite') or f.get('fundo') or f.get('enfeite') or f.get('logo')
-        chave = hashlib.md5(json.dumps([fonte_img, f.get('titulo'), f.get('homenageado'), f.get('categoria'), f.get('bg'), f.get('accent'), 4]).encode()).hexdigest()[:10]
+        chave = hashlib.md5(json.dumps([fonte_img, f.get('titulo'), f.get('homenageado'), f.get('categoria'), f.get('bg'), f.get('accent'), 5]).encode()).hexdigest()[:10]
         pasta = os.path.join('c', slug); os.makedirs(pasta, exist_ok=True)
         marca = os.path.join(pasta, '.versao')
         if os.path.exists(marca) and open(marca).read().strip() == chave: continue
         try: im = arte(baixar(fonte_img)) if fonte_img else cartao(f)
         except Exception as ex: print('sem imagem', slug, ex); im = cartao(f)
-        q = 85
-        while True:
-            buf = io.BytesIO(); im.save(buf, 'JPEG', quality=q, optimize=True, progressive=True)
-            if buf.tell() < 280_000 or q <= 55: break
-            q -= 8
-        open(os.path.join(pasta, 'og.jpg'), 'wb').write(buf.getvalue())
+        try: imq = arte(baixar(fonte_img), 1200, 1200) if fonte_img else None
+        except Exception: imq = None
+        def salvar(im, nome):
+            q = 85
+            while True:
+                buf = io.BytesIO(); im.save(buf, 'JPEG', quality=q, optimize=True, progressive=True)
+                if buf.tell() < 280_000 or q <= 55: break
+                q -= 8
+            open(os.path.join(pasta, nome), 'wb').write(buf.getvalue())
+        salvar(im, 'og.jpg')
         open(os.path.join(pasta, 'index.html'), 'w', encoding='utf-8').write(pagina(f, chave))
+        if imq:   # teste do formato quadrado: c/<slug>/q/
+            salvar(imq, 'og_q.jpg'); os.makedirs(os.path.join(pasta, 'q'), exist_ok=True)
+            open(os.path.join(pasta, 'q', 'index.html'), 'w', encoding='utf-8').write(pagina(f, chave, True))
         open(marca, 'w').write(chave); mudou += 1; print('atualizada', slug)
     print(len(festas), 'festas,', mudou, 'atualizadas')
 

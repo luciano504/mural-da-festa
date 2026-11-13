@@ -163,11 +163,11 @@ body.sem-qr .tv-bar{display:none}
 .tv-empty p{font-size:clamp(18px,2vw,32px);font-weight:600;margin:0;color:var(--muted)}
 .chars{position:fixed;inset:0;pointer-events:none;z-index:6;overflow:hidden}
 .ch{position:absolute;line-height:0}
-.ch img{height:min(30vh,30vw);width:auto;max-width:40vw;object-fit:contain;filter:drop-shadow(0 1.5vh 2.5vh rgba(0,0,0,.35))}
+.ch img{height:min(30vh,30vw);width:auto;max-width:var(--chw,22vw);object-fit:contain;filter:drop-shadow(0 1.5vh 2.5vh rgba(0,0,0,.35))}
 .ch img.sticker{height:min(26vh,26vw);background:#fff;padding:.9vh;border-radius:2.2vh;transform:rotate(var(--r));box-shadow:0 1.6vh 3.5vh rgba(0,0,0,.35);filter:none}
 .ch .emo{font-size:min(20vh,24vw);line-height:1;filter:drop-shadow(0 1vh 2vh rgba(0,0,0,.25))}
-.ch.pk-l{left:1vw;bottom:calc(var(--bh,22vh) + 1vh);animation:pkl 6.5s cubic-bezier(.3,1.3,.5,1) both}
-.ch.pk-r{right:1vw;bottom:calc(var(--bh,22vh) + 1vh);animation:pkr 6.5s cubic-bezier(.3,1.3,.5,1) both}
+.ch.pk-l{left:1vw;bottom:3vh;animation:pkl 6.5s cubic-bezier(.3,1.3,.5,1) both}
+.ch.pk-r{right:1vw;bottom:calc(16vh + 1vh);animation:pkr 6.5s cubic-bezier(.3,1.3,.5,1) both}
 .ch.pk-b{left:50%;bottom:calc(var(--bh,22vh) + 1vh);animation:pkb 6.5s ease both}
 .ch.voa{top:10vh;left:0;animation:voa 7s linear both}
 .ch.pula{left:6vw;bottom:calc(var(--bh,22vh) + 1vh);animation:pula 6.5s ease-in-out both}
@@ -1294,11 +1294,11 @@ body.tv-trop{background:linear-gradient(180deg,#ffe8d6 0%,#fff4e6 45%,#fffdf5 10
 @media (orientation:portrait){ .orn{width:26vw;bottom:24vh;opacity:.14} }
 
 /* QR do telão: discreto, grande em momentos, some quando não cabe */
-body.qr-mini .tv-bar{padding:.8vh 3vw 1.2vh;gap:1.4vw}
+body.qr-mini .tv-bar{gap:.9vw}
 body.qr-mini .tv-bar .qr{width:10vh;padding:.6vh;border-radius:1vh}
-body.qr-mini .tv-bar b{font-size:clamp(16px,1.8vw,30px)}
+
 body.qr-mini .tv-bar span{font-size:clamp(12px,1.1vw,18px)}
-body.qr-grande .tv-bar .qr{width:22vh}
+body.qr-grande .tv-bar .qr{width:11vh}
 .tv-bar,.tv-bar .qr{transition:width .6s ease, padding .6s ease}
 body.qr-off-auto .tv-bar{display:none}
 .tvb-r{display:flex;gap:6px;flex-wrap:wrap}
@@ -2554,12 +2554,21 @@ async function telaTelao(){
     srcs.forEach(s=>{ if(!s.img) return; const im=new Image(); im.crossOrigin='anonymous';
       im.onload=()=>{ try{ const c=document.createElement('canvas'); c.width=c.height=24; const x=c.getContext('2d'); x.drawImage(im,0,0,24,24); const d=x.getImageData(0,0,24,24).data; s.trans=[0,23,552,575].some(i=>d[i*4+3]<200); }catch(e){ s.trans=false; } };
       im.onerror=()=>{ s.trans=false; }; im.src=s.img; });
-    const tipos=['pk-l','pk-r','pk-b','voa','pk-l','pk-r','pula']; let i=0, timer=null, ult='';
-    function um(forca){ if(!srcs.length || lay.children.length>=(forca?3:1)) return; const s=srcs[i++ % srcs.length]; let k; do{ k=forca||tipos[Math.floor(Math.random()*tipos.length)]; }while(!forca && k===ult && tipos.length>1); ult=k;
-      const el=document.createElement('div'); el.className='ch '+k;
+    // a arte nunca passa por cima do texto (nem das fotos): o personagem só espia pela lateral que estiver livre
+    let i=0, timer=null, ult='';
+    const livres=()=>{ const sl=document.querySelector('#stage .sl:last-child'); if(!sl) return null; let L=innerWidth, R=0;
+      sl.querySelectorAll('img,video,.q,.cap,.by,.nm,.sub,.hey,.cta,h2,p,.qr,.env,.pa,.mic,.eq,.grd').forEach(e=>{ const r=e.getBoundingClientRect(); if(!r.width||!r.height) return; let x0=r.left,x1=r.right; if(!/^(IMG|VIDEO)$/.test(e.tagName)){ const rg=document.createRange(); rg.selectNodeContents(e); const rr=rg.getBoundingClientRect(); if(rr.width){ x0=Math.max(x0,rr.left); x1=Math.min(x1,rr.right); } } L=Math.min(L,x0); R=Math.max(R,x1); });
+      return {l:L-innerWidth*.03, r:innerWidth-R-innerWidth*.03}; };
+    function um(forca){ if(!srcs.length || lay.children.length>=(forca?2:1)) return; if(document.querySelector('.tv-hom:not([hidden]),.tv-apr:not([hidden]),.tv-pausa:not([hidden]),.tv-bng:not([hidden])')) return;
+      const g=livres(); if(!g) return; const minW=innerWidth*.11; let k=forca;
+      if(!k){ const ops=[g.l>=minW?'pk-l':null, g.r>=minW?'pk-r':null].filter(Boolean); if(!ops.length) return; k=ops.length>1&&ult===ops[0]?ops[1]:ops[Math.floor(Math.random()*ops.length)]; }
+      else if((k==='pk-l'?g.l:g.r)<minW) return; ult=k; const s=srcs[i++ % srcs.length];
+      const el=document.createElement('div'); el.className='ch '+k; el.style.setProperty('--chw', Math.round(Math.min(k==='pk-l'?g.l:g.r, innerWidth*.22))+'px');
       el.innerHTML = s.img ? `<img class="${s.trans===true?'':'sticker'}" style="--r:${(Math.random()*16-8).toFixed(1)}deg" src="${s.img}" alt="">` : `<span class="emo">${s.emo}</span>`;
       lay.appendChild(el); setTimeout(()=>el.remove(), 7000); }
-    return { start(){ um(); timer=setInterval(()=>um(), 6500); }, festa(){ um('pk-l'); setTimeout(()=>um('pk-r'),400); } };
+    function conferir(){ const g=livres(); lay.querySelectorAll('.ch').forEach(el=>{ const lado=el.classList.contains('pk-l')?'l':'r'; const im=el.querySelector('img'); const w=im?im.getBoundingClientRect().width:0;
+      if(!g || g[lado] < Math.max(w, innerWidth*.11)){ el.style.transition='opacity .25s'; el.style.opacity='0'; setTimeout(()=>el.remove(),260); } }); }
+    return { start(){ um(); timer=setInterval(()=>um(), 6500); }, festa(){ um('pk-l'); setTimeout(()=>um('pk-r'),400); }, conferir };
   })();
   function confete(n=50){ const box=document.createElement('div'); box.className='conf'; const cores=t.pal&&t.pal.length?t.pal:['#ff5a5f','#ffc300','#2ec4b6','#7b2cbf'];
     for(let i=0;i<n;i++){ const s=document.createElement('i'); s.style.left=(Math.random()*100)+'vw'; s.style.background=cores[i%cores.length]; s.style.animationDelay=(Math.random()*.7).toFixed(2)+'s'; s.style.animationDuration=(2.2+Math.random()*1.8).toFixed(2)+'s'; s.style.setProperty('--x',(Math.random()*30-15).toFixed(1)+'vw'); s.style.setProperty('--g',(Math.random()*900-450).toFixed(0)+'deg'); box.appendChild(s); }
@@ -2647,7 +2656,7 @@ async function telaTelao(){
     else if(p.tipo==='video'){ el.classList.add('sl-video'); el.innerHTML=`<video src="${(cacheM.get(p.id)||{}).url||midia(p.caminho)}" playsinline preload="auto" ${vt()==='mudo'?'muted':''} ${p.thumb?`poster="${midia(p.thumb)}"`:''}></video>${by?`<div class="cap"><small>🎥 Recado de ${by}</small></div>`:''}`; dur=null; }
     if(p.tipo==='texto' && /^💸/.test(p.texto||'')){ const gm=(p.texto||'').match(/^💸\s*Presenteei:\s*([^!\n]{1,40})!/); el.insertAdjacentHTML('afterbegin',`<div class="novo">🎁 ${gm?esc(gm[1].trim())+'!':'Presente enviado!'} Obrigado${by?', '+by:''}!</div>`); if(!QUIET) confete(120); }
     else if(p._novo){ el.insertAdjacentHTML('afterbegin',`<div class="novo">${CORP(f)?'Nova mensagem':'Nova homenagem'}</div>`); if(!QUIET){ confete(); chars.festa(); } }
-    st.appendChild(el); tv.cur=p; caberSlide(el); setTimeout(()=>caberSlide(el),400); el.querySelectorAll('img').forEach(im=>im.addEventListener('load',()=>caberSlide(el),{once:true}));
+    st.appendChild(el); tv.cur=p; caberSlide(el); chars.conferir(); setTimeout(()=>{ caberSlide(el); chars.conferir(); },400); setTimeout(()=>chars.conferir(),1200); el.querySelectorAll('img').forEach(im=>im.addEventListener('load',()=>caberSlide(el),{once:true}));
     if(p.tipo==='qr') qrInto($('tvQrBig'), url, 600);
     if(p.tipo==='pix'){ const px=pixTv(); if(px) qrInto($('tvQrBig'), Array.isArray(px.lista)&&px.lista.length ? url : pixPayload(px), 600); }
     const m=el.querySelector('audio,video'); if(m && vt()==='mudo' && m.tagName==='VIDEO') m.muted=true; if(mus) mus.duck(!!m && !m.muted);

@@ -1,4 +1,5 @@
 # Gera a prévia (imagem + título) do link de cada festa, para o WhatsApp mostrar a arte do convite.
+# Sem meta refresh nem canonical: o robô do WhatsApp seguia o redirecionamento e perdia a prévia.
 # Roda no GitHub Actions a cada 10 minutos. Escreve c/<slug>/index.html e c/<slug>/og.jpg.
 import os, io, json, hashlib, html, urllib.request
 from PIL import Image, ImageFilter, ImageDraw, ImageFont, ImageOps
@@ -63,7 +64,7 @@ def pagina(f, ver):
 <meta property="og:url" content="{SITE}c/{slug}/"><meta property="og:image" content="{img}">
 <meta property="og:image:width" content="{W}"><meta property="og:image:height" content="{H}"><meta property="og:image:type" content="image/jpeg">
 <meta name="twitter:card" content="summary_large_image"><meta name="description" content="{e(desc)}">
-<link rel="canonical" href="{destino}"><meta http-equiv="refresh" content="0; url={destino}">
+<meta property="og:image:secure_url" content="{img}"><meta property="og:locale" content="pt_BR">
 <script>location.replace({json.dumps(destino)} + location.hash);</script>
 </head><body style="font-family:system-ui;text-align:center;padding:40px"><p><a href="{destino}">Abrir o convite</a></p></body></html>
 '''
@@ -75,7 +76,7 @@ def main():
         slug = f.get('slug')
         if not slug or '/' in slug or '..' in slug: continue
         fonte_img = f.get('convite') or f.get('fundo') or f.get('enfeite') or f.get('logo')
-        chave = hashlib.md5(json.dumps([fonte_img, f.get('titulo'), f.get('homenageado'), f.get('categoria'), f.get('bg'), f.get('accent'), 3]).encode()).hexdigest()[:10]
+        chave = hashlib.md5(json.dumps([fonte_img, f.get('titulo'), f.get('homenageado'), f.get('categoria'), f.get('bg'), f.get('accent'), 4]).encode()).hexdigest()[:10]
         pasta = os.path.join('c', slug); os.makedirs(pasta, exist_ok=True)
         marca = os.path.join(pasta, '.versao')
         if os.path.exists(marca) and open(marca).read().strip() == chave: continue

@@ -145,11 +145,12 @@ h2.sec{font-weight:700;font-size:22px;margin:28px 0 12px;display:flex;align-item
 .eq i:nth-child(3n){animation-duration:1.25s}
 @keyframes eq{0%,100%{height:15%}50%{height:100%}}
 .sl-audio .mic{font-size:12vh}
-.tv-bar{display:flex;align-items:center;gap:2vw;padding:1.2vh 3vw 2.2vh}
+.tv-bar{display:flex;align-items:center;gap:.9vw;position:fixed;right:1.4vw;bottom:1.6vh;z-index:6;padding:.8vh .9vw;border-radius:1.6vh;background:color-mix(in srgb,var(--surface) 86%,transparent);box-shadow:0 .6vh 2vh rgba(0,0,0,.14);max-width:24vw}
 body.sem-qr .tv-bar{display:none}
 .tv-bar .qr{background:#fff;padding:1vh;border-radius:1.4vh;line-height:0}
-.tv-bar .qr{width:17vh;flex:none}
-.tv-bar b{display:block;font-size:clamp(20px,2.6vw,44px);font-family:var(--display);color:var(--accent)}
+.tv-bar .qr{width:11vh;flex:none;padding:.6vh!important;border-radius:1vh!important}
+.tv-bar b{display:block;font-size:clamp(13px,1.15vw,22px);line-height:1.2;font-family:var(--body,inherit);font-weight:700;color:var(--ink)}
+.tv-bar span,.tv-bar .acts-mini,.tv-bar .tv-promo{display:none!important}
 .tv-bar span{font-weight:600;font-size:clamp(14px,1.5vw,24px);color:var(--muted)}
 .tv-bar .acts-mini{margin-left:auto;font-size:clamp(28px,3.4vw,56px);letter-spacing:.2em}
 .tv-start{position:fixed;inset:0;z-index:20;display:grid;place-items:center;text-align:center;background:color-mix(in srgb,var(--bg) 88%, transparent);padding:16px}
@@ -206,7 +207,7 @@ body.sem-qr .tv-bar{display:none}
 .sl-intro{text-align:center}
 .sl-intro .hey{font-weight:700;font-size:clamp(18px,2.6vw,42px);color:var(--muted)}
 .sl-intro .nm{font-family:var(--display);color:var(--accent);font-size:clamp(44px,min(11vw,14vh),190px);line-height:1;text-shadow:0 .6vh 0 color-mix(in srgb,var(--accent2) 60%, transparent)}
-.sl-intro .nm span{display:inline-block;animation:onda 1.6s ease-in-out infinite}
+.sl-intro .nm span{display:inline-block}
 @keyframes onda{0%,100%{transform:translateY(0) rotate(0)}30%{transform:translateY(-3vh) rotate(-4deg)}60%{transform:translateY(0) rotate(3deg)}}
 .sl-intro .sub{font-weight:700;font-size:clamp(22px,3.4vw,56px);color:var(--ink)}
 .sl-intro .cta{font-weight:600;font-size:clamp(15px,1.8vw,30px);color:var(--muted);background:color-mix(in srgb,var(--surface) 80%, transparent);padding:1.2vh 2.4vw;border-radius:99px}
@@ -321,6 +322,13 @@ body.sem-qr .tv-bar{display:none}
 .hist figure:nth-child(odd){transform:rotate(-1.5deg)} .hist figure:nth-child(even){transform:rotate(1.5deg)}
 .hist img{height:190px;width:auto;max-width:72vw;display:block;object-fit:cover;border-radius:2px}
 .tv-bar .qr{position:relative;z-index:3}
+.tv-hom{position:fixed;inset:0;z-index:40;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2vh;padding:3vh 3vw}
+.tv-hom video{max-width:92vw;max-height:80vh;border-radius:1.6vh;box-shadow:0 2vh 6vh rgba(0,0,0,.3);background:#000}
+.tv-hom .hom-by{font-family:var(--display);font-size:clamp(22px,3vw,52px);color:var(--accent);text-align:center}
+.tv-hom .hom-n{position:absolute;top:2.4vh;right:2.4vw;font-weight:700;color:var(--muted);font-size:clamp(14px,1.4vw,24px)}
+.tv-hom .hom-tit{text-align:center}.tv-hom .hom-tit .k{font-family:var(--display);color:var(--accent);font-size:clamp(40px,7vw,120px);line-height:1.05}.tv-hom .hom-tit p{font-size:clamp(18px,2.4vw,40px);color:var(--muted);font-weight:600;margin:2vh 0 0}
+.tv-hom .hom-aud{display:flex;flex-direction:column;align-items:center;gap:3vh}.tv-hom .hom-aud .mic svg{width:16vh;height:16vh;color:var(--accent)}
+.tv-hom .eq{display:flex;gap:.8vw;height:10vh;align-items:flex-end}.tv-hom .eq i{width:1.2vw;background:var(--accent);border-radius:99px;animation:eq 1s ease-in-out infinite}.tv-hom .eq i:nth-child(2n){animation-delay:-.3s}.tv-hom .eq i:nth-child(3n){animation-delay:-.6s}
 .demo{position:fixed;left:0;top:0;z-index:2;pointer-events:none;background:rgba(20,16,24,.55);color:#fff;font:700 clamp(12px,1.25vw,20px)/1.2 Figtree,Fredoka,sans-serif;text-align:center;padding:.7vh 1.2vw;border-radius:99px;backdrop-filter:blur(4px);box-shadow:0 .6vh 2vh rgba(0,0,0,.18);will-change:transform;opacity:.85}
 .demo small{font-weight:500;opacity:.85}
 .demo-faixa{position:fixed;left:50%;transform:translateX(-50%);top:8px;z-index:10;width:max-content;max-width:calc(100% - 32px);background:color-mix(in srgb,var(--surface) 88%, transparent);color:var(--muted);border:1px solid var(--line);border-radius:99px;text-align:center;font:600 12.5px/1.3 Figtree,sans-serif;padding:5px 12px;backdrop-filter:blur(6px)}
@@ -856,7 +864,7 @@ h2.sec{font-family:var(--body);font-size:22px;line-height:28px;font-weight:700;l
 /* telão: mensagens e legendas em letra reta */
 .sl .cap,.sl-texto .q{font-family:var(--body);font-weight:500;letter-spacing:-.01em}
 .sl-texto .q::before{display:none}
-.tv-bar{border-top:1px solid var(--line)}
+.tv-bar{border:1px solid var(--line)}
 .tv-bar b{font-family:var(--body);font-weight:700}
 .tv-empty h2{font-family:var(--body);font-weight:700}
 /* sóbrio (empresa): sem enfeites */
@@ -911,6 +919,7 @@ body.com-aviso .tv-top{margin-top:5.5vh}
 .mod-top #aprTodos{align-self:flex-start;min-height:44px;padding:10px 24px}
 @media (max-width:760px){ .mod-top #aprTodos{align-self:stretch;width:100%;min-height:48px;font-size:16px} }
 .livre-det{margin:0 0 12px} .livre-det summary{list-style:none;display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;color:var(--muted);padding:6px 2px} .livre-det summary::-webkit-details-marker{display:none} .livre-det summary svg{width:18px;height:18px;flex:none}
+.vt-op{display:flex;flex-direction:column;gap:10px}.vt-op label{display:flex;gap:10px;align-items:flex-start}.vt-op small{display:block;color:var(--muted);font-size:13px;line-height:1.4}.livre-det summary .ai,.livre-det summary>svg{width:18px;height:18px}
 .livre-det[open] summary{color:var(--ink)} .livre-det .livre-box{background:var(--surface);border:1px solid var(--line);border-radius:14px;margin-top:6px}
 .vw-top{display:none}
 .dia-festa #roteiro{display:none}
@@ -2561,6 +2570,9 @@ async function telaTelao(){
   }
   // ---- pré-download: áudio e vídeo só entram no telão depois de baixados por inteiro ----
   const midiaPesada = p => p && (p.tipo==='video' || p.tipo==='audio');
+  // vídeos e áudios na roda do telão: 'som' (padrão), 'mudo' (vídeos sem som, áudios fora) ou 'momento' (só no Momento das homenagens)
+  const vt = () => ((window.__tvEx||f.extras||{}).videos_tv) || 'som';
+  const naRoda = p => !midiaPesada(p) || vt()==='som' || (vt()==='mudo' && p.tipo==='video');
   const cacheM = new Map();            // id -> {url} | {erro:true} | {baixando:true}
   const pronto = p => !midiaPesada(p) || !!(cacheM.get(p.id)||{}).url;
   let baixandoAgora=false;
@@ -2590,16 +2602,17 @@ async function telaTelao(){
   setInterval(baixador, 2000);
   // QR grande no telão só de vez em quando (o QR pequeno fica sempre no rodapé):
   // com mensagens no mural, no máximo a cada 10 min; mural vazio, a cada 2 min
-  function padrao(arr,k){ for(let n=0;n<arr.length;n++){ const t=arr[tv[k]++ % arr.length]; if(t==='pix'){ if(pixTv() && Date.now()-(tv.pixEm||0)>=240000){ tv.pixEm=Date.now(); return t; } continue; } if(t!=='qr') return t; if(document.body.classList.contains('sem-qr')) continue;
+  function padrao(arr,k){ for(let n=0;n<arr.length;n++){ const t=arr[tv[k]++ % arr.length]; if(t==='qr') continue; if(t==='pix'){ if(pixTv() && Date.now()-(tv.pixEm||0)>=240000){ tv.pixEm=Date.now(); return t; } continue; } if(t!=='qr') return t; if(document.body.classList.contains('sem-qr')) continue;
       const gap=tv.list.length?600000:120000; if(Date.now()-(tv.qrEm||0)>=gap){ tv.qrEm=Date.now(); return t; } } return 'intro'; }
   function proxima(back){
     clearTimeout(tv.timer); if(tv.paused) return;
     let p=null;
     if(back && tv.hist.length>1){ tv.hist.pop(); p=tv.hist.pop(); }
-    else if(tv.queue.some(pronto)){ const i=tv.queue.findIndex(pronto); p={...tv.queue.splice(i,1)[0], _novo:true}; }
+    else if((tv.queue=tv.queue.filter(naRoda)).some(pronto)){ const i=tv.queue.findIndex(pronto); p={...tv.queue.splice(i,1)[0], _novo:true}; }
     else if(tv.list.length){
+      if(!tv.list.some(naRoda)) return mostrar(extra(padrao(PADRAO_VAZIO,'pv')));
       if(tv.since>=3){ tv.since=0; return mostrar(extra(padrao(PADRAO_MIX,'pm'))); }
-      for(let k=0;k<tv.list.length;k++){ const c=tv.list[tv.loop % tv.list.length]; tv.loop++; if(pronto(c) && !tv.queue.find(q=>q.id===c.id)){ p=c; break; } }
+      for(let k=0;k<tv.list.length;k++){ const c=tv.list[tv.loop % tv.list.length]; tv.loop++; if(naRoda(c) && pronto(c) && !tv.queue.find(q=>q.id===c.id)){ p=c; break; } }
       if(!p) return mostrar(extra(padrao(PADRAO_VAZIO,'pv')));
     }
     else return mostrar(extra(padrao(PADRAO_VAZIO,'pv')));
@@ -2631,13 +2644,13 @@ async function telaTelao(){
     else if(p.tipo==='correio'){ el.classList.add('sl-texto','sl-correio'); const L=(p.texto||'').length; const fs=L<60?6:L<140?4.6:3.6; el.innerHTML=`<div><div class="env">${CORP(f)?'💬 Recado para um colega':'💌 Correio elegante'}</div><div class="pa">Para: ${esc(p.para)}</div><div class="q${t.fundo?' card-on':''}" style="font-size:${fs}vw">${esc(p.texto)}</div><div class="by">${p.de?'— '+esc(p.de):(CORP(f)?'— um colega':'🤫 De: alguém especial')}</div></div>`; dur=Math.min(16000, 8000+L*40); }
     else if(p.tipo==='texto'){ el.classList.add('sl-texto'); const L=(p.texto||'').length; const fs = L<40?9:L<90?7:L<180?5.4:L<320?4.2:3.4; el.innerHTML=`<div class="q${t.fundo?' card-on':''}" style="font-size:${fs}vw">${esc(p.texto)}</div>${by||p.curtidas?`<div class="by">${by?'— '+by:''}${p.curtidas?`<span class="tvlike">♥ ${p.curtidas}</span>`:''}</div>`:''}`; dur=Math.min(18000, 7000+L*45); }
     else if(p.tipo==='audio'){ el.classList.add('sl-audio'); el.innerHTML=`<div class="mic">${emiSvg('mic')}</div><div class="eq">${'<i></i>'.repeat(12)}</div><div class="cap">Recado de ${by||'um convidado'}</div><audio src="${(cacheM.get(p.id)||{}).url||midia(p.caminho)}" preload="auto"></audio>`; dur=null; }
-    else if(p.tipo==='video'){ el.classList.add('sl-video'); el.innerHTML=`<video src="${(cacheM.get(p.id)||{}).url||midia(p.caminho)}" playsinline preload="auto" ${p.thumb?`poster="${midia(p.thumb)}"`:''}></video>${by?`<div class="cap"><small>🎥 Recado de ${by}</small></div>`:''}`; dur=null; }
+    else if(p.tipo==='video'){ el.classList.add('sl-video'); el.innerHTML=`<video src="${(cacheM.get(p.id)||{}).url||midia(p.caminho)}" playsinline preload="auto" ${vt()==='mudo'?'muted':''} ${p.thumb?`poster="${midia(p.thumb)}"`:''}></video>${by?`<div class="cap"><small>🎥 Recado de ${by}</small></div>`:''}`; dur=null; }
     if(p.tipo==='texto' && /^💸/.test(p.texto||'')){ const gm=(p.texto||'').match(/^💸\s*Presenteei:\s*([^!\n]{1,40})!/); el.insertAdjacentHTML('afterbegin',`<div class="novo">🎁 ${gm?esc(gm[1].trim())+'!':'Presente enviado!'} Obrigado${by?', '+by:''}!</div>`); if(!QUIET) confete(120); }
     else if(p._novo){ el.insertAdjacentHTML('afterbegin',`<div class="novo">${CORP(f)?'Nova mensagem':'Nova homenagem'}</div>`); if(!QUIET){ confete(); chars.festa(); } }
     st.appendChild(el); tv.cur=p; caberSlide(el); setTimeout(()=>caberSlide(el),400); el.querySelectorAll('img').forEach(im=>im.addEventListener('load',()=>caberSlide(el),{once:true}));
     if(p.tipo==='qr') qrInto($('tvQrBig'), url, 600);
     if(p.tipo==='pix'){ const px=pixTv(); if(px) qrInto($('tvQrBig'), Array.isArray(px.lista)&&px.lista.length ? url : pixPayload(px), 600); }
-    const m=el.querySelector('audio,video'); if(mus) mus.duck(!!m);
+    const m=el.querySelector('audio,video'); if(m && vt()==='mudo' && m.tagName==='VIDEO') m.muted=true; if(mus) mus.duck(!!m && !m.muted);
     if(m){ m.onended=()=>proxima(); m.onerror=()=>{ tv.timer=setTimeout(proxima,1500); }; m.play().catch(()=>{ tv.timer=setTimeout(proxima,3000); }); tv.timer=setTimeout(proxima, ((p.duracao||60)+6)*1000); }
     else tv.timer=setTimeout(proxima, dur);
   }
@@ -2675,9 +2688,11 @@ async function telaTelao(){
     else if(modo==='bingo' && e.bingo){ telaoBingo(e.bingo); }
     else if(modo==='pergunta' && e.pergunta){ const q=e.pergunta; if(camada.dataset.pq!=String(q.id)){ camada.dataset.pq=q.id; camada.className='tv-prg'; camada.hidden=false;
         camada.innerHTML=`<div><div class="k">🙋 Pergunta da plateia</div><div class="t">${q.texto?esc(q.texto):q.tipo==='audio'?'🎙️ Pergunta gravada':''}</div><div class="w">${q.nome?esc(q.nome):'Anônimo'}${q.mesa?' · '+esc(q.mesa):''}</div>${q.audio?`<audio id="tvPa" src="${midia(q.audio)}" autoplay></audio>`:''}</div>`; } }
+    else if(modo==='homenagens'){ if(camada.dataset.hk!==String(e.em)){ camada.dataset.hk=String(e.em); momentoHomenagens(); } }
     else if(modo==='pausa'){ camada.className='tv-pausa'; camada.hidden=false; if(!camada.querySelector('.who')) camada.innerHTML=`<div><div class="who">${esc(nome)}</div><p>Já voltamos</p></div>`; }
     else { camada.hidden=true; camada.innerHTML=''; }
-    const parar = modo!=='mural' && (modo==='pausa' || modo==='sorteio' || modo==='quiz' || modo==='pergunta' || modo==='enquete' || modo==='bingo' || sl.length);
+    if(modo!=='homenagens'){ delete camada.dataset.hk; if(hom.ativo){ hom.ativo=false; clearTimeout(hom.t); camada.querySelectorAll('audio,video').forEach(m=>{ try{ m.pause(); }catch(_){} }); } }
+    const parar = modo!=='mural' && ((modo==='homenagens' && hom.ativo) || modo==='pausa' || modo==='sorteio' || modo==='quiz' || modo==='pergunta' || modo==='enquete' || modo==='bingo' || sl.length);
     if(modo!=='apresentacao'){ const v=camada.querySelector('.tv-apr video, video[data-src]'); if(v){ try{ v.pause(); }catch(_){} } }
     if(modo!=='enquete') delete camada.dataset.eid;
     if(modo!=='bingo'){ delete camada.dataset.bk; bgFesta=null; }
@@ -2688,6 +2703,23 @@ async function telaTelao(){
     if(modo!=='sorteio') srtUlt=null;
     tvCtl={modo, slide:e&&e.slide||0, em:e&&e.em, n:e&&e.sorteio?e.sorteio.n:null, qk:e&&e.quiz?[e.quiz.fase,e.quiz.idx,e.quiz.jogadores,e.quiz.respostas].join():null, ek:e&&e.enquete?JSON.stringify([e.enquete.id,e.enquete.total,e.enquete.contagem,e.enquete.palavras,e.enquete.aberta]):null, bk:e&&e.bingo?BGK(e.bingo):null};
   };
+  const hom={ativo:false,t:null};
+  function momentoHomenagens(){
+    const L=tv.list.filter(midiaPesada).slice().sort((a,b)=>new Date(a.criado_em)-new Date(b.criado_em));
+    hom.ativo=true; clearTimeout(hom.t); camada.className='tv-hom'; camada.hidden=false;
+    tv.ctlPausa=true; tv.paused=true; clearTimeout(tv.timer); $('stage').querySelectorAll('audio,video').forEach(m=>{ try{ m.pause(); }catch(_){} }); if(mus) mus.duck(true);
+    const fim=()=>{ if(!hom.ativo) return; hom.ativo=false; camada.hidden=true; camada.innerHTML=''; tv.ctlPausa=false; tv.paused=false; if(mus) mus.duck(false); if(tv.started) proxima(); };
+    if(!L.length){ camada.innerHTML=`<div class="hom-tit"><div class="k">${CORP(f)?'Mensagens gravadas':'Momento das homenagens'}</div><p>Ainda não chegou nenhum vídeo ou áudio.</p></div>`; hom.t=setTimeout(fim,5000); return; }
+    let i=-1;
+    const prox=()=>{ if(!hom.ativo) return; clearTimeout(hom.t); i++; if(i>=L.length){ camada.innerHTML=`<div class="hom-tit"><div class="k">${CORP(f)?'Obrigado a todos':'Obrigado a todos que gravaram'}</div></div>`; hom.t=setTimeout(fim,4500); return; }
+      const p=L[i], src=(cacheM.get(p.id)||{}).url||midia(p.caminho), by=esc(p.autor||''), n=`<div class="hom-n">${i+1} de ${L.length}</div>`;
+      camada.innerHTML = p.tipo==='video' ? `${n}<video src="${src}" playsinline autoplay preload="auto" ${p.thumb?`poster="${midia(p.thumb)}"`:''}></video>${by?`<div class="hom-by">${by}</div>`:''}`
+        : `${n}<div class="hom-aud"><div class="mic">${emiSvg('mic')}</div><div class="eq">${'<i></i>'.repeat(12)}</div><div class="hom-by">${by||(CORP(f)?'Um participante':'Um convidado')}</div></div><audio src="${src}" autoplay preload="auto"></audio>`;
+      const m=camada.querySelector('audio,video'); m.onended=()=>{ hom.t=setTimeout(prox,1200); }; m.onerror=()=>{ hom.t=setTimeout(prox,1000); };
+      m.play().catch(()=>{ hom.t=setTimeout(prox,2000); }); hom.t=setTimeout(prox, ((p.duracao||90)+8)*1000); };
+    camada.innerHTML=`<div class="hom-tit"><div class="k">${CORP(f)?'Mensagens gravadas':'Momento das homenagens'}</div><p>${L.length} ${L.length>1?'recados gravados':'recado gravado'}${f.homenageado&&!CORP(f)?` para ${esc(DESTAQUE(f))}`:''}</p></div>`;
+    hom.t=setTimeout(prox, 5000);
+  }
   let bgFesta=null;
   const telaoBingo=b=>{
     camada.className='tv-bng'; camada.hidden=false; const nums=b.numeros||[], ult=nums[nums.length-1], prem=b.premio||'';
@@ -3170,7 +3202,9 @@ function vModerar(){
      <button data-s="pendente" aria-pressed="${ADM.aba==='pendente'}">Aguardando</button><button data-s="aprovado" aria-pressed="${ADM.aba==='aprovado'}">No telão</button><button data-s="oculto" aria-pressed="${ADM.aba==='oculto'}">Ocultos</button></div>
      <button class="btn ok" id="aprTodos" hidden>Aprovar todas</button></div>
      ${FESTA.moderacao!==false?`<details class="livre-det"><summary><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span id="livreRes">${resumoL()}</span></summary><div class="livre-box"><b>Entram direto no telão, sem aprovação:</b><div class="livre-op">${[['foto','Fotos'],['texto','Recados'],['audio','Áudios'],['video','Vídeos']].map(([k,t])=>`<label><input type="checkbox" data-livre="${k}" ${(EXT(FESTA).livre||[]).includes(k)?'checked':''}> ${t}</label>`).join('')}</div><p class="livre-nota">O que não estiver marcado espera a sua aprovação aqui.</p></div></details>`:''}
+     <details class="livre-det" id="vtDet"><summary>${AICO.homenagens||''}<span id="vtRes">${({som:'Vídeos e áudios passam no telão com som',mudo:'Vídeos passam no telão sem som; áudios ficam para o Momento das homenagens',momento:'Vídeos e áudios ficam só para o Momento das homenagens'})[EXT(FESTA).videos_tv||'som']}</span></summary><div class="livre-box"><b>Vídeos e áudios no telão</b><div class="livre-op vt-op">${[['som','Na roda do telão, com som','Tocam no meio das fotos e recados, com som.'],['mudo','Na roda do telão, sem som','Os vídeos passam mudos; os áudios ficam de fora.'],['momento','Só no Momento das homenagens','Ficam guardados até você tocar em "Homenagens" na barra do telão. Aí todos param, assistem e ouvem.']].map(([k,t,d])=>`<label><input type="radio" name="vtOp" data-vt="${k}" ${(EXT(FESTA).videos_tv||'som')===k?'checked':''}> <span><b>${t}</b><small>${d}</small></span></label>`).join('')}</div><p class="livre-nota">A qualquer momento, o botão "Homenagens" da barra do telão toca todos os vídeos e áudios, com som, e depois volta ao mural.</p></div></details>
      <div id="modList"><div class="empty"><span class="spin"></span></div></div>`;
+  document.querySelectorAll('[data-vt]').forEach(c=>c.onchange=async()=>{ const v=c.dataset.vt; try{ await extrasSet('videos_tv', v==='som'?null:v); if($('vtRes')) $('vtRes').textContent=({som:'Vídeos e áudios passam no telão com som',mudo:'Vídeos passam no telão sem som; áudios ficam para o Momento das homenagens',momento:'Vídeos e áudios ficam só para o Momento das homenagens'})[v]; toast('Pronto. O telão já segue esta escolha.'); }catch(e){ toast(ERR(e)); } });
   document.querySelectorAll('[data-livre]').forEach(c=>c.onchange=async()=>{ const L=[...document.querySelectorAll('[data-livre]:checked')].map(x=>x.dataset.livre); try{ await extrasSet('livre', L.length?L:null); toast(L.length?'Pronto. O que você marcou entra direto no telão.':'Tudo volta a passar pela sua aprovação.'); if($('livreRes')) $('livreRes').textContent=resumoL(); }catch(e){ c.checked=!c.checked; toast(ERR(e)); } });
   $('abasMod').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; ADM.aba=b.dataset.s; $('abasMod').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b)); renderModeracao(); };
   $('aprTodos').onclick=()=>{ const ids=ADM.posts.filter(p=>p.status==='pendente').map(p=>p.id); if(!ids.length) return; const q=ids.length, nm=CORP(FESTA)?(q>1?'mensagens':'mensagem'):(q>1?'homenagens':'homenagem');
@@ -3985,6 +4019,7 @@ const AICO = {
   quiz: LI('<circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/>'),
   enquete: LI('<path d="M3 3v18h18"/><path d="M7 16v-4M12 16V8M17 16v-7"/>'),
   bingo: LI('<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/>'),
+  homenagens: LI('<rect x="2.5" y="6" width="13" height="12" rx="2"/><path d="M15.5 10.5 21 7.5v9l-5.5-3"/>'),
   pix: LI('<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20M6 15h4"/>'),
   interacoes: LI('<path d="M14 9a2 2 0 0 1-2 2H6l-3 3V4a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2z"/><path d="M18 9h2a2 2 0 0 1 2 2v11l-3-3h-6a2 2 0 0 1-2-2v-1"/>'),
   recordacoes: LI('<path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>'),
@@ -3994,7 +4029,7 @@ const AICO = {
   cel: LI('<rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/>')
 };
 // ---------- controle do telão (barra fixa no painel e no próprio telão) ----------
-const TV_MODOS = [['mural','Mural'],['apresentacao','Apresentação'],['sorteio','Sorteio'],['quiz','Quiz'],['enquete','Enquete'],['bingo','Bingo'],['pausa','Pausa']];
+const TV_MODOS = [['mural','Mural'],['homenagens','Homenagens'],['apresentacao','Apresentação'],['sorteio','Sorteio'],['quiz','Quiz'],['enquete','Enquete'],['bingo','Bingo'],['pausa','Pausa']];
 function abrirTelaoJanela(f){
   const w=window.open(linkFesta(f.slug,'telao'),'telao_'+f.slug,'popup=yes,width=1280,height=720');
   if(!w){ location.href=linkFesta(f.slug,'telao'); return; }
@@ -4030,6 +4065,7 @@ function ligarTvBar(f){
     box.querySelectorAll('[data-tvm]').forEach(b=>b.onclick=async()=>{ const k=b.dataset.tvm;
       if(k==='apresentacao' && !((FESTA.slides||[]).length)){ toast('Envie os slides na aba Apresentação primeiro.'); const t=document.querySelector('#abasTop [data-v="apresentacao"]'); if(t) t.click(); return; }
       try{ const e=await rpc('fe_admin_tv',{p_slug:SLUG,p_pin:PIN,p_modo:k,p_slide:null}); modo=(e&&e.modo)||k; pintar(); store.set('mf_r_bar_'+SLUG,'1'); pintarRoteiro(FESTA); }catch(err){ toast(ERR(err)); return; }
+      if(k==='homenagens') toast('O telão vai tocar todos os vídeos e áudios aprovados, com som, um depois do outro. No fim, volta sozinho ao mural.',6000);
       if(['sorteio','quiz','enquete','bingo'].includes(k)){ const t=document.querySelector(`#abasTop [data-v="${k}"]`); if(t && ADM.view!==k) t.click(); } });
     $('tvCel').onclick=()=>{ abrirFolha(`<h3>Controlar pelo celular</h3><p class="muted" style="margin-top:0">Deixe o notebook só com o telão na TV e comande tudo pelo celular. Aponte a câmera, entre com a senha e use a barra "No telão agora".</p><div style="width:240px;margin:8px auto;background:#fff;padding:10px;border-radius:12px" id="celQr"></div><div class="foot"><button class="btn" id="eCancel">Fechar</button></div>`); qrInto($('celQr'), linkFesta(SLUG,'admin'), 300); $('eCancel').onclick=fecharFolha; }; };
   const ler=async()=>{ if(document.hidden || !$('tvBar')) return; try{ const e=await rpc('fe_tv_estado',{p_festa:f.id}); if(e && (e.modo!==modo || (e.qr!==false)!==qrOn)){ modo=e.modo; qrOn=e.qr!==false; pintar(); } }catch(_){} };

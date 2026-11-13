@@ -1,0 +1,30 @@
+name: Previas dos convites
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+  pages: write
+concurrency:
+  group: previas
+  cancel-in-progress: false
+jobs:
+  gerar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install pillow
+      - name: Gerar previas
+        env:
+          OG_TOKEN: ${{ secrets.OG_TOKEN }}
+        run: python3 og/gerar.py
+      - name: Gravar
+        run: |
+          git config user.name "robo-previas"
+          git config user.email "robo-previas@users.noreply.github.com"
+          git add c || true
+          if git diff --cached --quiet; then echo "Nada novo"; exit 0; fi
+          git commit -m "Previas dos convites atualizadas"
+          git push
+          curl -s -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github+json" https://api.github.com/repos/${{ github.repository }}/pages/builds || true

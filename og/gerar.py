@@ -61,7 +61,7 @@ def pagina(f, ver, quadrado=False):
 <title>{e(titulo)}</title>
 <meta property="og:type" content="website"><meta property="og:site_name" content="Mural da Festa">
 <meta property="og:title" content="{e(titulo)}"><meta property="og:description" content="{e(desc)}">
-<meta property="og:url" content="{SITE}c/{slug}/{'q/' if quadrado else ''}"><meta property="og:image" content="{img}">
+<meta property="og:url" content="{SITE}c/{slug}/"><meta property="og:image" content="{img}">
 <meta property="og:image:width" content="{LA}"><meta property="og:image:height" content="{AL}"><meta property="og:image:type" content="image/jpeg">
 <meta name="twitter:card" content="summary_large_image"><meta name="description" content="{e(desc)}">
 <meta property="og:image:secure_url" content="{img}"><meta property="og:locale" content="pt_BR">
@@ -76,7 +76,7 @@ def main():
         slug = f.get('slug')
         if not slug or '/' in slug or '..' in slug: continue
         fonte_img = f.get('convite') or f.get('fundo') or f.get('enfeite') or f.get('logo')
-        chave = hashlib.md5(json.dumps([fonte_img, f.get('titulo'), f.get('homenageado'), f.get('categoria'), f.get('bg'), f.get('accent'), 5]).encode()).hexdigest()[:10]
+        chave = hashlib.md5(json.dumps([fonte_img, f.get('titulo'), f.get('homenageado'), f.get('categoria'), f.get('bg'), f.get('accent'), 6]).encode()).hexdigest()[:10]
         pasta = os.path.join('c', slug); os.makedirs(pasta, exist_ok=True)
         marca = os.path.join(pasta, '.versao')
         if os.path.exists(marca) and open(marca).read().strip() == chave: continue
@@ -92,10 +92,8 @@ def main():
                 q -= 8
             open(os.path.join(pasta, nome), 'wb').write(buf.getvalue())
         salvar(im, 'og.jpg')
-        open(os.path.join(pasta, 'index.html'), 'w', encoding='utf-8').write(pagina(f, chave))
-        if imq:   # teste do formato quadrado: c/<slug>/q/
-            salvar(imq, 'og_q.jpg'); os.makedirs(os.path.join(pasta, 'q'), exist_ok=True)
-            open(os.path.join(pasta, 'q', 'index.html'), 'w', encoding='utf-8').write(pagina(f, chave, True))
+        if imq: salvar(imq, 'og_q.jpg')   # quadrado: no WhatsApp o convite aparece grande (aprovado em 13/11/2026)
+        open(os.path.join(pasta, 'index.html'), 'w', encoding='utf-8').write(pagina(f, chave, bool(imq)))
         open(marca, 'w').write(chave); mudou += 1; print('atualizada', slug)
     print(len(festas), 'festas,', mudou, 'atualizadas')
 

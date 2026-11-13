@@ -3669,8 +3669,8 @@ async function vCompartilhar(){
   $('cvEnviar').onclick=async()=>{ const b=$('cvEnviar'); b.disabled=true; let blob=null;
     try{ const cv=await gerarCv(); blob=await new Promise(r=>cv.toBlob(r,'image/png')); }catch(e){ b.disabled=false; $('cvM').className='msg err'; $('cvM').textContent='Não consegui gerar o convite agora.'; return; }
     b.disabled=false; const txt=($('shTxt')&&$('shTxt').value)||textoConvite(f), file=new File([blob],nomeArq+'.png',{type:'image/png'});
-    const celular=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-    if(celular && navigator.canShare && navigator.canShare({files:[file]})){ try{ await navigator.share({files:[file], text:txt}); return; }catch(e){ if(e&&e.name==='AbortError') return; } }
+    // um clique: o compartilhar do aparelho (celular ou Windows) leva a arte e a mensagem com o link juntas
+    if(navigator.canShare && navigator.canShare({files:[file], text:txt})){ try{ await navigator.share({files:[file], text:txt}); return; }catch(e){ if(e&&e.name==='AbortError') return; } }
     // computador (WhatsApp Web): a arte vai pela área de transferência e a mensagem entra como legenda
     let imgOk=false; try{ await navigator.clipboard.write([new ClipboardItem({'image/png':blob})]); imgOk=true; }catch(e){}
     abrirFolha(`<h3>Enviar pelo WhatsApp Web</h3><ol class="env-passos">

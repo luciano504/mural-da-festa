@@ -1479,8 +1479,9 @@ function semEmojiAttr(root){ if(!root||!root.querySelectorAll) return; root.quer
 })();
 const BASE = location.origin + location.pathname.replace(/index\.html$/, '');
 const SITE = (location.host + location.pathname).replace(/index\.html$/,'').replace(/\/$/,'');
-const linkFesta = (slug, extra) => BASE + '?f=' + slug + (extra ? '&' + extra : '');
-const linkConvite = slug => (/github\.io$/.test(location.hostname) ? BASE + 'c/' + slug + '/' : linkFesta(slug));   // link curto: o WhatsApp mostra a arte do convite na prévia
+const linkLongo = (slug, extra) => BASE + '?f=' + slug + (extra ? '&' + extra : '');
+const linkConvite = slug => (/github\.io$/.test(location.hostname) ? BASE + 'c/' + slug + '/' : linkLongo(slug));
+const linkFesta = (slug, extra) => (extra ? linkLongo(slug, extra) : linkConvite(slug));   // link dos convidados sempre no formato que mostra a arte no WhatsApp
 const midia = p => !p ? '' : /^(blob:|data:|https?:)/.test(p) ? p : `${SUPABASE_URL}/storage/v1/object/public/fe-midia/${p.split('/').map(encodeURIComponent).join('/')}`;
 const store = {
   get(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } },
@@ -3700,7 +3701,7 @@ async function pdfMesas(f){
       const g=c.createLinearGradient(x,y,x+w,y+h); g.addColorStop(0,t.bg); g.addColorStop(1,t.bg2); c.fillStyle=g; c.fillRect(x+14,y+14,w-28,h-28);
       c.textAlign='center'; c.fillStyle=t.muted; c.font='600 26px Figtree, Fredoka, sans-serif'; c.fillText(f.homenageado||f.titulo, x+w/2, y+80);
       c.fillStyle=t.accent; c.font=`400 120px ${fonte(t)}`; c.fillText(`Mesa ${m}`, x+w/2, y+210);
-      rr(c,x+w/2-160,y+250,320,320,22); c.fillStyle='#fff'; c.fill(); c.drawImage(qrCanvas(linkFesta(f.slug)+'&mesa='+m,600),x+w/2-140,y+270,280,280);
+      rr(c,x+w/2-160,y+250,320,320,22); c.fillStyle='#fff'; c.fill(); c.drawImage(qrCanvas(linkFesta(f.slug,'mesa='+m),600),x+w/2-140,y+270,280,280);
       c.fillStyle=t.ink; c.font='700 30px Figtree, Fredoka, sans-serif'; c.fillText('Aponte a câmera 📲', x+w/2, y+630);
       c.font='500 24px Figtree, Fredoka, sans-serif'; c.fillStyle=t.muted; c.fillText('🍹 pedidos · 🍽️ cardápio · 💌 homenagens', x+w/2, y+672); }
     c.setLineDash([14,12]); c.strokeStyle='#bbb'; c.lineWidth=2; c.beginPath(); c.moveTo(PW/2,0); c.lineTo(PW/2,PH); c.moveTo(0,PH/2); c.lineTo(PW,PH/2); c.stroke();

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mural da Festa</title>
+<meta name="robots" content="noindex">
+<script>
+  // O Mural da Festa mudou de endereço. Leva o convidado para o mesmo lugar no endereço novo,
+  // mantendo o código da festa (?f=...), o telão, o álbum etc.
+  (function(){
+    var NOVO = 'https://muraldafesta.github.io/mural-da-festa';
+    var caminho = location.pathname.replace(/^\/mural-da-festa/, '');
+    location.replace(NOVO + caminho + location.search + location.hash);
+  })();
+</script>
+<meta http-equiv="refresh" content="2;url=https://muraldafesta.github.io/mural-da-festa/">
+<style>body{font-family:system-ui,sans-serif;background:#fbf7f3;color:#2d1820;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;text-align:center}a{color:#c94a3a}</style>
+</head>
+<body><p>Abrindo o Mural da Festa...<br><a href="https://muraldafesta.github.io/mural-da-festa/">Toque aqui se não abrir</a></p></body>
+</html>
